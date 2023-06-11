@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[AddComponentMenu("Project Script/Rigidbody/Rigidbody Rotate 3D")]
+[AddComponentMenu("Quick Methode/Rigidbody/Rigidbody Rotate 3D")]
 public class RigidbodyRotate3D : MonoBehaviour
 {
     [SerializeField] private Rigidbody m_Rigidbody;

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Simple Script Object", menuName = "Project Script/Simple Script Object", order = 0)]
+[CreateAssetMenu(fileName = "Simple Scriptable Object", menuName = "Quick Methode/Simple Scriptable Object", order = 0)]
 public class SimpleScriptableObject : ScriptableObject
 {
     //Data is stored local

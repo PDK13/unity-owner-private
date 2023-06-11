@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[AddComponentMenu("Project Script/Rigidbody/Rigidbody Collision")]
+[AddComponentMenu("Quick Methode/Rigidbody/Rigidbody Collision")]
 public class RigidbodyCollision : MonoBehaviour
 {
     [SerializeField] private bool m_CollisionPassingThrough = true;

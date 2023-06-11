@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[AddComponentMenu("Project Script/Rigidbody/Rigidbody Gravity")]
+[AddComponentMenu("Quick Methode/Rigidbody/Rigidbody Gravity")]
 public class RigidbodyGravity : MonoBehaviour
 {
     [SerializeField] private float m_GravityScale = 1.0f;
