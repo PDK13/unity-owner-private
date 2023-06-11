@@ -1,22 +1,23 @@
-using IsometricMethode;
 using QuickMethode;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class IsometricManager : MonoBehaviour
 {
+    #region Enum
+
+    public enum IsoRendererType { XY, H, None, }
+
+    #endregion
+
     #region Varible: World Manager
 
     [SerializeField] private string m_name = "";
-    [SerializeField] private IsoType m_renderer = IsoType.H;
-    [SerializeField] private IsoVector m_scale = new IsoVector(1f, 1f, 1f);
+    [SerializeField] private IsoDataScene m_scene = new IsoDataScene();
 
     public string WorldName => m_name;
-    public IsoType WorldRenderer => m_renderer;
-    public IsoVector WorldScale => m_scale;
+    public IsoDataScene Scene => m_scene;
 
     private List<(int PosH, List<IsometricBlock> Block)> m_worldPosH = new List<(int PosH, List<IsometricBlock> Block)>();
 
@@ -47,9 +48,6 @@ public class IsometricManager : MonoBehaviour
             return null;
         }
 
-        //Delete
-        SetWorldBlockRemovePrimary(Pos);
-
         //Create
         GameObject BlockObject = QGameObject.SetCreate(BlockPrefab);
 
@@ -69,31 +67,41 @@ public class IsometricManager : MonoBehaviour
             BlockRenderer.SetSpriteJoin(Pos);
         }
 
-        //World
-        int IndexPosH = GetIndexWorldPosH(Pos.HInt);
-        if (IndexPosH != -1)
+        if (Block.Free && Application.isPlaying)
         {
-            m_worldPosH[IndexPosH].Block.Add(Block);
+            //When in playing, FREE Block's Pos Primary will not be track, so just can be find by it own Tag!
         }
         else
         {
-            m_worldPosH.Add((Pos.HInt, new List<IsometricBlock>()));
-            IndexPosH = m_worldPosH.Count - 1;
-            m_worldPosH[IndexPosH].Block.Add(Block);
+            //Delete
+            SetWorldBlockRemovePrimary(Pos);
+
+            //World
+            int IndexPosH = GetIndexWorldPosH(Pos.HInt);
+            if (IndexPosH != -1)
+            {
+                m_worldPosH[IndexPosH].Block.Add(Block);
+            }
+            else
+            {
+                m_worldPosH.Add((Pos.HInt, new List<IsometricBlock>()));
+                IndexPosH = m_worldPosH.Count - 1;
+                m_worldPosH[IndexPosH].Block.Add(Block);
+            }
         }
 
         //Tag
-        string Tag = Block.GetComponent<IsometricBlock>().Tag;
-        int IndexTag = GetIndexWorldTag(Tag);
-        if (IndexTag != -1)
+        string TagFind = Block.GetComponent<IsometricBlock>().Tag;
+        int TagIndex = GetIndexWorldTag(TagFind);
+        if (TagIndex != -1)
         {
-            this.m_worldTag[IndexTag].Block.Add(Block);
+            this.m_worldTag[TagIndex].Block.Add(Block);
         }
         else
         {
-            this.m_worldTag.Add((Tag, new List<IsometricBlock>()));
-            IndexPosH = this.m_worldTag.Count - 1;
-            this.m_worldTag[IndexPosH].Block.Add(Block);
+            this.m_worldTag.Add((TagFind, new List<IsometricBlock>()));
+            TagIndex = this.m_worldTag.Count - 1;
+            this.m_worldTag[TagIndex].Block.Add(Block);
         }
 
         //Scene
@@ -133,20 +141,45 @@ public class IsometricManager : MonoBehaviour
         return null;
     }
 
-    public IsometricBlock GetWorldBlockCurrent(IsoVector Pos, string TagFind = "")
+    public List<IsometricBlock> GetWorldBlockCurrent(IsoVector Pos, params string[] Tag)
     {
-        int IndexTag = GetIndexWorldTag(TagFind);
-        if (IndexTag == -1)
-            return null;
+        List<IsometricBlock> List = new List<IsometricBlock>();
 
-        for (int i = m_worldTag[IndexTag].Block.Count - 1; i >= 0; i--)
+        if (Tag.Length > 0)
         {
-            if (m_worldTag[IndexTag].Block[i].Pos != Pos)
-                continue;
+            //Find all Block with know tag - More Quickly!!
+            foreach(string TagFind in Tag)
+            {
+                int TagIndex = GetIndexWorldTag(TagFind);
+                if (TagIndex == -1)
+                    //Not exist Tag in Tag List!
+                    continue;
 
-            return m_worldTag[IndexTag].Block[i];
+                for (int BlockIndex = 0; BlockIndex < m_worldTag[TagIndex].Block.Count; BlockIndex++)
+                {
+                    if (m_worldTag[TagIndex].Block[BlockIndex].Pos != Pos)
+                        continue;
+
+                    List.Add(m_worldTag[TagIndex].Block[BlockIndex]);
+                }
+            }
         }
-        return null;
+        else
+        {
+            //Find all block with unknow tag - More slower!!
+            foreach(var PosH in m_worldPosH)
+            {
+                foreach(IsometricBlock Block in PosH.Block)
+                {
+                    if (Block.Pos != Pos)
+                        continue;
+
+                    List.Add(Block);
+                }
+            }
+        }
+
+        return List;
     }
 
     #endregion
@@ -173,13 +206,13 @@ public class IsometricManager : MonoBehaviour
                 m_worldPosH.RemoveAt(IndexPosH);
 
             //Tag
-            string Tag = Block.Tag;
-            int IndexTag = GetIndexWorldTag(Tag);
-            if (IndexTag != -1)
+            string TagFind = Block.Tag;
+            int TagIndex = GetIndexWorldTag(TagFind);
+            if (TagIndex != -1)
             {
-                m_worldTag[IndexTag].Block.Remove(Block);
-                if (m_worldTag[IndexTag].Block.Count == 0)
-                    m_worldTag.RemoveAt(IndexTag);
+                m_worldTag[TagIndex].Block.Remove(Block);
+                if (m_worldTag[TagIndex].Block.Count == 0)
+                    m_worldTag.RemoveAt(TagIndex);
             }
 
             //Scene
@@ -192,43 +225,96 @@ public class IsometricManager : MonoBehaviour
         }
     }
 
-    public void SetWorldBlockRemoveCurrent(IsoVector Pos, string TagFind = "")
+    public void SetWorldBlockRemoveInstant(IsometricBlock Block)
     {
+        //World
+        m_worldPosH[GetIndexWorldPosH(Block.Pos.HInt)].Block.Remove(Block);
+
         //Tag
-        int IndexTag = GetIndexWorldTag(TagFind);
-        if (IndexTag == -1)
-            return;
+        m_worldTag[GetIndexWorldTag(Block.tag)].Block.Remove(Block);
 
-        for (int i = m_worldTag[IndexTag].Block.Count - 1; i >= 0; i--)
+        //Scene
+        if (Application.isEditor)
+            DestroyImmediate(Block.gameObject);
+        else
+            Destroy(Block.gameObject);
+    } //Should use!!
+
+    public void SetWorldBlockRemoveCurrent(IsoVector Pos, bool All, params string[] Tag)
+    {
+        if (Tag.Length > 0)
         {
-            if (m_worldTag[IndexTag].Block[i].Pos != Pos)
-                continue;
-
-            IsometricBlock Block = m_worldTag[IndexTag].Block[i];
-
-            //World
-            int IndexPosH = GetIndexWorldPosH(Pos.HInt);
-            if (IndexPosH != -1)
+            foreach (string TagFind in Tag)
             {
-                m_worldPosH[IndexPosH].Block.Remove(Block);
-                if (m_worldPosH[IndexPosH].Block.Count == 0)
-                    m_worldPosH.RemoveAt(IndexPosH);
+                //Tag
+                int TagIndex = GetIndexWorldTag(TagFind);
+                if (TagIndex == -1)
+                    continue;
+
+                for (int BlockIndex = m_worldTag[TagIndex].Block.Count - 1; BlockIndex >= 0; BlockIndex--)
+                {
+                    if (m_worldTag[TagIndex].Block[BlockIndex].Pos != Pos)
+                        continue;
+
+                    IsometricBlock Block = m_worldTag[TagIndex].Block[BlockIndex];
+
+                    //World
+                    int IndexPosH = GetIndexWorldPosH(Pos.HInt);
+                    if (IndexPosH != -1)
+                    {
+                        m_worldPosH[IndexPosH].Block.Remove(Block);
+                        if (m_worldPosH[IndexPosH].Block.Count == 0)
+                            m_worldPosH.RemoveAt(IndexPosH);
+                    }
+
+                    //Tag
+                    m_worldTag[TagIndex].Block.Remove(Block);
+                    if (m_worldTag[TagIndex].Block.Count == 0)
+                        m_worldTag.RemoveAt(TagIndex);
+
+                    //Scene
+                    if (Application.isEditor)
+                        DestroyImmediate(Block.gameObject);
+                    else
+                        Destroy(Block.gameObject);
+
+                    if (!All)
+                        return;
+                }
             }
-
-            //Tag
-            m_worldTag[IndexTag].Block.Remove(Block);
-            if (m_worldTag[IndexTag].Block.Count == 0)
-                m_worldTag.RemoveAt(IndexTag);
-
-            //Scene
-            if (Application.isEditor)
-                DestroyImmediate(Block.gameObject);
-            else
-                Destroy(Block.gameObject);
-
-            break;
         }
-    }
+        else
+        {
+            //Find all block with unknow tag - More slower!!
+            foreach (var PosH in m_worldPosH)
+            {
+                foreach (IsometricBlock Block in PosH.Block)
+                {
+                    if (Block.Pos != Pos)
+                        continue;
+
+                    //Tag
+                    string TagFind = Block.Tag;
+                    int TagIndex = GetIndexWorldTag(TagFind);
+                    if (TagIndex != -1)
+                    {
+                        m_worldTag[TagIndex].Block.Remove(Block);
+                        if (m_worldTag[TagIndex].Block.Count == 0)
+                            m_worldTag.RemoveAt(TagIndex);
+                    }
+
+                    //Scene
+                    if (Application.isEditor)
+                        DestroyImmediate(Block.gameObject);
+                    else
+                        Destroy(Block.gameObject);
+
+                    if (!All)
+                        return;
+                }
+            }
+        }
+    } //Shouldn't use!!
 
     #endregion
 
@@ -297,15 +383,15 @@ public class IsometricManager : MonoBehaviour
         }
 
         //Tag
-        string Tag = Block.GetComponent<IsometricBlock>().Tag;
-        int IndexTag = GetIndexWorldTag(Tag);
-        if (IndexTag != -1)
+        string TagFind = Block.GetComponent<IsometricBlock>().Tag;
+        int TagIndex = GetIndexWorldTag(TagFind);
+        if (TagIndex != -1)
         {
-            this.m_worldTag[IndexTag].Block.Add(Block);
+            this.m_worldTag[TagIndex].Block.Add(Block);
         }
         else
         {
-            this.m_worldTag.Add((Tag, new List<IsometricBlock>()));
+            this.m_worldTag.Add((TagFind, new List<IsometricBlock>()));
             IndexPosH = this.m_worldTag.Count - 1;
             this.m_worldTag[IndexPosH].Block.Add(Block);
         }
@@ -408,17 +494,17 @@ public class IsometricManager : MonoBehaviour
                 continue;
             }
 
-            string Tag = BlockPrefab.GetComponent<IsometricBlock>().Tag;
-            int IndexTag = GetIndexBlockListTag(Tag);
-            if (IndexTag != -1)
+            string TagFind = BlockPrefab.GetComponent<IsometricBlock>().Tag;
+            int TagIndex = GetIndexBlockListTag(TagFind);
+            if (TagIndex != -1)
             {
-                this.BlockList[IndexTag].Block.Add(BlockPrefab);
+                this.BlockList[TagIndex].Block.Add(BlockPrefab);
             }
             else
             {
-                this.BlockList.Add((Tag, new List<GameObject>()));
-                IndexTag = this.BlockList.Count - 1;
-                this.BlockList[IndexTag].Block.Add(BlockPrefab);
+                this.BlockList.Add((TagFind, new List<GameObject>()));
+                TagIndex = this.BlockList.Count - 1;
+                this.BlockList[TagIndex].Block.Add(BlockPrefab);
             }
         }
     }
@@ -690,301 +776,6 @@ public class IsometricManager : MonoBehaviour
                 else
                     BlockSprite.SetSpriteAlpha(1f);
             }
-    }
-
-    #endregion
-}
-
-namespace IsometricMethode
-{
-    #region Enum
-
-    public enum IsoType { XY, H, None, }
-
-    #endregion
-
-    #region Vector
-
-    [Serializable]
-    public struct IsoVector
-    {
-        #region Enum
-
-        public enum IsoDir { None = 0, Up = 1, Down = 2, Left = 3, Right = 4, Top = 5, Bot = 6 }
-
-        #endregion
-
-        #region Primary
-
-        public IsoVector(float XUD, float YLR, float HTB)
-        {
-            X = XUD;
-            Y = YLR;
-            H = HTB;
-        }
-
-        public IsoVector(IsoVector IsoVector)
-        {
-            X = IsoVector.X;
-            Y = IsoVector.Y;
-            H = IsoVector.H;
-        }
-
-        public float X; //Direction Up & Down
-        public float Y; //Direction Left & Right
-        public float H; //Direction Top & Bot
-
-        #endregion
-
-        #region Value Int
-
-        public int XInt => Mathf.RoundToInt(X); //Direction Up & Down
-
-        public int YInt => Mathf.RoundToInt(Y); //Direction Left & Right
-
-        public int HInt => Mathf.RoundToInt(H); //Direction Top & Bot
-
-        #endregion
-
-        #region Primary Dir
-
-        public static IsoVector Up => new IsoVector(1, 0, 0);
-        public static IsoVector Down => new IsoVector(-1, 0, 0);
-        public static IsoVector Left => new IsoVector(0, -1, 0);
-        public static IsoVector Right => new IsoVector(0, 1, 0);
-        public static IsoVector Top => new IsoVector(0, 0, 1);
-        public static IsoVector Bot => new IsoVector(0, 0, -1);
-
-        #endregion
-
-        #region Operator
-
-        public static IsoVector operator +(IsoVector IsoVector) => IsoVector;
-        public static IsoVector operator -(IsoVector IsoVector) => new IsoVector(IsoVector.X * -1, IsoVector.Y * -1, IsoVector.H * -1);
-        public static IsoVector operator +(IsoVector IsoVectorA, IsoVector IsoVectorB) => new IsoVector(IsoVectorA.X + IsoVectorB.X, IsoVectorA.Y + IsoVectorB.Y, IsoVectorA.H + IsoVectorB.H);
-        public static IsoVector operator -(IsoVector IsoVectorA, IsoVector IsoVectorB) => new IsoVector(IsoVectorA.X - IsoVectorB.X, IsoVectorA.Y - IsoVectorB.Y, IsoVectorA.H - IsoVectorB.H);
-        public static IsoVector operator *(IsoVector IsoVectorA, float Number) => new IsoVector(IsoVectorA.X * Number, IsoVectorA.Y * Number, IsoVectorA.H * Number);
-        public static IsoVector operator /(IsoVector IsoVectorA, float Number) => new IsoVector(IsoVectorA.X / Number, IsoVectorA.Y / Number, IsoVectorA.H / Number);
-        public static bool operator ==(IsoVector IsoVectorA, IsoVector IsoVectorB) => IsoVectorA.X == IsoVectorB.X && IsoVectorA.Y == IsoVectorB.Y && IsoVectorA.H == IsoVectorB.H;
-        public static bool operator !=(IsoVector IsoVectorA, IsoVector IsoVectorB) => IsoVectorA.X != IsoVectorB.X || IsoVectorA.Y != IsoVectorB.Y || IsoVectorA.H != IsoVectorB.H;
-
-        #endregion
-
-        #region Encypt
-
-        public const char KEY_VECTOR_ENCYPT = ';';
-
-        public string Encypt => "[" + QEncypt.GetEncypt(KEY_VECTOR_ENCYPT, this.X, this.Y, this.H) + "]";
-
-        public static IsoVector GetDencypt(string m_Encypt)
-        {
-            m_Encypt = m_Encypt.Replace("[", "");
-            m_Encypt = m_Encypt.Replace("]", "");
-            List<int> DataDencypt = QEncypt.GetDencyptInt(KEY_VECTOR_ENCYPT, m_Encypt);
-            return new IsoVector(DataDencypt[0], DataDencypt[1], DataDencypt[2]);
-        }
-
-        #endregion
-
-        #region Overide
-
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
-        public override string ToString() => $"[{X}, {Y}, {H}]";
-
-        #endregion
-    }
-
-    #endregion
-
-    #region Data
-
-    public class IsoDataBlock
-    {
-        public IsoVector PosPrimary;
-        public string Name;
-        public IsoDataBlockSingle Data;
-
-        public IsoDataBlock(IsoVector Pos, string Name, IsoDataBlockSingle Data)
-        {
-            this.PosPrimary = Pos;
-            this.Name = Name;
-            this.Data = Data;
-        }
-    }
-
-    [Serializable]
-    public class IsoDataBlockSingle
-    {
-        public List<IsoDataBlockMove> MoveData;
-        public List<IsoDataBlockEvent> EventData;
-        public List<IsoDataBlockTeleport> TeleportData;
-    }
-
-    #endregion
-
-    #region Data: Move
-
-    [Serializable]
-    public class IsoDataBlockMove
-    {
-        public string KeyStart = "Move-Start";
-        public string KeyEnd = "Move-End";
-        public List<IsoDataBlockMoveSingle> Data;
-    }
-
-    [Serializable]
-    public struct IsoDataBlockMoveSingle
-    {
-        public const char KEY_VALUE_ENCYPT = '|';
-
-        public IsoVector.IsoDir Dir;
-        public int Length;
-
-        public string Encypt => QEncypt.GetEncypt(KEY_VALUE_ENCYPT, (int)Dir, Length);
-
-        public IsoDataBlockMoveSingle(IsoVector.IsoDir Dir, int Length)
-        {
-            this.Dir = Dir;
-            this.Length = Length;
-        }
-
-        public static IsoDataBlockMoveSingle GetDencypt(string Value)
-        {
-            List<int> DataString = QEncypt.GetDencyptInt(KEY_VALUE_ENCYPT, Value);
-            return new IsoDataBlockMoveSingle((IsoVector.IsoDir)DataString[0], DataString[1]);
-        }
-    }
-
-    #endregion
-
-    #region Data: Event
-
-    [Serializable]
-    public class IsoDataBlockEvent
-    {
-        public string KeyStart = "Event-Start";
-        public string KeyEnd = "Event-End";
-        public List<IsoDataBlockEventSingle> Data;
-    }
-
-    [Serializable]
-    public struct IsoDataBlockEventSingle
-    {
-        public const char KEY_VALUE_ENCYPT = '|';
-
-        public string Name;
-        public string Value;
-
-        public string Encypt => QEncypt.GetEncypt(KEY_VALUE_ENCYPT, Name, Value);
-
-        public IsoDataBlockEventSingle(string Name, string Value)
-        {
-            this.Name = Name;
-            this.Value = Value;
-        }
-
-        public static IsoDataBlockEventSingle GetDencypt(string Value)
-        {
-            List<string> DataString = QEncypt.GetDencyptString(KEY_VALUE_ENCYPT, Value);
-            return new IsoDataBlockEventSingle(DataString[0], DataString[1]);
-        }
-    }
-
-    #endregion
-
-    #region Data: Teleport
-
-    [Serializable]
-    public class IsoDataBlockTeleport
-    {
-        public string KeyStart = "Teleport-Start";
-        public string KeyEnd = "Teleport-End";
-        public List<IsoDataBlockTeleportSingle> Data;
-    }
-
-    [Serializable]
-    public struct IsoDataBlockTeleportSingle
-    {
-        public const char KEY_VALUE_ENCYPT = '|';
-
-        public string Name;
-        public IsoVector Pos;
-
-        public string Encypt => QEncypt.GetEncypt(KEY_VALUE_ENCYPT, Name, Pos.Encypt);
-
-        public IsoDataBlockTeleportSingle(string Name, IsoVector Value)
-        {
-            this.Name = Name;
-            this.Pos = Value;
-        }
-
-        public static IsoDataBlockTeleportSingle GetDencypt(string Value)
-        {
-            List<string> DataString = QEncypt.GetDencyptString(KEY_VALUE_ENCYPT, Value);
-            return new IsoDataBlockTeleportSingle(DataString[0], IsoVector.GetDencypt(DataString[1]));
-        }
-    }
-
-    #endregion
-
-
-    #region Data: Teleport
-
-    [Serializable]
-    public struct IsoDataWorldTeleportIndex
-    {
-        public const char KEY_VALUE_ENCYPT = '|';
-
-        public IsoVector Pos;
-        public int Index;
-
-        public string Encypt { get => QEncypt.GetEncypt(KEY_VALUE_ENCYPT, Pos.Encypt, Index.ToString()); }
-
-        public IsoDataWorldTeleportIndex(IsoVector Pos, int Index)
-        {
-            this.Pos = Pos;
-            this.Index = Index;
-        }
-
-        public static IsoDataWorldTeleportIndex GetDencypt(string Value)
-        {
-            List<string> DataRead = QEncypt.GetDencyptString(KEY_VALUE_ENCYPT, Value);
-            return new IsoDataWorldTeleportIndex(IsoVector.GetDencypt(DataRead[0]), int.Parse(DataRead[1]));
-        }
-    }
-
-    [Serializable]
-    public struct IsoDataWorldTeleport
-    {
-        public const char KEY_VALUE_ENCYPT = '|';
-
-        public IsoVector Pos;
-        public string WorldFile;
-        public int Index;
-
-        public string Encypt { get => QEncypt.GetEncypt(KEY_VALUE_ENCYPT, Pos.Encypt, WorldFile, Index.ToString()); }
-
-        public IsoDataWorldTeleport(IsoVector Pos, string WorldFile, int Index)
-        {
-            this.Pos = Pos;
-            this.WorldFile = WorldFile;
-            this.Index = Index;
-        }
-
-        public static IsoDataWorldTeleport GetDencypt(string Value)
-        {
-            List<string> DataRead = QEncypt.GetDencyptString(KEY_VALUE_ENCYPT, Value);
-            return new IsoDataWorldTeleport(IsoVector.GetDencypt(DataRead[0]), DataRead[1], int.Parse(DataRead[2]));
-        }
     }
 
     #endregion
