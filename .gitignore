@@ -1,0 +1,69 @@
+=============== 
+Unity generated
+===============
+QuickMethode/Temp/
+QuickMethode/Library/
+
+=====================================
+Visual Studio / MonoDevelop generated
+=====================================
+QuickMethode/ExportedObj/
+QuickMethode/obj/
+*.svd
+*.userprefs
+/QuickMethode/*.csproj
+*.pidb
+*.suo
+/QuickMethode/*.sln
+*.user
+*.unityproj
+*.booproj
+.vs
+*.dwlt
+
+============
+OS generated
+============
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+QuickMethode/remote_config_data
+QuickMethode/Logs/
+temp_res
+release
+QuickMethode/.vsconfig
+QuickMethode/.vs
+QuickMethode/.idea
+QuickMethode/.vs/
+QuickMethode/.idea/
+QuickMethode/Layouts/
+QuickMethode/UserSettings/
+QuickMethode/Assets/BuildReports/
+QuickMethode/.vscode/settings.json
+QuickMethode/Bundles/
+Build/
+QuickMethode/Assets/FindReference2/
+QuickMethode/Assets/FindReference2.meta
+QuickMethode/Assets/FR2_Cache.asset
+QuickMethode/Assets/FR2_Cache.asset.meta
+QuickMethode/Assets/DOTween/
+QuickMethode/Assets/Editor/
+QuickMethode/Assets/Plugins/
+QuickMethode/Assets/Firebase/
+QuickMethode/Assets/ExternalDependencyManager/
+QuickMethode/Assets/Editor Default Resources/Firebase/firebase_lockup_dark.png.meta
+QuickMethode/Assets/Editor Default Resources/
+QuickMethode/Assets/Editor Default Resources.meta
+QuickMethode/Assets/ExternalDependencyManager.meta
+QuickMethode/Assets/Firebase.meta
+QuickMethode/Assets/Plugins.meta
+QuickMethode/Assets/DOTween.meta
+QuickMethode/Assets/Resources/
+QuickMethode/Assets/Resources.meta
+*.ini
+QuickMethode/Assets/TextMesh Pro/
+QuickMethode/Assets/TextMesh Pro.meta
