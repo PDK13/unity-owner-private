@@ -43,32 +43,9 @@ public class ControlJumpY2D : MonoBehaviour
 
     private Rigidbody2D m_rigidbody;
 
-    private void Start()
+    private void Awake()
     {
-        Application.targetFrameRate = 60;
-
         m_rigidbody = GetComponent<Rigidbody2D>();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-            SetEventClick();
-
-        if (Input.GetKey(KeyCode.UpArrow))
-            SetEventHold();
-        else
-            SetEventRelease();
-
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            m_jumpHold = !m_jumpHold;
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        SetProgessJump();
     }
 
     #region Jump Progess
@@ -134,14 +111,4 @@ public class ControlJumpY2D : MonoBehaviour
     } //Event Update!!
 
     #endregion
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        SetEventLock(false);
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        SetEventLock(true);
-    }
 }

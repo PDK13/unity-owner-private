@@ -30,11 +30,20 @@ public class SimplePlayer : MonoBehaviour
             m_bodyControlX.SetEventMove(DirectionX.Left);
         else
             m_bodyControlX.SetEventMove(DirectionX.None);
+
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+            m_bodyControlY.SetEventClick();
+
+        if (Input.GetKey(KeyCode.UpArrow))
+            m_bodyControlY.SetEventHold();
+        else
+            m_bodyControlY.SetEventRelease();
     }
 
     private void FixedUpdate()
     {
         m_bodyControlX.SetProgessMove();
+        m_bodyControlY.SetProgessJump();
     }
 
     private void SetDebug()
@@ -58,6 +67,16 @@ public class SimplePlayer : MonoBehaviour
 
         if (m_posYHighest < m_posYLast)
             m_posYHighest = m_posYLast;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        m_bodyControlY.SetEventLock(false);
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        m_bodyControlY.SetEventLock(true);
     }
 
     private void OnDrawGizmos()
