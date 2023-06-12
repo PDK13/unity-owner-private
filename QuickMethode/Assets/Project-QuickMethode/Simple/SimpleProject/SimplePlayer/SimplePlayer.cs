@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class SimplePlayer : MonoBehaviour
 {
-    private BodyControlX2D m_bodyControlX;
-    private BodyControlY2D m_bodyControlY;
+    private ControlMoveX2D m_bodyControlX;
+    private ControlJumpY2D m_bodyControlY;
 
     //Debug
     private float m_posYStart;
@@ -15,8 +15,8 @@ public class SimplePlayer : MonoBehaviour
 
     private void Start()
     {
-        m_bodyControlX = GetComponent<BodyControlX2D>();
-        m_bodyControlY = GetComponent<BodyControlY2D>();
+        m_bodyControlX = GetComponent<ControlMoveX2D>();
+        m_bodyControlY = GetComponent<ControlJumpY2D>();
     }
 
     private void Update()
@@ -24,17 +24,17 @@ public class SimplePlayer : MonoBehaviour
         SetDebug();
 
         if (Input.GetKey(KeyCode.RightArrow))
-            m_bodyControlX.MoveDir = DirectionX.Right;
+            m_bodyControlX.SetEventMove(DirectionX.Right);
         else
         if (Input.GetKey(KeyCode.LeftArrow))
-            m_bodyControlX.MoveDir = DirectionX.Left;
+            m_bodyControlX.SetEventMove(DirectionX.Left);
         else
-            m_bodyControlX.MoveDir = DirectionX.None;
+            m_bodyControlX.SetEventMove(DirectionX.None);
     }
 
     private void FixedUpdate()
     {
-        m_bodyControlX.SetMove();
+        m_bodyControlX.SetProgessMove();
     }
 
     private void SetDebug()
@@ -42,6 +42,7 @@ public class SimplePlayer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             m_posYStart = this.transform.position.y;
+            m_posYHighest = this.transform.position.y;
         }
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -55,8 +56,8 @@ public class SimplePlayer : MonoBehaviour
         if (m_posYEnd < m_posYLast)
             m_posYEnd = m_posYLast;
 
-        if (m_posYHighest < m_posYEnd)
-            m_posYHighest = m_posYEnd;
+        if (m_posYHighest < m_posYLast)
+            m_posYHighest = m_posYLast;
     }
 
     private void OnDrawGizmos()

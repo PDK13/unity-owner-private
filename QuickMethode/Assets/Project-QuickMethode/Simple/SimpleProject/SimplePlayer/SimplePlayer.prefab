@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &322434580
 Transform:
   m_ObjectHideFlags: 0
@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: 7451268335240335928}
   - component: {fileID: 8643110037358825227}
   - component: {fileID: 8643110037358825224}
+  - component: {fileID: 4615146092051195092}
   m_Layer: 2
   m_Name: SimplePlayer
   m_TagString: Untagged
@@ -215,9 +216,9 @@ Rigidbody2D:
   m_Mass: 5
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 10
+  m_GravityScale: 0
   m_Material: {fileID: 0}
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
@@ -260,15 +261,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 8643110037358825265}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4a1da8e6560b774cb11ebad18e37f0c, type: 3}
+  m_Script: {fileID: 11500000, guid: b2009d22f3a204c49939a416130e6d13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_jumpHold: 1
   m_jumpCount: 1
-  m_jumpForce: 2.2
+  m_jumpForce: 15
   m_jumpRatio: 1
-  m_downRatio: 0.5
-  m_downClick: 1.8
-  m_downHold: 2.5
+  m_downStop: 0.1
+  m_downForce: 0.1
+  m_gravity: 9.8
+  m_gravityScale: 15
 --- !u!114 &8643110037358825224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,3 +284,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5001bb8fa7f7ffd4eaa93996a3153afe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!247 &4615146092051195092
+ConstantForce2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8643110037358825265}
+  m_Enabled: 1
+  m_Force: {x: 0, y: -98}
+  m_RelativeForce: {x: 0, y: 0}
+  m_Torque: 0

@@ -2,7 +2,7 @@ using QuickMethode;
 using System;
 using UnityEngine;
 
-public class BodyControlX2D : MonoBehaviour
+public class ControlMoveX2D : MonoBehaviour
 {
     #region Varible: Move
 
@@ -160,9 +160,9 @@ public class BodyControlX2D : MonoBehaviour
         m_rigidbody = GetComponent<Rigidbody2D>();
     }
 
-    #region Move Check
+    #region Move Progess
 
-    public void SetMove()
+    public void SetProgessMove()
     {
         if (m_colliderBase == null)
             return;
@@ -227,6 +227,11 @@ public class BodyControlX2D : MonoBehaviour
 
         m_rigidbody.AddForce((VelocityForce + m_moveForceAdd) * 4f, ForceMode2D.Impulse); //Move Force Finally!!
     } //Fixed Update!!
+
+    public void SetEventMove(DirectionX Move)
+    {
+        m_moveDir = Move;
+    } //Event Update!!
 
     #endregion
 
