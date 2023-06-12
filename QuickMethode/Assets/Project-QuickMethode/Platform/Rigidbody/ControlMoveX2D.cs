@@ -220,9 +220,6 @@ public class ControlMoveX2D : MonoBehaviour
                         VelocityForce += DirMoveL * MoveForce;
                 }
             }
-            //else
-            //    //Stop body if no any force add!!
-            //    m_rigidbody.velocity = new Vector2(0, m_rigidbody.velocity.y);
         }
 
         m_rigidbody.AddForce((VelocityForce + m_moveForceAdd) * 4f, ForceMode2D.Impulse); //Move Force Finally!!

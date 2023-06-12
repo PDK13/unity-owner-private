@@ -11,20 +11,23 @@ public class ControlJumpY2D : MonoBehaviour
     [SerializeField] private bool m_jumpHold = true;
     [SerializeField] [Min(0)] private float m_jumpForce = 10f;
     [SerializeField] [Min(0)] private float m_jumpRatio = 1f;
+    [SerializeField] [Min(1)] private int m_jumpUpdate = 2;
 
     private float JumpForceCurrent => m_jumpForce * m_jumpRatio;
 
     //Event
-    private bool m_jumpLock = false;
-    private bool m_jumpPress = false;
+    private bool m_jumpContinue = true;
+    private bool m_jumpUp = false;
     private bool m_jumpKeep = false;
+
+    private Coroutine m_iSetJumpContinue;
 
     #endregion
 
     #region Varible: Hold
 
     [Header("Down")]
-    [SerializeField] [Min(0)] private float m_downStop = 10f;
+    [SerializeField] [Min(0)] private float m_downStop = 1f;
     [SerializeField] [Min(0)] private float m_downForce = 1f;
 
     [Header("Gravity")]
@@ -43,80 +46,82 @@ public class ControlJumpY2D : MonoBehaviour
 
     private Rigidbody2D m_rigidbody;
 
-    private void Start()
+    private void Awake()
     {
-        Application.targetFrameRate = 60;
-
         m_rigidbody = GetComponent<Rigidbody2D>();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-            SetEventClick();
-
-        if (Input.GetKey(KeyCode.UpArrow))
-            SetEventHold();
-        else
-            SetEventRelease();
-
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            m_jumpHold = !m_jumpHold;
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        SetProgessJump();
     }
 
     #region Jump Progess
 
     public void SetProgessJump()
     {
-        if (m_jumpLock)
+        #region -------------------------------- Jump Press
+
+        if (!m_jumpContinue)
         {
+            //Gravity when Jump or on air!!
             float GravityForce = -Physics2D.gravity.y * m_gravityScale;
             m_rigidbody.AddForce(Vector2.down * GravityForce, ForceMode2D.Force);
         }
 
-        if (!m_jumpLock && m_jumpPress)
+        if (m_jumpContinue && m_jumpUp)
         {
+            //Jump Up start!!
             float ForceUp = Mathf.Sqrt(-Physics2D.gravity.y * JumpForceCurrent) * m_rigidbody.mass;
             m_rigidbody.AddForce(Vector2.up * ForceUp, ForceMode2D.Impulse);
         }
 
-        if (!m_jumpPress)
+        if (!m_jumpUp)
+            //Jump Up continue!!
             return;
 
         if (m_rigidbody.velocity.y < 0)
-            m_jumpPress = false;
+            //Jump Up end!!
+            m_jumpUp = false;
+
+        #endregion
+
+        #region -------------------------------- Jump Hold
 
         if (!m_jumpHold)
+            //Jump Hold optional!!
             return;
 
         if (m_rigidbody.velocity.y > 0 && !m_jumpKeep)
         {
             //Drag Down in middle!!
-            float ForceUp = Mathf.Sqrt(-Physics2D.gravity.y * JumpForceCurrent * m_downStop) * m_rigidbody.mass;
-            m_rigidbody.AddForce(Vector2.down * m_rigidbody.velocity.y * ForceUp, ForceMode2D.Force);
+            float ForceDown = Mathf.Sqrt(-Physics2D.gravity.y * JumpForceCurrent * m_downStop) * m_rigidbody.mass;
+            m_rigidbody.AddForce(Vector2.down * m_rigidbody.velocity.y * ForceDown, ForceMode2D.Force);
         }
         else
         if (m_rigidbody.velocity.y < 0)
         {
             //Drag Down at begin!!
-            float ForceUp = Mathf.Sqrt(-Physics2D.gravity.y * JumpForceCurrent * m_downForce) * m_rigidbody.mass;
-            m_rigidbody.AddForce(Vector2.down * m_rigidbody.velocity.y * ForceUp, ForceMode2D.Force);
+            float ForceDown = Mathf.Sqrt(-Physics2D.gravity.y * JumpForceCurrent * m_downForce) * m_rigidbody.mass;
+            m_rigidbody.AddForce(Vector2.down * m_rigidbody.velocity.y * ForceDown, ForceMode2D.Force);
         }
+
+        #endregion
     } //Fixed Update!!
 
     public void SetEventClick()
     {
-        if (m_jumpLock)
-            return;
-        m_jumpPress = true;
+        m_jumpUp = true;
+
+        if (m_iSetJumpContinue != null)
+            StopCoroutine(m_iSetJumpContinue);
+        m_iSetJumpContinue = StartCoroutine(ISetJumpContinue());
     } //Event Update!!
+
+    private IEnumerator ISetJumpContinue()
+    {
+        m_jumpContinue = true;
+
+        for (int Fixed = 0; Fixed < m_jumpUpdate; Fixed++)
+            yield return new WaitForFixedUpdate();
+
+        m_jumpContinue = false;
+    }
 
     public void SetEventHold()
     {
@@ -128,20 +133,5 @@ public class ControlJumpY2D : MonoBehaviour
         m_jumpKeep = false;
     } //Event Update!!
 
-    public void SetEventLock(bool Lock)
-    {
-        m_jumpLock = Lock;
-    } //Event Update!!
-
     #endregion
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        SetEventLock(false);
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        SetEventLock(true);
-    }
 }
