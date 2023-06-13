@@ -6,6 +6,8 @@ public class SimplePlayer : MonoBehaviour
     private ControlMoveX2D m_bodyControlX;
     private ControlJumpY2D m_bodyControlY;
 
+    private bool m_ground = true;
+
     //Debug
     private float m_posYStart;
     private float m_posYEnd;
@@ -31,10 +33,10 @@ public class SimplePlayer : MonoBehaviour
         else
             m_bodyControlX.SetEventMove(DirectionX.None);
 
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (m_ground)
         {
-            m_bodyControlY.SetEventClick();
-            m_bodyControlY.SetEventLock(true);
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+                m_bodyControlY.SetEventClick();
         }
 
         if (Input.GetKey(KeyCode.UpArrow))
@@ -74,12 +76,12 @@ public class SimplePlayer : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        m_bodyControlY.SetEventLock(false);
+        m_ground = true;
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        m_bodyControlY.SetEventLock(true);
+        m_ground = false;
     }
 
     private void OnDrawGizmos()

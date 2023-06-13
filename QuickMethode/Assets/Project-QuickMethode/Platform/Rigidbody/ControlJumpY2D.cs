@@ -11,13 +11,16 @@ public class ControlJumpY2D : MonoBehaviour
     [SerializeField] private bool m_jumpHold = true;
     [SerializeField] [Min(0)] private float m_jumpForce = 10f;
     [SerializeField] [Min(0)] private float m_jumpRatio = 1f;
+    [SerializeField] [Min(1)] private int m_jumpUpdate = 2;
 
     private float JumpForceCurrent => m_jumpForce * m_jumpRatio;
 
     //Event
-    private bool m_jumpLock = false;
+    private bool m_jumpContinue = true;
     private bool m_jumpUp = false;
     private bool m_jumpKeep = false;
+
+    private Coroutine m_iSetJumpContinue;
 
     #endregion
 
@@ -54,14 +57,14 @@ public class ControlJumpY2D : MonoBehaviour
     {
         #region -------------------------------- Jump Press
 
-        if (m_jumpLock)
+        if (!m_jumpContinue)
         {
             //Gravity when Jump or on air!!
             float GravityForce = -Physics2D.gravity.y * m_gravityScale;
             m_rigidbody.AddForce(Vector2.down * GravityForce, ForceMode2D.Force);
         }
 
-        if (!m_jumpLock && m_jumpUp)
+        if (m_jumpContinue && m_jumpUp)
         {
             //Jump Up start!!
             float ForceUp = Mathf.Sqrt(-Physics2D.gravity.y * JumpForceCurrent) * m_rigidbody.mass;
@@ -103,10 +106,22 @@ public class ControlJumpY2D : MonoBehaviour
 
     public void SetEventClick()
     {
-        if (m_jumpLock)
-            return;
         m_jumpUp = true;
+
+        if (m_iSetJumpContinue != null)
+            StopCoroutine(m_iSetJumpContinue);
+        m_iSetJumpContinue = StartCoroutine(ISetJumpContinue());
     } //Event Update!!
+
+    private IEnumerator ISetJumpContinue()
+    {
+        m_jumpContinue = true;
+
+        for (int Fixed = 0; Fixed < m_jumpUpdate; Fixed++)
+            yield return new WaitForFixedUpdate();
+
+        m_jumpContinue = false;
+    }
 
     public void SetEventHold()
     {
@@ -116,12 +131,6 @@ public class ControlJumpY2D : MonoBehaviour
     public void SetEventRelease()
     {
         m_jumpKeep = false;
-    } //Event Update!!
-
-    public void SetEventLock(bool Lock)
-    {
-        //Jump Lock revent from Jump press!!
-        m_jumpLock = Lock;
     } //Event Update!!
 
     #endregion
