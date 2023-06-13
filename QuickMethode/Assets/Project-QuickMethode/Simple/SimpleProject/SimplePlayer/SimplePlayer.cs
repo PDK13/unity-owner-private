@@ -32,7 +32,10 @@ public class SimplePlayer : MonoBehaviour
             m_bodyControlX.SetEventMove(DirectionX.None);
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
             m_bodyControlY.SetEventClick();
+            m_bodyControlY.SetEventLock(true);
+        }
 
         if (Input.GetKey(KeyCode.UpArrow))
             m_bodyControlY.SetEventHold();

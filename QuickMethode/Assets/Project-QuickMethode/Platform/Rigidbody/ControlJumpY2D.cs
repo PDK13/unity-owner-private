@@ -16,7 +16,7 @@ public class ControlJumpY2D : MonoBehaviour
 
     //Event
     private bool m_jumpLock = false;
-    private bool m_jumpPress = false;
+    private bool m_jumpUp = false;
     private bool m_jumpKeep = false;
 
     #endregion
@@ -24,7 +24,7 @@ public class ControlJumpY2D : MonoBehaviour
     #region Varible: Hold
 
     [Header("Down")]
-    [SerializeField] [Min(0)] private float m_downStop = 10f;
+    [SerializeField] [Min(0)] private float m_downStop = 1f;
     [SerializeField] [Min(0)] private float m_downForce = 1f;
 
     [Header("Gravity")]
@@ -52,47 +52,60 @@ public class ControlJumpY2D : MonoBehaviour
 
     public void SetProgessJump()
     {
+        #region -------------------------------- Jump Press
+
         if (m_jumpLock)
         {
+            //Gravity when Jump or on air!!
             float GravityForce = -Physics2D.gravity.y * m_gravityScale;
             m_rigidbody.AddForce(Vector2.down * GravityForce, ForceMode2D.Force);
         }
 
-        if (!m_jumpLock && m_jumpPress)
+        if (!m_jumpLock && m_jumpUp)
         {
+            //Jump Up start!!
             float ForceUp = Mathf.Sqrt(-Physics2D.gravity.y * JumpForceCurrent) * m_rigidbody.mass;
             m_rigidbody.AddForce(Vector2.up * ForceUp, ForceMode2D.Impulse);
         }
 
-        if (!m_jumpPress)
+        if (!m_jumpUp)
+            //Jump Up continue!!
             return;
 
         if (m_rigidbody.velocity.y < 0)
-            m_jumpPress = false;
+            //Jump Up end!!
+            m_jumpUp = false;
+
+        #endregion
+
+        #region -------------------------------- Jump Hold
 
         if (!m_jumpHold)
+            //Jump Hold optional!!
             return;
 
         if (m_rigidbody.velocity.y > 0 && !m_jumpKeep)
         {
             //Drag Down in middle!!
-            float ForceUp = Mathf.Sqrt(-Physics2D.gravity.y * JumpForceCurrent * m_downStop) * m_rigidbody.mass;
-            m_rigidbody.AddForce(Vector2.down * m_rigidbody.velocity.y * ForceUp, ForceMode2D.Force);
+            float ForceDown = Mathf.Sqrt(-Physics2D.gravity.y * JumpForceCurrent * m_downStop) * m_rigidbody.mass;
+            m_rigidbody.AddForce(Vector2.down * m_rigidbody.velocity.y * ForceDown, ForceMode2D.Force);
         }
         else
         if (m_rigidbody.velocity.y < 0)
         {
             //Drag Down at begin!!
-            float ForceUp = Mathf.Sqrt(-Physics2D.gravity.y * JumpForceCurrent * m_downForce) * m_rigidbody.mass;
-            m_rigidbody.AddForce(Vector2.down * m_rigidbody.velocity.y * ForceUp, ForceMode2D.Force);
+            float ForceDown = Mathf.Sqrt(-Physics2D.gravity.y * JumpForceCurrent * m_downForce) * m_rigidbody.mass;
+            m_rigidbody.AddForce(Vector2.down * m_rigidbody.velocity.y * ForceDown, ForceMode2D.Force);
         }
+
+        #endregion
     } //Fixed Update!!
 
     public void SetEventClick()
     {
         if (m_jumpLock)
             return;
-        m_jumpPress = true;
+        m_jumpUp = true;
     } //Event Update!!
 
     public void SetEventHold()
@@ -107,6 +120,7 @@ public class ControlJumpY2D : MonoBehaviour
 
     public void SetEventLock(bool Lock)
     {
+        //Jump Lock revent from Jump press!!
         m_jumpLock = Lock;
     } //Event Update!!
 
