@@ -16,7 +16,7 @@ public class ControlJumpY2D : MonoBehaviour
     private float JumpForceCurrent => m_jumpForce * m_jumpRatio;
 
     //Event
-    private bool m_jumpContinue = true;
+    private bool m_jumpContinue = false;
     private bool m_jumpUp = false;
     private bool m_jumpKeep = false;
 
@@ -31,7 +31,6 @@ public class ControlJumpY2D : MonoBehaviour
     [SerializeField] [Min(0)] private float m_downForce = 1f;
 
     [Header("Gravity")]
-    [SerializeField] [Min(0)] private float m_gravity = 9.8f;
     [SerializeField] [Min(0)] private float m_gravityScale = 1f;
 
     #endregion
@@ -41,6 +40,8 @@ public class ControlJumpY2D : MonoBehaviour
     public float JumpForce { get => m_jumpForce; set => m_jumpForce = value; }
 
     public float JumpRatio { get => m_jumpRatio; set => m_jumpRatio = value; }
+
+    public float GravityScale { get => m_gravityScale; set => m_gravityScale = value; }
 
     #endregion
 
