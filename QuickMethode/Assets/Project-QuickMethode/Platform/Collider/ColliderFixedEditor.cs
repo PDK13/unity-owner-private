@@ -1,9 +1,6 @@
 #if UNITY_EDITOR
 using QuickMethode;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
-using UnityEngine;
 
 [CustomEditor(typeof(ColliderFixed))]
 public class ColliderFixedEditor : Editor

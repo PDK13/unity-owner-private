@@ -271,18 +271,13 @@ namespace QuickMethode
 
         #region ==================================== Deg to Target: Use for Face to a Target
 
-        public static float GetDegTargetXZ(Transform TransformMain, Transform TransformTarket) //Check(?!)
+        public static float GetDegTargetOffset(Transform Body, Vector3 BodyDir, Transform Target)
         {
-            float Distance = Vector3.Distance(TransformMain.transform.position, TransformTarket.position);
-            float Deg = TransformMain.transform.eulerAngles.y;
-
-            Vector3 DirStart = QVector.GetDir(TransformMain.transform.position, TransformMain.transform.position + GetPosXZ(-Deg, Distance));
-            Vector3 DirEnd = QVector.GetDir(TransformMain.transform.position, TransformMain.transform.position + QVector.GetDir(TransformMain.transform.position, TransformTarket.position) * Distance);
-
-            Vector2 DirFrom = new Vector2(DirStart.x, DirStart.z);
-            Vector2 DirTo = new Vector2(DirEnd.x, DirEnd.z);
-
-            return Vector2.Angle(DirFrom, DirTo);
+            //Get value of deg remain to target:
+            //- Value > 0 mean rotate follow anti-clockwise to head target
+            //- Value < 0 mean rotate follow clockwise to head target
+            Vector2 Dir = (Target.position - Body.position).normalized;
+            return Vector3.SignedAngle(BodyDir, Dir, Vector3.forward);
         }
 
         #endregion
@@ -376,6 +371,24 @@ namespace QuickMethode
         #endregion
 
         #region ------------------------------------ Rotation Instantly
+
+        //Axis
+
+        public static void SetRotate(Transform Body, Vector3 Dir, Axis Axis)
+        {
+            switch (Axis)
+            {
+                case Axis.Right:
+                    Body.right = Dir;
+                    break;
+                case Axis.Up:
+                    Body.up = Dir;
+                    break;
+                case Axis.Forward:
+                    Body.forward = Dir;
+                    break;
+            }
+        }
 
         //2D
 
@@ -5717,6 +5730,8 @@ namespace QuickMethode
     public enum DirectionX { Left = -1, Right = 1, None = 0 }
 
     public enum DirectionY { Up = 1, Down = -1, None = 0 }
+
+    public enum Axis { Up, Right, Forward, }
 }
 
 //namespace QuickManager

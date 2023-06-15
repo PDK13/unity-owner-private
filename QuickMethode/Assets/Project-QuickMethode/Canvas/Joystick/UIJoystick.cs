@@ -1,7 +1,7 @@
+using QuickMethode;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using QuickMethode;
 
 public class UIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {

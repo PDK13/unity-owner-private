@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-using Unity.Profiling;
 using UnityEngine;
 
 public class GameStats : MonoBehaviour

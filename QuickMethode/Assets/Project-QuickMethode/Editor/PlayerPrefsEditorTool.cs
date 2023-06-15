@@ -1,10 +1,9 @@
 #if UNITY_EDITOR
 
+using QuickMethode;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using QuickMethode;
-using System.Collections;
 
 public class PlayerPrefsEditorTool : EditorWindow
 {

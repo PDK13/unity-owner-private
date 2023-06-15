@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Linq;
 #if UNITY_ANDROID
 using Unity.Notifications.Android;
 #endif

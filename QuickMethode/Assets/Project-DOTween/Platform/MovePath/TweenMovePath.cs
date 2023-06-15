@@ -1,7 +1,5 @@
 using DG.Tweening;
 using QuickMethode;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TweenMovePath : MonoBehaviour

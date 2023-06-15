@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using QuickMethode;
+using System.Collections.Generic;
 using UnityEngine;
-using QuickMethode;
 
 public class SoundManager : MonoBehaviour
 {

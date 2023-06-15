@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using QuickMethode;
+﻿using QuickMethode;
+using UnityEngine;
 
 public class CheckPointGet : MonoBehaviour
 {
@@ -25,7 +25,7 @@ public class CheckPointGet : MonoBehaviour
 
     public float GetPointNextOffsetRotate()
     {
-        return QCircle.GetDegTargetXZ(transform, m_PointNext.transform);
+        return GetDegTargetXZ(transform, m_PointNext.transform);
     }
 
     public void SetCheckPointOffsetDirection(float m_PointOffsetDirectionDeg)
@@ -48,4 +48,18 @@ public class CheckPointGet : MonoBehaviour
     {
         return GetPointNextOffsetRotate() <= m_PointOffsetAngleLower;
     }
+
+    private float GetDegTargetXZ(Transform TransformMain, Transform TransformTarket) //Check(?!)
+    {
+        float Distance = Vector3.Distance(TransformMain.transform.position, TransformTarket.position);
+        float Deg = TransformMain.transform.eulerAngles.y;
+
+        Vector3 DirStart = QVector.GetDir(TransformMain.transform.position, TransformMain.transform.position + QCircle.GetPosXZ(-Deg, Distance));
+        Vector3 DirEnd = QVector.GetDir(TransformMain.transform.position, TransformMain.transform.position + QVector.GetDir(TransformMain.transform.position, TransformTarket.position) * Distance);
+
+        Vector2 DirFrom = new Vector2(DirStart.x, DirStart.z);
+        Vector2 DirTo = new Vector2(DirEnd.x, DirEnd.z);
+
+        return Vector2.Angle(DirFrom, DirTo);
+    } //This methode is old, should use "QCircle.GetDegTargetOffset()" instead!!
 }

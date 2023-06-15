@@ -1,8 +1,7 @@
-using System.Collections;
+using QuickMethode;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using QuickMethode;
 
 public class SimpleSlotMachine : MonoBehaviour
 {

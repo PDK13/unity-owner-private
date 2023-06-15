@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using QuickMethode;
+﻿using QuickMethode;
+using UnityEngine;
 
 public class CheckPointArea : MonoBehaviour
 {
