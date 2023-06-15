@@ -32,6 +32,7 @@ public class ControlJumpY2D : MonoBehaviour
 
     [Header("Gravity")]
     [SerializeField] [Min(0)] private float m_gravityScale = 1f;
+    [SerializeField] private Vector2 m_gravityDirection = Vector2.down;
 
     #endregion
 
@@ -42,6 +43,12 @@ public class ControlJumpY2D : MonoBehaviour
     public float JumpRatio { get => m_jumpRatio; set => m_jumpRatio = value; }
 
     public float GravityScale { get => m_gravityScale; set => m_gravityScale = value; }
+
+    public Vector2 GravityDirection { get => m_gravityDirection; set => m_gravityDirection = value; }
+
+    public bool JumpUp => m_jumpUp;
+
+    public bool JumpKeep => m_jumpKeep;
 
     #endregion
 
@@ -62,7 +69,7 @@ public class ControlJumpY2D : MonoBehaviour
         {
             //Gravity when Jump or on air!!
             float GravityForce = -Physics2D.gravity.y * m_gravityScale;
-            m_rigidbody.AddForce(Vector2.down * GravityForce, ForceMode2D.Force);
+            m_rigidbody.AddForce(m_gravityDirection * GravityForce, ForceMode2D.Force);
         }
 
         if (m_jumpContinue && m_jumpUp)
