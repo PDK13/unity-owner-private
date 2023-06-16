@@ -1,4 +1,5 @@
 using QuickMethode;
+using System;
 using UnityEngine;
 
 public class ControlMoveX2D : MonoBehaviour
@@ -55,7 +56,7 @@ public class ControlMoveX2D : MonoBehaviour
             if (MoveFixed)
                 return Vector2.left;
 
-            if (m_degL == 90f)
+            if (m_degL >= 90f)
             {
                 if (m_wallClimb > 0 && !m_wallCheckPush)
                     return Vector2.up;
@@ -88,7 +89,7 @@ public class ControlMoveX2D : MonoBehaviour
             if (MoveFixed)
                 return Vector2.right;
 
-            if (m_degR == 90f)
+            if (m_degR >= 90f)
             {
                 if (m_wallClimb > 0 && !m_wallCheckPush)
                     return Vector2.up;

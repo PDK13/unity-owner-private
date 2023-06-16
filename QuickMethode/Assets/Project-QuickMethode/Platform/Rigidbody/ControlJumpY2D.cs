@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using QuickMethode;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class ControlJumpY2D : MonoBehaviour //From: Trịnh Văn Khoa
+public class ControlJumpY2D : MonoBehaviour //From: Trịnh Văn Khoa (Searcher)
 {
     #region Varible: Jump
 
@@ -29,7 +31,7 @@ public class ControlJumpY2D : MonoBehaviour //From: Trịnh Văn Khoa
     [SerializeField] [Min(0)] private float m_downForce = 1f;
 
     [Header("Gravity")]
-    [SerializeField] [Min(0)] private float m_gravityScale = 1f;
+    [SerializeField] private float m_gravityScale = 1f;
     [SerializeField] private Vector2 m_gravityDirection = Vector2.down;
 
     #endregion
