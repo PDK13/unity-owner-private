@@ -127,6 +127,8 @@ public class ControlMoveX2D : MonoBehaviour
     [SerializeField] private PhysicsMaterial2D m_materialStand; //Fiction should be more than 0 value!!
     [SerializeField] private LayerMask m_checkMask;             //Layer Mask for every raycast!!
 
+    private bool m_bodyOnAir = false;
+
     #endregion
 
     #region Varible: Public
@@ -151,6 +153,8 @@ public class ControlMoveX2D : MonoBehaviour
 
     public bool WallCheckPush => m_wallCheckPush;
 
+    public bool BodyOnAir { get => m_bodyOnAir; set => m_bodyOnAir = value; }
+
     #endregion
 
     private Rigidbody2D m_rigidbody;
@@ -168,7 +172,9 @@ public class ControlMoveX2D : MonoBehaviour
             return;
 
         //Physic Material!!
-
+        if (m_bodyOnAir)
+            m_rigidbody.sharedMaterial = m_materialMove;
+        else
         if (m_moveDir != DirectionX.None)
             m_rigidbody.sharedMaterial = m_materialMove;
         else
