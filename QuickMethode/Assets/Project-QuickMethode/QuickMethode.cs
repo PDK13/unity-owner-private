@@ -17,8 +17,6 @@ using UnityEditor;
 
 namespace QuickMethode
 {
-    //==================================== Vector
-
     public class QVector
     {
         //'Vector().magnitude' mean Length & 'Vector.Distance()' mean Distance
@@ -134,8 +132,6 @@ namespace QuickMethode
 
         #endregion
     }
-
-    //==================================== Circle
 
     public class QCircle
     {
@@ -283,7 +279,44 @@ namespace QuickMethode
         #endregion
     }
 
-    //==================================== Transform
+    public class QTrajectory
+    {
+        public static List<Vector3> GetTrajectory(Vector3 From, float Deg, float Force, float GravityScale, float VelocityDrag = 0f)
+        {
+            //NOTE:
+            //- Can be used for LineRenderer Component.
+            //- Can be used for Bullet GameObject with Rigidbody and Rigidbody2D Componenet.
+
+            List<Vector3> TrajectoryPath = new List<Vector3>();
+
+            Vector3 GravityGolbal = Vector3.down * (-Physics2D.gravity);
+            float Step = Time.fixedDeltaTime / Physics.defaultSolverVelocityIterations;
+            Vector3 Accel = GravityGolbal * GravityScale * Step * Step;
+            float Drag = 1f - Step * VelocityDrag;
+            Vector3 Dir = QCircle.GetPosXY(Deg, 1f).normalized * Force;
+            Vector3 Move = Dir * Step;
+
+            Vector3 Pos = From;
+            TrajectoryPath.Add(Pos);
+            for (int i = 0; i < 500; i++)
+            {
+                Move += Accel;
+                Move *= Drag;
+                Pos += Move;
+                TrajectoryPath.Add(Pos);
+            }
+
+            return TrajectoryPath;
+        }
+
+        public static void SetBullet(Rigidbody2D Body, float Deg, float Force, float GravityScale, float VelocityDrag = 0f)
+        {
+            Body.gameObject.SetActive(true);
+            Body.velocity = QCircle.GetPosXY(Deg, 1f).normalized * Force;
+            Body.gravityScale = GravityScale;
+            Body.drag = VelocityDrag;
+        }
+    }
 
     public class QTransform
     {
@@ -442,8 +475,6 @@ namespace QuickMethode
 
         #endregion
     }
-
-    //==================================== Collider2D
 
     public class QCollider2D
     {
@@ -707,8 +738,6 @@ namespace QuickMethode
         #endregion
     }
 
-    //==================================== Layer
-
     public class QLayer
     {
         #region Primary
@@ -754,8 +783,6 @@ namespace QuickMethode
 
         #endregion
     }
-
-    //==================================== Cast
 
     public class QCast : QLayer
     {
@@ -1264,8 +1291,6 @@ namespace QuickMethode
         #endregion
     }
 
-    //==================================== RecTransform
-
     public class QRecTransform
     {
         private static Vector2 GetPosAnchorPivotOffset(RectTransform From, Vector2 ToPivot)
@@ -1306,9 +1331,7 @@ namespace QuickMethode
         }
     }
 
-    //==================================== Camera
-
-    public class QCamera //Note: Current ORTHOGRAPHIC 2D only!!
+    public class QCamera
     {
         //Required only ONE Main Camera (with tag Main Camera) for the true result!!
 
@@ -1372,9 +1395,7 @@ namespace QuickMethode
         }
 
         #endregion
-    }
-
-    //==================================== Resolution
+    } //Note: Current ORTHOGRAPHIC 2D only!!
 
     public class QResolution
     {
@@ -1436,8 +1457,6 @@ namespace QuickMethode
 
         #endregion
     }
-
-    //==================================== Sprite & Sprite Renderer
 
     public class QSprite
     {
@@ -1579,8 +1598,6 @@ namespace QuickMethode
         #endregion
     }
 
-    //==================================== GameObject
-
     public class QGameObject
     {
         #region ==================================== Create
@@ -1690,8 +1707,6 @@ namespace QuickMethode
         #endregion
     }
 
-    //==================================== Component
-
     public class QComponent
     {
         #region Primary
@@ -1731,8 +1746,6 @@ namespace QuickMethode
 
         #endregion
     }
-
-    //==================================== PlayerPrefs
 
     public class QPlayerPrefs
     {
@@ -1965,8 +1978,6 @@ namespace QuickMethode
         #endregion
     }
 
-    //==================================== Resources
-
     public class QResources
     {
         //NOTE:
@@ -2014,8 +2025,6 @@ namespace QuickMethode
 
         #endregion
     }
-
-    //==================================== File
 
     public class QPath
     {
@@ -2142,8 +2151,6 @@ namespace QuickMethode
 
         #endregion
     }
-
-    //==================================== FileIO
 
     public class QFileIO : QPath
     {
@@ -2493,8 +2500,6 @@ namespace QuickMethode
         #endregion
     }
 
-    //==================================== JSON
-
     public class QJSON
     {
         //NOTE:
@@ -2518,8 +2523,6 @@ namespace QuickMethode
             return JsonUtility.ToJson(JsonDataClass);
         }
     }
-
-    //==================================== Enum
 
     public class QEnum
     {
@@ -2560,8 +2563,6 @@ namespace QuickMethode
 
         #endregion
     }
-
-    //==================================== Color
 
     public class QColor
     {
@@ -2714,8 +2715,6 @@ namespace QuickMethode
 
         #endregion
     }
-
-    //==================================== Encypt
 
     public class QEncypt
     {
@@ -3063,8 +3062,6 @@ namespace QuickMethode
         #endregion
     }
 
-    //==================================== List
-
     public class QList
     {
         #region Get Data
@@ -3183,8 +3180,6 @@ namespace QuickMethode
         #endregion
     }
 
-    //==================================== Application
-
     public class QApplication
     {
         public static void SetTimeScale(float TimeScale = 1)
@@ -3206,8 +3201,6 @@ namespace QuickMethode
             Physics2D.simulationMode = Mode;
         }
     }
-
-    //==================================== Scene
 
     public class QScene
     {
@@ -3231,8 +3224,6 @@ namespace QuickMethode
             return SceneManager.GetActiveScene().buildIndex;
         }
     }
-
-    //==================================== Control Mouse & Keyboard & Device
 
     public class QControl
     {
@@ -3381,8 +3372,6 @@ namespace QuickMethode
 
         #endregion
     }
-
-    //==================================== Gizmos
 
     public class QGizmos
     {
@@ -3591,8 +3580,6 @@ namespace QuickMethode
         #endregion
     }
 
-    //==================================== Date Time
-
     public class QDateTime
     {
         public const string DD_MM_YYYY = "dd/MM/yyyy";
@@ -3668,8 +3655,6 @@ namespace QuickMethode
         #endregion
     }
 
-    //==================================== Time Span
-
     public class QTimeSpan
     {
         public const string HH_MM_SS = @"hh\:mm\:ss";
@@ -3692,8 +3677,6 @@ namespace QuickMethode
 
         #endregion
     }
-
-    //==================================== Time Countdown
 
     public class QTimeCountdown
     {
@@ -3766,8 +3749,6 @@ namespace QuickMethode
 
         #endregion
     }
-
-    //==================================== GUI Editor Window & GUI Editor Custom Script
 
 #if UNITY_EDITOR
 
@@ -4126,476 +4107,16 @@ namespace QuickMethode
         }
 
         #endregion
-
-        //#region ==================================== GUI Quick-Use!!
-
-        //private static float WIDTH_OFFSET = 4f;
-
-        //#region ------------------------------------ Label
-
-        //public static void SetLabel(string Label, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    GUIStyle GUIStyle = GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter);
-
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            SetLabel(Label, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            SetLabel(Label, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        SetLabel(Label, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static void SetLabel(string Label, EditorWindow This, FontStyle FontStyle, TextAnchor TextAnchor, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    GUIStyle GUIStyle = GetGUILabel(FontStyle, TextAnchor);
-
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            SetLabel(Label, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            SetLabel(Label, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        SetLabel(Label, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static void SetLabel(Sprite Sprite, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            SetLabel(Sprite, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            SetLabel(Sprite, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        SetLabel(Sprite, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //#endregion
-
-        //#region ------------------------------------ Button
-
-        //public static bool SetButton(string Label, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    GUIStyle GUIStyle = GetGUIButton(FontStyle.Normal, TextAnchor.MiddleCenter);
-
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetButton(Label, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetButton(Label, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetButton(Label, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static bool SetButton(string Label, EditorWindow This, FontStyle FontStyle, TextAnchor TextAnchor, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    GUIStyle GUIStyle = GetGUIButton(FontStyle, TextAnchor);
-
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetButton(Label, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetButton(Label, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetButton(Label, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static bool SetButton(Sprite Sprite, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetButton(Sprite, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetButton(Sprite, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetButton(Sprite, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //#endregion
-
-        //#region ------------------------------------ Field
-
-        //#region Field Text
-
-        ////String
-
-        //public static string SetField(string Value, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    GUIStyle GUIStyle = GetGUITextField(FontStyle.Normal, TextAnchor.UpperLeft);
-
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static string SetField(string Value, EditorWindow This, FontStyle FontStyle, TextAnchor TextAnchor, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    GUIStyle GUIStyle = GetGUIButton(FontStyle, TextAnchor);
-
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static string SetFieldArea(string Value, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    GUIStyle GUIStyle = GetGUITextArea(FontStyle.Normal, TextAnchor.UpperLeft);
-
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static string SetFieldArea(string Value, EditorWindow This, FontStyle FontStyle, TextAnchor TextAnchor, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    GUIStyle GUIStyle = GetGUIButton(FontStyle, TextAnchor);
-
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static string SetFieldPassword(string Value, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    GUIStyle GUIStyle = GetGUITextField(FontStyle.Normal, TextAnchor.MiddleLeft);
-
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetFieldPassword(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetFieldPassword(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetFieldPassword(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static string SetFieldPassword(string Value, EditorWindow This, FontStyle FontStyle, TextAnchor TextAnchor, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    GUIStyle GUIStyle = GetGUIButton(FontStyle, TextAnchor);
-
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetFieldPassword(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetFieldPassword(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetFieldPassword(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        ////Number
-
-        //public static int SetField(int Value, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    GUIStyle GUIStyle = GetGUITextField(FontStyle.Normal, TextAnchor.MiddleLeft);
-
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static int SetField(int Value, EditorWindow This, FontStyle FontStyle, TextAnchor TextAnchor, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    GUIStyle GUIStyle = GetGUIButton(FontStyle, TextAnchor);
-
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static long SetField(long Value, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    GUIStyle GUIStyle = GetGUITextField(FontStyle.Normal, TextAnchor.MiddleLeft);
-
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static long SetField(long Value, EditorWindow This, FontStyle FontStyle, TextAnchor TextAnchor, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    GUIStyle GUIStyle = GetGUIButton(FontStyle, TextAnchor);
-
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static float SetField(float Value, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    GUIStyle GUIStyle = GetGUITextField(FontStyle.Normal, TextAnchor.MiddleLeft);
-
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static float SetField(float Value, EditorWindow This, FontStyle FontStyle, TextAnchor TextAnchor, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    GUIStyle GUIStyle = GetGUIButton(FontStyle, TextAnchor);
-
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static double SetField(double Value, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    GUIStyle GUIStyle = GetGUITextField(FontStyle.Normal, TextAnchor.MiddleLeft);
-
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static double SetField(double Value, EditorWindow This, FontStyle FontStyle, TextAnchor TextAnchor, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    GUIStyle GUIStyle = GetGUIButton(FontStyle, TextAnchor);
-
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetField(Value, GUIStyle, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //#endregion
-
-        //#region Field Vector
-
-        ////Vector2
-
-        //public static Vector2 SetField(Vector2 Value, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetField(Value, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetField(Value, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetField(Value, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static Vector2Int SetField(Vector2Int Value, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetField(Value, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetField(Value, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetField(Value, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        ////Vector3
-
-        //public static Vector3 SetField(Vector3 Value, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetField(Value, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetField(Value, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetField(Value, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static Vector3Int SetField(Vector3Int Value, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetField(Value, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetField(Value, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetField(Value, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //#endregion
-
-        //#region Field Else
-
-        //public static Color SetField(Color Value, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetField(Value, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetField(Value, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetField(Value, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static GameObject SetField(GameObject Value, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return SetField(Value, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return SetField(Value, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return SetField(Value, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //#endregion
-
-        //#endregion
-
-        //#region ------------------------------------ Scroll View
-        //#endregion
-
-        //#region ------------------------------------ Popup
-
-        //public static int SetPopup(int IndexChoice, string[] ListChoice, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return EditorGUILayout.Popup("", IndexChoice, ListChoice, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return EditorGUILayout.Popup("", IndexChoice, ListChoice, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return EditorGUILayout.Popup("", IndexChoice, ListChoice, GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static int SetPopup(int IndexChoice, List<string> ListChoice, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return EditorGUILayout.Popup("", IndexChoice, ListChoice.ToArray(), GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return EditorGUILayout.Popup("", IndexChoice, ListChoice.ToArray(), GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return EditorGUILayout.Popup("", IndexChoice, ListChoice.ToArray(), GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //public static int SetPopup<EnumType>(int IndexChoice, EditorWindow This, float WidthPercent = 1, float HeightPercent = 0, bool HeightScaleByWidth = true)
-        //{
-        //    if (HeightPercent != 0)
-        //    {
-        //        if (HeightScaleByWidth)
-        //            return EditorGUILayout.Popup("", IndexChoice, QEnum.GetEnumList<EnumType>().ToArray(), GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetWidth(This) * HeightPercent));
-        //        else
-        //            return EditorGUILayout.Popup("", IndexChoice, QEnum.GetEnumList<EnumType>().ToArray(), GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET), GetHeight(GetHeight(This) * HeightPercent));
-        //    }
-        //    else
-        //        return EditorGUILayout.Popup("", IndexChoice, QEnum.GetEnumList<EnumType>().ToArray(), GetWidth(GetWidth(This) * WidthPercent - WIDTH_OFFSET));
-        //}
-
-        //#endregion
-
-        //#endregion
     }
 
 #endif
-
-    //==================================== Assets Database
 
 #if UNITY_EDITOR
 
     ///<summary>
     ///Caution: Unity Editor only!
     ///</summary>
-    public class QAssetsDatabase : QPath
+    public class QAssetsDatabase: QPath
     {
         //Folder "Assets" is the main root of all assets in project, that can find any assets from it.
 
@@ -4727,9 +4248,7 @@ namespace QuickMethode
 
 #endif
 
-    //==================================== Encypt 256 Bit
-
-    public class QEncypt256Bit //From: Tạ Xuân Hiển
+    public class QEncypt256Bit
     {
         //This constant is used to determine the keysize of the encryption algorithm in bits.
         //We divide this by 8 within the code below to get the equivalent number of bytes.
@@ -4823,9 +4342,7 @@ namespace QuickMethode
             }
             return randomBytes;
         }
-    }
-
-    //==================================== AIML - Machine Learning Primary
+    } //From: Tạ Xuân Hiển
 
     public class QAIML
     {
@@ -5573,8 +5090,6 @@ namespace QuickMethode
         #endregion
     }
 
-    //==================================== Email
-
     public class QEmail
     {
         public static bool GetEmail(string EmailCheck)
@@ -5709,8 +5224,6 @@ namespace QuickMethode
         }
     }
 
-    //==================================== Math
-
     public class QMath
     {
         public static (double Value, String String) GetDiscountPercent(double PrimaryValue, double DiscoundValue)
@@ -5720,8 +5233,6 @@ namespace QuickMethode
             return (DiscountPercent, "-" + DiscountPercent.ToString() + "%");
         }
     }
-
-    //==================================== Enum
 
     public enum Opption { Yes = 1, No = 0 }
 
