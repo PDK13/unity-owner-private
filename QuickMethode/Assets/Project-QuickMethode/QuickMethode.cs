@@ -309,7 +309,30 @@ namespace QuickMethode
             return TrajectoryPath;
         }
 
-        public static void SetBullet(Rigidbody2D Body, float Deg, float Force, float GravityScale, float VelocityDrag = 0f)
+        public static float? GetDegToTarget(Vector3 From, Vector3 To, float Force, float GravityScale, bool DegHigh = true)
+        {
+            //Get the Deg to hit Target!
+
+            Vector3 Dir = To - From;
+            float HeightY = Dir.y;
+            Dir.y = 0f;
+            float LengthX = Dir.magnitude;
+            float Gravity = -Physics2D.gravity.y * GravityScale;
+            float SpeedSQR = Force * Force;
+            float UnderSQR = (SpeedSQR * SpeedSQR) - Gravity * (Gravity * LengthX * LengthX + 2 * HeightY * SpeedSQR);
+            if (UnderSQR >= 0)
+            {
+                float UnderSQRT = Mathf.Sqrt(UnderSQR);
+                float AngleHigh = SpeedSQR + UnderSQRT;
+                float AngleLow = SpeedSQR - UnderSQRT;
+
+                return DegHigh ? Mathf.Atan2(AngleHigh, Gravity * LengthX) * Mathf.Rad2Deg : Mathf.Atan2(AngleLow, Gravity * LengthX) * Mathf.Rad2Deg;
+            }
+
+            return null;
+        }
+
+        public static void SetForceToBullet(Rigidbody2D Body, float Deg, float Force, float GravityScale, float VelocityDrag = 0f)
         {
             Body.gameObject.SetActive(true);
             Body.velocity = QCircle.GetPosXY(Deg, 1f).normalized * Force;
