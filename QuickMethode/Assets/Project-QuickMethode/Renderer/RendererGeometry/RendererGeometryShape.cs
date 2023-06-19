@@ -22,7 +22,7 @@ public class RendererGeometryShape : MonoBehaviour
         for (int i = 0; i < Points.Count; i++)
         {
             Vector2 Pos = Points[i];
-            Pos.x = Pos.x * (-1);
+            Pos.x = Pos.x * (1);
             Points[i] = Pos;
         }
 
