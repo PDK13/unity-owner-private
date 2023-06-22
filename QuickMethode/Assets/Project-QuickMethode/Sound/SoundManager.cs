@@ -1,173 +1,133 @@
 ﻿using QuickMethode;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
     //Can call this Script instancely thought this Name of Script!
-    private static SoundManager m_This;
+    private static SoundManager m_this;
 
-    [Header("Sound Manager")]
+    private class AudioData
+    {
+        public AudioSource Source;
+        public float Volumn;
 
-    [SerializeField] private GameObject m_SoundClone;
+        public AudioData(AudioSource Source, float Volumn)
+        {
+            this.Source = Source;
+            this.Volumn = Volumn;
+        }
+    }
 
-    private bool m_CheckMute = false;
+    private float m_musicVolumn = 1f;
+    private float m_soundVolumn = 1f;
+    private bool m_musicMute = false;
+    private bool m_soundMute = false;
 
-    [Header("Sound List")]
-
-    //First Index is Background music
-    private List<GameObject> m_SoundCloneList = new List<GameObject>() { null };
+    private AudioData m_music;
+    private List<AudioData> m_sound = new List<AudioData>();
 
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
-
-        if (m_This == null)
-        {
-            m_This = this;
-        }
+        m_this = this;
     }
 
-    #region m_usic
+    #region Music
 
-    public static SoundClone SetBackgroundMusic(AudioClip m_Clip, float m_VolumnPrimary)
+    public static void SetMusicStart(AudioClip Music, float Volumn = 1f)
     {
-        SetBackgroundMusicStop();
+        SetMusicStop();
 
-        GameObject m_SoundClone = QGameObject.SetCreate(m_This.m_SoundClone);
+        GameObject Object = QGameObject.SetCreate(Music.name);
+        AudioSource Audio = QComponent.GetComponent<AudioSource>(Object);
+        Audio.clip = Music;
+        Audio.loop = true;
+        Audio.volume = Volumn * m_this.m_musicVolumn;
+        Audio.spatialBlend = 0;
+        Audio.Play();
 
-        if (m_SoundClone.GetComponent<SoundClone>() == null)
-        {
-            m_SoundClone.AddComponent<SoundClone>();
-        }
-
-        m_SoundClone.GetComponent<SoundClone>().SetPlaySound2D(new SoundCloneData(m_Clip, true, m_VolumnPrimary));
-
-        m_SoundClone.GetComponent<SoundClone>().SetSoundMute(m_This.m_CheckMute);
-
-        m_This.m_SoundCloneList[0] = m_SoundClone;
-
-        return m_SoundClone.GetComponent<SoundClone>();
+        m_this.m_music = new AudioData(Audio, Volumn);
     }
 
-    public static void SetBackgroundMusicStop()
+    public static void SetMusicStop()
     {
-        if (m_This.m_SoundCloneList[0] == null)
-        {
+        if (m_this.m_music == null)
             return;
-        }
-
-        Destroy(m_This.m_SoundCloneList[0]);
+        Destroy(m_this.m_music.Source.gameObject);
+        m_this.m_music = null;
     }
 
-    public static void SetBackgroundMusicMute(bool m_CheckMute)
+    public static void SetMusicMute(bool Mute)
     {
-        if (m_This.m_SoundCloneList[0] == null)
-        {
+        if (m_this.m_music == null)
             return;
-        }
-
-        m_This.m_SoundCloneList[0].GetComponent<SoundClone>().SetSoundMute(m_CheckMute);
+        m_this.m_music.Source.mute = Mute;
     }
 
     #endregion
 
-    #region Sound Primary
+    #region Sound
 
-    public static GameObject SetSound3D(AudioClip m_Clip, bool m_CheckLoop, float m_VolumnPrimary, Vector2 m_Pos, float m_Distance)
+    public static void SetSoundStart2D(AudioClip Sound, bool Loop, float Volumn = 1f)
     {
-        GameObject m_SoundClone = QGameObject.SetCreate(m_This.m_SoundClone);
+        GameObject Object = QGameObject.SetCreate(Sound.name);
+        AudioSource Audio = QComponent.GetComponent<AudioSource>(Object);
+        Audio.clip = Sound;
+        Audio.loop = Loop;
+        Audio.volume = Volumn * m_this.m_soundVolumn;
+        Audio.spatialBlend = 0;
+        Audio.Play();
 
-        if (m_SoundClone.GetComponent<SoundClone>() == null)
-        {
-            m_SoundClone.AddComponent<SoundClone>();
-        }
+        m_this.m_sound.Add(new AudioData(Audio, Volumn));
 
-        m_SoundClone.GetComponent<SoundClone>().SetPlaySound3D(new SoundCloneData(m_Clip, m_CheckLoop, m_VolumnPrimary), m_Pos, m_Distance);
-
-        m_SoundClone.GetComponent<SoundClone>().SetSoundMute(m_This.m_CheckMute);
-
-        if (m_CheckLoop)
-        {
-            m_This.m_SoundCloneList.Add(m_SoundClone);
-        }
-
-        return m_SoundClone;
+        if (!Loop)
+            m_this.StartCoroutine(m_this.ISetSoundStop(Audio));
     }
 
-    public static GameObject SetSound2D(AudioClip m_Clip, bool m_CheckLoop, float m_VolumnPrimary)
+    public static void SetSoundStart3D(AudioClip Sound, Vector2 Pos, float Distance, bool Loop, float Volumn = 1f)
     {
-        GameObject m_SoundClone = QGameObject.SetCreate(m_This.m_SoundClone);
+        GameObject Object = QGameObject.SetCreate(Sound.name);
+        AudioSource Audio = QComponent.GetComponent<AudioSource>(Object);
+        Audio.clip = Sound;
+        Audio.loop = Loop;
+        Audio.volume = Volumn * m_this.m_soundVolumn;
+        Audio.spatialBlend = 1;
+        Audio.transform.position = Pos;
+        Audio.maxDistance = Distance;
+        Audio.Play();
 
-        if (m_SoundClone.GetComponent<SoundClone>() == null)
-        {
-            m_SoundClone.AddComponent<SoundClone>();
-        }
+        m_this.m_sound.Add(new AudioData(Audio, Volumn));
 
-        m_SoundClone.GetComponent<SoundClone>().SetPlaySound2D(new SoundCloneData(m_Clip, m_CheckLoop, m_VolumnPrimary));
-
-        m_SoundClone.GetComponent<SoundClone>().SetSoundMute(m_This.m_CheckMute);
-
-        if (m_CheckLoop)
-        {
-            m_This.m_SoundCloneList.Add(m_SoundClone);
-        }
-
-        return m_SoundClone;
+        if (!Loop)
+            m_this.StartCoroutine(m_this.ISetSoundStop(Audio));
     }
 
-    public static bool SetSoundStop(AudioClip m_Clip)
+    private IEnumerator ISetSoundStop(AudioSource Audio)
     {
-        for (int i = 1; i < m_This.m_SoundCloneList.Count; i++)
-        {
-            if (m_This.m_SoundCloneList[i].GetComponent<SoundClone>().GetSound().name.Equals(m_Clip.name))
-            {
-                Destroy(m_This.m_SoundCloneList[i]);
-
-                m_This.m_SoundCloneList.RemoveAt(i);
-
-                return true;
-            }
-        }
-
-        Debug.LogWarningFormat("{0}: Not found Sound {1} to Stop it!", m_This.name, m_Clip.name);
-        return false;
+        yield return new WaitUntil(() => !Audio.isPlaying);
+        Destroy(Audio.gameObject);
     }
 
-    public static void SetSoundStopAll()
+    public static void SetSoundStop()
     {
-        for (int i = 1; i < m_This.m_SoundCloneList.Count; i++)
+        m_this.StopAllCoroutines();
+        foreach(var Sound in m_this.m_sound)
         {
-            Destroy(m_This.m_SoundCloneList[i]);
-        }
-
-        m_This.m_SoundCloneList = new List<GameObject>();
-    }
-
-    public static void SetSoundMute(bool m_CheckMute)
-    {
-        for (int i = 1; i < m_This.m_SoundCloneList.Count; i++)
-        {
-            m_This.m_SoundCloneList[i].GetComponent<SoundClone>().SetSoundMute(m_CheckMute);
+            if (Sound.Source != null)
+                Destroy(Sound.Source.gameObject);
+            m_this.m_sound.Remove(Sound);
         }
     }
 
-    #endregion
-
-    #region Mute
-
-    public static void SetMute(bool m_CheckMute)
+    public static void SetSoundMute(bool Mute)
     {
-        m_This.m_CheckMute = m_CheckMute;
-
-        SetBackgroundMusicMute(m_CheckMute);
-
-        SetSoundMute(m_CheckMute);
-    }
-
-    public static bool GetMute()
-    {
-        return m_This.m_CheckMute;
+        foreach (var Sound in m_this.m_sound)
+        {
+            if (Sound.Source != null)
+                Sound.Source.mute = Mute;
+        }
     }
 
     #endregion
