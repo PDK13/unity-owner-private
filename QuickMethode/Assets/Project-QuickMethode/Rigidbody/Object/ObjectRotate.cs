@@ -1,25 +1,23 @@
 using QuickMethode;
 using UnityEngine;
 
-public class ObjectPlatformCircle : MonoBehaviour
+[RequireComponent(typeof(Rigidbody2D))]
+public class ObjectRotate : MonoBehaviour
 {
+    #region Varible: Circle
+
     [SerializeField] private DirectionX m_dir = DirectionX.None;
     [SerializeField] private float m_speed = 50f;
+    [SerializeField] private float m_radius = 5f;
 
-    public DirectionX Dir => m_dir;
+    public float SurfaceForce => m_speed * m_radius * (int)m_dir * Time.fixedDeltaTime;
 
-    public float Speed => m_speed;
-
-    public float Radius => m_collider.radius * transform.localScale.x;
-
-    public Vector2 Centre => m_collider.bounds.center;
+    #endregion
 
     private Rigidbody2D m_rigidbody;
-    private CircleCollider2D m_collider;
 
     private void Start()
     {
-        m_collider = QComponent.GetComponent<CircleCollider2D>(gameObject);
         m_rigidbody = QComponent.GetComponent<Rigidbody2D>(gameObject);
     }
 
