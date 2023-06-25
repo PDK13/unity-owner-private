@@ -5,9 +5,8 @@ using System.Collections.Generic;
 [Serializable]
 public class IsoDataBlockTeleport
 {
-    public string KeyStart = "Teleport-Start";
-    public string KeyEnd = "Teleport-End";
-    public List<IsoDataBlockTeleportSingle> Data;
+    public string Name = "Teleport";
+    public List<IsoDataBlockTeleportSingle> Data = new List<IsoDataBlockTeleportSingle>();
 }
 
 [Serializable]

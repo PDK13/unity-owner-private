@@ -42,9 +42,15 @@ public class IsometricManager : MonoBehaviour
 
     public IsometricBlock SetWorldBlockCreate(IsoVector Pos, GameObject BlockPrefab, IsoDataBlockSingle Data = null)
     {
+        if (BlockPrefab == null)
+        {
+            Debug.LogWarningFormat("Block {0} not found!", Pos.Encypt);
+            return null;
+        }
+
         if (BlockPrefab.GetComponent<IsometricBlock>() == null)
         {
-            Debug.LogWarningFormat("Prefab {0} not found IsometricBlock to Create!", BlockPrefab.name);
+            Debug.LogWarningFormat("Block {0} {1} not found IsometricBlock!", Pos.Encypt, BlockPrefab.name);
             return null;
         }
 
@@ -58,7 +64,7 @@ public class IsometricManager : MonoBehaviour
         Block.PosPrimary = Pos;
 
         //Block Data
-        Block.Data = Data;
+        Block.Data = Data != null ? Data : new IsoDataBlockSingle();
 
         //Block Renderer
         IsometricRenderer BlockRenderer = BlockObject.GetComponent<IsometricRenderer>();
@@ -78,30 +84,46 @@ public class IsometricManager : MonoBehaviour
 
             //World
             int IndexPosH = GetIndexWorldPosH(Pos.HInt);
-            if (IndexPosH != -1)
-            {
-                m_worldPosH[IndexPosH].Block.Add(Block);
-            }
-            else
+            if (IndexPosH == -1)
             {
                 m_worldPosH.Add((Pos.HInt, new List<IsometricBlock>()));
                 IndexPosH = m_worldPosH.Count - 1;
                 m_worldPosH[IndexPosH].Block.Add(Block);
             }
+            else
+                m_worldPosH[IndexPosH].Block.Add(Block);
         }
 
         //Tag
-        string TagFind = Block.GetComponent<IsometricBlock>().Tag;
-        int TagIndex = GetIndexWorldTag(TagFind);
-        if (TagIndex != -1)
+        List<string> TagFind = Block.GetComponent<IsometricBlock>().Tag;
+        if (TagFind.Count == 0)
         {
-            this.m_worldTag[TagIndex].Block.Add(Block);
+            //None Tag!
+            int TagIndex = GetIndexWorldTag("");
+            if (TagIndex == -1)
+            {
+                this.m_worldTag.Add(("", new List<IsometricBlock>()));
+                TagIndex = this.m_worldTag.Count - 1;
+                this.m_worldTag[TagIndex].Block.Add(Block);
+            }
+            else
+                this.m_worldTag[TagIndex].Block.Add(Block);
         }
         else
         {
-            this.m_worldTag.Add((TagFind, new List<IsometricBlock>()));
-            TagIndex = this.m_worldTag.Count - 1;
-            this.m_worldTag[TagIndex].Block.Add(Block);
+            //Got Tag!
+            foreach (string TagCheck in TagFind)
+            {
+                int TagIndex = GetIndexWorldTag(TagCheck);
+                if (TagIndex == -1)
+                {
+                    this.m_worldTag.Add((TagCheck, new List<IsometricBlock>()));
+                    TagIndex = this.m_worldTag.Count - 1;
+                    this.m_worldTag[TagIndex].Block.Add(Block);
+                }
+                else
+                    this.m_worldTag[TagIndex].Block.Add(Block);
+            }
         }
 
         //Scene
@@ -217,13 +239,16 @@ public class IsometricManager : MonoBehaviour
                 m_worldPosH.RemoveAt(IndexPosH);
 
             //Tag
-            string TagFind = Block.Tag;
-            int TagIndex = GetIndexWorldTag(TagFind);
-            if (TagIndex != -1)
+            List<string> TagFind = Block.Tag;
+            foreach(string TagCheck in TagFind)
             {
-                m_worldTag[TagIndex].Block.Remove(Block);
-                if (m_worldTag[TagIndex].Block.Count == 0)
-                    m_worldTag.RemoveAt(TagIndex);
+                int TagIndex = GetIndexWorldTag(TagCheck);
+                if (TagIndex != -1)
+                {
+                    m_worldTag[TagIndex].Block.Remove(Block);
+                    if (m_worldTag[TagIndex].Block.Count == 0)
+                        m_worldTag.RemoveAt(TagIndex);
+                }
             }
 
             //Scene
@@ -306,29 +331,28 @@ public class IsometricManager : MonoBehaviour
 
         //World
         int IndexPosH = GetIndexWorldPosH(Block.Pos.HInt);
-        if (IndexPosH != -1)
-        {
-            m_worldPosH[IndexPosH].Block.Add(Block);
-        }
-        else
+        if (IndexPosH == -1)
         {
             m_worldPosH.Add((Block.Pos.HInt, new List<IsometricBlock>()));
             IndexPosH = m_worldPosH.Count - 1;
             m_worldPosH[IndexPosH].Block.Add(Block);
         }
+        else
+            m_worldPosH[IndexPosH].Block.Add(Block);
 
         //Tag
-        string TagFind = Block.GetComponent<IsometricBlock>().Tag;
-        int TagIndex = GetIndexWorldTag(TagFind);
-        if (TagIndex != -1)
+        List<string> TagFind = Block.GetComponent<IsometricBlock>().Tag;
+        foreach(string TagCheck in TagFind)
         {
-            this.m_worldTag[TagIndex].Block.Add(Block);
-        }
-        else
-        {
-            this.m_worldTag.Add((TagFind, new List<IsometricBlock>()));
-            IndexPosH = this.m_worldTag.Count - 1;
-            this.m_worldTag[IndexPosH].Block.Add(Block);
+            int TagIndex = GetIndexWorldTag(TagCheck);
+            if (TagIndex == -1)
+            {
+                this.m_worldTag.Add((TagCheck, new List<IsometricBlock>()));
+                IndexPosH = this.m_worldTag.Count - 1;
+                this.m_worldTag[IndexPosH].Block.Add(Block);
+            }
+            else
+                this.m_worldTag[TagIndex].Block.Add(Block);
         }
 
         //Scene
@@ -421,17 +445,18 @@ public class IsometricManager : MonoBehaviour
 
         foreach (IsometricBlock BlockPrefab in BlockList)
         {
-            string TagFind = BlockPrefab.GetComponent<IsometricBlock>().Tag;
-            int TagIndex = GetIndexBlockListTag(TagFind);
-            if (TagIndex != -1)
+            List<string> TagFind = BlockPrefab.GetComponent<IsometricBlock>().Tag;
+            foreach(string TagCheck in TagFind)
             {
-                this.BlockList[TagIndex].Block.Add(BlockPrefab.gameObject);
-            }
-            else
-            {
-                this.BlockList.Add((TagFind, new List<GameObject>()));
-                TagIndex = this.BlockList.Count - 1;
-                this.BlockList[TagIndex].Block.Add(BlockPrefab.gameObject);
+                int TagIndex = GetIndexBlockListTag(TagCheck);
+                if (TagIndex == -1)
+                {
+                    this.BlockList.Add((TagCheck, new List<GameObject>()));
+                    TagIndex = this.BlockList.Count - 1;
+                    this.BlockList[TagIndex].Block.Add(BlockPrefab.gameObject);
+                }
+                else
+                    this.BlockList[TagIndex].Block.Add(BlockPrefab.gameObject);
             }
         }
     }
@@ -451,17 +476,18 @@ public class IsometricManager : MonoBehaviour
                 continue;
             }
 
-            string TagFind = BlockPrefab.GetComponent<IsometricBlock>().Tag;
-            int TagIndex = GetIndexBlockListTag(TagFind);
-            if (TagIndex != -1)
+            List<string> TagFind = BlockPrefab.GetComponent<IsometricBlock>().Tag;
+            foreach(string TagCheck in TagFind)
             {
-                this.BlockList[TagIndex].Block.Add(BlockPrefab);
-            }
-            else
-            {
-                this.BlockList.Add((TagFind, new List<GameObject>()));
-                TagIndex = this.BlockList.Count - 1;
-                this.BlockList[TagIndex].Block.Add(BlockPrefab);
+                int TagIndex = GetIndexBlockListTag(TagCheck);
+                if (TagIndex == -1)
+                {
+                    this.BlockList.Add((TagCheck, new List<GameObject>()));
+                    TagIndex = this.BlockList.Count - 1;
+                    this.BlockList[TagIndex].Block.Add(BlockPrefab);
+                }
+                else
+                    this.BlockList[TagIndex].Block.Add(BlockPrefab);
             }
         }
     }
@@ -483,17 +509,33 @@ public class IsometricManager : MonoBehaviour
                 continue;
             }
 
-            string TagFind = BlockPrefab.GetComponent<IsometricBlock>().Tag;
-            int TagIndex = GetIndexBlockListTag(TagFind);
-            if (TagIndex != -1)
+            List<string> TagFind = BlockPrefab.GetComponent<IsometricBlock>().Tag;
+            if (TagFind.Count == 0)
             {
-                this.BlockList[TagIndex].Block.Add(BlockPrefab);
+                int TagIndex = GetIndexBlockListTag("");
+                if (TagIndex == -1)
+                {
+                    this.BlockList.Add(("", new List<GameObject>()));
+                    TagIndex = this.BlockList.Count - 1;
+                    this.BlockList[TagIndex].Block.Add(BlockPrefab);
+                }
+                else
+                    this.BlockList[TagIndex].Block.Add(BlockPrefab);
             }
             else
             {
-                this.BlockList.Add((TagFind, new List<GameObject>()));
-                TagIndex = this.BlockList.Count - 1;
-                this.BlockList[TagIndex].Block.Add(BlockPrefab);
+                foreach (string TagCheck in TagFind)
+                {
+                    int TagIndex = GetIndexBlockListTag(TagCheck);
+                    if (TagIndex == -1)
+                    {
+                        this.BlockList.Add((TagCheck, new List<GameObject>()));
+                        TagIndex = this.BlockList.Count - 1;
+                        this.BlockList[TagIndex].Block.Add(BlockPrefab);
+                    }
+                    else
+                        this.BlockList[TagIndex].Block.Add(BlockPrefab);
+                }
             }
         }
     }
@@ -586,8 +628,7 @@ public class IsometricManager : MonoBehaviour
             FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.MoveData.Count);
             for (int MoveIndex = 0; MoveIndex < WorldBlocks[BlockIndex].Data.MoveData.Count; MoveIndex++)
             {
-                FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.MoveData[MoveIndex].KeyStart);
-                FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.MoveData[MoveIndex].KeyEnd);
+                FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.MoveData[MoveIndex].Name);
                 FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.MoveData[MoveIndex].Loop);
                 FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.MoveData[MoveIndex].Data.Count);
                 for (int DataIndex = 0; DataIndex < WorldBlocks[BlockIndex].Data.MoveData[MoveIndex].Data.Count; DataIndex++)
@@ -600,8 +641,7 @@ public class IsometricManager : MonoBehaviour
             FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.EventData.Count);
             for (int JoinIndex = 0; JoinIndex < WorldBlocks[BlockIndex].Data.EventData.Count; JoinIndex++)
             {
-                FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.EventData[JoinIndex].KeyStart);
-                FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.EventData[JoinIndex].KeyEnd);
+                FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.EventData[JoinIndex].Name);
                 FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.EventData[JoinIndex].Data.Count);
                 for (int DataIndex = 0; DataIndex < WorldBlocks[BlockIndex].Data.EventData[JoinIndex].Data.Count; DataIndex++)
                 {
@@ -613,8 +653,7 @@ public class IsometricManager : MonoBehaviour
             FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.TeleportData.Count);
             for (int JoinIndex = 0; JoinIndex < WorldBlocks[BlockIndex].Data.TeleportData.Count; JoinIndex++)
             {
-                FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.TeleportData[JoinIndex].KeyStart);
-                FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.TeleportData[JoinIndex].KeyEnd);
+                FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.TeleportData[JoinIndex].Name);
                 FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.TeleportData[JoinIndex].Data.Count);
                 for (int DataIndex = 0; DataIndex < WorldBlocks[BlockIndex].Data.TeleportData[JoinIndex].Data.Count; DataIndex++)
                 {
@@ -660,8 +699,7 @@ public class IsometricManager : MonoBehaviour
             for (int MoveIndex = 0; MoveIndex < MoveCount; MoveIndex++)
             {
                 Data.MoveData.Add(new IsoDataBlockMove());
-                Data.MoveData[MoveIndex].KeyStart = FileIO.GetReadAutoString();
-                Data.MoveData[MoveIndex].KeyEnd = FileIO.GetReadAutoString();
+                Data.MoveData[MoveIndex].Name = FileIO.GetReadAutoString();
                 Data.MoveData[MoveIndex].Loop = FileIO.GetReadAutoBool();
                 Data.MoveData[MoveIndex].Data = new List<IsoDataBlockMoveSingle>();
                 int DataCount = FileIO.GetReadAutoInt();
@@ -677,8 +715,7 @@ public class IsometricManager : MonoBehaviour
             for (int EventIndex = 0; EventIndex < EventCount; EventIndex++)
             {
                 Data.EventData.Add(new IsoDataBlockEvent());
-                Data.EventData[EventIndex].KeyStart = FileIO.GetReadAutoString();
-                Data.EventData[EventIndex].KeyEnd = FileIO.GetReadAutoString();
+                Data.EventData[EventIndex].Name = FileIO.GetReadAutoString();
                 Data.EventData[EventIndex].Data = new List<IsoDataBlockEventSingle>();
                 int DataCount = FileIO.GetReadAutoInt();
                 for (int DataIndex = 0; DataIndex < DataCount; DataIndex++)
@@ -693,8 +730,7 @@ public class IsometricManager : MonoBehaviour
             for (int TeleportIndex = 0; TeleportIndex < TeleportCount; TeleportIndex++)
             {
                 Data.TeleportData.Add(new IsoDataBlockTeleport());
-                Data.TeleportData[TeleportIndex].KeyStart = FileIO.GetReadAutoString();
-                Data.TeleportData[TeleportIndex].KeyEnd = FileIO.GetReadAutoString();
+                Data.TeleportData[TeleportIndex].Name = FileIO.GetReadAutoString();
                 Data.TeleportData[TeleportIndex].Data = new List<IsoDataBlockTeleportSingle>();
                 int DataCount = FileIO.GetReadAutoInt();
                 for (int DataIndex = 0; DataIndex < DataCount; DataIndex++)
