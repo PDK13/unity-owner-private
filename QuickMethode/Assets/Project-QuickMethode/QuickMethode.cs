@@ -403,52 +403,70 @@ namespace QuickMethode
 
         //Toward
 
-        public static void SetRotate3DToward(Transform Transform, Vector3 Deg, float DeltaDeg)
+        public static void SetRotate3DToward(Transform Transform, Vector3 Deg, float DeltaDeg, bool World = true)
         {
             //Pos Move Linear by Distance when called - On World!!
             Vector3 DegMove = Vector3.MoveTowards(Transform.eulerAngles, Deg, DeltaDeg);
-            Transform.eulerAngles = DegMove;
+            if (World)
+                Transform.eulerAngles = DegMove;
+            else
+                Transform.localEulerAngles = DegMove;
         }
 
-        public static void SetRotate3DToward(RectTransform RectTransform, Vector3 DegAnchor, float DeltaDeg)
+        public static void SetRotate3DToward(RectTransform RectTransform, Vector3 DegAnchor, float DeltaDeg, bool World = true)
         {
             //Pos Move Linear by Distance when called - On Canvas!!
             Vector3 DegMove = Vector3.MoveTowards(RectTransform.eulerAngles, DegAnchor, DeltaDeg);
-            RectTransform.eulerAngles = DegMove;
+            if (World)
+                RectTransform.eulerAngles = DegMove;
+            else
+                RectTransform.localEulerAngles = DegMove;
         }
 
-        public static void SetRotate3DTowardTarget(Transform Transform, Vector3 PosTarget, float DeltaDeg)
+        public static void SetRotate3DTowardTarget(Transform Transform, Vector3 PosTarget, float DeltaDeg, bool World = true)
         {
             //Pos Move Linear by Distance when called!!
             Vector3 Dir = (PosTarget - Transform.position).normalized;
             Vector3 Deg = new Vector3(0, 0, QCircle.GetDeg(Dir));
             Vector3 DegMove = Vector3.MoveTowards(Transform.eulerAngles, Deg, DeltaDeg);
-            Transform.eulerAngles = DegMove;
+            if (World)
+                Transform.eulerAngles = DegMove;
+            else
+                Transform.localEulerAngles = DegMove;
         }
 
         //Lerf
 
-        public static void SetRotate3DLerp(Transform Transform, Vector3 Deg, float DeltaTime)
+        public static void SetRotate3DLerp(Transform Transform, Vector3 Deg, float DeltaTime, bool World = true)
         {
             //Pos Move none Linear by Time per called!!
             Vector3 DegMove = Vector3.Lerp(Transform.eulerAngles, Deg, DeltaTime);
-            Transform.eulerAngles = DegMove;
+            if (World)
+                Transform.eulerAngles = DegMove;
+            else
+                Transform.localEulerAngles = DegMove;
         }
 
-        public static void SetRotate3DLerp(RectTransform RectTransform, Vector3 DegAnchor, float DeltaDeg)
+        public static void SetRotate3DLerp(RectTransform RectTransform, Vector3 DegAnchor, float DeltaDeg, bool World = true)
         {
             //Pos Move Linear by Distance when called - On Canvas!!
             Vector3 DegMove = Vector3.Lerp(RectTransform.eulerAngles, DegAnchor, DeltaDeg);
-            RectTransform.eulerAngles = DegMove;
+            if (World)
+                RectTransform.eulerAngles = DegMove;
+            else
+                RectTransform.localEulerAngles = DegMove;
         }
 
-        public static void SetRotate3DLerpTarget(Transform Transform, Vector3 PosTarget, float DeltaDeg)
+        public static void SetRotate3DLerpTarget(Transform Transform, Vector3 PosTarget, float DeltaDeg, bool World = true)
         {
             //Pos Move Linear by Distance when called!!
             Vector3 Dir = (PosTarget - Transform.position).normalized;
             Vector3 Deg = new Vector3(0, 0, QCircle.GetDeg(Dir));
             Vector3 DegMove = Vector3.Lerp(Transform.eulerAngles, Deg, DeltaDeg);
-            Transform.eulerAngles = DegMove;
+            if (World)
+                Transform.eulerAngles = DegMove;
+            else
+                Transform.localEulerAngles = DegMove;
         }
 
         #endregion
