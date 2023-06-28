@@ -69,15 +69,23 @@ public class ControlMoveX2D : MonoBehaviour
 
             if (m_surfaceLimit > 0)
             {
-                if (m_degL != 0 && QCircle.GetDegOppositeUD(m_degL) <= m_surfaceLimit)
-                    return QCircle.GetPosXY(m_degL, 1f);
+                if (m_degL != 0 && m_degL <= m_surfaceLimit)
+                {
+                    Vector2 Dir = QCircle.GetPosXY(m_degL, 1f);
+                    Dir.x *= -1;
+                    return Dir;
+                }
 
-                if (m_degR != 0 && m_degR <= m_surfaceLimit)
-                    return QCircle.GetPosXY(m_degR, 1f) * -1f;
+                if (m_degR!= 0 && QCircle.GetDegOppositeUD(m_degR) <= m_surfaceLimit)
+                    return QCircle.GetPosXY(m_degR, 1f);
             }
             else
             if (m_degL != 0)
-                return QCircle.GetPosXY(m_degL, 1f);
+            {
+                Vector2 Dir = QCircle.GetPosXY(m_degL, 1f);
+                Dir.x *= -1;
+                return Dir;
+            }
 
             return Vector2.left;
         }
@@ -257,7 +265,7 @@ public class ControlMoveX2D : MonoBehaviour
 
         float Deg = QCircle.GetDeg(RayHitResultB.Value.Point, RayHitResultT.Value.Point);
 
-        return Deg;
+        return 180f - Deg;
     }
 
     private float GetCheckSurfaceR()
