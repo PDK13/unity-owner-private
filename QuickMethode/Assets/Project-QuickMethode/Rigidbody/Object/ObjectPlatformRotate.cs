@@ -2,7 +2,7 @@ using QuickMethode;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class ObjectRotate : MonoBehaviour
+public class ObjectPlatformRotate : MonoBehaviour
 {
     #region Varible: Circle
 
