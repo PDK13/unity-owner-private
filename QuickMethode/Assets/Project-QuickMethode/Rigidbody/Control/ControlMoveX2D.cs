@@ -28,6 +28,7 @@ public class ControlMoveX2D : MonoBehaviour
     private bool m_wallCheckClimb;  //Climb will continue avaible when Bottom still Check ground!!
 
     private Vector2 PosRayClimb => m_moveDir == DirectionX.Left ? PosRayLB : m_moveDir == DirectionX.Right ? PosRayRB : QCollider2D.GetBorderPos(m_colliderBase, Direction.Down);
+    private Vector2 PosRayAhead => QCollider2D.GetBorderPos(m_colliderBase, Application.isPlaying ? m_moveDir : DirectionX.Right) + Vector2.up * m_wallOffset;
 
     #endregion
 
@@ -345,31 +346,19 @@ public class ControlMoveX2D : MonoBehaviour
         if (m_colliderBase == null)
             return;
 
-        Vector2 Centre = m_rigidbody != null ? m_rigidbody.worldCenterOfMass : this.transform.position;
-
-        QGizmos.SetWireSphere(Centre, 0.1f, Color.white);
-
         //Direction Move!!
-        QGizmos.SetLine(Centre, Centre + DirMoveL * 0.2f, Color.white);
-        QGizmos.SetLine(Centre, Centre + DirMoveR * 0.2f, Color.white);
+        Vector2 Centre = QCollider2D.GetBorderPos(m_colliderBase, Direction.Down) + Vector2.up * 0.1f;
+        QGizmos.SetLine(Centre, Centre + DirMoveL * 0.2f, Color.white, 0.025f);
+        QGizmos.SetLine(Centre, Centre + DirMoveR * 0.2f, Color.white, 0.025f);
 
         //Surface Check!!
-        QGizmos.SetRay(PosRayLB, Vector2.left, m_surfaceLength, Color.red);
-        QGizmos.SetRay(PosRayRB, Vector2.right, m_surfaceLength, Color.red);
+        QGizmos.SetRay(PosRayLB, Vector2.left, m_surfaceLength, Color.white);
+        QGizmos.SetRay(PosRayRB, Vector2.right, m_surfaceLength, Color.white);
 
         //Bottom Check!!
-        QGizmos.SetRay(PosRayClimb, Vector2.down, m_wallClimb, Color.blue);
+        QGizmos.SetRay(PosRayClimb, Vector2.down, m_wallClimb, Color.white);
 
         //Ahead Check!!
-        if (Application.isPlaying)
-        {
-            Vector2 PosRayAhead = QCollider2D.GetBorderPos(m_colliderBase, m_moveDir) + Vector2.up * m_wallOffset;
-            QGizmos.SetRay(PosRayAhead, Vector2.right * (int)m_moveDir, m_wallLength, Color.yellow);
-        }
-        else
-        {
-            Vector2 PosRayAhead = QCollider2D.GetBorderPos(m_colliderBase, DirectionX.Right) + Vector2.up * m_wallOffset;
-            QGizmos.SetRay(PosRayAhead, Vector2.right * (int)1, m_wallLength, Color.yellow);
-        }
+        QGizmos.SetRay(PosRayAhead, Vector2.right * (Application.isPlaying ? (int)m_moveDir : 1), m_wallLength, Color.white);
     }
 }
