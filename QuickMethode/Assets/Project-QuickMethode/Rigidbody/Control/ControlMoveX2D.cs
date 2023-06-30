@@ -9,6 +9,7 @@ public class ControlMoveX2D : MonoBehaviour
     private DirectionX m_moveDir = DirectionX.None;
 
     [Header("Move")]
+    [SerializeField] private bool m_moveSurface = true;
     [SerializeField] [Min(0)] private float m_moveForce = 10f;  //Can be change by methode!!
     [SerializeField] [Min(0)] private float m_moveRatio = 1f;   //Can be change by methode!!
     [SerializeField] [Min(0)] private float m_moveLimit = 10f;
@@ -144,6 +145,8 @@ public class ControlMoveX2D : MonoBehaviour
 
     public DirectionX MoveDir { get => m_moveDir; set => m_moveDir = value; }
 
+    public bool MoveSurface { get => m_moveSurface; set => m_moveSurface = value; }
+
     public float MoveForce { get => m_moveForce; set => m_moveForce = value; }
 
     public float MoveRatio { get => m_moveRatio; set => m_moveRatio = value; }
@@ -194,45 +197,70 @@ public class ControlMoveX2D : MonoBehaviour
         Vector2 VelocityForce = Vector2.zero;
         m_rigidbody.velocity = new Vector2(0f, m_rigidbody.velocity.y); //Reset Velocity X!!
 
-        if (m_checkAlways)
-        {
-            SetCheckSurface();
-            SetCheckWall(m_moveDir);
-        }
-
         if (m_rigidbody.velocity.x > m_moveLimit || m_rigidbody.velocity.x < -m_moveLimit)
             m_rigidbody.AddForce(Vector3.left * (m_rigidbody.velocity.x / Mathf.Abs(m_rigidbody.velocity.x)) * m_moveDecrease, ForceMode2D.Impulse);
         else
         {
-            if (m_moveChange > 0)
+            //Move Surface Check - Increase Workflow!!
+            if (m_moveSurface)
             {
-                if (m_moveDir == DirectionX.Right && m_rigidbody.velocity.x < 0)
-                    m_rigidbody.AddForce(Vector3.left * (m_rigidbody.velocity.x / Mathf.Abs(m_rigidbody.velocity.x)) * m_moveChange, ForceMode2D.Impulse);
-                else
-                if (m_moveDir == DirectionX.Left && m_rigidbody.velocity.x > 0)
-                    m_rigidbody.AddForce(Vector3.left * (m_rigidbody.velocity.x / Mathf.Abs(m_rigidbody.velocity.x)) * m_moveChange, ForceMode2D.Impulse);
-            }
+                if (m_moveChange > 0)
+                {
+                    if (m_moveDir == DirectionX.Right && m_rigidbody.velocity.x < 0)
+                        m_rigidbody.AddForce(Vector3.left * (m_rigidbody.velocity.x / Mathf.Abs(m_rigidbody.velocity.x)) * m_moveChange, ForceMode2D.Impulse);
+                    else
+                    if (m_moveDir == DirectionX.Left && m_rigidbody.velocity.x > 0)
+                        m_rigidbody.AddForce(Vector3.left * (m_rigidbody.velocity.x / Mathf.Abs(m_rigidbody.velocity.x)) * m_moveChange, ForceMode2D.Impulse);
+                }
 
-            if (m_moveDir != DirectionX.None)
-            {
-                if (!m_checkAlways)
+                if (m_checkAlways)
                 {
                     SetCheckSurface();
                     SetCheckWall(m_moveDir);
                 }
 
-                if (m_moveDir == DirectionX.Right)
+                if (m_moveDir != DirectionX.None)
                 {
-                    float MoveForce = (m_degR != 90f || m_wallCheckClimb || m_wallCheckPush? m_moveForce : 0f) * m_moveRatio;
-                    if (m_rigidbody.velocity.x < m_moveLimit)
-                        VelocityForce += DirMoveR * MoveForce;
+                    if (!m_checkAlways)
+                    {
+                        SetCheckSurface();
+                        SetCheckWall(m_moveDir);
+                    }
+
+                    if (m_moveDir == DirectionX.Right)
+                    {
+                        float MoveForce = (m_degR != 90f || m_wallCheckClimb || m_wallCheckPush ? m_moveForce : 0f) * m_moveRatio;
+                        if (m_rigidbody.velocity.x < m_moveLimit)
+                            VelocityForce += DirMoveR * MoveForce;
+                    }
+                    else
+                    if (m_moveDir == DirectionX.Left)
+                    {
+                        float MoveForce = (m_degL != 90f || m_wallCheckClimb || m_wallCheckPush ? m_moveForce : 0f) * m_moveRatio;
+                        if (m_rigidbody.velocity.x > -m_moveLimit)
+                            VelocityForce += DirMoveL * MoveForce;
+                    }
                 }
-                else
-                if (m_moveDir == DirectionX.Left)
+            }
+            else
+            //Move Surface UnCheck - Decrease Workflow!!
+            {
+                if (m_moveChange > 0)
                 {
-                    float MoveForce = (m_degL != 90f || m_wallCheckClimb || m_wallCheckPush ? m_moveForce : 0f) * m_moveRatio;
-                    if (m_rigidbody.velocity.x > -m_moveLimit)
-                        VelocityForce += DirMoveL * MoveForce;
+                    if (m_moveDir == DirectionX.Right && m_rigidbody.velocity.x < 0)
+                        m_rigidbody.AddForce(Vector3.left * (m_rigidbody.velocity.x / Mathf.Abs(m_rigidbody.velocity.x)) * m_moveChange, ForceMode2D.Impulse);
+                    else
+                    if (m_moveDir == DirectionX.Left && m_rigidbody.velocity.x > 0)
+                        m_rigidbody.AddForce(Vector3.left * (m_rigidbody.velocity.x / Mathf.Abs(m_rigidbody.velocity.x)) * m_moveChange, ForceMode2D.Impulse);
+                }
+
+                if (m_moveDir != DirectionX.None)
+                {
+                    if (m_moveDir == DirectionX.Right)
+                        VelocityForce += Vector2.right * m_moveForce;
+                    else
+                    if (m_moveDir == DirectionX.Left)
+                        VelocityForce += Vector2.left * m_moveForce;
                 }
             }
         }
@@ -247,7 +275,7 @@ public class ControlMoveX2D : MonoBehaviour
 
     #endregion
 
-    #region Surface Check: Always check ray first before force move!!
+    #region Surface Check: Always check ray first before force move!! - Required "Surface Check" Active!!
 
     private void SetCheckSurface()
     {
@@ -285,7 +313,7 @@ public class ControlMoveX2D : MonoBehaviour
 
     #endregion
 
-    #region Wall Check: Always check ray first before force move!!
+    #region Wall Check: Always check ray first before force move!! - Required "Surface Check" Active!!
 
     private void SetCheckWall(DirectionX Move)
     {
