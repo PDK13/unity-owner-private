@@ -257,10 +257,10 @@ public class ControlMoveX2D : MonoBehaviour
                 if (m_moveDir != DirectionX.None)
                 {
                     if (m_moveDir == DirectionX.Right)
-                        VelocityForce += Vector2.right * m_moveForce;
+                        VelocityForce += Vector2.right * m_moveForce * m_moveRatio;
                     else
                     if (m_moveDir == DirectionX.Left)
-                        VelocityForce += Vector2.left * m_moveForce;
+                        VelocityForce += Vector2.left * m_moveForce * m_moveRatio;
                 }
             }
         }
