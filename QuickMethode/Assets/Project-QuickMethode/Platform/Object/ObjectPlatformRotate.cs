@@ -1,7 +1,8 @@
 using QuickMethode;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
 public class ObjectPlatformRotate : MonoBehaviour
 {
     [SerializeField] private DirectionX m_dir = DirectionX.Left;
@@ -23,6 +24,7 @@ public class ObjectPlatformRotate : MonoBehaviour
                 m_radius = value;
         }
     }
+    public bool CircleCollider => m_circleCollider != null;
     public Vector2 Centre => m_circleCollider != null ? m_circleCollider.bounds.center : this.transform.position;
     public float SurfaceForce => m_speed * m_radius * (int)m_dir * Time.fixedDeltaTime;
 
@@ -31,6 +33,7 @@ public class ObjectPlatformRotate : MonoBehaviour
     private void Start()
     {
         m_rigidbody = QComponent.GetComponent<Rigidbody2D>(gameObject);
+        m_rigidbody.bodyType = RigidbodyType2D.Kinematic;
     }
 
     private void FixedUpdate()
