@@ -31,10 +31,10 @@ public class UFO : MonoBehaviour
     {
         QTransform.SetRotate3DToward(transform, m_eulerEnd, 1f);
 
-        if (m_degDir == -1 && transform.eulerAngles.z == m_eulerEnd.z)
+        if (m_degDir == -1 && Mathf.Approximately(transform.eulerAngles.z, m_eulerEnd.z))
             m_degDir *= -1;
         else
-        if (m_degDir == 1 && transform.eulerAngles.z == m_eulerEnd.z)
+        if (m_degDir == 1 && Mathf.Approximately(transform.eulerAngles.z, m_eulerEnd.z)) 
             m_degDir *= -1;
     }
 
