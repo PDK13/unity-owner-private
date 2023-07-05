@@ -21,6 +21,8 @@ public class RotateScan : MonoBehaviour
 
     private int m_degDir = 1; //Scan!!
 
+    public float DegSpeed { get => m_degSpeed; set => m_degSpeed = value; }
+
     public float CheckLength
     { 
         get => m_checkLength != 0 ? m_checkLength : Mathf.Infinity; 
@@ -31,6 +33,7 @@ public class RotateScan : MonoBehaviour
         get => m_checkRadius; 
         set => m_checkRadius = value; 
     }
+    public LayerMask CheckMask { get => m_checkMask; set => m_checkMask = value; }
 
     private Vector3 DirForward => QCircle.GetPosXY(m_rotateLimit.DegForward, 1f).normalized;
     private Vector3 DirCurrent => QCircle.GetPosXY(m_rotateLimit.DegCurrent, 1f).normalized;

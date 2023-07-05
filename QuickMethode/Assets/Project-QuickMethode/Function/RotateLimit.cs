@@ -8,8 +8,8 @@ public class RotateLimit : MonoBehaviour
 
     private float m_degCurrent;
 
-    public float DegCurrent => m_degCurrent;
-    public float DegForward => m_degForward;
+    public float DegCurrent { get => m_degCurrent; set => m_degCurrent = value; }
+    public float DegForward { get => m_degForward; set => m_degForward = value; }
     public float DegLimitA => m_degForward + m_degWidth / 2;
     public float DegLimitB => m_degForward - m_degWidth / 2;
     public bool DegLimitReach => DegCurrent == DegLimitA || DegCurrent == DegLimitB;
