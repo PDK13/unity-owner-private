@@ -66,7 +66,7 @@ public class UIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
 
     public float FixedRadius => m_ValueFixed.magnitude; //Distance Value from Center!!
 
-    public float Deg => QCircle.GetDeg(Vector2.zero, m_ValueFixed); //Deg Value from X-Axis Right!!
+    public float Deg => QCircle.GetDeg360(Vector2.zero, m_ValueFixed); //Deg Value from X-Axis Right!!
 
     public bool Touch => m_Touch;
 

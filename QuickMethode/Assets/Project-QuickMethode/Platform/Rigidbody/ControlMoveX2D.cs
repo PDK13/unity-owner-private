@@ -292,7 +292,7 @@ public class ControlMoveX2D : MonoBehaviour
             //Surely not Wall, continue Move Normally!!
             return 0;
 
-        float Deg = QCircle.GetDeg(RayHitResultB.Value.Point, RayHitResultT.Value.Point);
+        float Deg = QCircle.GetDeg360(RayHitResultB.Value.Point, RayHitResultT.Value.Point);
 
         return 180f - Deg;
     }
@@ -306,7 +306,7 @@ public class ControlMoveX2D : MonoBehaviour
             //Surely not Wall, continue Move Normally!!
             return 0;
 
-        float Deg = QCircle.GetDeg(RayHitResultB.Value.Point, RayHitResultT.Value.Point);
+        float Deg = QCircle.GetDeg360(RayHitResultB.Value.Point, RayHitResultT.Value.Point);
 
         return Deg;
     }

@@ -29,7 +29,7 @@ public class UFO : MonoBehaviour
 
     private void FixedUpdate()
     {
-        QTransform.SetRotate3DToward(transform, m_eulerEnd, 1f);
+        QTransform.SetRotate3DToward(transform, m_eulerEnd, 1f, false);
 
         if (m_degDir == -1 && Mathf.Approximately(transform.eulerAngles.z, m_eulerEnd.z))
             m_degDir *= -1;
