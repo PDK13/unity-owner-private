@@ -6,10 +6,10 @@ using QuickMethode;
 
 #if UNITY_EDITOR
 
-[CustomEditor(typeof(ObjectPlatformRotate))]
-public class ObjectPlatformRotateEditor : Editor
+[CustomEditor(typeof(ObjPlatformRotate))]
+public class ObjPlatformRotateEditor : Editor
 {
-    ObjectPlatformRotate m_target;
+    ObjPlatformRotate m_target;
 
     private SerializedProperty m_dir;
     private SerializedProperty m_speed;
@@ -18,7 +18,7 @@ public class ObjectPlatformRotateEditor : Editor
 
     private void OnEnable()
     {
-        m_target = (target as ObjectPlatformRotate);
+        m_target = (target as ObjPlatformRotate);
 
         m_dir = serializedObject.FindProperty("m_dir");
         m_speed = serializedObject.FindProperty("m_speed");

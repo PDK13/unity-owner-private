@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPlatformRotate : MonoBehaviour
+public class ObjPlatformRotate : MonoBehaviour
 {
     [SerializeField] private DirectionX m_dir = DirectionX.Left;
     [SerializeField] private float m_speed = 10f;
