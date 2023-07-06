@@ -1,10 +1,13 @@
 using QuickMethode;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class RotateScan : MonoBehaviour
 {
+    public Action<GameObject> onTargetFound;
+
     [SerializeField] private RotateLimit m_rotateLimit; //Might use this component with "RotateLimit" component on same GameObject!!
 
     [Space]
@@ -52,6 +55,7 @@ public class RotateScan : MonoBehaviour
 
     public bool TargetCheck { get => m_targetCheck; set => m_targetCheck = value; }
     public GameObject TargetLock { get => m_targetLock; set => m_targetLock = value; }
+    public float TargetDistance => m_targetLock != null ? Vector2.Distance(m_targetLock.transform.position, this.transform.position) : 0f;
 
     private void FixedUpdate()
     {
@@ -81,7 +85,10 @@ public class RotateScan : MonoBehaviour
 
         var Cast = QCast.GetCircleCast2DDir(transform.position, DirCurrent, m_checkRadius, m_checkLength, m_checkMask);
         if (Cast.HasValue)
+        {
             m_targetLock = Cast.Value.Target;
+            onTargetFound?.Invoke(m_targetLock);
+        }
     }
 
     private void SetFollow()
@@ -89,7 +96,7 @@ public class RotateScan : MonoBehaviour
         m_rotateLimit.SetDeg(Vector3.MoveTowards(EulerCurrent, EulerTarget, m_degSpeed).z);
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         if (m_rotateLimit == null)
             return;

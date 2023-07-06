@@ -3,13 +3,14 @@ using UnityEngine;
 
 public class RotateLimit : MonoBehaviour
 {
-    [SerializeField] [Range(-360f, 360f)] private float m_degForward = 0;
+    [SerializeField] private float m_degForward = 0;
     [SerializeField] [Range(0f, 360f)] private float m_degWidth = 60f;
 
     private float m_degCurrent;
 
-    public float DegCurrent { get => m_degCurrent; set => m_degCurrent = value; }
     public float DegForward { get => m_degForward; set => m_degForward = value; }
+    public float DegWidth { get => m_degWidth; set => m_degWidth = value < 0 ? 0 : value > 360 ? 360 : value; }
+    public float DegCurrent { get => m_degCurrent; set => m_degCurrent = value; }
     public float DegLimitA => m_degForward + m_degWidth / 2;
     public float DegLimitB => m_degForward - m_degWidth / 2;
     public bool DegLimitReach => DegCurrent == DegLimitA || DegCurrent == DegLimitB;
