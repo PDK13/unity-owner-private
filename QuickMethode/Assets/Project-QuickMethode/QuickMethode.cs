@@ -4932,6 +4932,11 @@ namespace QuickMethode
             return EditorGUI.EndChangeCheck();
         }
 
+        public static void SetApplyModifiedProperties(Editor This)
+        {
+            This.serializedObject.ApplyModifiedProperties();
+        }
+
         #endregion
 
         #region ------------------------------------ Else
