@@ -329,18 +329,20 @@ public class IsometricManager : MonoBehaviour
         GameObject BlockStore = QGameObject.SetCreate("BlockStore");
         foreach (IsometricBlock Block in BlockFound)
         {
+#if UNITY_EDITOR
             if (Block.gameObject.name == IsometricTool.CURSON_NAME)
                 continue;
-
+#endif
             Block.transform.SetParent(BlockStore.transform);
         }
 
         //Remove All GameObject!!
         for (int i = WorldManager.transform.childCount - 1; i >= 0; i--)
         {
+#if UNITY_EDITOR
             if (WorldManager.GetChild(i).gameObject.name == IsometricTool.CURSON_NAME)
                 continue;
-
+#endif
             if (Application.isEditor)
                 DestroyImmediate(WorldManager.GetChild(i).gameObject);
             else
@@ -350,9 +352,10 @@ public class IsometricManager : MonoBehaviour
         //Add Block(s) Found!!
         foreach (IsometricBlock Block in BlockFound)
         {
+#if UNITY_EDITOR
             if (Block.gameObject.name == IsometricTool.CURSON_NAME)
                 continue;
-
+#endif
             SetWorldBlockRead(Block);
         }
 
