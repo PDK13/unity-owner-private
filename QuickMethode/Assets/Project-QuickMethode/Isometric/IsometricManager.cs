@@ -8,7 +8,9 @@ public class IsometricManager : MonoBehaviour
 {
     #region Event
 
-    public static Action onWorldRead;
+    public Action onWorldCreate;
+    public Action onWorldRemove;
+    public Action onListRead;
 
     #endregion
 
@@ -18,8 +20,17 @@ public class IsometricManager : MonoBehaviour
 
     #endregion
 
+    #region Varible: Game Config
+
+    [SerializeField] private IsometricConfig m_config;
+
+    public IsometricConfig Config => m_config;
+
+    #endregion
+
     #region Varible: World Manager
 
+    [Space]
     [SerializeField] private string m_name = "";
     [SerializeField] private IsoDataScene m_scene = new IsoDataScene();
 
@@ -43,11 +54,6 @@ public class IsometricManager : MonoBehaviour
     public const string CURSON_NAME = "ISO-CURSON";
 
     #endregion
-
-    private void Awake()
-    {
-        DontDestroyOnLoad(this.gameObject);
-    }
 
     #region ======================================================================== Block
 
@@ -379,6 +385,8 @@ public class IsometricManager : MonoBehaviour
             DestroyImmediate(BlockStore);
         else
             Destroy(BlockStore);
+
+        onWorldCreate?.Invoke();
     }
 
     public void SetWorldReadBlock(IsometricBlock Block)
@@ -465,21 +473,23 @@ public class IsometricManager : MonoBehaviour
         }
         m_worldTag.Clear();
 
-        if (!Full)
-            return;
-
-        //Remove All GameObject!!
-        for (int i = this.transform.childCount - 1; i >= 0; i--)
+        if (Full)
         {
+            //Remove All GameObject!!
+            for (int i = this.transform.childCount - 1; i >= 0; i--)
+            {
 #if UNITY_EDITOR
-            if (this.transform.GetChild(i).gameObject.name == CURSON_NAME)
-                continue;
+                if (this.transform.GetChild(i).gameObject.name == CURSON_NAME)
+                    continue;
 #endif
-            if (Application.isEditor && !Application.isPlaying)
-                DestroyImmediate(this.transform.GetChild(i).gameObject);
-            else
-                Destroy(this.transform.GetChild(i).gameObject);
+                if (Application.isEditor && !Application.isPlaying)
+                    DestroyImmediate(this.transform.GetChild(i).gameObject);
+                else
+                    Destroy(this.transform.GetChild(i).gameObject);
+            }
         }
+
+        onWorldRemove?.Invoke();
     }
 
     #endregion
@@ -528,6 +538,11 @@ public class IsometricManager : MonoBehaviour
 
     #region Read
 
+    public void SetList(IsometricConfig IsometricConfig)
+    {
+        SetList(IsometricConfig.BlockList);
+    }
+
     public void SetList(List<IsometricBlock> BlockList)
     {
         if (this.BlockList == null)
@@ -551,6 +566,8 @@ public class IsometricManager : MonoBehaviour
                     this.BlockList[TagIndex].Block.Add(BlockCheck);
             }
         }
+
+        onListRead?.Invoke();
     }
 
     public void SetList(List<GameObject> BlockList)
@@ -583,6 +600,8 @@ public class IsometricManager : MonoBehaviour
                     this.BlockList[TagIndex].Block.Add(Block);
             }
         }
+
+        onListRead?.Invoke();
     }
 
     public void SetList(params string[] PathChildInResources)
@@ -632,6 +651,8 @@ public class IsometricManager : MonoBehaviour
                 }
             }
         }
+
+        onListRead?.Invoke();
     }
 
     public GameObject GetList(string BlockName, string Tag = "")
@@ -687,9 +708,9 @@ public class IsometricManager : MonoBehaviour
 
     #region ======================================================================== File
 
-    #region Fild Save
+    #region Fild Write
 
-    public void SetFileSave(QPath.PathType PathType, params string[] PathChild)
+    public void SetFileWrite(QPath.PathType PathType, params string[] PathChild)
     {
         QFileIO FileIO = new QFileIO();
 
@@ -761,8 +782,6 @@ public class IsometricManager : MonoBehaviour
 
     #region File Read
 
-    //File Path
-
     public void SetFileRead(QPath.PathType PathType, params string[] PathChild)
     {
         QFileIO FileIO = new QFileIO();
@@ -772,8 +791,19 @@ public class IsometricManager : MonoBehaviour
         SetFileRead(FileIO);
     }
 
+    public void SetFileRead(TextAsset WorldFile)
+    {
+        QFileIO FileIO = new QFileIO();
+
+        FileIO.SetReadStart(WorldFile);
+
+        SetFileRead(FileIO);
+    }
+
     private void SetFileRead(QFileIO FileIO)
     {
+        SetWorldRemove(true);
+
         FileIO.GetReadAuto();
         m_name = FileIO.GetReadAutoString();
 
@@ -835,17 +865,8 @@ public class IsometricManager : MonoBehaviour
 
             SetWorldBlockCreate(PosPrimary, GetList(Name), Data);
         }
-    }
 
-    //File Text
-
-    public void SetFileRead(TextAsset WorldFile)
-    {
-        QFileIO FileIO = new QFileIO();
-
-        FileIO.SetReadStart(WorldFile);
-
-        SetFileRead(FileIO);
+        onWorldCreate?.Invoke();
     }
 
     #endregion

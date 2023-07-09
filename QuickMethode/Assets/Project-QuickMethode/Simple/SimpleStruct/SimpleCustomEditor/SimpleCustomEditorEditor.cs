@@ -9,7 +9,9 @@ using UnityEngine;
 [CustomEditor(typeof(SimpleCustomEditor))]
 public class SimpleCustomEditorEditor : Editor
 {
-    private SerializedProperty m_AnotherVaribleA; //Stored Varible
+    private SimpleCustomEditor m_target;
+
+    private SerializedProperty m_AnotherVaribleA;
 
     private SerializedProperty m_AnotherVaribleB;
     private SerializedProperty m_AnotherVaribleC;
@@ -18,7 +20,9 @@ public class SimpleCustomEditorEditor : Editor
 
     private void OnEnable()
     {
-        m_AnotherVaribleA = serializedObject.FindProperty("m_VaribleA"); //Find Varible
+        m_target = (target as SimpleCustomEditor);
+
+        m_AnotherVaribleA = serializedObject.FindProperty("m_VaribleA");
 
         m_AnotherVaribleB = serializedObject.FindProperty("m_VaribleB");
         m_AnotherVaribleC = serializedObject.FindProperty("m_VaribleC");
@@ -28,35 +32,30 @@ public class SimpleCustomEditorEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        SimpleCustomEditor m_Temp = (target as SimpleCustomEditor); //"Target" mean GameObject
+        serializedObject.Update();
 
-        serializedObject.Update(); //...???
-
-        //=================================================== Begin Check
-
-        EditorGUI.BeginChangeCheck(); //Begin Check
+        EditorGUI.BeginChangeCheck(); //Begin Change Check
 
         EditorGUILayout.PropertyField(m_AnotherVaribleA); //Show varible
 
-        if (m_Temp.m_VaribleA == SimpleCustomEditor.Option.Option1) 
+        if (m_target.m_VaribleA == SimpleCustomEditor.Option.Option1) 
         {
             EditorGUILayout.PropertyField(m_AnotherVaribleB);
         }
 
-        serializedObject.ApplyModifiedProperties(); //Apply All Chance...???
-        if (EditorGUI.EndChangeCheck())
-        {
-            m_Temp.SetOptionDebug(); //Call Methode from Sript or Component
-        }
+        serializedObject.ApplyModifiedProperties(); //Apply All Chagce
 
-        //=================================================== End Check
+        if (EditorGUI.EndChangeCheck()) //End Change Check
+        {
+            m_target.SetOptionDebug(); //Call Methode from Sript or Component
+        }
 
         //EditorGUILayout.PropertyField(m_AnotherVaribleB);
         EditorGUILayout.PropertyField(m_AnotherVaribleC);
 
         EditorGUILayout.PropertyField(m_AnotherVariblePath);
 
-        serializedObject.ApplyModifiedProperties(); //Apply All Chance...???
+        serializedObject.ApplyModifiedProperties(); //Apply All Chagce
     }
 
     private void OnSceneGUI()

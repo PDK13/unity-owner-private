@@ -31,9 +31,9 @@ public class ObjPlatformRotateEditor : Editor
         serializedObject.Update();
         EditorGUILayout.PropertyField(m_dir);
         EditorGUILayout.PropertyField(m_speed);
-        QEditor.SetChanceCheckBegin();
+        QCustomEditor.SetChanceCheckBegin();
         EditorGUILayout.PropertyField(m_circleCollider);
-        if (QEditor.SetChanceCheckEnd())
+        if (QCustomEditor.SetChanceCheckEnd())
             if (!m_target.CircleCollider)
                 EditorGUILayout.PropertyField(m_radius);
         serializedObject.ApplyModifiedProperties();
