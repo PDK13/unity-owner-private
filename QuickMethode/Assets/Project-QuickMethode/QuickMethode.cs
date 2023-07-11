@@ -4581,13 +4581,21 @@ namespace QuickMethode
 
     public enum Opption { Yes = 1, No = 0 }
 
-    public enum Direction { Up, Down, Left, Right, None }
+    public enum Direction { None, Up, Down, Left, Right, }
 
-    public enum DirectionX { Left = -1, Right = 1, None = 0 }
+    public enum DirectionX { None = 0, Left = -1, Right = 1, }
 
-    public enum DirectionY { Up = 1, Down = -1, None = 0 }
+    public enum DirectionY { None = 0, Up = 1, Down = -1, }
 
     public enum Axis { Up, Right, Forward, }
+
+    [Flags]
+    public enum Coordinates 
+    { 
+        X = 1 << 0, //001 = 1
+        Y = 1 << 1, //010 = 2
+        Z = 1 << 2, //100 = 4
+    }
 
     #endregion
 
