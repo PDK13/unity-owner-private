@@ -370,12 +370,33 @@ namespace QuickMethode
 
     public class QMath
     {
-        public static (double Value, String String) GetDiscountPercent(double PrimaryValue, double DiscoundValue)
+        #region Sum
+
+        public static int GetSum(params int[] Value)
         {
-            //Ex: Primary-Value = 40 & Discound-Value = 20 >> Mean Discound-Percent = 50%
-            double DiscountPercent = (PrimaryValue - DiscoundValue) / PrimaryValue * 100;
-            return (DiscountPercent, "-" + DiscountPercent.ToString() + "%");
+            return Value.Sum();
         }
+
+        public static float GetSum(params float[] Value)
+        {
+            return Value.Sum();
+        }
+
+        #endregion
+
+        #region Bit
+
+        public static int GetBitIndex(int BitValue32)
+        {
+            return (int)Mathf.Log(BitValue32, 2); //BitValue32 = 2 ^ BitIndex
+        }
+
+        public static int GetBitValue32(int BitIndex)
+        {
+            return (int)Mathf.Pow(2, BitIndex); //BitValue32 = 2 ^ BitIndex
+        }
+
+        #endregion
     }
 
     #endregion
@@ -1957,47 +1978,104 @@ namespace QuickMethode
 
     public class QEnum
     {
-        #region ==================================== Name
-
-        public static string[] GetEnumArray<EnumType>()
-        {
-            return Enum.GetNames(typeof(EnumType));
-        }
-
-        public static List<string> GetEnumList<EnumType>()
+        public static List<string> GetListName<EnumType>()
         {
             return Enum.GetNames(typeof(EnumType)).ToList();
         }
 
-        #endregion
-
-        #region ==================================== Index
-
-        public static int[] GetEnumArrayIndex<EnumType>()
-        {
-            return Enum.GetValues(typeof(EnumType)).Cast<int>().ToArray();
-        }
-
-        public static List<int> GetEnumListIndex<EnumType>()
+        public static List<int> GetListIndex<EnumType>()
         {
             return Enum.GetValues(typeof(EnumType)).Cast<int>().ToList();
         }
 
-        #endregion
+        public static List<int> GetListIndex<EnumType>(params EnumType[] Value)
+        {
+            List<int> Index = new List<int>();
+            for (int i = 0; i < Value.Length; i++)
+                Index.Add((int)Convert.ChangeType(Value[i], typeof(int)));
+            return Index;
+        }
 
-        #region ==================================== Index - Name
-
-        public static string GetEnumString<EnumType>(int Index)
+        public static string GetName<EnumType>(int Index)
         {
             return Enum.GetName(typeof(EnumType), Index);
         }
+    }
 
-        #endregion
+    public class QFlag
+    {
+        //NOTE:
+        //Bit       : "1 << 3" mean "0100" or "8"
+        //Bit |     : 1 | 0 = 1 + 0 = 1
+        //Bit &     : 1 & 0 = 1 * 0 = 0
+        //Bit ~     : Revert Bit, like ~8 = ~0100 = 1011 + 1 = 1100 = -9 (?)
+        //Add       : "Flag = Flag.A | Flag.B | Flag.C"
+        //Remove    : "Flag &= ~Flag.A"
+        //Exist     : "(Flag & Flag.A) == Flag.A" or "Flag.HasFlag(Flag.A)"
+        //Emty      : "Alpha == 0"
+
+        public static List<int> GetBit<EnumType>()
+        {
+            List<int> Index = QEnum.GetListIndex<EnumType>();
+            for (int i = 0; i < Index.Count; i++)
+                if (i == 0)
+                    Index[i] = 1;
+                else
+                    Index[i] = Index[i - 1] * 2;
+            return Index;
+        }
+
+        public static int GetChoice<EnumType>(params EnumType[] Choice)
+        {
+            int Sum32 = 0;
+            foreach (EnumType Value in Choice)
+            {
+                int Value32 = (int)Convert.ChangeType(Value, typeof(int));
+                Sum32 += Value32;
+            }
+            return Sum32;
+        }
+
+        public static int GetAdd<EnumType>(EnumType Current, params EnumType[] Choice)
+        {
+            int Sum32 = GetChoice(Current);
+            foreach (EnumType Value in Choice)
+            {
+                if (GetExist(Current, Value))
+                    continue;
+                int Value32 = (int)Convert.ChangeType(Value, typeof(int));
+                Sum32 += Value32;
+            }
+            return Sum32;
+        }
+
+        public static int GetRemove<EnumType>(EnumType Current, params EnumType[] Choice)
+        {
+            int Sum32 = GetChoice(Current);
+            foreach (EnumType Value in Choice)
+            {
+                if (!GetExist(Current, Value))
+                    continue;
+                int Value32 = (int)Convert.ChangeType(Value, typeof(int));
+                Sum32 -= Value32;
+            }
+            return Sum32;
+        }
+
+        public static bool GetExist<EnumType>(EnumType Current, params EnumType[] Check)
+        {
+            return (GetChoice(Current) & GetChoice(Check)) == GetChoice(Check);
+        }
+
+        public static bool GetEmty<EnumType>(EnumType Current)
+        {
+            return GetChoice(Current) == 0;
+        }
     }
 
     public class QList
     {
-        #region Get Data
+        #region ==================================== Get Data
 
         public static List<T> GetData<T>(List<T> Data)
         {
@@ -2019,7 +2097,7 @@ namespace QuickMethode
 
         #endregion
 
-        #region Find Data
+        #region ==================================== Find Data
 
         public static T GetComponent<T>(List<GameObject> DataList, GameObject DataFind)
         {
@@ -2033,7 +2111,7 @@ namespace QuickMethode
 
         #endregion
 
-        #region Random
+        #region ==================================== Get Random
 
         public static int GetIndexRandom(params int[] Percent)
         {
@@ -4925,7 +5003,7 @@ namespace QuickMethode
 
         public static int SetPopup<EnumType>(int IndexChoice, params GUILayoutOption[] GUILayoutOption)
         {
-            return EditorGUILayout.Popup("", IndexChoice, QEnum.GetEnumList<EnumType>().ToArray(), GUILayoutOption);
+            return EditorGUILayout.Popup("", IndexChoice, QEnum.GetListName<EnumType>().ToArray(), GUILayoutOption);
         }
 
         #endregion
