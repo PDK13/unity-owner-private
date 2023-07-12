@@ -14,6 +14,8 @@ public class UniqueID : MonoBehaviour
 
 #if UNITY_EDITOR
 
+    //NOTICE: When editor in Prefab mode, should delete ID after save in Project window, instead in Scene that make this update ID auto!!
+
     private void Awake()
     {
         if (Application.isPlaying)
@@ -127,7 +129,7 @@ public class UniqueID : MonoBehaviour
         if (localIdProp.intValue.ToString() == "0")
             m_id = localIdProp.intValue.ToString();
         else
-            m_id = QDateTime.GetFormat(QDateTime.Now, "yyMMddHHMMss") + ":" + localIdProp.intValue.ToString();
+            m_id = QDateTime.GetFormat(QDateTime.Now, "yyMMddHHMMss") + ":" + localIdProp.intValue.ToString().Replace("-", "");
 
         m_idKeep = true;
     } //From: Nguyễn Nhật Minh - Share idea of code
