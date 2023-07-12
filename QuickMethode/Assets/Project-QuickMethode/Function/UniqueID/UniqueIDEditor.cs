@@ -11,20 +11,20 @@ public class UniqueIDEditor : Editor
 {
     private UniqueID m_target;
 
-    private SerializedProperty m_idAuto;
+    private SerializedProperty m_id;
 
     private void OnEnable()
     {
         m_target = (target as UniqueID);
 
-        m_idAuto = serializedObject.FindProperty("m_idAuto");
+        m_id = serializedObject.FindProperty("m_id");
     }
 
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
 
-        EditorGUILayout.PropertyField(m_idAuto);
+        EditorGUILayout.PropertyField(m_id);
 
         if (QGameObject.GetCheckPrefab(m_target.gameObject))
         {

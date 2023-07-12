@@ -7,10 +7,10 @@ using UnityEngine;
 #endif
 public class UniqueID : MonoBehaviour
 {
-    [SerializeField] private string m_idAuto = "";
+    [SerializeField] private string m_id = "";
     [SerializeField] private bool m_idKeep = true;
 
-    public string ID_AUTO => m_idAuto;
+    public string ID => m_id;
 
 #if UNITY_EDITOR
 
@@ -19,7 +19,7 @@ public class UniqueID : MonoBehaviour
         if (Application.isPlaying)
             return;
 
-        if (m_idAuto == "" || m_idAuto == "0")
+        if (m_id == "" || m_id == "0")
         {
             if (!QGameObject.GetCheckPrefab(this.gameObject))
                 SetUpdateIdentfier(true);
@@ -37,7 +37,7 @@ public class UniqueID : MonoBehaviour
         if (Application.isPlaying)
             return;
 
-        if (m_idAuto == "" || m_idAuto == "0")
+        if (m_id == "" || m_id == "0")
         {
             if (!QGameObject.GetCheckPrefab(this.gameObject))
                 SetUpdateIdentfier(true);
@@ -99,7 +99,7 @@ public class UniqueID : MonoBehaviour
                 return;
         }
 
-        m_idAuto = QDateTime.GetFormat(QDateTime.Now, "yyMMddHHMMss") + ":" + transform.GetInstanceID().ToString().Replace("-", "");
+        m_id = QDateTime.GetFormat(QDateTime.Now, "yyMMddHHMMss") + ":" + transform.GetInstanceID().ToString().Replace("-", "");
 
         m_idKeep = true;
     }
@@ -125,9 +125,9 @@ public class UniqueID : MonoBehaviour
         UnityEditor.SerializedProperty localIdProp = serializedObject.FindProperty("m_LocalIdentfierInFile");
 
         if (localIdProp.intValue.ToString() == "0")
-            m_idAuto = localIdProp.intValue.ToString();
+            m_id = localIdProp.intValue.ToString();
         else
-            m_idAuto = QDateTime.GetFormat(QDateTime.Now, "yyMMddHHMMss") + ":" + localIdProp.intValue.ToString();
+            m_id = QDateTime.GetFormat(QDateTime.Now, "yyMMddHHMMss") + ":" + localIdProp.intValue.ToString();
 
         m_idKeep = true;
     } //From: Nguyễn Nhật Minh - Share idea of code
