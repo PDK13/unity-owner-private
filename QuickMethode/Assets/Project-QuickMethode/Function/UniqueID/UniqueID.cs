@@ -1,4 +1,4 @@
-using QuickMethode;
+﻿using QuickMethode;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -137,7 +137,7 @@ public class UniqueID : MonoBehaviour
             m_idAuto = QDateTime.GetFormat(QDateTime.Now, "yyMMddHHMMss") + ":" + localIdProp.intValue.ToString();
 
         m_idKeep = true;
-    }
+    } //From: Nguyễn Nhật Minh - Share idea of code
 
     public void SetUpdateRefresh()
     {
