@@ -1500,22 +1500,22 @@ namespace QuickMethode
 
         #region ==================================== Destroy
 
-        public static void SetDestroy(UnityEngine.Object Object)
+        public static void SetDestroy(UnityEngine.Object From)
         {
             //Remove GameObject from Scene or Component from GameObject!!
 
-            if (Object == null) return;
+            if (From == null) return;
 
             if (Application.isEditor)
             {
                 if (Application.isPlaying)
-                    MonoBehaviour.Destroy(Object);
+                    MonoBehaviour.Destroy(From);
                 else
-                    MonoBehaviour.DestroyImmediate(Object);
+                    MonoBehaviour.DestroyImmediate(From);
             }
             else
             {
-                MonoBehaviour.Destroy(Object);
+                MonoBehaviour.Destroy(From);
             }
         }
 
@@ -1523,33 +1523,43 @@ namespace QuickMethode
 
         #region ==================================== Transform
 
-        public static void SetIndex(Transform Child, int Index)
+        public static void SetIndex(Transform From, int Index)
         {
-            if (Child.parent != null)
+            if (From.parent != null)
             {
-                if (Index < 0 || Index > Child.parent.childCount - 1)
+                if (Index < 0 || Index > From.parent.childCount - 1)
                     return;
             }
 
-            Child.SetSiblingIndex(Index);
+            From.SetSiblingIndex(Index);
         }
 
         #endregion
 
         #region ==================================== Message
 
-        public static void SetMessage(GameObject Target, string MethodeName, SendMessageOptions Option = SendMessageOptions.RequireReceiver)
+        public static void SetMessage(GameObject From, string MethodeName, SendMessageOptions Option = SendMessageOptions.RequireReceiver)
         {
-            Target.SendMessage(MethodeName, Option);
+            From.SendMessage(MethodeName, Option);
         }
 
         #endregion
 
         #region ==================================== GameObject
 
-        public static string GetNameReplaceClone(string GameObjectName)
+        public static string GetNameReplaceClone(string Name)
         {
-            return GameObjectName.Replace("(Clone)", "");
+            return Name.Replace("(Clone)", "");
+        }
+
+        public static bool GetCheckPrefab(GameObject From)
+        {
+            //Check if GameObject is a Prefab?!
+#if UNITY_2018_3_OR_NEWER
+            return PrefabUtility.IsPartOfAnyPrefab(From);
+#else
+	        return PrefabUtility.GetPrefabType(go) != PrefabType.None;
+#endif
         }
 
 #if UNITY_EDITOR
@@ -1557,9 +1567,9 @@ namespace QuickMethode
         ///<summary>
         ///Caution: Unity Editor only!
         ///</summary>
-        public static GameObject SetFocus(GameObject GameObjectInScene)
+        public static GameObject SetFocus(GameObject From)
         {
-            return Selection.activeGameObject = GameObjectInScene;
+            return Selection.activeGameObject = From;
         }
 
         ///<summary>
