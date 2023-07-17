@@ -7,22 +7,27 @@ using UnityEngine;
 public class IsoDataBlockMove
 {
     public string Key = "";
-    public bool Loop = false;
+    public IsoDataBlock.DataBlockType Type = IsoDataBlock.DataBlockType.Forward;
     public List<IsoDir> Dir = new List<IsoDir>();
     public List<int> Length = new List<int>();
-    [HideInInspector] public int Index = 0;
-    [HideInInspector] public int Quantity = 1;
+
+    [HideInInspector]
+    public int Index = 0;
+    [HideInInspector]
+    public int Quantity = 1;
 
     public List<IsoDataBlockMoveSingle> Data
     {
         get
         {
             List<IsoDataBlockMoveSingle> Data = new List<IsoDataBlockMoveSingle>();
-            for(int i=0; i < Dir.Count; i++)
+            for (int i = 0; i < Dir.Count; i++)
                 Data.Add(new IsoDataBlockMoveSingle(Dir[i], (Length.Count == Dir.Count ? Length[i] : 1)));
             return Data;
         }
     }
+
+    public int DataCount => Dir.Count;
 
     public void SetDataNew()
     {
@@ -47,7 +52,7 @@ public class IsoDataBlockMoveSingle
     public IsoDir Dir = IsoDir.None;
     public int Length = 1;
 
-    public string Encypt => QEncypt.GetEncypt(KEY_VALUE_ENCYPT, (int)Dir, Length);
+    public string Encypt => QEncypt.GetEncypt(KEY_VALUE_ENCYPT, Length.ToString(), IsoVector.GetEncyptDir(Dir));
 
     public IsoDataBlockMoveSingle(IsoDir Dir, int Value)
     {
@@ -57,7 +62,7 @@ public class IsoDataBlockMoveSingle
 
     public static IsoDataBlockMoveSingle GetDencypt(string Value)
     {
-        List<int> DataString = QEncypt.GetDencyptInt(KEY_VALUE_ENCYPT, Value);
-        return new IsoDataBlockMoveSingle((IsoDir)DataString[0], DataString[1]);
+        List<string> DataString = QEncypt.GetDencyptString(KEY_VALUE_ENCYPT, Value);
+        return new IsoDataBlockMoveSingle(IsoVector.GetDirEnum(DataString[1]), int.Parse(DataString[0]));
     }
 }

@@ -79,8 +79,8 @@ public class IsometricManager : MonoBehaviour
         //Block
         IsometricBlock Block = QComponent.GetComponent<IsometricBlock>(BlockObject);
         Block.WorldManager = this;
-        Block.Pos = Pos;
-        Block.PosPrimary = Pos;
+        Block.Pos = Pos.Fixed;
+        Block.PosPrimary = Pos.Fixed;
 
         //Block Data
         Block.Data = Data != null ? Data : new IsoDataBlockSingle();
@@ -89,7 +89,7 @@ public class IsometricManager : MonoBehaviour
         IsometricRenderer BlockRenderer = BlockObject.GetComponent<IsometricRenderer>();
         if (BlockRenderer != null)
         {
-            BlockRenderer.SetSpriteJoin(Pos);
+            BlockRenderer.SetSpriteJoin(Pos.Fixed);
         }
 
         if (Block.Free && Application.isPlaying)
@@ -99,13 +99,13 @@ public class IsometricManager : MonoBehaviour
         else
         {
             //Delete
-            SetWorldBlockRemovePrimary(Pos);
+            SetWorldBlockRemovePrimary(Pos.Fixed);
 
             //World
             int IndexPosH = GetWorldIndexPosH(Pos.HInt);
             if (IndexPosH == -1)
             {
-                m_worldPosH.Add((Pos.HInt, new List<IsometricBlock>()));
+                m_worldPosH.Add((Pos.Fixed.HInt, new List<IsometricBlock>()));
                 IndexPosH = m_worldPosH.Count - 1;
                 m_worldPosH[IndexPosH].Block.Add(Block);
             }
@@ -146,14 +146,14 @@ public class IsometricManager : MonoBehaviour
         }
 
         //Scene
-        Transform ParentPosH = transform.Find(GetWorldNamePosH(Pos));
+        Transform ParentPosH = transform.Find(GetWorldNamePosH(Pos.Fixed));
         if (ParentPosH != null)
         {
             Block.transform.SetParent(ParentPosH, true);
         }
         else
         {
-            ParentPosH = QGameObject.SetCreate(GetWorldNamePosH(Pos), transform).transform;
+            ParentPosH = QGameObject.SetCreate(GetWorldNamePosH(Pos.Fixed), transform).transform;
             Block.transform.SetParent(ParentPosH, true);
         }
 
@@ -167,13 +167,13 @@ public class IsometricManager : MonoBehaviour
     public IsometricBlock GetWorldBlockPrimary(IsoVector Pos)
     {
         //World
-        int IndexPosH = GetWorldIndexPosH(Pos.HInt);
+        int IndexPosH = GetWorldIndexPosH(Pos.Fixed.HInt);
         if (IndexPosH == -1)
             return null;
 
         for (int i = 0; i < m_worldPosH[IndexPosH].Block.Count; i++)
         {
-            if (m_worldPosH[IndexPosH].Block[i].PosPrimary != Pos)
+            if (m_worldPosH[IndexPosH].Block[i].PosPrimary != Pos.Fixed)
                 continue;
 
             return m_worldPosH[IndexPosH].Block[i];
@@ -196,7 +196,7 @@ public class IsometricManager : MonoBehaviour
 
                 for (int BlockIndex = 0; BlockIndex < m_worldTag[TagIndex].Block.Count; BlockIndex++)
                 {
-                    if (m_worldTag[TagIndex].Block[BlockIndex].Pos != Pos)
+                    if (m_worldTag[TagIndex].Block[BlockIndex].Pos.Fixed != Pos.Fixed)
                         continue;
 
                     return m_worldTag[TagIndex].Block[BlockIndex];
@@ -210,7 +210,7 @@ public class IsometricManager : MonoBehaviour
             {
                 foreach (var BlockCheck in TagCheck.Block)
                 {
-                    if (BlockCheck.Pos != Pos)
+                    if (BlockCheck.Pos.Fixed != Pos.Fixed)
                         continue;
 
                     return BlockCheck;
@@ -237,7 +237,7 @@ public class IsometricManager : MonoBehaviour
 
                 for (int BlockIndex = 0; BlockIndex < m_worldTag[TagIndex].Block.Count; BlockIndex++)
                 {
-                    if (m_worldTag[TagIndex].Block[BlockIndex].Pos != Pos)
+                    if (m_worldTag[TagIndex].Block[BlockIndex].Pos.Fixed != Pos.Fixed)
                         continue;
 
                     List.Add(m_worldTag[TagIndex].Block[BlockIndex]);
@@ -251,7 +251,7 @@ public class IsometricManager : MonoBehaviour
             {
                 foreach (var BlockCheck in TagCheck.Block)
                 {
-                    if (BlockCheck.Pos != Pos)
+                    if (BlockCheck.Pos.Fixed != Pos.Fixed)
                         continue;
 
                     List.Add(BlockCheck);
@@ -277,16 +277,16 @@ public class IsometricManager : MonoBehaviour
 
     #region Block Remove
 
-    public void SetWorldBlockRemovePrimary(IsoVector Pos)
+    public void SetWorldBlockRemovePrimary(IsoVector Pos, float Delay = 0)
     {
         //World
-        int IndexPosH = GetWorldIndexPosH(Pos.HInt);
+        int IndexPosH = GetWorldIndexPosH(Pos.Fixed.HInt);
         if (IndexPosH == -1)
             return;
 
         for (int i = 0; i < m_worldPosH[IndexPosH].Block.Count; i++)
         {
-            if (m_worldPosH[IndexPosH].Block[i].PosPrimary != Pos)
+            if (m_worldPosH[IndexPosH].Block[i].PosPrimary != Pos.Fixed)
                 continue;
 
             IsometricBlock Block = m_worldPosH[IndexPosH].Block[i];
@@ -313,25 +313,29 @@ public class IsometricManager : MonoBehaviour
             if (Application.isEditor && !Application.isPlaying)
                 DestroyImmediate(Block.gameObject);
             else
-                Destroy(Block.gameObject);
+                Destroy(Block.gameObject, Delay);
 
             break;
         }
     }
 
-    public void SetWorldBlockRemoveInstant(IsometricBlock Block)
+    public void SetWorldBlockRemoveInstant(IsometricBlock Block, float Delay)
     {
-        //World
-        m_worldPosH[GetWorldIndexPosH(Block.Pos.HInt)].Block.Remove(Block);
+        if (!Block.Free)
+        {
+            //World
+            m_worldPosH[GetWorldIndexPosH(Block.Pos.HInt)].Block.Remove(Block);
+        }
 
         //Tag
-        m_worldTag[GetWorldIndexTag(Block.tag)].Block.Remove(Block);
+        foreach(string TagCheck in Block.Tag)
+            m_worldTag[GetWorldIndexTag(TagCheck)].Block.Remove(Block);
 
         //Scene
         if (Application.isEditor && !Application.isPlaying)
             DestroyImmediate(Block.gameObject);
         else
-            Destroy(Block.gameObject);
+            Destroy(Block.gameObject, Delay);
     }
 
     #endregion
@@ -365,6 +369,9 @@ public class IsometricManager : MonoBehaviour
             if (WorldManager.GetChild(i).gameObject.name == CURSON_NAME)
                 continue;
 #endif
+            if (this.transform.GetChild(i).GetComponent<Camera>() != null)
+                continue;
+
             if (Application.isEditor && !Application.isPlaying)
                 DestroyImmediate(WorldManager.GetChild(i).gameObject);
             else
@@ -482,6 +489,9 @@ public class IsometricManager : MonoBehaviour
                 if (this.transform.GetChild(i).gameObject.name == CURSON_NAME)
                     continue;
 #endif
+                if (this.transform.GetChild(i).GetComponent<Camera>() != null)
+                    continue;
+
                 if (Application.isEditor && !Application.isPlaying)
                     DestroyImmediate(this.transform.GetChild(i).gameObject);
                 else
@@ -747,10 +757,17 @@ public class IsometricManager : MonoBehaviour
 
             FileIO.SetWriteAdd("<MOVE DATA>");
             FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.MoveData.Key);
-            FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.MoveData.Loop);
+            FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.MoveData.Type);
             FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.MoveData.Data.Count);
             for (int DataIndex = 0; DataIndex < WorldBlocks[BlockIndex].Data.MoveData.Data.Count; DataIndex++)
                 FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.MoveData.Data[DataIndex].Encypt);
+
+            FileIO.SetWriteAdd("<ACTION DATA>");
+            FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.ActionData.Key);
+            FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.ActionData.Type);
+            FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.ActionData.Data.Count);
+            for (int DataIndex = 0; DataIndex < WorldBlocks[BlockIndex].Data.ActionData.Data.Count; DataIndex++)
+                FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.ActionData.Data[DataIndex].Encypt);
 
             FileIO.SetWriteAdd("<EVENT DATA>");
             FileIO.SetWriteAdd(WorldBlocks[BlockIndex].Data.EventData.Key);
@@ -808,11 +825,20 @@ public class IsometricManager : MonoBehaviour
             FileIO.GetReadAuto();
             Data.MoveData = new IsoDataBlockMove();
             Data.MoveData.Key = FileIO.GetReadAutoString();
-            Data.MoveData.Loop = FileIO.GetReadAutoBool();
+            Data.MoveData.Type = FileIO.GetReadAutoEnum<IsoDataBlock.DataBlockType>();
             Data.MoveData.SetDataNew();
             int MoveCount = FileIO.GetReadAutoInt();
             for (int DataIndex = 0; DataIndex < MoveCount; DataIndex++)
                 Data.MoveData.SetDataAdd(IsoDataBlockMoveSingle.GetDencypt(FileIO.GetReadAutoString()));
+
+            FileIO.GetReadAuto();
+            Data.ActionData = new IsoDataBlockAction();
+            Data.ActionData.Key = FileIO.GetReadAutoString();
+            Data.ActionData.Type = FileIO.GetReadAutoEnum<IsoDataBlock.DataBlockType>();
+            Data.ActionData.SetDataNew();
+            int ActionCount = FileIO.GetReadAutoInt();
+            for (int DataIndex = 0; DataIndex < ActionCount; DataIndex++)
+                Data.ActionData.SetDataAdd(IsoDataBlockActionSingle.GetDencypt(FileIO.GetReadAutoString()));
 
             FileIO.GetReadAuto();
             Data.EventData = new IsoDataBlockEvent();

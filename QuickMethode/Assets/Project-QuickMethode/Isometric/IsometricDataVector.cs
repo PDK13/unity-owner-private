@@ -127,6 +127,109 @@ public struct IsoVector
         return None;
     }
 
+    public static IsoDir GetDirEnum(string Data)
+    {
+        switch (Data)
+        {
+            case "U":
+            case "u":
+                return IsoDir.Up;
+            case "D":
+            case "d":
+                return IsoDir.Down;
+            case "L":
+            case "l":
+                return IsoDir.Left;
+            case "R":
+            case "r":
+                return IsoDir.Right;
+            case "T":
+            case "t":
+                return IsoDir.Top;
+            case "B":
+            case "b":
+                return IsoDir.Bot;
+            case "N":
+            case "n":
+                return IsoDir.None;
+        }
+        Debug.LogError("[Caution] Data not correct!!");
+        return IsoDir.None;
+    }
+
+    public static IsoVector GetDirValue(string Data)
+    {
+        switch (Data)
+        {
+            case "U":
+            case "u":
+                return Up;
+            case "D":
+            case "d":
+                return Down;
+            case "L":
+            case "l":
+                return Left;
+            case "R":
+            case "r":
+                return Right;
+            case "T":
+            case "t":
+                return Top;
+            case "B":
+            case "b":
+                return Bot;
+            case "N":
+            case "n":
+                return None;
+        }
+        Debug.LogError("[Caution] Data not correct!!");
+        return None;
+    }
+
+    public static string GetEncyptDir(IsoDir Dir)
+    {
+        switch (Dir)
+        {
+            case IsoDir.Up:
+                return "U";
+            case IsoDir.Down:
+                return "D";
+            case IsoDir.Left:
+                return "L";
+            case IsoDir.Right:
+                return "R";
+            case IsoDir.Top:
+                return "T";
+            case IsoDir.Bot:
+                return "B";
+        }
+        return "N";
+    }
+
+    public static string GetEncyptDir(IsoVector Dir)
+    {
+        if (Dir == Up)
+            return "U";
+
+        if (Dir == Down)
+            return "U";
+
+        if (Dir == Left)
+            return "U";
+
+        if (Dir == Right)
+            return "U";
+
+        if (Dir == Top)
+            return "U";
+
+        if (Dir == Bot)
+            return "U";
+
+        return "N";
+    }
+
     #endregion
 
     #region Operator
