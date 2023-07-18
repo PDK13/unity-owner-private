@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -5,282 +6,206 @@ using UnityEngine.UI;
 [ExecuteAlways]
 public class UIScrollViewSingle : MonoBehaviour
 {
-    [Header("Setting")]
+    private enum ScrollViewType
+    {
+        Vertical,
+        Horizontal,
+    }
 
-    [SerializeField] private ScrollViewType m_ScrollViewType;
+    [SerializeField] private ScrollViewType m_scrollViewType;
+    [SerializeField] private ScrollRect.MovementType m_movementType = ScrollRect.MovementType.Clamped;
 
-    [SerializeField] private Vector2 m_ItemSize = new Vector2(100f, 100f);
+    [Space]
+    [SerializeField] [Min(1)] private int m_itemConstraint = 1;
+    [SerializeField] private Vector2 m_itemSize = new Vector2(100f, 100f);
+    [SerializeField] private Vector2 m_itemSpacing = new Vector2(5f, 5f);
 
-    [SerializeField] private Vector2 m_ItemSpacing = new Vector2(5f, 5f);
+    [Space]
+    [SerializeField] private ScrollRect m_scrollRect;
+    [SerializeField] private RectTransform m_content;
+    [SerializeField] private ContentSizeFitter m_contentSizeFitter;
+    [SerializeField] private GridLayoutGroup m_gridLayoutGroup;
 
-    [SerializeField] [Min(1)] private int m_ItemConstraint = 1;
-
-    [Header("Testing")]
-
-    [SerializeField] [Range(0, 10)] float m_IndexTesting = 0;
-
-    [SerializeField] bool m_CheckTesting = false;
-
-    [Header("Component")]
-
-    [SerializeField] private ScrollRect com_ScrollRect;
-
-    [SerializeField] private RectTransform com_Content;
-
-    [SerializeField] private ContentSizeFitter com_ContentSizeFitter;
-
-    [SerializeField] private GridLayoutGroup com_GridLayoutGroup;
+    public RectTransform Content => m_content;
 
     private void Awake()
     {
-        if (this.GetComponent<ScrollRect>() == null)
-        {
-            Debug.LogWarningFormat("{0}: Script not attach to Scroll View GameObject?!", name);
-        }
-        else
-        {
-            //Scroll Rect
-
-            com_ScrollRect = this.GetComponent<ScrollRect>();
-        }
-
-        if (this.transform.Find("Viewport/Content") == null)
-        {
-            Debug.LogWarningFormat("{0}: Something went wrong to get child Viewport/Content of Scroll View!", name);
-
-            return;
-        }
-        else
-        {
-            com_Content = this.transform.Find("Viewport/Content").GetComponent<RectTransform>();
-
-            //Grid Layout Group
-
-            if (com_Content.gameObject.GetComponent<ContentSizeFitter>() == null)
-            {
-                com_ContentSizeFitter = com_Content.gameObject.AddComponent<ContentSizeFitter>();
-            }
-
-            if (com_ContentSizeFitter == null)
-            {
-                com_ContentSizeFitter = com_Content.gameObject.GetComponent<ContentSizeFitter>();
-            }
-
-            //Content Size Fitter
-
-            if (com_Content.gameObject.GetComponent<GridLayoutGroup>() == null)
-            {
-                com_GridLayoutGroup = com_Content.gameObject.AddComponent<GridLayoutGroup>();
-            }
-
-            if (com_GridLayoutGroup == null)
-            {
-                com_GridLayoutGroup = com_Content.gameObject.GetComponent<GridLayoutGroup>();
-            }
-        }
-
-        SetScrollViewFix();
+        if (Application.isEditor && !Application.isPlaying)
+            SetInit();
     }
 
-    private void Start()
+    private void Reset()
     {
-        if (Application.IsPlaying(this.gameObject))
-        {
-            SetCheckTestingOff();
-        }
+        SetInit();
     }
 
 #if UNITY_EDITOR
 
     private void Update()
     {
-        SetScrollViewFix();
-
-        if (m_CheckTesting)
-        {
-            SetContent((float)m_IndexTesting);
-        }
+        SetScrollViewFixed();
     }
 
 #endif
 
-    #region ================================================ Content Primary
+    private void SetInit()
+    {
+        if (GetComponent<ScrollRect>() == null)
+            Debug.LogWarningFormat("{0}: Script not attach to Scroll View GameObject?!", name);
+        else
+            m_scrollRect = this.GetComponent<ScrollRect>();
+        //
+        if (this.transform.Find("Viewport/Content") == null)
+        {
+            Debug.LogWarningFormat("{0}: Something went wrong to get child Viewport/Content of Scroll View!", name);
+            return;
+        }
+        else
+        {
+            m_content = this.transform.Find("Viewport/Content").GetComponent<RectTransform>();
+            //
+            //Grid Layout Group
+            if (m_content.gameObject.GetComponent<ContentSizeFitter>() == null)
+                m_contentSizeFitter = m_content.gameObject.AddComponent<ContentSizeFitter>();
+            if (m_contentSizeFitter == null)
+                m_contentSizeFitter = m_content.gameObject.GetComponent<ContentSizeFitter>();
+            //
+            //Content Size Fitter
+            if (m_content.gameObject.GetComponent<GridLayoutGroup>() == null)
+                m_gridLayoutGroup = m_content.gameObject.AddComponent<GridLayoutGroup>();
+            if (m_gridLayoutGroup == null)
+                m_gridLayoutGroup = m_content.gameObject.GetComponent<GridLayoutGroup>();
+        }
+        //
+        SetScrollViewFixed();
+    }
+
+    #region Content Primary
 
     public void SetScrollViewTouch(bool ScrollViewTouch)
     {
-        com_ScrollRect.enabled = ScrollViewTouch;
+        m_scrollRect.enabled = ScrollViewTouch;
     }
 
-    private void SetScrollViewFix()
+    private void SetScrollViewFixed()
     {
-        switch (m_ScrollViewType)
+        switch (m_scrollViewType)
         {
             case ScrollViewType.Vertical:
                 //Content
-                if (com_ScrollRect != null)
+                if (m_scrollRect != null)
                 {
-                    com_Content.anchoredPosition = new Vector2(0, com_Content.anchoredPosition.y);
+                    m_content.anchoredPosition = new Vector2(0, m_content.anchoredPosition.y);
                 }
                 //Scroll Rect
-                if (com_ContentSizeFitter != null)
+                if (m_contentSizeFitter != null)
                 {
-                    com_ScrollRect.vertical = true;
-                    com_ScrollRect.horizontal = false;
+                    m_scrollRect.vertical = true;
+                    m_scrollRect.horizontal = false;
+                    m_scrollRect.movementType = m_movementType;
                 }
                 //Grid Layout Group
-                if (com_GridLayoutGroup != null)
+                if (m_gridLayoutGroup != null)
                 {
-                    com_GridLayoutGroup.startAxis = GridLayoutGroup.Axis.Horizontal;
-                    com_GridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-                    com_GridLayoutGroup.constraintCount = m_ItemConstraint;
+                    m_gridLayoutGroup.startAxis = GridLayoutGroup.Axis.Horizontal;
+                    m_gridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+                    m_gridLayoutGroup.constraintCount = m_itemConstraint;
                 }
                 //Content Size Fitter
-                if (com_GridLayoutGroup == null)
+                if (m_gridLayoutGroup == null)
                 {
-                    com_ContentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-                    com_ContentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+                    m_contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+                    m_contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
                 }
                 break;
             case ScrollViewType.Horizontal:
-                if (com_ScrollRect != null)
+                if (m_scrollRect != null)
                 {
-                    com_Content.anchoredPosition = new Vector2(com_Content.anchoredPosition.x, 0);
+                    m_content.anchoredPosition = new Vector2(m_content.anchoredPosition.x, 0);
                 }
                 //Scroll Rect
-                if (com_ContentSizeFitter != null)
+                if (m_contentSizeFitter != null)
                 {
-                    com_ScrollRect.vertical = false;
-                    com_ScrollRect.horizontal = true;
+                    m_scrollRect.vertical = false;
+                    m_scrollRect.horizontal = true;
+                    m_scrollRect.movementType = m_movementType;
                 }
                 //Grid Layout Group
-                if (com_GridLayoutGroup != null)
+                if (m_gridLayoutGroup != null)
                 {
-                    com_GridLayoutGroup.startAxis = GridLayoutGroup.Axis.Vertical;
-                    com_GridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedRowCount;
-                    com_GridLayoutGroup.constraintCount = m_ItemConstraint;
+                    m_gridLayoutGroup.startAxis = GridLayoutGroup.Axis.Vertical;
+                    m_gridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedRowCount;
+                    m_gridLayoutGroup.constraintCount = m_itemConstraint;
                 }
                 //Content Size Fitter
-                if (com_GridLayoutGroup != null)
+                if (m_gridLayoutGroup != null)
                 {
-                    com_ContentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-                    com_ContentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+                    m_contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+                    m_contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
                 }
                 break;
         }
 
-        if (com_GridLayoutGroup != null)
+        if (m_gridLayoutGroup != null)
         {
-            com_GridLayoutGroup.cellSize = m_ItemSize;
-            com_GridLayoutGroup.spacing = m_ItemSpacing;
+            m_gridLayoutGroup.cellSize = m_itemSize;
+            m_gridLayoutGroup.spacing = m_itemSpacing;
         }
     }
 
     #endregion
 
-    #region ================================================ Content Pos
+    #region Content Pos
 
-    #region Content Pos Free
-
-    public void SetContent(float ItemIndex)
+    public void SetContentPos(float ItemIndex)
     {
         if (ItemIndex < 0)
-            com_Content.anchoredPosition = GetContent(0);
+            m_content.anchoredPosition = GetContentPos(0);
         else
-        if (ItemIndex > com_Content.childCount - 1)
-            com_Content.anchoredPosition = GetContent(com_Content.childCount - 1);
+        if (ItemIndex > m_content.childCount - 1)
+            m_content.anchoredPosition = GetContentPos(m_content.childCount - 1);
         else
-            com_Content.anchoredPosition = GetContent(ItemIndex);
+            m_content.anchoredPosition = GetContentPos(ItemIndex);
     }
 
-    public Vector2 GetContent(float ItemIndex)
+    public Vector2 GetContentPos(float ItemIndex)
     {
-        switch (m_ScrollViewType)
+        switch (m_scrollViewType)
         {
             case ScrollViewType.Vertical:
-                return (+1) * (ItemIndex / m_ItemConstraint) * new Vector2(0, m_ItemSize.y + m_ItemSpacing.y);
+                return (+1) * (ItemIndex / m_itemConstraint) * new Vector2(0, m_itemSize.y + m_itemSpacing.y);
             case ScrollViewType.Horizontal:
-                return (-1) * (ItemIndex / m_ItemConstraint) * new Vector2(m_ItemSize.x + m_ItemSpacing.x, 0);
+                return (-1) * (ItemIndex / m_itemConstraint) * new Vector2(m_itemSize.x + m_itemSpacing.x, 0);
+        }
+        return new Vector2();
+    }
+
+    public Vector2 GetContentPos(int ItemIndex)
+    {
+        switch (m_scrollViewType)
+        {
+            case ScrollViewType.Vertical:
+                return (+1) * (ItemIndex / m_itemConstraint) * new Vector2(0, m_itemSize.y + m_itemSpacing.y);
+            case ScrollViewType.Horizontal:
+                return (-1) * (ItemIndex / m_itemConstraint) * new Vector2(m_itemSize.x + m_itemSpacing.x, 0);
         }
         return new Vector2();
     }
 
     #endregion
 
-    #region Content Pos Fixed
-
-    public void SetContent(int ItemIndex)
-    {
-        if (ItemIndex < 0)
-            com_Content.anchoredPosition = GetContent(0);
-        else
-        if (ItemIndex > com_Content.childCount - 1)
-            com_Content.anchoredPosition = GetContent(com_Content.childCount - 1);
-        else
-            com_Content.anchoredPosition = GetContent(ItemIndex);
-    }
-
-    public Vector2 GetContent(int ItemIndex)
-    {
-        switch (m_ScrollViewType)
-        {
-            case ScrollViewType.Vertical:
-                return (+1) * (ItemIndex / m_ItemConstraint) * new Vector2(0, m_ItemSize.y + m_ItemSpacing.y);
-            case ScrollViewType.Horizontal:
-                return (-1) * (ItemIndex / m_ItemConstraint) * new Vector2(m_ItemSize.x + m_ItemSpacing.x, 0);
-        }
-        return new Vector2();
-    }
-
-    public Vector2 ContentLast => GetContent(ContentCount - 1);
-
-    #endregion
-
-    #endregion
-
-    #region ================================================ Content RecTransform
-
-    public RectTransform Content => com_Content;
-
-    /// <summary>
-    /// Use "Content" instead!!
-    /// </summary>
-    /// <returns></returns>
-    public RectTransform GetContent()
-    {
-        return com_Content;
-    }
-
-    public int ContentCount => com_Content.childCount;
+    #region Content RecTransform
 
     public RectTransform GetContentItem(int ItemIndex)
     {
         if (ItemIndex < 0)
-            return com_Content.GetChild(0).GetComponent<RectTransform>();
-
-        if (ItemIndex > com_Content.childCount - 1)
-            return com_Content.GetChild(com_Content.childCount - 1).GetComponent<RectTransform>();
-
-        return com_Content.GetChild(ItemIndex).GetComponent<RectTransform>();
-    }
-
-    public List<RectTransform> GetContentItem()
-    {
-        List<RectTransform> ItemContent = new List<RectTransform>();
-        for (int i = 0; i < ContentCount; i++)
-            ItemContent.Add(Content.GetChild(i).GetComponent<RectTransform>());
-        return ItemContent;
+            return m_content.GetChild(0).GetComponent<RectTransform>();
+        else
+        if (ItemIndex > m_content.childCount - 1)
+            return m_content.GetChild(m_content.childCount - 1).GetComponent<RectTransform>();
+        else
+            return m_content.GetChild(ItemIndex).GetComponent<RectTransform>();
     }
 
     #endregion
-
-    public void SetCheckTestingOff()
-    {
-        m_CheckTesting = false;
-    }
-}
-
-public enum ScrollViewType
-{
-    Vertical,
-    Horizontal,
 }
