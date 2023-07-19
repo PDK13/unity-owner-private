@@ -1,5 +1,17 @@
 {
   "dependencies": {
+    "com.unity.2d.animation": {
+      "version": "7.0.11",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.2d.common": "6.0.6",
+        "com.unity.2d.sprite": "1.0.0",
+        "com.unity.modules.animation": "1.0.0",
+        "com.unity.modules.uielements": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.2d.common": {
       "version": "6.0.6",
       "depth": 1,
@@ -21,7 +33,7 @@
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
-      "depth": 2,
+      "depth": 1,
       "source": "builtin",
       "dependencies": {}
     },
@@ -179,10 +191,11 @@
       }
     },
     "com.unity.uiextensions": {
-      "version": "file:D:/-/Package/UIExtensions",
+      "version": "https://github.com/Unity-UI-Extensions/com.unity.uiextensions.git",
       "depth": 0,
-      "source": "local",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "d2b10980e380e1c9afef61dee63ca2b45b5eccf9"
     },
     "com.unity.visualscripting": {
       "version": "1.8.0",
