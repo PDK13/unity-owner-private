@@ -6,16 +6,16 @@ using UnityEngine;
 
 #if UNITY_EDITOR
 
-[CustomEditor(typeof(UniqueID))]
-public class UniqueIDEditor : Editor
+[CustomEditor(typeof(Unique))]
+public class UniqueEditor : Editor
 {
-    private UniqueID m_target;
+    private Unique m_target;
 
     private SerializedProperty m_id;
 
     private void OnEnable()
     {
-        m_target = (target as UniqueID);
+        m_target = (target as Unique);
 
         m_id = serializedObject.FindProperty("m_id");
     }

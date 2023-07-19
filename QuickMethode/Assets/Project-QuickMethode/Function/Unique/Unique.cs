@@ -5,7 +5,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 [ExecuteInEditMode]
 #endif
-public class UniqueID : MonoBehaviour
+public class Unique : MonoBehaviour
 {
     [SerializeField] private string m_id = "";
     [SerializeField] private bool m_idKeep = true;
