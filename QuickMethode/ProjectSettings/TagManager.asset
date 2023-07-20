@@ -11,6 +11,11 @@ TagManager:
   - 
   - Water
   - UI
+  - Ground
+  - Player
+  - PlayerHit
+  - Enemy
+  - EnemyHit
   - 
   - 
   - 
@@ -31,12 +36,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Object
   m_SortingLayers:
   - name: Default
     uniqueID: 0
