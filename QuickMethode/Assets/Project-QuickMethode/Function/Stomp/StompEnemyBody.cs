@@ -7,7 +7,7 @@ public class StompEnemyBody : MonoBehaviour
     //NOTE: Should use 2 layer for Enemy Head and Player Foot that only contact each other!!
 
     [SerializeField] private GameObject m_enemy;
-    [SerializeField] private string m_methode = "OnHit";
+    [SerializeField] private List<string> m_methode = new List<string>() { "OnHit" };
 
     [Space]
     [Tooltip("Send an message to 'StompEnemyHead'")]
@@ -16,7 +16,10 @@ public class StompEnemyBody : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (m_enemy != null)
-            m_enemy.SendMessage(m_methode, collision.gameObject, SendMessageOptions.DontRequireReceiver);
+        {
+            foreach (string Methode in m_methode)
+                m_enemy.SendMessage(Methode, collision.gameObject, SendMessageOptions.DontRequireReceiver);
+        }
         //
         collision.gameObject.SendMessage("OnHitReceive", m_playerMessage, SendMessageOptions.DontRequireReceiver);
     }

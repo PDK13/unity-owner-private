@@ -569,7 +569,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_enemy: {fileID: 1153025417}
-  m_methode: OnStomp
+  m_methode:
+  - OnStomp
 --- !u!1 &1321410489
 GameObject:
   m_ObjectHideFlags: 0
@@ -644,7 +645,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_player: {fileID: 1169172808}
-  m_methode: OnStomp
+  m_methode:
+  - OnStomp
   m_enemyMessage: player
 --- !u!251 &1321410493
 PlatformEffector2D:
@@ -678,7 +680,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_player: {fileID: 1169172808}
-  m_methode: OnHit
+  m_methode:
+  - OnHit
 --- !u!1 &1560935708
 GameObject:
   m_ObjectHideFlags: 0
@@ -920,5 +923,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_enemy: {fileID: 1153025417}
-  m_methode: OnHit
+  m_methode:
+  - OnHit
   m_playerMessage: enemy
