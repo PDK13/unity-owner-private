@@ -6,7 +6,7 @@ public class StompEnemyHead : MonoBehaviour
     //NOTE: Should use 2 layer for Enemy Head and Player Foot that only contact each other!!
 
     [SerializeField] private GameObject m_enemy;
-    [SerializeField] private string m_methode;
+    [SerializeField] private string m_methode = "OnStomp";
 
     private void OnStompReceive(string EnemyReceive)
     {

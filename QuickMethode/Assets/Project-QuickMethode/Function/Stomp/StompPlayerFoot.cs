@@ -6,7 +6,7 @@ public class StompPlayerFoot : MonoBehaviour
     //NOTE: Should use 2 layer for Enemy Head and Player Foot that only contact each other!!
 
     [SerializeField] private GameObject m_player;
-    [SerializeField] private string m_methode;
+    [SerializeField] private string m_methode = "OnStomp";
 
     [Space]
     [Tooltip("Send an message to 'StompEnemyHead'")]
@@ -17,6 +17,6 @@ public class StompPlayerFoot : MonoBehaviour
         if (m_player != null)
             m_player.SendMessage(m_methode, SendMessageOptions.DontRequireReceiver);
         //
-        collision.gameObject.SendMessage("OnStompReceive", m_enemyMessage, SendMessageOptions.DontRequireReceiver);
+        collision.collider.gameObject.SendMessage("OnStompReceive", m_enemyMessage, SendMessageOptions.DontRequireReceiver);
     }
 }

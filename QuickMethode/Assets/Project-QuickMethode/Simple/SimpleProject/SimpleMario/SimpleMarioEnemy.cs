@@ -12,6 +12,8 @@ public class SimpleMarioEnemy : MonoBehaviour
 
     private void OnStomp(string Message)
     {
+        Debug.LogFormat("[Debug] Stomp by {0}", Message);
+        //
         StartCoroutine(ISetStompDelay());
     }
 
@@ -24,10 +26,5 @@ public class SimpleMarioEnemy : MonoBehaviour
 
         m_bodyTrigger.enabled = true;
         m_headTrigger.enabled = true;
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Debug.Log("[Debug] Enemy Hit Player!!");
     }
 }

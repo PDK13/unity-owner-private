@@ -13,4 +13,9 @@ public class SimpleMarioPlayer : MonoBehaviour
     {
         m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x, m_stompForce);
     }
+
+    private void OnHit(string Message)
+    {
+        Debug.LogFormat("[Debug] Hit by {0}!!", Message);
+    }
 }
