@@ -4,17 +4,38 @@ using UnityEngine;
 
 public class SimpleMarioEnemy : MonoBehaviour
 {
+    [SerializeField] private StompEnemyHead m_head;
+    [SerializeField] private StompEnemyBody m_body;
+
+    [Space]
     [SerializeField] private float m_stompDelay = 1f;
 
     [Space]
     [SerializeField] private Collider2D m_bodyTrigger;
     [SerializeField] private Collider2D m_headTrigger;
 
-    private void OnStomp(string Message)
+    private void Awake()
     {
-        Debug.LogFormat("[Debug] Stomp by {0}", Message);
+        m_head.onStomp += OnStomp;
+        m_body.onHit += OnHit;
+    }
+
+    private void OnDestroy()
+    {
+        m_head.onStomp -= OnStomp;
+        m_body.onHit -= OnHit;
+    }
+
+    private void OnStomp(StompPlayerFoot From)
+    {
+        Debug.LogFormat("[Debug] Stomp by {0}", From.Base.name);
         //
         StartCoroutine(ISetStompDelay());
+    }
+
+    private void OnHit(StompPlayerBody From)
+    {
+
     }
 
     private IEnumerator ISetStompDelay()

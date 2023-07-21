@@ -1,20 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class StompPlayerBody : MonoBehaviour
 {
-    //NOTE: Should use 2 layer for Enemy Head and Player Foot that only contact each other!!
+    public Action<StompEnemyBody> onHit;
 
-    [SerializeField] private GameObject m_player;
-    [SerializeField] private List<string> m_methode = new List<string>() { "OnHit" };
+    [SerializeField] private GameObject m_base;
 
-    private void OnHitReceive(string EnemyReceive)
+    public GameObject Base => m_base;
+
+    public void SetHit(StompEnemyBody From)
     {
-        if (m_player != null)
-        {
-            foreach (string Methode in m_methode)
-                m_player.SendMessage(Methode, EnemyReceive, SendMessageOptions.DontRequireReceiver);
-        }
+        onHit?.Invoke(From);
     }
 }

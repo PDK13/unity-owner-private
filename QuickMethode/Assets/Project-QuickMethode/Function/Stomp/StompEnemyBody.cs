@@ -1,26 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class StompEnemyBody : MonoBehaviour
 {
-    //NOTE: Should use 2 layer for Enemy Head and Player Foot that only contact each other!!
+    public Action<StompPlayerBody> onHit;
 
-    [SerializeField] private GameObject m_enemy;
-    [SerializeField] private List<string> m_methode = new List<string>() { "OnHit" };
+    [SerializeField] private GameObject m_base;
+    [SerializeField] private bool m_stay = true;
 
-    [Space]
-    [Tooltip("Send an message to 'StompEnemyHead'")]
-    [SerializeField] private string m_playerMessage = "";
+    public GameObject Base => m_base;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (m_enemy != null)
-        {
-            foreach (string Methode in m_methode)
-                m_enemy.SendMessage(Methode, collision.gameObject, SendMessageOptions.DontRequireReceiver);
-        }
+        onHit?.Invoke(collision.GetComponent<StompPlayerBody>());
         //
-        collision.gameObject.SendMessage("OnHitReceive", m_playerMessage, SendMessageOptions.DontRequireReceiver);
+        collision.GetComponent<StompPlayerBody>().SetHit(this);
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (!m_stay)
+            return;
+        //
+        onHit?.Invoke(collision.GetComponent<StompPlayerBody>());
+        //
+        collision.GetComponent<StompPlayerBody>().SetHit(this);
     }
 }
