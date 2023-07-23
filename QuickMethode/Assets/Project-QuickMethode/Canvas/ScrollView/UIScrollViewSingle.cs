@@ -160,12 +160,18 @@ public class UIScrollViewSingle : MonoBehaviour
     public void SetContentPos(float ItemIndex)
     {
         if (ItemIndex < 0)
+        {
             m_content.anchoredPosition = GetContentPos(0);
+        }
         else
         if (ItemIndex > m_content.childCount - 1)
+        {
             m_content.anchoredPosition = GetContentPos(m_content.childCount - 1);
+        }
         else
+        {
             m_content.anchoredPosition = GetContentPos(ItemIndex);
+        }
     }
 
     public Vector2 GetContentPos(float ItemIndex)
@@ -199,12 +205,18 @@ public class UIScrollViewSingle : MonoBehaviour
     public RectTransform GetContentItem(int ItemIndex)
     {
         if (ItemIndex < 0)
+        {
             return m_content.GetChild(0).GetComponent<RectTransform>();
+        }
         else
         if (ItemIndex > m_content.childCount - 1)
+        {
             return m_content.GetChild(m_content.childCount - 1).GetComponent<RectTransform>();
+        }
         else
+        {
             return m_content.GetChild(ItemIndex).GetComponent<RectTransform>();
+        }
     }
 
     #endregion
