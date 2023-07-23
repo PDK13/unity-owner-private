@@ -228,9 +228,9 @@ public class PlayerPrefsEditorTool : EditorWindow
 
     private void SetGUIList()
     {
-        QEditor.SetLabel("LIST", QEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter), QEditor.GetGUILayoutWidth(this));
+        QEditor.SetLabel("LIST", QEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter), QEditorWindow.GetGUILayoutWidth(this));
 
-        if (QEditor.SetButton("Refresh", QEditor.GetGUIButton(FontStyle.Normal, TextAnchor.MiddleCenter), QEditor.GetGUILayoutWidth(this))) 
+        if (QEditor.SetButton("Refresh", QEditor.GetGUIButton(FontStyle.Normal, TextAnchor.MiddleCenter), QEditorWindow.GetGUILayoutWidth(this))) 
             SetGUIListDataRead();
 
         GUILayout.Space(10f);
@@ -250,15 +250,15 @@ public class PlayerPrefsEditorTool : EditorWindow
 
             if (i < m_list.Count)
             {
-                if (QEditor.SetButton(m_list[i].Name, QEditor.GetGUIButton(FontStyle.Normal, TextAnchor.MiddleCenter), QEditor.GetGUILayoutWidth(this, 0.7f)))
+                if (QEditor.SetButton(m_list[i].Name, QEditor.GetGUIButton(FontStyle.Normal, TextAnchor.MiddleCenter), QEditorWindow.GetGUILayoutWidth(this, 0.7f)))
                 {
                     m_name = m_list[i].Name;
                     m_valueTypeIndex = m_list[i].Choice;
                 }
 
-                QEditor.SetLabel(m_valueType[m_list[i].Choice], QEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter), QEditor.GetGUILayoutWidth(this, 0.2f));
+                QEditor.SetLabel(m_valueType[m_list[i].Choice], QEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter), QEditorWindow.GetGUILayoutWidth(this, 0.2f));
 
-                if (QEditor.SetButton("Del", QEditor.GetGUIButton(FontStyle.Normal, TextAnchor.MiddleCenter), QEditor.GetGUILayoutWidth(this, 0.1f)))
+                if (QEditor.SetButton("Del", QEditor.GetGUIButton(FontStyle.Normal, TextAnchor.MiddleCenter), QEditorWindow.GetGUILayoutWidth(this, 0.1f)))
                 {
                     m_list.RemoveAt(i);
                     SetGUIListDataSave();
@@ -266,7 +266,7 @@ public class PlayerPrefsEditorTool : EditorWindow
             }
             else
             {
-                if (QEditor.SetButton("[New]", QEditor.GetGUIButton(FontStyle.Normal, TextAnchor.MiddleCenter), QEditor.GetGUILayoutWidth(this)))
+                if (QEditor.SetButton("[New]", QEditor.GetGUIButton(FontStyle.Normal, TextAnchor.MiddleCenter), QEditorWindow.GetGUILayoutWidth(this)))
                 {
                     if (m_name != "")
                     {
