@@ -16,7 +16,9 @@ public class IsometricManager : MonoBehaviour
 
     #region Enum
 
-    public enum IsoRendererType { XY, H, None, }
+    public enum RendererType { XY, H, None, }
+
+    public enum RotateType { _0, _90, _180, _270, }
 
     #endregion
 

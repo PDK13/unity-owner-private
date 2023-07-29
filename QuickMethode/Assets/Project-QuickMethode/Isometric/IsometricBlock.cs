@@ -113,52 +113,69 @@ public class IsometricBlock : MonoBehaviour
 
     #region ================================================================== Scene Manager
 
-    private Vector3 GetIsoScene(IsoVector PosWorld)
+    private Vector3 GetIsoTransform(IsoVector Pos)
     {
+        IsoVector PosCentre = m_scene.Centre;
+        float Angle = 0;
+        //
+        switch (m_scene.Rotate)
+        {
+            case IsometricManager.RotateType._0:
+                Angle = 0 * Mathf.Deg2Rad;
+                break;
+            case IsometricManager.RotateType._90:
+                Angle = 90f * Mathf.Deg2Rad;
+                break;
+            case IsometricManager.RotateType._180:
+                Angle = 180f * Mathf.Deg2Rad;
+                break;
+            case IsometricManager.RotateType._270:
+                Angle = 270f * Mathf.Deg2Rad;
+                break;
+        }
+        IsoVector PosValue = new IsoVector(Pos);
+        PosValue.X = (Pos.X - PosCentre.X) * Mathf.Cos(Angle) - (Pos.Y - PosCentre.Y) * Mathf.Sin(Angle) + PosCentre.X;
+        PosValue.Y = (Pos.X - PosCentre.X) * Mathf.Sin(Angle) + (Pos.Y - PosCentre.Y) * Mathf.Cos(Angle) + PosCentre.Y;
+        //
+        Vector3 PosTransform = new Vector3();
+        IsoVector PosValueScale = PosValue;
+        //
+        //
         switch (m_scene.Renderer)
         {
-            case IsometricManager.IsoRendererType.H:
-                {
-                    IsoVector PosWorldFinal = new IsoVector(PosWorld);
-                    PosWorldFinal.X *= m_scene.Scale.X * 0.5f * -1;
-                    PosWorldFinal.Y *= m_scene.Scale.Y * 0.5f;
-                    PosWorldFinal.H *= m_scene.Scale.H * 0.5f;
-
-                    float PosX = PosWorldFinal.X + PosWorldFinal.Y;
-                    float PosY = 0.5f * (PosWorldFinal.Y - PosWorldFinal.X) + PosWorldFinal.H;
-                    float PosZ = PosWorld.X + PosWorld.Y - PosWorld.H;
-
-                    return new Vector3(PosX, PosY, PosZ);
-                }
-            case IsometricManager.IsoRendererType.XY:
-                {
-                    IsoVector PosWorldFinal = new IsoVector(PosWorld);
-                    PosWorldFinal.X *= m_scene.Scale.X * 0.5f * -1;
-                    PosWorldFinal.Y *= m_scene.Scale.Y * 0.5f;
-                    PosWorldFinal.H *= m_scene.Scale.H * 0.5f;
-
-                    float PosX = PosWorldFinal.X + PosWorldFinal.Y;
-                    float PosY = 0.5f * (PosWorldFinal.Y - PosWorldFinal.X) + PosWorldFinal.H;
-                    float PosZ = (PosWorld.Y + PosWorld.X) - PosWorld.H * 2;
-
-                    return new Vector3(PosX, PosY, PosZ);
-                }
-            case IsometricManager.IsoRendererType.None:
-                {
-                    //Testing
-                    IsoVector PosWorldFinal = new IsoVector(PosWorld);
-                    PosWorldFinal.X *= m_scene.Scale.X * 0.5f * -1;
-                    PosWorldFinal.Y *= m_scene.Scale.Y * 0.5f;
-                    PosWorldFinal.H *= m_scene.Scale.H * 0.5f;
-
-                    float m_PosX = PosWorldFinal.X + PosWorldFinal.Y;
-                    float m_PosY = 0.5f * (PosWorldFinal.Y - PosWorldFinal.X) + PosWorldFinal.H;
-                    float m_PosZ = 0;
-
-                    return new Vector3(m_PosX, m_PosY, m_PosZ);
-                }
+            case IsometricManager.RendererType.H:
+                PosValueScale.X *= m_scene.Scale.X * 0.5f * -1;
+                PosValueScale.Y *= m_scene.Scale.Y * 0.5f;
+                PosValueScale.H *= m_scene.Scale.H * 0.5f;
+                //
+                PosTransform.x = PosValueScale.X + PosValueScale.Y;
+                PosTransform.y = 0.5f * (PosValueScale.Y - PosValueScale.X) + PosValueScale.H;
+                PosTransform.z = PosValue.X + PosValue.Y - PosValue.H;
+                //
+                break;
+            case IsometricManager.RendererType.XY:
+                PosValueScale.X *= m_scene.Scale.X * 0.5f * -1;
+                PosValueScale.Y *= m_scene.Scale.Y * 0.5f;
+                PosValueScale.H *= m_scene.Scale.H * 0.5f;
+                //
+                PosTransform.x = PosValueScale.X + PosValueScale.Y;
+                PosTransform.y = 0.5f * (PosValueScale.Y - PosValueScale.X) + PosValueScale.H;
+                PosTransform.z = (PosValue.Y + PosValue.X) - PosValue.H * 2;
+                //
+                break;
+            case IsometricManager.RendererType.None: //Testing
+                PosValueScale.X *= m_scene.Scale.X * 0.5f * -1;
+                PosValueScale.Y *= m_scene.Scale.Y * 0.5f;
+                PosValueScale.H *= m_scene.Scale.H * 0.5f;
+                //
+                PosTransform.x = PosValueScale.X + PosValueScale.Y;
+                PosTransform.y = 0.5f * (PosValueScale.Y - PosValueScale.X) + PosValueScale.H;
+                PosTransform.z = 0;
+                //
+                break;
         }
-        return new Vector3();
+        //
+        return PosTransform;
     }
 
     private void SetIsoTransform()
@@ -166,7 +183,7 @@ public class IsometricBlock : MonoBehaviour
         if (WorldManager != null)
             m_scene = WorldManager.Scene;
 
-        Vector3 PosTransform = GetIsoScene(m_pos);
+        Vector3 PosTransform = GetIsoTransform(m_pos);
 
         PosTransform += (Vector3)m_centre;
 

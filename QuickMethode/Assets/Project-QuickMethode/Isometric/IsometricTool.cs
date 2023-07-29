@@ -132,6 +132,28 @@ public class IsometricTool : EditorWindow
         QEditor.SetHorizontalBegin();
         {
             QEditor.SetBackground(Color.white);
+            QEditor.SetLabel("RENDERER: ", QEditor.GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter), QEditorWindow.GetGUILayoutWidth(this, 0.25f));
+            m_manager.Scene.Renderer = (IsometricManager.RendererType)QEditor.SetPopup<IsometricManager.RendererType>((int)m_manager.Scene.Renderer, QEditorWindow.GetGUILayoutWidth(this, 0.75f, 2.5f));
+        }
+        QEditor.SetHorizontalEnd();
+
+        QEditor.SetHorizontalBegin();
+        {
+            QEditor.SetBackground(Color.white);
+            QEditor.SetLabel("ROTATE: ", QEditor.GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter), QEditorWindow.GetGUILayoutWidth(this, 0.25f));
+            QEditor.SetChanceCheckBegin();
+            m_manager.Scene.Rotate = (IsometricManager.RotateType)QEditor.SetPopup<IsometricManager.RotateType>((int)m_manager.Scene.Rotate, QEditorWindow.GetGUILayoutWidth(this, 0.75f, 2.5f));
+            if (QEditor.SetChanceCheckEnd())
+            {
+                m_manager.Scene.Centre = m_curson.Pos;
+                m_manager.Scene.Centre.H = 0;
+            }
+        }
+        QEditor.SetHorizontalEnd();
+
+        QEditor.SetHorizontalBegin();
+        {
+            QEditor.SetBackground(Color.white);
             QEditor.SetLabel("CURSON: ", QEditor.GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter), QEditorWindow.GetGUILayoutWidth(this, 0.25f));
             QEditor.SetLabel(m_curson.Pos.XInt.ToString(), QEditor.GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter), QEditorWindow.GetGUILayoutWidth(this, 0.25f));
             QEditor.SetLabel(m_curson.Pos.YInt.ToString(), QEditor.GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter), QEditorWindow.GetGUILayoutWidth(this, 0.25f));
@@ -270,7 +292,7 @@ public class IsometricTool : EditorWindow
                     {
                         //Move Curson!!
                         case KeyCode.UpArrow:
-                            m_curson.GetComponent<IsometricBlock>().Pos += IsoVector.Up;
+                            m_curson.Pos += IsoVector.GetDir(IsoDir.Up, m_manager.Scene.Rotate);
                             SetCursonMaskXY();
                             SetCursonHiddenH();
                             SetCursonCheck();
@@ -278,7 +300,7 @@ public class IsometricTool : EditorWindow
                             m_event.Use();
                             break;
                         case KeyCode.DownArrow:
-                            m_curson.GetComponent<IsometricBlock>().Pos += IsoVector.Down;
+                            m_curson.Pos += IsoVector.GetDir(IsoDir.Down, m_manager.Scene.Rotate);
                             SetCursonMaskXY();
                             SetCursonHiddenH();
                             SetCursonCheck();
@@ -286,7 +308,7 @@ public class IsometricTool : EditorWindow
                             m_event.Use();
                             break;
                         case KeyCode.LeftArrow:
-                            m_curson.GetComponent<IsometricBlock>().Pos += IsoVector.Left;
+                            m_curson.Pos += IsoVector.GetDir(IsoDir.Left, m_manager.Scene.Rotate);
                             SetCursonMaskXY();
                             SetCursonHiddenH();
                             SetCursonCheck();
@@ -294,7 +316,7 @@ public class IsometricTool : EditorWindow
                             m_event.Use();
                             break;
                         case KeyCode.RightArrow:
-                            m_curson.GetComponent<IsometricBlock>().Pos += IsoVector.Right;
+                            m_curson.Pos += IsoVector.GetDir(IsoDir.Right, m_manager.Scene.Rotate);
                             SetCursonMaskXY();
                             SetCursonHiddenH();
                             SetCursonCheck();
@@ -302,7 +324,7 @@ public class IsometricTool : EditorWindow
                             m_event.Use();
                             break;
                         case KeyCode.PageUp:
-                            m_curson.GetComponent<IsometricBlock>().Pos += IsoVector.Top;
+                            m_curson.Pos += IsoVector.GetDir(IsoDir.Top, m_manager.Scene.Rotate);
                             SetCursonMaskXY();
                             SetCursonHiddenH();
                             SetCursonCheck();
@@ -310,7 +332,7 @@ public class IsometricTool : EditorWindow
                             m_event.Use();
                             break;
                         case KeyCode.PageDown:
-                            m_curson.GetComponent<IsometricBlock>().Pos += IsoVector.Bot;
+                            m_curson.Pos += IsoVector.GetDir(IsoDir.Bot, m_manager.Scene.Rotate);
                             SetCursonMaskXY();
                             SetCursonHiddenH();
                             SetCursonCheck();
@@ -412,12 +434,20 @@ public class IsometricTool : EditorWindow
         }
         if (QEditor.SetButton("Open", QEditor.GetGUIButton(FontStyle.Bold, TextAnchor.MiddleCenter), QEditorWindow.GetGUILayoutWidth(this, 1f / 2)))
         {
+            QAssetsDatabase.SetRefresh();
+            //
             var Path = QPath.GetPathFileOpenPanel("Open", "txt", m_pathOpen == "" ? QPath.GetPath(QPath.PathType.Assets) : m_pathOpen);
             if (Path.Result)
             {
+                m_maskXY = false;
+                m_hiddenH = false;
+                m_indexTag = 0;
+                m_indexName = 0;
+
+                m_manager.SetList(m_manager.Config);
+
                 m_pathOpen = Path.Path;
                 m_manager.SetFileRead(QPath.PathType.None, Path.Path);
-                QAssetsDatabase.SetRefresh();
             }
         }
         QEditor.SetHorizontalEnd();
