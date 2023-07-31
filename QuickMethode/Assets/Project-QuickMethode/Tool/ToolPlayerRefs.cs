@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class ToolPlayRefs : EditorWindow
+public class ToolPlayerRefs : EditorWindow
 {
     private enum VaribleType { Int, Float, String, }
 
@@ -33,7 +33,7 @@ public class ToolPlayRefs : EditorWindow
     [MenuItem("Tools/PlayerPrefs")]
     public static void Init()
     {
-        GetWindow<ToolPlayRefs>("PlayerPrefs");
+        GetWindow<ToolPlayerRefs>("PlayerPrefs");
     }
 
     private void OnEnable()
