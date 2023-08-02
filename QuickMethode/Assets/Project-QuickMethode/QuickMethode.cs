@@ -2270,6 +2270,7 @@ namespace QuickMethode
         #endregion
     }
 
+    //IMPORTANCE: This JSON class still can't handle with big-size data!!
     public class QJSON
     {
         //NOTE:
