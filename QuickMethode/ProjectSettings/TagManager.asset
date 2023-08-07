@@ -16,6 +16,7 @@ TagManager:
   - player stomp
   - enemy
   - enemy stomp
+  - player hit
   - 
   - 
   - 
@@ -35,8 +36,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - Object
+  - object
   m_SortingLayers:
   - name: Default
     uniqueID: 0
