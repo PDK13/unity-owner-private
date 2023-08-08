@@ -2,6 +2,7 @@ using DG.Tweening;
 using QuickMethode;
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -11,44 +12,46 @@ public class TweenMovePath : MonoBehaviour
     #region Enum
 
     public enum ElevatorTween 
-    { 
+    {
         Rigidbody, //Got Physic Event!!
         Transform, //Non-Physic event!!
     }
 
-    public enum ElevatorMove 
-    { 
-        Loop, 
-        Key, 
+    public enum ElevatorActive 
+    {
+        Start, 
+        Wait,
     }
 
     public enum ElevatorPath 
-    { 
+    {
         Local, 
         World, 
     }
 
     #endregion
 
+    #region Event
+
+    public Action onStart;
+    public Action onUpdate;
+    public Action onKill;
+
+    #endregion
+
     #region Varible: Elevator
 
+    [SerializeField] private ElevatorActive m_activeType = ElevatorActive.Start;
+    //
     [SerializeField] private ElevatorTween m_tweenType = ElevatorTween.Rigidbody;
     [SerializeField] private Ease m_easeType = Ease.Linear;
-    [SerializeField] private ElevatorMove m_moveType = ElevatorMove.Loop;
     [SerializeField] private ElevatorPath m_pathType = ElevatorPath.Local;
 
-    public ElevatorMove MoveType => m_moveType;
+    public ElevatorActive MoveType => m_activeType;
     public ElevatorPath PathType => m_pathType;
-
-    //KEY
-    [SerializeField] private string m_key = "Start";
-    [SerializeField] private string m_keyStop = "Stop";
-    [SerializeField] private bool m_once = false;
-    private bool m_onceTrigged = false;
-    //KEY
-
+    //
     [SerializeField] [Min(0)] private float m_duration = 4f;
-    [SerializeField] [Min(0)] private float m_durationScaleRevert = 1f;
+    [SerializeField] [Min(0)] private float m_timeScaleRevert = 1f;
     
     [SerializeField] private List<Vector2> m_pathList;
     private Vector2 m_posStart;
@@ -57,9 +60,8 @@ public class TweenMovePath : MonoBehaviour
 
     #endregion
 
-    private bool m_state;
     private Tweener m_tweenMove;
-
+    //
     [SerializeField] protected Collider2D m_colliderBase;
     [SerializeField] protected Rigidbody2D m_rigidbodyBase;
 
@@ -76,21 +78,15 @@ public class TweenMovePath : MonoBehaviour
                 m_pathList[i] += m_posStart;
         }
         //
-        m_state = false;
-    }
-
-    protected virtual void Start()
-    {
-        if (m_moveType == ElevatorMove.Loop)
-            SetLoop();
+        if (m_activeType == ElevatorActive.Start)
+            SetStart();
     }
 
     protected virtual void OnDestroy()
     {
-        //Elevator
-
         if (m_tweenMove != null)
             m_tweenMove.Kill();
+        //
         transform.DOKill();
     }
 
@@ -98,133 +94,67 @@ public class TweenMovePath : MonoBehaviour
 
     #region Tween Move
 
-    private void SetLoop()
+    protected void SetStart()
     {
         if (PathCount == 0)
             return;
-
-        switch (m_tweenType)
+        //
+        if (m_tweenMove != null)
         {
-            case ElevatorTween.Transform:
-                Vector3[] Path = new Vector3[this.PathCount];
-                for (int i = 0; i < this.PathCount; i++) Path[i] = (Vector3)this.m_pathList[i];
-                m_tweenMove = transform.DOPath(Path, m_duration).SetEase(m_easeType).SetLoops(-1, LoopType.Yoyo)
-                    .OnStart(() => SetTweenPathStart())
-                    .OnUpdate(() => SetTweenPathUpdate())
-                    .OnKill(() => SetTweenPathKill());
-                break;
-            case ElevatorTween.Rigidbody:
-                m_tweenMove = m_rigidbodyBase.DOPath(this.m_pathList.ToArray(), m_duration).SetEase(m_easeType).SetLoops(-1, LoopType.Yoyo)
-                    .OnStart(() => SetTweenPathStart())
-                    .OnUpdate(() => SetTweenPathUpdate())
-                    .OnKill(() => SetTweenPathKill());
-                break;
+            SetMove();
         }
-    }
-
-    private void SetMove()
-    {
-        if (m_tweenMove == null)
+        else
         {
             switch (m_tweenType)
             {
                 case ElevatorTween.Transform:
-                    Vector3[] m_path = new Vector3[this.PathCount];
-                    for (int i = 0; i < this.PathCount; i++) m_path[i] = (Vector3)this.m_pathList[i];
-                    m_tweenMove = transform.DOPath(m_path, m_duration).SetEase(m_easeType)
-                        .OnStart(() => SetTweenPathStart())
-                        .OnUpdate(() => SetTweenPathUpdate())
-                        .OnKill(() => SetTweenPathKill());
+                    Vector3[] Path = new Vector3[PathCount];
+                    for (int i = 0; i < PathCount; i++) 
+                        Path[i] = m_pathList[i];
+                    //
+                    m_tweenMove = transform.DOPath(Path, m_duration).SetEase(m_easeType).SetLoops(-1, LoopType.Yoyo)
+                        .OnStart(() => onStart?.Invoke())
+                        .OnUpdate(() => onUpdate?.Invoke())
+                        .OnKill(() => onKill?.Invoke());
                     break;
                 case ElevatorTween.Rigidbody:
-                    m_tweenMove = m_rigidbodyBase.DOPath(this.m_pathList.ToArray(), m_duration).SetEase(m_easeType)
-                        .OnStart(() => SetTweenPathStart())
-                        .OnUpdate(() => SetTweenPathUpdate())
-                        .OnKill(() => SetTweenPathKill());
+                    m_tweenMove = m_rigidbodyBase.DOPath(m_pathList.ToArray(), m_duration).SetEase(m_easeType).SetLoops(-1, LoopType.Yoyo)
+                        .OnStart(() => onStart?.Invoke())
+                        .OnUpdate(() => onUpdate?.Invoke())
+                        .OnKill(() => onKill?.Invoke());
                     break;
             }
-            m_tweenMove.timeScale = 1;
         }
+    }
+
+    protected void SetMove()
+    {
+        if (PathCount == 0)
+            return;
+        //
+        if (m_tweenMove == null)
+            SetStart();
         else
-        {
-            m_tweenMove.timeScale = 1;
             m_tweenMove.PlayForward();
-        }
+        //
+        m_tweenMove.timeScale = 1;
     }
 
-    private void SetMoveInvert()
+    protected void SetMoveInvert()
     {
-        if (m_tweenMove != null)
-        {
-            m_tweenMove.timeScale = m_durationScaleRevert;
-            m_tweenMove.PlayBackwards();
-        }
-    }
-
-    private void SetMoveStop()
-    {
-        if (m_tweenMove != null)
-            m_tweenMove.timeScale = 0;
-    }
-
-    #endregion
-
-    #region Tween Event
-
-    protected virtual void SetTweenPathStart()
-    {
-
-    }
-
-    protected virtual void SetTweenPathUpdate()
-    {
-
-    }
-
-    protected virtual void SetTweenPathKill()
-    {
-
-    }
-
-    #endregion
-
-    #region Key Move
-
-    protected void SetOnTrigger(string Key, bool State)
-    {
-        if (PathCount == 0) 
+        if (m_tweenMove == null)
             return;
-
-        if (m_moveType != ElevatorMove.Key) 
-            return;
-
-        if (m_key != Key || m_state == State) 
-            return;
-
-        if (m_once)
-        {
-            if (m_onceTrigged) 
-                return;
-            m_onceTrigged = true;
-        }
-
-        m_state = State;
-
-        if (m_state)
-            SetMove();
-        else
-            SetMoveInvert();
+        //
+        m_tweenMove.timeScale = m_timeScaleRevert;
+        m_tweenMove.PlayBackwards();
     }
 
-    protected void SetOnTriggerStop(string Key, bool State)
+    protected void SetMoveStop()
     {
-        if (PathCount == 0) 
+        if (m_tweenMove == null)
             return;
-
-        if (m_keyStop != Key) 
-            return;
-
-        SetMoveStop();
+        //
+        m_tweenMove.timeScale = 0;
     }
 
     #endregion
@@ -318,20 +248,17 @@ public class TweenMovePathEditor : Editor
 {
     private TweenMovePath m_target;
 
+    private SerializedProperty m_activeType;
+    //
     private SerializedProperty m_tweenType;
     private SerializedProperty m_easeType;
-    private SerializedProperty m_moveType;
     private SerializedProperty m_pathType;
-
-    private SerializedProperty m_key;
-    private SerializedProperty m_keyStop;
-    private SerializedProperty m_once;
-
+    //
     private SerializedProperty m_duration;
-    private SerializedProperty m_durationScaleRevert;
-
+    private SerializedProperty m_timeScaleRevert;
+    //
     private SerializedProperty m_pathList;
-
+    //
     private SerializedProperty m_colliderBase;
     private SerializedProperty m_rigidbodyBase;
 
@@ -339,17 +266,14 @@ public class TweenMovePathEditor : Editor
     {
         m_target = (target as TweenMovePath);
         //
+        m_activeType = serializedObject.FindProperty("m_activeType");
+        //
         m_tweenType = serializedObject.FindProperty("m_tweenType");
         m_easeType = serializedObject.FindProperty("m_easeType");
-        m_moveType = serializedObject.FindProperty("m_moveType");
         m_pathType = serializedObject.FindProperty("m_pathType");
         //
-        m_key = serializedObject.FindProperty("m_key");
-        m_keyStop = serializedObject.FindProperty("m_keyStop");
-        m_once = serializedObject.FindProperty("m_once");
-        //
         m_duration = serializedObject.FindProperty("m_duration");
-        m_durationScaleRevert = serializedObject.FindProperty("m_durationScaleRevert");
+        m_timeScaleRevert = serializedObject.FindProperty("m_timeScaleRevert");
 
         m_pathList = serializedObject.FindProperty("m_pathList");
 
@@ -363,24 +287,18 @@ public class TweenMovePathEditor : Editor
         //
         QEditor.SetDisableGroupBegin(Application.isPlaying);
         //
+        QEditorCustom.SetField(m_activeType);
+        //
+        QEditor.SetSpace(10);
+        //
         QEditorCustom.SetField(m_tweenType);
         QEditorCustom.SetField(m_easeType);
-        QEditorCustom.SetField(m_moveType);
         QEditorCustom.SetField(m_pathType);
         //
         QEditor.SetSpace(10);
         //
-        if (m_target.MoveType == TweenMovePath.ElevatorMove.Key)
-        {
-            QEditorCustom.SetField(m_key);
-            QEditorCustom.SetField(m_once);
-        }
-        QEditorCustom.SetField(m_keyStop);
-        //
-        QEditor.SetSpace(10);
-        //
         QEditorCustom.SetField(m_duration);
-        QEditorCustom.SetField(m_durationScaleRevert);
+        QEditorCustom.SetField(m_timeScaleRevert);
         //
         QEditor.SetSpace(10);
         //

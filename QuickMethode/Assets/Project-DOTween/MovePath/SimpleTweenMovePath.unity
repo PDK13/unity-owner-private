@@ -223,15 +223,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9798f919e1e93ef4bb0d9fd4da9c9d56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_activeType: 0
   m_tweenType: 0
   m_easeType: 1
-  m_moveType: 0
   m_pathType: 0
-  m_key: Start
-  m_keyStop: Stop
-  m_once: 0
   m_duration: 4
-  m_durationScaleRevert: 1
+  m_timeScaleRevert: 1
   m_pathList:
   - {x: 5, y: 5}
   - {x: 10, y: 0}
