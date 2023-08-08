@@ -41,7 +41,7 @@ public class CameraArea : MonoBehaviour
         m_virtualCamera.Follow = null;
     }
 
-    private void SetZoom(float ZoomTo)
+    private void SetZoom(float ZoomTo, float Duration)
     {
         if (m_tweenZoom != null)
             m_tweenZoom.Kill();

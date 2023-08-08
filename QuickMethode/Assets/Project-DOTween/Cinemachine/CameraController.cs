@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour
     private float m_baseOrthographicSize;
     private Tween m_tweenZoom;
 
-    public static Action<float> onZoom;
+    public static Action<float, float> onZoom; //<ZoomTo, Duration>
 
     private void Awake()
     {
@@ -31,7 +31,7 @@ public class CameraController : MonoBehaviour
             Instance.m_tweenZoom.Kill();
         Instance.m_tweenZoom = DOTween.To(() => Instance.m_virtualCamera.m_Lens.OrthographicSize, x => Instance.m_virtualCamera.m_Lens.OrthographicSize = x, Instance.m_baseOrthographicSize * Scale, Duration).SetEase(Ease.Linear);
         //
-        onZoom?.Invoke(Instance.m_baseOrthographicSize * Scale);
+        onZoom?.Invoke(Instance.m_baseOrthographicSize * Scale, Duration);
     }
 
     public static void SetFollow(Transform Follow)
