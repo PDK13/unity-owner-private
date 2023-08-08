@@ -204,7 +204,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 99592579}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5, y: 0.5, z: 0}
+  m_LocalPosition: {x: -5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -223,17 +223,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9798f919e1e93ef4bb0d9fd4da9c9d56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_tween: 1
-  m_ease: 1
-  m_elevator: 0
-  m_key: ele
-  m_keyStop: ele_stop
+  m_tweenType: 0
+  m_easeType: 1
+  m_moveType: 0
+  m_pathType: 1
+  m_key: Start
+  m_keyStop: Stop
   m_once: 0
-  m_time: 5
-  m_timeRatioRevert: 1
-  m_path:
-  - {x: -5, y: 0.5}
-  - {x: 5, y: 0.5}
+  m_duration: 4
+  m_durationScaleRevert: 1
+  m_pathList:
+  - {x: 5, y: 5}
+  - {x: 10, y: 0}
+  m_colliderBase: {fileID: 99592588}
+  m_rigidbodyBase: {fileID: 99592589}
 --- !u!251 &99592586
 PlatformEffector2D:
   m_ObjectHideFlags: 0
