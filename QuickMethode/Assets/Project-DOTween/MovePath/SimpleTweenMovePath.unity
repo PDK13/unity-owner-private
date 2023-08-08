@@ -226,7 +226,7 @@ MonoBehaviour:
   m_tweenType: 0
   m_easeType: 1
   m_moveType: 0
-  m_pathType: 1
+  m_pathType: 0
   m_key: Start
   m_keyStop: Stop
   m_once: 0
@@ -235,6 +235,7 @@ MonoBehaviour:
   m_pathList:
   - {x: 5, y: 5}
   - {x: 10, y: 0}
+  - {x: 16, y: 5}
   m_colliderBase: {fileID: 99592588}
   m_rigidbodyBase: {fileID: 99592589}
 --- !u!251 &99592586

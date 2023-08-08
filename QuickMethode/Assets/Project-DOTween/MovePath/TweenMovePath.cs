@@ -1,6 +1,7 @@
 using DG.Tweening;
 using QuickMethode;
 using UnityEngine;
+using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -49,18 +50,16 @@ public class TweenMovePath : MonoBehaviour
     [SerializeField] [Min(0)] private float m_duration = 4f;
     [SerializeField] [Min(0)] private float m_durationScaleRevert = 1f;
     
-    [SerializeField] private Vector2[] m_pathList;
-    private Vector2[] m_pathTween;
+    [SerializeField] private List<Vector2> m_pathList;
     private Vector2 m_posStart;
 
-    public int PathCount => m_pathList.Length;
+    public int PathCount => m_pathList.Count;
 
     #endregion
 
     private bool m_state;
     private Tweener m_tweenMove;
 
-    [Space]
     [SerializeField] protected Collider2D m_colliderBase;
     [SerializeField] protected Rigidbody2D m_rigidbodyBase;
 
@@ -73,7 +72,7 @@ public class TweenMovePath : MonoBehaviour
         //
         if (m_pathType == ElevatorPath.Local)
         {
-            for (int i = 0; i < m_pathList.Length; i++)
+            for (int i = 0; i < PathCount; i++)
                 m_pathList[i] += m_posStart;
         }
         //
@@ -101,21 +100,21 @@ public class TweenMovePath : MonoBehaviour
 
     private void SetLoop()
     {
-        if (m_pathList.Length == 0)
+        if (PathCount == 0)
             return;
 
         switch (m_tweenType)
         {
             case ElevatorTween.Transform:
-                Vector3[] Path = new Vector3[this.m_pathList.Length];
-                for (int i = 0; i < this.m_pathList.Length; i++) Path[i] = (Vector3)this.m_pathList[i];
+                Vector3[] Path = new Vector3[this.PathCount];
+                for (int i = 0; i < this.PathCount; i++) Path[i] = (Vector3)this.m_pathList[i];
                 m_tweenMove = transform.DOPath(Path, m_duration).SetEase(m_easeType).SetLoops(-1, LoopType.Yoyo)
                     .OnStart(() => SetTweenPathStart())
                     .OnUpdate(() => SetTweenPathUpdate())
                     .OnKill(() => SetTweenPathKill());
                 break;
             case ElevatorTween.Rigidbody:
-                m_tweenMove = m_rigidbodyBase.DOPath(this.m_pathList, m_duration).SetEase(m_easeType).SetLoops(-1, LoopType.Yoyo)
+                m_tweenMove = m_rigidbodyBase.DOPath(this.m_pathList.ToArray(), m_duration).SetEase(m_easeType).SetLoops(-1, LoopType.Yoyo)
                     .OnStart(() => SetTweenPathStart())
                     .OnUpdate(() => SetTweenPathUpdate())
                     .OnKill(() => SetTweenPathKill());
@@ -130,15 +129,15 @@ public class TweenMovePath : MonoBehaviour
             switch (m_tweenType)
             {
                 case ElevatorTween.Transform:
-                    Vector3[] m_path = new Vector3[this.m_pathList.Length];
-                    for (int i = 0; i < this.m_pathList.Length; i++) m_path[i] = (Vector3)this.m_pathList[i];
+                    Vector3[] m_path = new Vector3[this.PathCount];
+                    for (int i = 0; i < this.PathCount; i++) m_path[i] = (Vector3)this.m_pathList[i];
                     m_tweenMove = transform.DOPath(m_path, m_duration).SetEase(m_easeType)
                         .OnStart(() => SetTweenPathStart())
                         .OnUpdate(() => SetTweenPathUpdate())
                         .OnKill(() => SetTweenPathKill());
                     break;
                 case ElevatorTween.Rigidbody:
-                    m_tweenMove = m_rigidbodyBase.DOPath(this.m_pathList, m_duration).SetEase(m_easeType)
+                    m_tweenMove = m_rigidbodyBase.DOPath(this.m_pathList.ToArray(), m_duration).SetEase(m_easeType)
                         .OnStart(() => SetTweenPathStart())
                         .OnUpdate(() => SetTweenPathUpdate())
                         .OnKill(() => SetTweenPathKill());
@@ -193,7 +192,7 @@ public class TweenMovePath : MonoBehaviour
 
     protected void SetOnTrigger(string Key, bool State)
     {
-        if (m_pathList.Length == 0) 
+        if (PathCount == 0) 
             return;
 
         if (m_moveType != ElevatorMove.Key) 
@@ -219,7 +218,7 @@ public class TweenMovePath : MonoBehaviour
 
     protected void SetOnTriggerStop(string Key, bool State)
     {
-        if (m_pathList.Length == 0) 
+        if (PathCount == 0) 
             return;
 
         if (m_keyStop != Key) 
@@ -236,7 +235,7 @@ public class TweenMovePath : MonoBehaviour
 
     public Vector2[] GetPath()
     {
-        return m_pathList;
+        return m_pathList.ToArray();
     }
 
     public Vector3 GetPath(int Index)
@@ -263,6 +262,21 @@ public class TweenMovePath : MonoBehaviour
         m_pathList[Index] = Pos;
     }
 
+    public void SetPathAdd()
+    {
+        if (PathCount == 0)
+            m_pathList.Add(Vector2.right * 10f);
+        else
+        if (PathCount > 0)
+            m_pathList.Add(m_pathList[PathCount - 1] + Vector2.right * 10f);
+    }
+
+    public void SetPathRemove()
+    {
+        if (PathCount > 0)
+            m_pathList.RemoveAt(PathCount - 1);
+    }
+
     #endregion
 
     protected virtual void OnDrawGizmosSelected()
@@ -274,7 +288,7 @@ public class TweenMovePath : MonoBehaviour
         {
             if (!Application.isPlaying)
             {
-                for (int i = 0; i < m_pathList.Length; i++)
+                for (int i = 0; i < PathCount; i++)
                 {
                     switch (m_pathType)
                     {
@@ -289,7 +303,7 @@ public class TweenMovePath : MonoBehaviour
             }
             else
             {
-                for (int i = 0; i < m_pathList.Length; i++)
+                for (int i = 0; i < PathCount; i++)
                     QGizmos.SetCollider2D(m_pathList[i], m_colliderBase, Color.gray);
             }
         }
@@ -368,7 +382,16 @@ public class TweenMovePathEditor : Editor
         QEditorCustom.SetField(m_duration);
         QEditorCustom.SetField(m_durationScaleRevert);
         //
+        QEditor.SetSpace(10);
+        //
+        if (QEditor.SetButton("Add Path"))
+            m_target.SetPathAdd();
+        if (QEditor.SetButton("Remove Path"))
+            m_target.SetPathRemove();
+        //
         QEditorCustom.SetField(m_pathList);
+        //
+        QEditor.SetSpace(10);
         //
         QEditorCustom.SetField(m_colliderBase);
         QEditorCustom.SetField(m_rigidbodyBase);
