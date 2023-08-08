@@ -64,6 +64,7 @@ public class TweenMovePath : MonoBehaviour
     //
     [SerializeField] protected Collider2D m_colliderBase;
     [SerializeField] protected Rigidbody2D m_rigidbodyBase;
+    [HideInInspector] public Color m_colorDebug = Color.white;
 
     protected virtual void Awake()
     {
@@ -94,7 +95,7 @@ public class TweenMovePath : MonoBehaviour
 
     #region Tween Move
 
-    protected void SetStart()
+    public void SetStart()
     {
         if (PathCount == 0)
             return;
@@ -127,7 +128,7 @@ public class TweenMovePath : MonoBehaviour
         }
     }
 
-    protected void SetMove()
+    public void SetMove()
     {
         if (PathCount == 0)
             return;
@@ -140,7 +141,7 @@ public class TweenMovePath : MonoBehaviour
         m_tweenMove.timeScale = 1;
     }
 
-    protected void SetMoveInvert()
+    public void SetMoveInvert()
     {
         if (m_tweenMove == null)
             return;
@@ -149,7 +150,7 @@ public class TweenMovePath : MonoBehaviour
         m_tweenMove.PlayBackwards();
     }
 
-    protected void SetMoveStop()
+    public void SetMoveStop()
     {
         if (m_tweenMove == null)
             return;
@@ -223,10 +224,10 @@ public class TweenMovePath : MonoBehaviour
                     switch (m_pathType)
                     {
                         case ElevatorPath.Local:
-                            QGizmos.SetCollider2D(transform.TransformPoint(m_pathList[i]), m_colliderBase, Color.gray);
+                            QGizmos.SetCollider2D(transform.TransformPoint(m_pathList[i]), m_colliderBase, m_colorDebug);
                             break;
                         case ElevatorPath.World:
-                            QGizmos.SetCollider2D(m_pathList[i], m_colliderBase, Color.gray);
+                            QGizmos.SetCollider2D(m_pathList[i], m_colliderBase, m_colorDebug);
                             break;
                     }
                 }
@@ -234,7 +235,7 @@ public class TweenMovePath : MonoBehaviour
             else
             {
                 for (int i = 0; i < PathCount; i++)
-                    QGizmos.SetCollider2D(m_pathList[i], m_colliderBase, Color.gray);
+                    QGizmos.SetCollider2D(m_pathList[i], m_colliderBase, m_colorDebug);
             }
         }
     }
@@ -324,7 +325,7 @@ public class TweenMovePathEditor : Editor
         if (Application.isPlaying)
             return;
         //
-        Handles.color = Color.red;
+        Handles.color = m_target.m_colorDebug;
         //
         for (int i = 0; i < m_target.PathCount; i++)
         {
