@@ -7,7 +7,7 @@ using System;
 using UnityEditor;
 #endif
 
-public class TweenMovePath : MonoBehaviour
+public class ObjectPath : MonoBehaviour
 {
     #region Enum
 
@@ -244,10 +244,10 @@ public class TweenMovePath : MonoBehaviour
 #if UNITY_EDITOR
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(TweenMovePath))]
+[CustomEditor(typeof(ObjectPath))]
 public class TweenMovePathEditor : Editor
 {
-    private TweenMovePath m_target;
+    private ObjectPath m_target;
 
     private SerializedProperty m_activeType;
     //
@@ -265,7 +265,7 @@ public class TweenMovePathEditor : Editor
 
     void OnEnable()
     {
-        m_target = (target as TweenMovePath);
+        m_target = (target as ObjectPath);
         //
         m_activeType = serializedObject.FindProperty("m_activeType");
         //
@@ -329,7 +329,7 @@ public class TweenMovePathEditor : Editor
         //
         for (int i = 0; i < m_target.PathCount; i++)
         {
-            if (m_target.PathType == TweenMovePath.ElevatorPath.World)
+            if (m_target.PathType == ObjectPath.ElevatorPath.World)
             {
                 EditorGUI.BeginChangeCheck();
                 Vector2 WorldPos = Handles.PositionHandle(m_target.GetPath()[i], Quaternion.identity);
@@ -345,7 +345,7 @@ public class TweenMovePathEditor : Editor
                     Handles.DrawDottedLine(m_target.GetPath()[i], m_target.transform.position, 10);
             }
             else
-            if (m_target.PathType == TweenMovePath.ElevatorPath.Local)
+            if (m_target.PathType == ObjectPath.ElevatorPath.Local)
             {
                 EditorGUI.BeginChangeCheck();
                 Vector3 WorldPos = m_target.transform.TransformPoint(m_target.GetPath(i));
