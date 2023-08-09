@@ -2338,20 +2338,9 @@ namespace QuickMethode
     {
         #region ==================================== String Split
 
-        public static string[] GetStringSplitArray(string FatherString, char Key)
-        {
-            return FatherString.Split(Key);
-        }
-
         public static List<string> GetStringSplitList(string FatherString, char Key)
         {
-            string[] SplitArray = GetStringSplitArray(FatherString, Key);
-
-            List<string> SplitString = new List<string>();
-
-            SplitString.AddRange(SplitArray);
-
-            return SplitString;
+            return FatherString.Split(Key).ToList();
         }
 
         #endregion
@@ -2366,42 +2355,22 @@ namespace QuickMethode
 
         public static string GetEncypt(char Key, List<string> Data)
         {
-            string Encypt = "";
-            //
-            for (int i = 0; i < Data.Count; i++)
-                GetEncyptAdd(Key, Encypt, Data[i], out Encypt);
-            //
-            return Encypt;
+            return string.Join(Key, Data);
         }
 
         public static string GetEncypt(char Key, List<int> Data)
         {
-            string Encypt = "";
-            //
-            for (int i = 0; i < Data.Count; i++)
-                GetEncyptAdd(Key, Encypt, Data[i], out Encypt);
-            //
-            return Encypt;
+            return string.Join(Key, Data);
         }
 
         public static string GetEncypt(char Key, List<float> Data)
         {
-            string Encypt = "";
-            //
-            for (int i = 0; i < Data.Count; i++)
-                GetEncyptAdd(Key, Encypt, Data[i], out Encypt);
-            //
-            return Encypt;
+            return string.Join(Key, Data);
         }
 
         public static string GetEncypt(char Key, List<bool> Data)
         {
-            string Encypt = "";
-            //
-            for (int i = 0; i < Data.Count; i++)
-                GetEncyptAdd(Key, Encypt, Data[i], out Encypt);
-            //
-            return Encypt;
+            return string.Join(Key, Data);
         }
 
         public static string GetEncypt<EnumType>(char Key, List<EnumType> Data)
@@ -2418,42 +2387,22 @@ namespace QuickMethode
 
         public static string GetEncypt(char Key, params string[] Data)
         {
-            string Encypt = "";
-            //
-            for (int i = 0; i < Data.Length; i++)
-                GetEncyptAdd(Key, Encypt, Data[i], out Encypt);
-            //
-            return Encypt;
+            return string.Join(Key, Data);
         }
 
         public static string GetEncypt(char Key, params int[] Data)
         {
-            string Encypt = "";
-            //
-            for (int i = 0; i < Data.Length; i++)
-                GetEncyptAdd(Key, Encypt, Data[i], out Encypt);
-            //
-            return Encypt;
+            return string.Join(Key, Data);
         }
 
         public static string GetEncypt(char Key, params float[] Data)
         {
-            string Encypt = "";
-            //
-            for (int i = 0; i < Data.Length; i++)
-                GetEncyptAdd(Key, Encypt, Data[i], out Encypt);
-            //
-            return Encypt;
+            return string.Join(Key, Data);
         }
 
         public static string GetEncypt(char Key, params bool[] Data)
         {
-            string Encypt = "";
-            //
-            for (int i = 0; i < Data.Length; i++)
-                GetEncyptAdd(Key, Encypt, Data[i], out Encypt);
-            //
-            return Encypt;
+            return string.Join(Key, Data);
         }
 
         public static string GetEncypt<EnumType>(char Key, params EnumType[] Data)
@@ -2520,63 +2469,22 @@ namespace QuickMethode
 
         public static List<string> GetDencyptString(char Key, string Data)
         {
-            if (Data.Equals(""))
-                return new List<string>();
-            //
-            return GetStringSplitList(Data, Key);
+            return Data.Split(Key).ToList();
         }
 
         public static List<int> GetDencyptInt(char Key, string Data)
         {
-            if (Data.Equals(""))
-                return new List<int>();
-            //
-            List<string> DataString = GetDencyptString(Key, Data);
-            //
-            List<int> DataInt = new List<int>();
-            //
-            for (int i = 0; i < DataString.Count; i++)
-                DataInt.Add(int.Parse(DataString[i]));
-            //
-            return DataInt;
+            return Data.Split(Key).ToList().ConvertAll(int.Parse);
         }
 
         public static List<float> GetDencyptFloat(char Key, string Data)
         {
-            if (Data.Equals(""))
-                return new List<float>();
-            //
-            List<string> DataString = GetStringSplitList(Data, Key);
-            //
-            List<float> DataFloat = new List<float>();
-            //
-            for (int i = 0; i < DataString.Count; i++)
-                DataFloat.Add(float.Parse(DataString[i]));
-            //
-            return DataFloat;
+            return Data.Split(Key).ToList().ConvertAll(float.Parse);
         }
 
         public static List<bool> GetDencyptBool(char Key, string Data)
         {
-            if (Data.Equals(""))
-                return new List<bool>();
-            //
-            List<string> DataString = GetStringSplitList(Data, Key);
-            //
-            List<bool> DataBool = new List<bool>();
-            //
-            for (int i = 0; i < DataString.Count; i++)
-            {
-                string Bool = DataString[i];
-                //
-                if (Bool == "1")
-                    DataBool.Add(true);
-                else
-                if (Bool == "0")
-                    DataBool.Add(false);
-            }
-            //
-            return DataBool;
+            return Data.Split(Key).ToList().ConvertAll(bool.Parse);
         }
 
         public static List<EnumType> GetDencyptEnum<EnumType>(char Key, string Data)
@@ -2604,22 +2512,22 @@ namespace QuickMethode
 
         public static string GetEncyptVector2(char Key, Vector2 Data)
         {
-            return Data.x.ToString() + Key + Data.y.ToString();
+            return GetEncypt(Key, Data.x, Data.y);
         }
 
         public static string GetEncyptVector3(char Key, Vector3 Data)
         {
-            return Data.x.ToString() + Key + Data.y.ToString() + Key + Data.z.ToString();
+            return GetEncypt(Key, Data.x, Data.y, Data.z);
         }
 
         public static string GetEncyptVector2Int(char Key, Vector2Int Data)
         {
-            return Data.x.ToString() + Key + Data.y.ToString();
+            return GetEncypt(Key, Data.x, Data.y);
         }
 
         public static string GetEncyptVector3Int(char Key, Vector3Int Data)
         {
-            return Data.x.ToString() + Key + Data.y.ToString() + Key + Data.z.ToString();
+            return GetEncypt(Key, Data.x, Data.y, Data.z);
         }
 
         #endregion
@@ -2629,28 +2537,28 @@ namespace QuickMethode
         public static Vector2 GetDencyptVector2(char Key, string Data)
         {
             List<float> Dencypt = GetDencyptFloat(Key, Data);
-
+            //
             return new Vector2(Dencypt[0], Dencypt[1]);
         }
 
         public static Vector3 GetDencyptVector3(char Key, string Data)
         {
             List<float> Dencypt = GetDencyptFloat(Key, Data);
-
+            //
             return new Vector3(Dencypt[0], Dencypt[1], Dencypt[2]);
         }
 
         public static Vector2Int GetDencyptVector2Int(char Key, string Data)
         {
             List<int> Dencypt = GetDencyptInt(Key, Data);
-
+            //
             return new Vector2Int(Dencypt[0], Dencypt[1]);
         }
 
         public static Vector3Int GetDencyptVector3Int(char Key, string Data)
         {
             List<int> Dencypt = GetDencyptInt(Key, Data);
-
+            //
             return new Vector3Int(Dencypt[0], Dencypt[1], Dencypt[2]);
         }
 
