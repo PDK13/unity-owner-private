@@ -243,7 +243,7 @@ namespace QuickMethode
             return ColorUtility.ToHtmlStringRGB(Color);
         }
 
-        public static string GetColorHexCode(Color Color)
+        public static string GetColorHexFormat(Color Color)
         {
             string ColorHex = GetColorHex(Color);
             string ColorHexCode = string.Format("#{0}", ColorHex);
@@ -372,7 +372,7 @@ namespace QuickMethode
 
     public class QMath
     {
-        #region Sum
+        #region ==================================== Sum
 
         public static int GetSum(params int[] Value)
         {
@@ -386,7 +386,7 @@ namespace QuickMethode
 
         #endregion
 
-        #region Bit
+        #region ==================================== Bit
 
         public static int GetBitIndex(int BitValue32)
         {
@@ -407,7 +407,7 @@ namespace QuickMethode
 
     public class QTransform
     {
-        #region ------------------------------------ Convert - World & Local
+        #region ==================================== Convert - World & Local
 
         public static Vector3 GetPosWorld(Transform From, Vector3 PosLocal)
         {
@@ -421,7 +421,7 @@ namespace QuickMethode
 
         #endregion
 
-        #region ------------------------------------ Move - Fixed Update
+        #region ==================================== Move - Fixed Update
 
         public static void SetMoveToward(Transform From, Vector3 Pos, float DeltaDistance, bool World = true)
         {
@@ -455,7 +455,7 @@ namespace QuickMethode
 
         #endregion
 
-        #region ------------------------------------ Rotation Instantly
+        #region ==================================== Rotation Instantly
 
         //Axis
 
@@ -530,7 +530,7 @@ namespace QuickMethode
 
     public class QRecTransform
     {
-        #region ------------------------------------ Move - Fixed Update
+        #region ==================================== Move - Fixed Update
 
         public static void SetMoveToward(RectTransform From, Vector3 PosAnchor, float DeltaDistance)
         {
@@ -541,7 +541,7 @@ namespace QuickMethode
 
         #endregion
 
-        #region ------------------------------------ Anchor Pos Convert
+        #region ==================================== Anchor Pos Convert
 
         private static Vector2 GetPosAnchorPivotOffset(RectTransform From, Vector2 ToPivot)
         {
@@ -589,7 +589,7 @@ namespace QuickMethode
 
     public class QLayer
     {
-        #region Primary
+        #region ==================================== Primary
 
         public const string UNTAGGED = "Untagged";
 
@@ -605,7 +605,7 @@ namespace QuickMethode
 
         #endregion
 
-        #region GameObject & Component
+        #region ==================================== GameObject & Component
 
         public static void SetLayerMask(GameObject From, string LayerName)
         {
@@ -1595,7 +1595,7 @@ namespace QuickMethode
 
     public class QComponent
     {
-        #region Primary
+        #region ==================================== Primary
 
         public static T GetComponent<T>(GameObject From) where T : Component
         {
@@ -1619,7 +1619,7 @@ namespace QuickMethode
 
         #endregion
 
-        #region Button
+        #region ==================================== Button
 
         public static void SetButton(UnityEngine.UI.Button From, UnityAction Action)
         {
@@ -2279,7 +2279,7 @@ namespace QuickMethode
         //SAMPLE:
         //ClassData Data = ClassFileIO.GetDatafromJson<ClassData>(JsonDataTextDocument);
 
-        #region Path
+        #region ==================================== Path
 
         public static void SetDataPath(object Data, string Path)
         {
@@ -2314,7 +2314,7 @@ namespace QuickMethode
 
         #endregion
 
-        #region Primary
+        #region ==================================== Primary
 
         public static string GetDataConvertJson(object JsonDataClass)
         {
