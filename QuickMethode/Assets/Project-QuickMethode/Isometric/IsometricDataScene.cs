@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 using static IsometricManager;
 
 [Serializable]

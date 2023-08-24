@@ -1,5 +1,4 @@
 #if UNITY_EDITOR
-using QuickMethode;
 using UnityEditor;
 
 [CustomEditor(typeof(RendererGeometryShape))]

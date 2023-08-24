@@ -1,4 +1,3 @@
-using QuickMethode;
 using UnityEngine;
 
 public class ColliderFixed : MonoBehaviour

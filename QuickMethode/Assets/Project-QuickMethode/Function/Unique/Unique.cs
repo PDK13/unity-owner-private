@@ -1,5 +1,4 @@
-﻿using QuickMethode;
-using System.Reflection;
+﻿using System.Reflection;
 using UnityEngine;
 
 #if UNITY_EDITOR

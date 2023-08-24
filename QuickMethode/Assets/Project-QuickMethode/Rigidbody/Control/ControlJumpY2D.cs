@@ -1,6 +1,4 @@
-﻿using QuickMethode;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 
 public class ControlJumpY2D : MonoBehaviour //From: Trịnh Văn Khoa (Searcher)

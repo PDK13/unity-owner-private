@@ -1,5 +1,4 @@
-﻿using QuickMethode;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class Sample_FileIO : MonoBehaviour

@@ -1,5 +1,4 @@
 using DG.Tweening;
-using QuickMethode;
 using UnityEngine;
 using System.Collections.Generic;
 using System;

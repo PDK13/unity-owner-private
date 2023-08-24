@@ -1,5 +1,3 @@
-using QuickMethode;
-using System;
 using UnityEngine;
 
 public class ControlMoveX2D : MonoBehaviour

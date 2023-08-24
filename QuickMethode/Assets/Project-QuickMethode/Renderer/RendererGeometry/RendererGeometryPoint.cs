@@ -1,5 +1,4 @@
-﻿using QuickMethode;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class RendererGeometryPoint : MonoBehaviour
