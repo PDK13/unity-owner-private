@@ -94,7 +94,9 @@ public class QPath
         }
 
         foreach (string PathChildAdd in PathChild)
+        {
             QEncypt.GetEncyptAdd('/', PathFinal, PathChildAdd, out PathFinal);
+        }
 
         return PathFinal;
     }
@@ -425,104 +427,164 @@ public class QFileIO : QPath
 
     public void GetReadAuto()
     {
-        if (ReadRun >= TextRead.Count - 1) return;
+        if (ReadRun >= TextRead.Count - 1)
+        {
+            return;
+        }
+
         ReadRun++;
     }
 
     public string GetReadAutoString()
     {
-        if (ReadRun >= TextRead.Count - 1) return "";
+        if (ReadRun >= TextRead.Count - 1)
+        {
+            return "";
+        }
+
         ReadRun++;
         return TextRead[ReadRun];
     }
 
     public List<string> GetReadAutoString(char Key)
     {
-        if (ReadRun >= TextRead.Count - 1) return new List<string>();
+        if (ReadRun >= TextRead.Count - 1)
+        {
+            return new List<string>();
+        }
+
         ReadRun++;
         return QEncypt.GetDencyptString(Key, TextRead[ReadRun]);
     }
 
     public List<int> GetReadAutoInt(char Key)
     {
-        if (ReadRun >= TextRead.Count - 1) return new List<int>();
+        if (ReadRun >= TextRead.Count - 1)
+        {
+            return new List<int>();
+        }
+
         ReadRun++;
         return QEncypt.GetDencyptInt(Key, TextRead[ReadRun]);
     }
 
     public List<float> GetReadAutoFloat(char Key)
     {
-        if (ReadRun >= TextRead.Count - 1) return new List<float>();
+        if (ReadRun >= TextRead.Count - 1)
+        {
+            return new List<float>();
+        }
+
         ReadRun++;
         return QEncypt.GetDencyptFloat(Key, TextRead[ReadRun]);
     }
 
     public List<bool> GetReadAutoBool(char Key)
     {
-        if (ReadRun >= TextRead.Count - 1) return new List<bool>();
+        if (ReadRun >= TextRead.Count - 1)
+        {
+            return new List<bool>();
+        }
+
         ReadRun++;
         return QEncypt.GetDencyptBool(Key, TextRead[ReadRun]);
     }
 
     public int GetReadAutoInt()
     {
-        if (ReadRun >= TextRead.Count - 1) return 0;
+        if (ReadRun >= TextRead.Count - 1)
+        {
+            return 0;
+        }
+
         ReadRun++;
         return int.Parse(TextRead[ReadRun]);
     }
 
     public float GetReadAutoFloat()
     {
-        if (ReadRun >= TextRead.Count - 1) return 0f;
+        if (ReadRun >= TextRead.Count - 1)
+        {
+            return 0f;
+        }
+
         ReadRun++;
         return float.Parse(TextRead[ReadRun]);
     }
 
     public double GetReadAutoDouble()
     {
-        if (ReadRun >= TextRead.Count - 1) return 0f;
+        if (ReadRun >= TextRead.Count - 1)
+        {
+            return 0f;
+        }
+
         ReadRun++;
         return double.Parse(TextRead[ReadRun]);
     }
 
     public bool GetReadAutoBool()
     {
-        if (ReadRun >= TextRead.Count - 1) return false;
+        if (ReadRun >= TextRead.Count - 1)
+        {
+            return false;
+        }
+
         ReadRun++;
         return TextRead[ReadRun] == "True";
     }
 
     public Vector2 GetReadAutoVector2(char Key)
     {
-        if (ReadRun >= TextRead.Count - 1) return new Vector2();
+        if (ReadRun >= TextRead.Count - 1)
+        {
+            return new Vector2();
+        }
+
         ReadRun++;
         return QEncypt.GetDencyptVector2(Key, TextRead[ReadRun]);
     }
 
     public Vector2Int GetReadAutoVector2Int(char Key)
     {
-        if (ReadRun >= TextRead.Count - 1) return new Vector2Int();
+        if (ReadRun >= TextRead.Count - 1)
+        {
+            return new Vector2Int();
+        }
+
         ReadRun++;
         return QEncypt.GetDencyptVector2Int(Key, TextRead[ReadRun]);
     }
 
     public Vector3 GetReadAutoVector3(char Key)
     {
-        if (ReadRun >= TextRead.Count - 1) return new Vector3();
+        if (ReadRun >= TextRead.Count - 1)
+        {
+            return new Vector3();
+        }
+
         ReadRun++;
         return QEncypt.GetDencyptVector3(Key, TextRead[ReadRun]);
     }
 
     public Vector3Int GetReadAutoVector3Int(char Key)
     {
-        if (ReadRun >= TextRead.Count - 1) return new Vector3Int();
+        if (ReadRun >= TextRead.Count - 1)
+        {
+            return new Vector3Int();
+        }
+
         ReadRun++;
         return QEncypt.GetDencyptVector3Int(Key, TextRead[ReadRun]);
     }
 
     public EnumType GetReadAutoEnum<EnumType>()
     {
-        if (ReadRun >= TextRead.Count - 1) return QEnum.GetChoice<EnumType>(0);
+        if (ReadRun >= TextRead.Count - 1)
+        {
+            return QEnum.GetChoice<EnumType>(0);
+        }
+
         ReadRun++;
         return QEnum.GetChoice<EnumType>(int.Parse(TextRead[ReadRun]));
     }

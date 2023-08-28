@@ -10,22 +10,22 @@ public class ObjectPath : MonoBehaviour
 {
     #region Enum
 
-    public enum ElevatorTween 
+    public enum ElevatorTween
     {
         Rigidbody, //Got Physic Event!!
         Transform, //Non-Physic event!!
     }
 
-    public enum ElevatorActive 
+    public enum ElevatorActive
     {
-        Start, 
+        Start,
         Wait,
     }
 
-    public enum ElevatorPath 
+    public enum ElevatorPath
     {
-        Local, 
-        World, 
+        Local,
+        World,
     }
 
     #endregion
@@ -51,7 +51,7 @@ public class ObjectPath : MonoBehaviour
     //
     [SerializeField] [Min(0)] private float m_duration = 4f;
     [SerializeField] [Min(0)] private float m_timeScaleRevert = 1f;
-    
+
     [SerializeField] private List<Vector2> m_pathList;
     private Vector2 m_posStart;
 
@@ -70,22 +70,30 @@ public class ObjectPath : MonoBehaviour
         m_posStart = transform.position;
         //
         if (m_tweenType == ElevatorTween.Rigidbody && m_rigidbodyBase == null)
+        {
             m_tweenType = ElevatorTween.Transform;
+        }
         //
         if (m_pathType == ElevatorPath.Local)
         {
             for (int i = 0; i < PathCount; i++)
+            {
                 m_pathList[i] += m_posStart;
+            }
         }
         //
         if (m_activeType == ElevatorActive.Start)
+        {
             SetStart();
+        }
     }
 
     protected virtual void OnDestroy()
     {
         if (m_tweenMove != null)
+        {
             m_tweenMove.Kill();
+        }
         //
         transform.DOKill();
     }
@@ -97,7 +105,9 @@ public class ObjectPath : MonoBehaviour
     public void SetStart()
     {
         if (PathCount == 0)
+        {
             return;
+        }
         //
         if (m_tweenMove != null)
         {
@@ -109,8 +119,10 @@ public class ObjectPath : MonoBehaviour
             {
                 case ElevatorTween.Transform:
                     Vector3[] Path = new Vector3[PathCount];
-                    for (int i = 0; i < PathCount; i++) 
+                    for (int i = 0; i < PathCount; i++)
+                    {
                         Path[i] = m_pathList[i];
+                    }
                     //
                     m_tweenMove = transform.DOPath(Path, m_duration).SetEase(m_easeType).SetLoops(-1, LoopType.Yoyo)
                         .OnStart(() => onStart?.Invoke())
@@ -130,12 +142,18 @@ public class ObjectPath : MonoBehaviour
     public void SetMove()
     {
         if (PathCount == 0)
+        {
             return;
+        }
         //
         if (m_tweenMove == null)
+        {
             SetStart();
+        }
         else
+        {
             m_tweenMove.PlayForward();
+        }
         //
         m_tweenMove.timeScale = 1;
     }
@@ -143,7 +161,9 @@ public class ObjectPath : MonoBehaviour
     public void SetMoveInvert()
     {
         if (m_tweenMove == null)
+        {
             return;
+        }
         //
         m_tweenMove.timeScale = m_timeScaleRevert;
         m_tweenMove.PlayBackwards();
@@ -152,7 +172,9 @@ public class ObjectPath : MonoBehaviour
     public void SetMoveStop()
     {
         if (m_tweenMove == null)
+        {
             return;
+        }
         //
         m_tweenMove.timeScale = 0;
     }
@@ -171,7 +193,9 @@ public class ObjectPath : MonoBehaviour
     public Vector3 GetPath(int Index)
     {
         if (Index > PathCount - 1)
+        {
             return Vector3.zero;
+        }
         //
         return m_pathList[Index];
     }
@@ -179,15 +203,19 @@ public class ObjectPath : MonoBehaviour
     public void SetPath(Vector3 Pos, int Index)
     {
         if (Index > PathCount - 1)
+        {
             return;
+        }
         //
-        m_pathList[Index] = (Vector2)Pos;
+        m_pathList[Index] = Pos;
     }
 
     public void SetPath(Vector2 Pos, int Index)
     {
         if (Index > PathCount - 1)
+        {
             return;
+        }
         //
         m_pathList[Index] = Pos;
     }
@@ -195,16 +223,22 @@ public class ObjectPath : MonoBehaviour
     public void SetPathAdd()
     {
         if (PathCount == 0)
+        {
             m_pathList.Add(Vector2.right * 10f);
+        }
         else
         if (PathCount > 0)
+        {
             m_pathList.Add(m_pathList[PathCount - 1] + Vector2.right * 10f);
+        }
     }
 
     public void SetPathRemove()
     {
         if (PathCount > 0)
+        {
             m_pathList.RemoveAt(PathCount - 1);
+        }
     }
 
     #endregion
@@ -212,7 +246,9 @@ public class ObjectPath : MonoBehaviour
     protected virtual void OnDrawGizmosSelected()
     {
         if (m_colliderBase == null)
+        {
             return;
+        }
 
         if (m_pathList != null)
         {
@@ -234,7 +270,9 @@ public class ObjectPath : MonoBehaviour
             else
             {
                 for (int i = 0; i < PathCount; i++)
+                {
                     QGizmos.SetCollider2D(m_pathList[i], m_colliderBase, m_colorDebug);
+                }
             }
         }
     }
@@ -262,7 +300,7 @@ public class TweenMovePathEditor : Editor
     private SerializedProperty m_colliderBase;
     private SerializedProperty m_rigidbodyBase;
 
-    void OnEnable()
+    private void OnEnable()
     {
         m_target = (target as ObjectPath);
         //
@@ -303,9 +341,14 @@ public class TweenMovePathEditor : Editor
         QEditor.SetSpace(10);
         //
         if (QEditor.SetButton("Add Path"))
+        {
             m_target.SetPathAdd();
+        }
+
         if (QEditor.SetButton("Remove Path"))
+        {
             m_target.SetPathRemove();
+        }
         //
         QEditorCustom.SetField(m_pathList);
         //
@@ -319,10 +362,12 @@ public class TweenMovePathEditor : Editor
         QEditorCustom.SetApply(this);
     }
 
-    void OnSceneGUI()
+    private void OnSceneGUI()
     {
         if (Application.isPlaying)
+        {
             return;
+        }
         //
         Handles.color = m_target.m_colorDebug;
         //
@@ -339,9 +384,13 @@ public class TweenMovePathEditor : Editor
                 }
                 //
                 if (i != 0)
+                {
                     Handles.DrawDottedLine(m_target.GetPath()[i], m_target.GetPath()[i - 1], 10);
+                }
                 else
+                {
                     Handles.DrawDottedLine(m_target.GetPath()[i], m_target.transform.position, 10);
+                }
             }
             else
             if (m_target.PathType == ObjectPath.ElevatorPath.Local)

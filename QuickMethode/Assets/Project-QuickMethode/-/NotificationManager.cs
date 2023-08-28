@@ -12,8 +12,8 @@ public class NotificationManager : MonoBehaviour
 {
     private const string CHANNEL_18H = "notification-18h";
     private const int ID_18H = 1000;
-    
-    void Awake()
+
+    private void Awake()
     {
         DontDestroyOnLoad(gameObject);
         ScheduleLocal();

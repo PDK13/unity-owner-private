@@ -13,7 +13,9 @@ public class SimpleCameraPointCanvas : MonoBehaviour
     private void Start()
     {
         if (m_cameraMain == null)
+        {
             m_cameraMain = Camera.main;
+        }
 
         m_recTransform = GetComponent<RectTransform>();
 

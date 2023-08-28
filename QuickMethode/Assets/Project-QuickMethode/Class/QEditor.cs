@@ -106,9 +106,13 @@ public class QEditor
     public static void SetLabel(string Label, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
     {
         if (GUIStyle == null)
+        {
             GUILayout.Label(Label, GUILayoutOption);
+        }
         else
+        {
             GUILayout.Label(Label, GUIStyle, GUILayoutOption);
+        }
     }
 
     public static void SetLabel(string Label, Rect Rect)
@@ -128,9 +132,13 @@ public class QEditor
     public static bool SetButton(string Label, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
     {
         if (GUIStyle == null)
+        {
             return GUILayout.Button(Label, GUILayoutOption);
+        }
         else
+        {
             return GUILayout.Button(Label, GUIStyle, GUILayoutOption);
+        }
     }
 
     public static bool SetButton(Sprite Sprite, params GUILayoutOption[] GUILayoutOption)
@@ -149,17 +157,25 @@ public class QEditor
     public static string SetField(string Value, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
     {
         if (GUIStyle == null)
+        {
             return EditorGUILayout.TextField("", Value, GUILayoutOption);
+        }
         else
+        {
             return EditorGUILayout.TextField("", Value, GUIStyle, GUILayoutOption);
+        }
     }
 
     public static string SetFieldPassword(string Value, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
     {
         if (GUIStyle == null)
+        {
             return EditorGUILayout.PasswordField("", Value, GUILayoutOption);
+        }
         else
+        {
             return EditorGUILayout.PasswordField("", Value, GUIStyle, GUILayoutOption);
+        }
     }
 
     //Number
@@ -167,33 +183,49 @@ public class QEditor
     public static int SetField(int Value, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
     {
         if (GUIStyle == null)
+        {
             return EditorGUILayout.IntField("", Value, GUILayoutOption);
+        }
         else
+        {
             return EditorGUILayout.IntField("", Value, GUIStyle, GUILayoutOption);
+        }
     }
 
     public static long SetField(long Value, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
     {
         if (GUIStyle == null)
+        {
             return EditorGUILayout.LongField("", Value, GUILayoutOption);
+        }
         else
+        {
             return EditorGUILayout.LongField("", Value, GUIStyle, GUILayoutOption);
+        }
     }
 
     public static float SetField(float Value, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
     {
         if (GUIStyle == null)
+        {
             return EditorGUILayout.FloatField("", Value, GUILayoutOption);
+        }
         else
+        {
             return EditorGUILayout.FloatField("", Value, GUIStyle, GUILayoutOption);
+        }
     }
 
     public static double SetField(double Value, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
     {
         if (GUIStyle == null)
+        {
             return EditorGUILayout.DoubleField("", Value, GUILayoutOption);
+        }
         else
+        {
             return EditorGUILayout.DoubleField("", Value, GUIStyle, GUILayoutOption);
+        }
     }
 
     #endregion
@@ -345,7 +377,7 @@ public class QEditor
 
         if (Texture != null)
         {
-            return new GUIContent("", (Texture)Texture);
+            return new GUIContent("", Texture);
         }
         else
         {
@@ -377,7 +409,7 @@ public class QEditorWindow
 
     #region ------------------------------------ GUI Layout Option
 
-    private static float WIDTH_OFFSET = 4f;
+    private static readonly float WIDTH_OFFSET = 4f;
 
     public static GUILayoutOption GetGUILayoutWidth(EditorWindow This, float WidthPercent = 1, float WidthOffset = 0)
     {
@@ -454,9 +486,13 @@ public class QEditorCustom
     public static void SetField(SerializedProperty Field, Rect Rect, bool FieldName = false)
     {
         if (FieldName)
+        {
             EditorGUI.PropertyField(Rect, Field);
+        }
         else
+        {
             EditorGUI.PropertyField(Rect, Field, GUIContent.none);
+        }
     }
 
     public static void SetApply(Editor This)
@@ -485,11 +521,11 @@ public class QEditorObject
 
     public static VisualElement GetContainer(SerializedProperty Property, params string[] FieldName)
     {
-        var Container = new VisualElement();
+        VisualElement Container = new VisualElement();
         //
         foreach (string FieldNameChild in FieldName)
         {
-            var Field = GetField(Property, FieldNameChild);
+            PropertyField Field = GetField(Property, FieldNameChild);
             Container.Add(Field);
         }
         //
@@ -519,9 +555,13 @@ public class QEditorObject
     public static void SetField(SerializedProperty Property, string NameField, Rect Rect, bool FieldName = false)
     {
         if (FieldName)
+        {
             EditorGUI.PropertyField(Rect, Property.FindPropertyRelative(NameField));
+        }
         else
+        {
             EditorGUI.PropertyField(Rect, Property.FindPropertyRelative(NameField), GUIContent.none);
+        }
     }
 
     #endregion
@@ -623,7 +663,10 @@ public class QAssetsDatabase : QPath
     {
         string Path = QPath.GetPath(PathType.Assets, PathChildInAssets);
 
-        if (!GetPathFolderExist(Path)) return new List<GameObject>();
+        if (!GetPathFolderExist(Path))
+        {
+            return new List<GameObject>();
+        }
 
         List<GameObject> ObjectsFound = new List<GameObject>();
 
@@ -643,7 +686,10 @@ public class QAssetsDatabase : QPath
     {
         string Path = QPath.GetPath(PathType.Assets, PathChildInAssets);
 
-        if (!GetPathFolderExist(Path)) return new List<Sprite>();
+        if (!GetPathFolderExist(Path))
+        {
+            return new List<Sprite>();
+        }
 
         List<Sprite> ObjectsFound = new List<Sprite>();
 

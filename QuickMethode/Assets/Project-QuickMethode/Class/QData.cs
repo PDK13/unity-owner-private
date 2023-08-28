@@ -282,7 +282,9 @@ public class QEnum
             for (int i = 0; i < ListName.Count; i++)
             {
                 if (ListName[i][0].Equals('_'))
+                {
                     ListName[i] = ListName[i].Remove(0, 1);
+                }
                 //
                 ListName[i] = ListName[i].Replace("_", " ");
             }
@@ -301,7 +303,10 @@ public class QEnum
     {
         List<int> Index = new List<int>();
         for (int i = 0; i < Value.Length; i++)
+        {
             Index.Add((int)Convert.ChangeType(Value[i], typeof(int)));
+        }
+
         return Index;
     }
 
@@ -327,10 +332,17 @@ public class QFlag
     {
         List<int> Index = QEnum.GetListIndex<EnumType>();
         for (int i = 0; i < Index.Count; i++)
+        {
             if (i == 0)
+            {
                 Index[i] = 1;
+            }
             else
+            {
                 Index[i] = Index[i - 1] * 2;
+            }
+        }
+
         return Index;
     }
 
@@ -351,7 +363,10 @@ public class QFlag
         foreach (EnumType Value in Choice)
         {
             if (GetExist(Current, Value))
+            {
                 continue;
+            }
+
             int Value32 = (int)Convert.ChangeType(Value, typeof(int));
             Sum32 += Value32;
         }
@@ -364,7 +379,10 @@ public class QFlag
         foreach (EnumType Value in Choice)
         {
             if (!GetExist(Current, Value))
+            {
                 continue;
+            }
+
             int Value32 = (int)Convert.ChangeType(Value, typeof(int));
             Sum32 -= Value32;
         }
@@ -391,7 +409,10 @@ public class QList
         //Use to Get Data from List, not it's Memory Pointer!!
         List<T> DataGet = new List<T>();
         foreach (T Value in Data)
+        {
             DataGet.Add(Value);
+        }
+
         return DataGet;
     }
 
@@ -400,7 +421,10 @@ public class QList
         //Use to Get Data from List, not it's Memory Pointer!!
         T[] DataGet = new T[Data.Length];
         for (int i = 0; i < Data.Length; i++)
+        {
             DataGet[i] = Data[i];
+        }
+
         return DataGet;
     }
 
@@ -434,7 +458,9 @@ public class QList
         for (int i = 0; i < Percent.Length; i++)
         {
             if (Percent[i] >= 100)
+            {
                 return i; //Get index of 100% percent!
+            }
 
             ListPercent.Add((i, Percent[i]));
             SumPercent += Percent[i];
@@ -465,12 +491,18 @@ public class QList
             int RandomCurrent = Random.Range(0, 100);
 
             if (RandomLast == -1)
+            {
                 RandomLast = RandomCurrent;
+            }
             else
             if (RandomLast == RandomCurrent)
+            {
                 continue;
+            }
             else
+            {
                 RandomLast = RandomCurrent;
+            }
         }
         RandomPercent = RandomLast;
 
@@ -484,12 +516,14 @@ public class QList
         lastNumber = randomNumber;
 
         int CheckPercent = 0;
-        foreach (var Child in ListPercent)
+        foreach ((int Index, int Percent) Child in ListPercent)
         {
             CheckPercent += Child.Percent;
 
             if (CheckPercent < RandomPercent)
+            {
                 continue;
+            }
 
             return Child.Index; //Get index of higher than random percent!
         }
@@ -537,7 +571,9 @@ public class QJSON
         //
         string JsonData = "";
         for (int i = 0; i < JSonRead.Count; i++)
+        {
             JsonData += (FileIO.GetReadAutoString() + "\n");
+        }
         //
         return JsonUtility.FromJson<ClassData>(JsonData);
     }
@@ -608,7 +644,9 @@ public class QEncypt
         string Encypt = "";
         //
         for (int i = 0; i < Data.Count; i++)
+        {
             GetEncyptAdd(Key, Encypt, QEnum.GetChoice(Data[i]), out Encypt);
+        }
         //
         return Encypt;
     }
@@ -640,7 +678,9 @@ public class QEncypt
         string Encypt = "";
         //
         for (int i = 0; i < Data.Length; i++)
+        {
             GetEncyptAdd(Key, Encypt, QEnum.GetChoice(Data[i]), out Encypt);
+        }
         //
         return Encypt;
     }
@@ -720,14 +760,18 @@ public class QEncypt
     public static List<EnumType> GetDencyptEnum<EnumType>(char Key, string Data)
     {
         if (Data.Equals(""))
+        {
             return new List<EnumType>();
+        }
         //
         List<string> DataString = GetDencyptString(Key, Data);
         //
         List<EnumType> DataEnum = new List<EnumType>();
         //
         for (int i = 0; i < DataString.Count; i++)
+        {
             DataEnum.Add(QEnum.GetChoice<EnumType>(int.Parse(DataString[i])));
+        }
         //
         return DataEnum;
     }
@@ -812,27 +856,27 @@ public class QEncypt256Bit
     {
         //Salt and IV is randomly generated each time, but is preprended to encrypted cipher text
         //so that the same Salt and IV values can be used when decrypting.  
-        var saltStringBytes = SetGenerate256BitsOfRandomEntropy();
-        var ivStringBytes = SetGenerate256BitsOfRandomEntropy();
-        var plainTextBytes = Encoding.UTF8.GetBytes(Data);
-        using (var password = new Rfc2898DeriveBytes(Pass, saltStringBytes, DERIVATION_ITERATIONS))
+        byte[] saltStringBytes = SetGenerate256BitsOfRandomEntropy();
+        byte[] ivStringBytes = SetGenerate256BitsOfRandomEntropy();
+        byte[] plainTextBytes = Encoding.UTF8.GetBytes(Data);
+        using (Rfc2898DeriveBytes password = new Rfc2898DeriveBytes(Pass, saltStringBytes, DERIVATION_ITERATIONS))
         {
-            var keyBytes = password.GetBytes(KEY_SIZE / 8);
-            using (var symmetricKey = new RijndaelManaged())
+            byte[] keyBytes = password.GetBytes(KEY_SIZE / 8);
+            using (RijndaelManaged symmetricKey = new RijndaelManaged())
             {
                 symmetricKey.BlockSize = 256;
                 symmetricKey.Mode = CipherMode.CBC;
                 symmetricKey.Padding = PaddingMode.PKCS7;
-                using (var encryptor = symmetricKey.CreateEncryptor(keyBytes, ivStringBytes))
+                using (ICryptoTransform encryptor = symmetricKey.CreateEncryptor(keyBytes, ivStringBytes))
                 {
-                    using (var memoryStream = new MemoryStream())
+                    using (MemoryStream memoryStream = new MemoryStream())
                     {
-                        using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
+                        using (CryptoStream cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
                         {
                             cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
                             cryptoStream.FlushFinalBlock();
                             //Create the final bytes as a concatenation of the random salt bytes, the random iv bytes and the cipher bytes.
-                            var cipherTextBytes = saltStringBytes;
+                            byte[] cipherTextBytes = saltStringBytes;
                             cipherTextBytes = cipherTextBytes.Concat(ivStringBytes).ToArray();
                             cipherTextBytes = cipherTextBytes.Concat(memoryStream.ToArray()).ToArray();
                             memoryStream.Close();
@@ -849,30 +893,30 @@ public class QEncypt256Bit
     {
         //Get the complete stream of bytes that represent:
         //[32 bytes of Salt] + [32 bytes of IV] + [n bytes of CipherText]
-        var cipherTextBytesWithSaltAndIv = Convert.FromBase64String(Data);
+        byte[] cipherTextBytesWithSaltAndIv = Convert.FromBase64String(Data);
         //Get the saltbytes by extracting the first 32 bytes from the supplied cipherText bytes.
-        var saltStringBytes = cipherTextBytesWithSaltAndIv.Take(KEY_SIZE / 8).ToArray();
+        byte[] saltStringBytes = cipherTextBytesWithSaltAndIv.Take(KEY_SIZE / 8).ToArray();
         //Get the IV bytes by extracting the next 32 bytes from the supplied cipherText bytes.
-        var ivStringBytes = cipherTextBytesWithSaltAndIv.Skip(KEY_SIZE / 8).Take(KEY_SIZE / 8).ToArray();
+        byte[] ivStringBytes = cipherTextBytesWithSaltAndIv.Skip(KEY_SIZE / 8).Take(KEY_SIZE / 8).ToArray();
         //Get the actual cipher text bytes by removing the first 64 bytes from the cipherText string.
-        var cipherTextBytes = cipherTextBytesWithSaltAndIv.Skip((KEY_SIZE / 8) * 2).Take(cipherTextBytesWithSaltAndIv.Length - ((KEY_SIZE / 8) * 2)).ToArray();
+        byte[] cipherTextBytes = cipherTextBytesWithSaltAndIv.Skip((KEY_SIZE / 8) * 2).Take(cipherTextBytesWithSaltAndIv.Length - ((KEY_SIZE / 8) * 2)).ToArray();
 
-        using (var password = new Rfc2898DeriveBytes(Pass, saltStringBytes, DERIVATION_ITERATIONS))
+        using (Rfc2898DeriveBytes password = new Rfc2898DeriveBytes(Pass, saltStringBytes, DERIVATION_ITERATIONS))
         {
-            var keyBytes = password.GetBytes(KEY_SIZE / 8);
-            using (var symmetricKey = new RijndaelManaged())
+            byte[] keyBytes = password.GetBytes(KEY_SIZE / 8);
+            using (RijndaelManaged symmetricKey = new RijndaelManaged())
             {
                 symmetricKey.BlockSize = 256;
                 symmetricKey.Mode = CipherMode.CBC;
                 symmetricKey.Padding = PaddingMode.PKCS7;
-                using (var decryptor = symmetricKey.CreateDecryptor(keyBytes, ivStringBytes))
+                using (ICryptoTransform decryptor = symmetricKey.CreateDecryptor(keyBytes, ivStringBytes))
                 {
-                    using (var memoryStream = new MemoryStream(cipherTextBytes))
+                    using (MemoryStream memoryStream = new MemoryStream(cipherTextBytes))
                     {
-                        using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
+                        using (CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
                         {
-                            var plainTextBytes = new byte[cipherTextBytes.Length];
-                            var decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
+                            byte[] plainTextBytes = new byte[cipherTextBytes.Length];
+                            int decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
                             memoryStream.Close();
                             cryptoStream.Close();
                             return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
@@ -885,8 +929,8 @@ public class QEncypt256Bit
 
     private static byte[] SetGenerate256BitsOfRandomEntropy()
     {
-        var randomBytes = new byte[32]; //32 Bytes will give us 256 bits.
-        using (var rngCsp = new RNGCryptoServiceProvider())
+        byte[] randomBytes = new byte[32]; //32 Bytes will give us 256 bits.
+        using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
         {
             //Fill the array with cryptographically secure random bytes.
             rngCsp.GetBytes(randomBytes);

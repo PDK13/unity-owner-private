@@ -28,7 +28,7 @@ public class SimpleSpeechRecognition : MonoBehaviour
             Debug.LogFormat("{0}: Speech Listener runing: {1}", name, m_Recognizer.IsRunning);
         }
 
-        foreach (var m_Device in Microphone.devices)
+        foreach (string m_Device in Microphone.devices)
         {
             Debug.LogFormat("{0}: Found Device(s) name: {1}", name, m_Device);
         }

@@ -29,7 +29,9 @@ public class UIScrollViewSingle : MonoBehaviour
     private void Awake()
     {
         if (Application.isEditor && !Application.isPlaying)
+        {
             SetInit();
+        }
     }
 
     private void Reset()
@@ -49,30 +51,44 @@ public class UIScrollViewSingle : MonoBehaviour
     private void SetInit()
     {
         if (GetComponent<ScrollRect>() == null)
+        {
             Debug.LogWarningFormat("{0}: Script not attach to Scroll View GameObject?!", name);
+        }
         else
-            m_scrollRect = this.GetComponent<ScrollRect>();
+        {
+            m_scrollRect = GetComponent<ScrollRect>();
+        }
         //
-        if (this.transform.Find("Viewport/Content") == null)
+        if (transform.Find("Viewport/Content") == null)
         {
             Debug.LogWarningFormat("{0}: Something went wrong to get child Viewport/Content of Scroll View!", name);
             return;
         }
         else
         {
-            m_content = this.transform.Find("Viewport/Content").GetComponent<RectTransform>();
+            m_content = transform.Find("Viewport/Content").GetComponent<RectTransform>();
             //
             //Grid Layout Group
             if (m_content.gameObject.GetComponent<ContentSizeFitter>() == null)
+            {
                 m_contentSizeFitter = m_content.gameObject.AddComponent<ContentSizeFitter>();
+            }
+
             if (m_contentSizeFitter == null)
+            {
                 m_contentSizeFitter = m_content.gameObject.GetComponent<ContentSizeFitter>();
+            }
             //
             //Content Size Fitter
             if (m_content.gameObject.GetComponent<GridLayoutGroup>() == null)
+            {
                 m_gridLayoutGroup = m_content.gameObject.AddComponent<GridLayoutGroup>();
+            }
+
             if (m_gridLayoutGroup == null)
+            {
                 m_gridLayoutGroup = m_content.gameObject.GetComponent<GridLayoutGroup>();
+            }
         }
         //
         SetScrollViewFixed();

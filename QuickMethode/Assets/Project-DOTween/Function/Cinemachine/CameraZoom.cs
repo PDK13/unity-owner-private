@@ -12,7 +12,9 @@ public class CameraZoom : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!m_tag.Contains(collision.tag))
+        {
             return;
+        }
         //
         CameraController.SetScale(m_scale, m_duration);
     }
@@ -20,7 +22,9 @@ public class CameraZoom : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (!m_tag.Contains(collision.tag))
+        {
             return;
+        }
         //
         CameraController.SetScale(1f, m_duration);
     }

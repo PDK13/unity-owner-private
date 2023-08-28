@@ -90,9 +90,13 @@ public class QTransform
     public static void SetRotate2D(Transform From, float Deg, bool World = true)
     {
         if (World)
+        {
             From.eulerAngles = new Vector3(0, 0, Deg);
+        }
         else
+        {
             From.localEulerAngles = new Vector3(0, 0, Deg);
+        }
     }
 
     //3D
@@ -115,9 +119,13 @@ public class QTransform
     public static void SetRotate3DXZ(Transform From, float Deg, bool World = true)
     {
         if (World)
+        {
             From.eulerAngles = new Vector3(0, Deg, 0);
+        }
         else
+        {
             From.localEulerAngles = new Vector3(0, Deg, 0);
+        }
     }
 
     #endregion

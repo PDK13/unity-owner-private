@@ -21,7 +21,7 @@ namespace UnityEngine.UI.Extensions
         private Transform _transform;
         private ParticleSystem pSystem;
         private ParticleSystem.Particle[] particles;
-        private UIVertex[] _quad = new UIVertex[4];
+        private readonly UIVertex[] _quad = new UIVertex[4];
         private Vector4 imageUV = Vector4.zero;
         private ParticleSystem.TextureSheetAnimationModule textureSheetAnimation;
         private int textureSheetAnimationFrames;
@@ -37,13 +37,7 @@ namespace UnityEngine.UI.Extensions
         private ParticleSystem.MainModule mainModule;
 #endif
 
-        public override Texture mainTexture
-        {
-            get
-            {
-                return currentTexture;
-            }
-        }
+        public override Texture mainTexture => currentTexture;
 
         public ParticleSystem.Particle[] Particles
         {
@@ -92,11 +86,13 @@ namespace UnityEngine.UI.Extensions
 
                 pRenderer = pSystem.GetComponent<ParticleSystemRenderer>();
                 if (pRenderer != null)
+                {
                     pRenderer.enabled = false;
+                }
 
                 if (material == null)
                 {
-                    var foundShader = ShaderLibrary.GetShaderInstance("UI Extensions/Particles/Additive");
+                    Shader foundShader = ShaderLibrary.GetShaderInstance("UI Extensions/Particles/Additive");
                     if (foundShader)
                     {
                         material = new Material(foundShader);
@@ -108,7 +104,9 @@ namespace UnityEngine.UI.Extensions
                 {
                     currentTexture = currentMaterial.mainTexture;
                     if (currentTexture == null)
+                    {
                         currentTexture = Texture2D.whiteTexture;
+                    }
                 }
                 material = currentMaterial;
                 // automatically set scaling
@@ -193,7 +191,9 @@ namespace UnityEngine.UI.Extensions
                 // apply scale
 #if UNITY_5_5_OR_NEWER
                 if (mainModule.scalingMode == ParticleSystemScalingMode.Shape)
+                {
                     position /= canvas.scaleFactor;
+                }
 #else
                 if (pSystem.scalingMode == ParticleSystemScalingMode.Shape)
                     position /= canvas.scaleFactor;
@@ -317,7 +317,9 @@ namespace UnityEngine.UI.Extensions
                         // apply scale
 #if UNITY_5_5_OR_NEWER
                         if (mainModule.scalingMode == ParticleSystemScalingMode.Shape)
+                        {
                             position /= canvas.scaleFactor;
+                        }
 #else
                         if (pSystem.scalingMode == ParticleSystemScalingMode.Shape)
                             position /= canvas.scaleFactor;

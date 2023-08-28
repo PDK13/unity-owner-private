@@ -22,17 +22,25 @@ public class QDateTime
     public static string GetFormat(DateTime Time, string FormatTime, string Special = "en-US")
     {
         if (Special != "")
+        {
             return Time.ToString(FormatTime, CultureInfo.CreateSpecificCulture(Special));
+        }
         else
+        {
             return Time.ToString(FormatTime, DateTimeFormatInfo.InvariantInfo);
+        }
     }
 
     public static DateTime GetConvert(string Time, string FormatTime, string Special = "en-US")
     {
         if (Special != "")
+        {
             return DateTime.ParseExact(Time, FormatTime, CultureInfo.CreateSpecificCulture(Special));
+        }
         else
+        {
             return DateTime.ParseExact(Time, FormatTime, CultureInfo.InvariantCulture);
+        }
     }
 
     #endregion
@@ -42,10 +50,14 @@ public class QDateTime
     public static (bool Prev, bool Equa, bool Next) GetCompare(DateTime TimeFrom, DateTime TimeTo)
     {
         if (TimeFrom < TimeTo)
+        {
             return (true, false, false); //Past Time!!
+        }
 
         if (TimeFrom > TimeTo)
+        {
             return (false, false, true); //Future Time!!
+        }
 
         return (false, true, false); //Now Time (Maybe not)!!
     }
@@ -53,19 +65,34 @@ public class QDateTime
     public static (bool Prev, bool Equa, bool Next) GetCompareDay(DateTime TimeFrom, DateTime TimeTo)
     {
         if (TimeFrom.Year > TimeTo.Year)
+        {
             return (false, false, true); //Future Time!!
+        }
+
         if (TimeFrom.Year < TimeTo.Year)
+        {
             return (true, false, false); //Past Time!!
+        }
 
         if (TimeFrom.Month > TimeTo.Month)
+        {
             return (false, false, true); //Future Time!!
+        }
+
         if (TimeFrom.Month < TimeTo.Month)
+        {
             return (true, false, false); //Past Time!!
+        }
 
         if (TimeFrom.Day > TimeTo.Day)
+        {
             return (false, false, true); //Future Time!!
+        }
+
         if (TimeFrom.Day < TimeTo.Day)
+        {
             return (true, false, false); //Past Time!!
+        }
 
         return (false, true, false); //Now Time (Maybe not)!!
     }

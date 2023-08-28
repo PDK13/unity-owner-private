@@ -19,13 +19,17 @@ public class ObjPlatformRotate : MonoBehaviour
         set
         {
             if (m_circleCollider != null)
+            {
                 m_circleCollider.radius = value;
+            }
             else
+            {
                 m_radius = value;
+            }
         }
     }
     public bool CircleCollider => m_circleCollider != null;
-    public Vector2 Centre => m_circleCollider != null ? m_circleCollider.bounds.center : this.transform.position;
+    public Vector2 Centre => m_circleCollider != null ? m_circleCollider.bounds.center : transform.position;
     public float SurfaceForce => m_speed * m_radius * (int)m_dir * Time.fixedDeltaTime;
 
     [HideInInspector] private Rigidbody2D m_rigidbody;
@@ -40,12 +44,14 @@ public class ObjPlatformRotate : MonoBehaviour
     {
         m_rigidbody.angularVelocity = m_speed * (int)m_dir * -1;
         if (m_rigidbody.rotation >= 360f || m_rigidbody.rotation <= -360f)
+        {
             m_rigidbody.rotation = 0;
+        }
     }
 
     private void OnDrawGizmos()
     {
-        QGizmos.SetLine(this.transform.position, this.transform.position + QCircle.GetPosXY(transform.eulerAngles.z, Radius), Color.red);
+        QGizmos.SetLine(transform.position, transform.position + QCircle.GetPosXY(transform.eulerAngles.z, Radius), Color.red);
     }
 }
 
@@ -54,7 +60,7 @@ public class ObjPlatformRotate : MonoBehaviour
 [CustomEditor(typeof(ObjPlatformRotate))]
 public class ObjPlatformRotateEditor : Editor
 {
-    ObjPlatformRotate m_target;
+    private ObjPlatformRotate m_target;
 
     private SerializedProperty m_dir;
     private SerializedProperty m_speed;
@@ -79,8 +85,13 @@ public class ObjPlatformRotateEditor : Editor
         QEditor.SetChanceCheckBegin();
         EditorGUILayout.PropertyField(m_circleCollider);
         if (QEditor.SetChanceCheckEnd())
+        {
             if (!m_target.CircleCollider)
+            {
                 EditorGUILayout.PropertyField(m_radius);
+            }
+        }
+
         serializedObject.ApplyModifiedProperties();
     }
 }

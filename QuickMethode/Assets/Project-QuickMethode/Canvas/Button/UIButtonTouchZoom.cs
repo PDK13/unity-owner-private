@@ -20,7 +20,7 @@ public class UIButtonTouchZoom : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     private void Start()
     {
-        m_Scale_Primary = this.transform.localScale;
+        m_Scale_Primary = transform.localScale;
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -55,7 +55,7 @@ public class UIButtonTouchZoom : MonoBehaviour, IPointerEnterHandler, IPointerEx
         }
 
         transform.localScale = new Vector3(m_Scale_Hold.x * m_Scale_Primary.x, m_Scale_Hold.y * m_Scale_Primary.y, m_Scale_Hold.z * m_Scale_Primary.z);
-        
+
         m_EventPointerDown?.Invoke();
     }
 

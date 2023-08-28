@@ -62,7 +62,9 @@ public class QCast : QLayer
         Physics.Linecast(PosStart, PosEnd, out RaycastHit);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -75,7 +77,9 @@ public class QCast : QLayer
         Physics.Raycast(PosStart, Dir, out RaycastHit, Distance);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -86,7 +90,9 @@ public class QCast : QLayer
         Physics.Raycast(PosStart, Dir.normalized, out RaycastHit, Distance);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -100,7 +106,9 @@ public class QCast : QLayer
         Physics.BoxCast(PosStart, Size, Dir, out RaycastHit, Quaternion, Distance);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -113,7 +121,9 @@ public class QCast : QLayer
         Physics.BoxCast(PosStart, Size, Dir.normalized, out RaycastHit, Quaternion, Distance);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -126,7 +136,9 @@ public class QCast : QLayer
         Physics.SphereCast(PosStart, Radius / 2, Dir, out RaycastHit, Distance);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -137,7 +149,9 @@ public class QCast : QLayer
         Physics.SphereCast(PosStart, Radius / 2, Dir.normalized, out RaycastHit, Distance);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -148,7 +162,10 @@ public class QCast : QLayer
         Collider[] ObjectsHit = Physics.OverlapBox(PosStart, Size, Quaternion);
 
         List<GameObject> ObjectsHitList = new List<GameObject>();
-        foreach (Collider ObjectHit in ObjectsHit) ObjectsHitList.Add(ObjectHit.gameObject);
+        foreach (Collider ObjectHit in ObjectsHit)
+        {
+            ObjectsHitList.Add(ObjectHit.gameObject);
+        }
 
         return ObjectsHitList;
     }
@@ -158,7 +175,10 @@ public class QCast : QLayer
         Collider[] ObjectsHit = Physics.OverlapSphere(PosStart, Size);
 
         List<GameObject> ObjectsHitList = new List<GameObject>();
-        foreach (Collider ObjectHit in ObjectsHit) ObjectsHitList.Add(ObjectHit.gameObject);
+        foreach (Collider ObjectHit in ObjectsHit)
+        {
+            ObjectsHitList.Add(ObjectHit.gameObject);
+        }
 
         return ObjectsHitList;
     }
@@ -174,7 +194,9 @@ public class QCast : QLayer
         Physics.Linecast(PosStart, PosEnd, out RaycastHit, Tarket);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -187,7 +209,9 @@ public class QCast : QLayer
         Physics.Raycast(PosStart, Dir, out RaycastHit, Distance, Tarket);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -198,7 +222,9 @@ public class QCast : QLayer
         Physics.Raycast(PosStart, Dir.normalized, out RaycastHit, Distance, Tarket);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -212,7 +238,9 @@ public class QCast : QLayer
         Physics.BoxCast(PosStart, Size, Dir, out RaycastHit, Quaternion, Distance, Tarket);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -225,7 +253,9 @@ public class QCast : QLayer
         Physics.BoxCast(PosStart, Size, Dir.normalized, out RaycastHit, Quaternion, Distance, Tarket);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -238,7 +268,9 @@ public class QCast : QLayer
         Physics.SphereCast(PosStart, Radius / 2, Dir, out RaycastHit, Distance, Tarket);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -249,7 +281,9 @@ public class QCast : QLayer
         Physics.SphereCast(PosStart, Radius / 2, Dir.normalized, out RaycastHit, Distance, Tarket);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -261,7 +295,10 @@ public class QCast : QLayer
         Collider[] ObjectsHit = Physics.OverlapBox(PosStart, Size, Quaternion, Tarket);
 
         List<GameObject> ObjectsHitList = new List<GameObject>();
-        foreach (Collider ObjectHit in ObjectsHit) ObjectsHitList.Add(ObjectHit.gameObject);
+        foreach (Collider ObjectHit in ObjectsHit)
+        {
+            ObjectsHitList.Add(ObjectHit.gameObject);
+        }
 
         return ObjectsHitList;
     }
@@ -271,7 +308,10 @@ public class QCast : QLayer
         Collider[] ObjectsHit = Physics.OverlapSphere(PosStart, Size, Tarket);
 
         List<GameObject> ObjectsHitList = new List<GameObject>();
-        foreach (Collider ObjectHit in ObjectsHit) ObjectsHitList.Add(ObjectHit.gameObject);
+        foreach (Collider ObjectHit in ObjectsHit)
+        {
+            ObjectsHitList.Add(ObjectHit.gameObject);
+        }
 
         return ObjectsHitList;
     }
@@ -289,7 +329,9 @@ public class QCast : QLayer
         RaycastHit2D RaycastHit = Physics2D.Linecast(PosStart, PosEnd);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -299,12 +341,16 @@ public class QCast : QLayer
         Vector2 Dir = (PosEnd - PosStart).normalized;
 
         if (Dir == Vector2.zero)
+        {
             return (null, PosStart);
+        }
 
         RaycastHit2D RaycastHit = Physics2D.Raycast(PosStart, Dir, Distance);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -312,12 +358,16 @@ public class QCast : QLayer
     public static (GameObject Target, Vector2 Point)? GetRaycast2DDir(Vector2 PosStart, Vector2 Dir, float Distance)
     {
         if (Dir == Vector2.zero)
+        {
             return (null, PosStart);
+        }
 
         RaycastHit2D RaycastHit = Physics2D.Raycast(PosStart, Dir.normalized, Distance);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -327,12 +377,16 @@ public class QCast : QLayer
         Vector2 Dir = (PosEnd - PosStart).normalized;
 
         if (Dir == Vector2.zero)
+        {
             return (null, PosStart);
+        }
 
         RaycastHit2D RaycastHit = Physics2D.BoxCast(PosStart, Size, Rotation, Dir, Distance);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -340,12 +394,16 @@ public class QCast : QLayer
     public static (GameObject Target, Vector2 Point)? GetBoxCast2DDir(Vector2 PosStart, Vector2 Dir, Vector2 Size, float Rotation, float Distance)
     {
         if (Dir == Vector2.zero)
+        {
             return (null, PosStart);
+        }
 
         RaycastHit2D RaycastHit = Physics2D.BoxCast(PosStart, Size, Rotation, Dir.normalized, Distance);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -355,12 +413,16 @@ public class QCast : QLayer
         Vector2 Dir = (PosEnd - PosStart).normalized;
 
         if (Dir == Vector2.zero)
+        {
             return (null, PosStart);
+        }
 
         RaycastHit2D RaycastHit = Physics2D.CircleCast(PosStart, Radius / 2, Dir, Distance);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -368,12 +430,16 @@ public class QCast : QLayer
     public static (GameObject Target, Vector2 Point)? GetCircleCast2DDir(Vector2 PosStart, Vector2 Dir, float Radius, float Distance)
     {
         if (Dir == Vector2.zero)
+        {
             return (null, PosStart);
+        }
 
         RaycastHit2D RaycastHit = Physics2D.CircleCast(PosStart, Radius / 2, Dir.normalized, Distance);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -382,7 +448,10 @@ public class QCast : QLayer
     {
         Collider2D ColliderHit = Physics2D.OverlapCircle(PosStart, Radius);
 
-        if (ColliderHit == null) return null;
+        if (ColliderHit == null)
+        {
+            return null;
+        }
 
         return ColliderHit.gameObject;
     }
@@ -392,7 +461,13 @@ public class QCast : QLayer
         Collider2D[] ColliderHit = Physics2D.OverlapCircleAll(PosStart, Radius);
 
         List<GameObject> ColliderHitList = new List<GameObject>();
-        for (int i = 0; i < ColliderHit.Length; i++) if (ColliderHit[i] != null) ColliderHitList.Add(ColliderHit[i].gameObject);
+        for (int i = 0; i < ColliderHit.Length; i++)
+        {
+            if (ColliderHit[i] != null)
+            {
+                ColliderHitList.Add(ColliderHit[i].gameObject);
+            }
+        }
 
         return ColliderHitList;
     }
@@ -401,7 +476,10 @@ public class QCast : QLayer
     {
         Collider2D ColliderHit = Physics2D.OverlapBox(PosStart, Size, Rotation);
 
-        if (ColliderHit == null) return null;
+        if (ColliderHit == null)
+        {
+            return null;
+        }
 
         return ColliderHit.gameObject;
     }
@@ -411,7 +489,13 @@ public class QCast : QLayer
         Collider2D[] ColliderHit = Physics2D.OverlapBoxAll(PosStart, Size, Rotation);
 
         List<GameObject> ColliderHitList = new List<GameObject>();
-        for (int i = 0; i < ColliderHit.Length; i++) if (ColliderHit[i] != null) ColliderHitList.Add(ColliderHit[i].gameObject);
+        for (int i = 0; i < ColliderHit.Length; i++)
+        {
+            if (ColliderHit[i] != null)
+            {
+                ColliderHitList.Add(ColliderHit[i].gameObject);
+            }
+        }
 
         return ColliderHitList;
     }
@@ -425,7 +509,9 @@ public class QCast : QLayer
         RaycastHit2D RaycastHit = Physics2D.Linecast(PosStart, PosEnd, Tarket);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -435,12 +521,16 @@ public class QCast : QLayer
         Vector2 Dir = (PosEnd - PosStart).normalized;
 
         if (Dir == Vector2.zero)
+        {
             return (null, PosStart);
+        }
 
         RaycastHit2D RaycastHit = Physics2D.Raycast(PosStart, Dir, Distance, Tarket);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -448,12 +538,16 @@ public class QCast : QLayer
     public static (GameObject Target, Vector2 Point)? GetRaycast2DDir(Vector2 PosStart, Vector2 Dir, float Distance, LayerMask Tarket)
     {
         if (Dir == Vector2.zero)
+        {
             return (null, PosStart);
+        }
 
         RaycastHit2D RaycastHit = Physics2D.Raycast(PosStart, Dir.normalized, Distance, Tarket);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -463,12 +557,16 @@ public class QCast : QLayer
         Vector2 Dir = (PosEnd - PosStart).normalized;
 
         if (Dir == Vector2.zero)
+        {
             return (null, PosStart);
+        }
 
         RaycastHit2D RaycastHit = Physics2D.BoxCast(PosStart, Size, Rotation, Dir, Distance, Tarket);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -476,12 +574,16 @@ public class QCast : QLayer
     public static (GameObject Target, Vector2 Point)? GetBoxCast2DDir(Vector2 PosStart, Vector2 Dir, Vector2 Size, float Rotation, float Distance, LayerMask Tarket)
     {
         if (Dir == Vector2.zero)
+        {
             return (null, PosStart);
+        }
 
         RaycastHit2D RaycastHit = Physics2D.BoxCast(PosStart, Size, Rotation, Dir.normalized, Distance, Tarket);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -491,12 +593,16 @@ public class QCast : QLayer
         Vector2 Dir = (PosEnd - PosStart).normalized;
 
         if (Dir == Vector2.zero)
+        {
             return (null, PosStart);
+        }
 
         RaycastHit2D RaycastHit = Physics2D.CircleCast(PosStart, Radius / 2, Dir, Distance, Tarket);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -504,12 +610,16 @@ public class QCast : QLayer
     public static (GameObject Target, Vector2 Point)? GetCircleCast2DDir(Vector2 PosStart, Vector2 Dir, float Radius, float Distance, LayerMask Tarket)
     {
         if (Dir == Vector2.zero)
+        {
             return (null, PosStart);
+        }
 
         RaycastHit2D RaycastHit = Physics2D.CircleCast(PosStart, Radius / 2, Dir.normalized, Distance, Tarket);
 
         if (RaycastHit.collider == null)
+        {
             return null;
+        }
 
         return (RaycastHit.collider.gameObject, RaycastHit.point);
     }
@@ -518,7 +628,10 @@ public class QCast : QLayer
     {
         Collider2D ColliderHit = Physics2D.OverlapCircle(PosStart, Radius, Tarket);
 
-        if (ColliderHit == null) return null;
+        if (ColliderHit == null)
+        {
+            return null;
+        }
 
         return ColliderHit.gameObject;
     }
@@ -528,7 +641,13 @@ public class QCast : QLayer
         Collider2D[] ColliderHit = Physics2D.OverlapCircleAll(PosStart, Radius, Tarket);
 
         List<GameObject> ColliderHitList = new List<GameObject>();
-        for (int i = 0; i < ColliderHit.Length; i++) if (ColliderHit[i] != null) ColliderHitList.Add(ColliderHit[i].gameObject);
+        for (int i = 0; i < ColliderHit.Length; i++)
+        {
+            if (ColliderHit[i] != null)
+            {
+                ColliderHitList.Add(ColliderHit[i].gameObject);
+            }
+        }
 
         return ColliderHitList;
     }
@@ -537,7 +656,10 @@ public class QCast : QLayer
     {
         Collider2D ColliderHit = Physics2D.OverlapBox(PosStart, Size, Rotation, Tarket);
 
-        if (ColliderHit == null) return null;
+        if (ColliderHit == null)
+        {
+            return null;
+        }
 
         return ColliderHit.gameObject;
     }
@@ -547,7 +669,13 @@ public class QCast : QLayer
         Collider2D[] ColliderHit = Physics2D.OverlapBoxAll(PosStart, Size, Rotation, Tarket);
 
         List<GameObject> ColliderHitList = new List<GameObject>();
-        for (int i = 0; i < ColliderHit.Length; i++) if (ColliderHit[i] != null) ColliderHitList.Add(ColliderHit[i].gameObject);
+        for (int i = 0; i < ColliderHit.Length; i++)
+        {
+            if (ColliderHit[i] != null)
+            {
+                ColliderHitList.Add(ColliderHit[i].gameObject);
+            }
+        }
 
         return ColliderHitList;
     }
@@ -578,7 +706,9 @@ public class QCollider2D
             {
                 SpriteRenderer Sprite = From.GetComponent<SpriteRenderer>();
                 if (Sprite != null)
+                {
                     Size = Sprite.bounds.size;
+                }
             }
         }
 
@@ -621,7 +751,9 @@ public class QCollider2D
             {
                 SpriteRenderer Sprite = From.GetComponent<SpriteRenderer>();
                 if (Sprite != null)
+                {
                     Size = Sprite.bounds.size;
+                }
             }
         }
 
@@ -658,7 +790,9 @@ public class QCollider2D
             {
                 SpriteRenderer Sprite = From.GetComponent<SpriteRenderer>();
                 if (Sprite != null)
+                {
                     Size = Sprite.bounds.size;
+                }
             }
         }
 
@@ -742,7 +876,10 @@ public class QCollider2D
                 {
                     Vector2Int Pos = new Vector2Int(Mathf.RoundToInt(Points[Index].x), Mathf.RoundToInt(Points[Index].y));
                     if (Points.Contains(Pos))
+                    {
                         continue;
+                    }
+
                     PointsBorder[Group].Add(TileCenter + Pos);
                 }
                 else
@@ -777,7 +914,10 @@ public class QCollider2D
             for (int Index = 0; Index < Points[Group].Count; Index++)
             {
                 if (Points[Group][Index].y <= HighStart)
+                {
                     continue;
+                }
+
                 IndexStart = Index;
                 HighStart = Points[Group][Index].y;
             }
@@ -791,17 +931,30 @@ public class QCollider2D
                 IndexNext++;
                 IndexPrev++;
                 if (IndexNext >= Points[Group].Count)
+                {
                     IndexNext = 0;
+                }
+
                 if (IndexPrev >= Points[Group].Count)
+                {
                     IndexPrev = 0;
+                }
                 //Check Start - End Index?!
                 if (IndexNext == IndexStart)
+                {
                     break;
+                }
                 //Check at Index!!
                 if (Points[Group][IndexPrev].y != Points[Group][IndexNext].y)
+                {
                     continue;
+                }
+
                 if (Points[Group][IndexPrev].x <= Points[Group][IndexNext].x)
+                {
                     continue;
+                }
+
                 Vector2 PointA = Points[Group][IndexPrev];
                 Vector2 PointB = Points[Group][IndexNext];
                 Vector2 Center = QVector.GetMiddlePoint(PointA, PointB);

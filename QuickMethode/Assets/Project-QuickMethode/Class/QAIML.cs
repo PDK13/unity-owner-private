@@ -163,18 +163,18 @@ public class QAIML
     public void SetNeuralNetworkCreate(bool RandomNumber = false)
     {
         //LayerCount
-        this.m_LayerCount = QPlayerPrefs.GetValueInt("LC");
+        m_LayerCount = QPlayerPrefs.GetValueInt("LC");
 
         //NeuralCount
         m_NeuralCount = new List<int>();
-        for (int lay = 0; lay < this.m_LayerCount; lay++)
+        for (int lay = 0; lay < m_LayerCount; lay++)
         {
             m_NeuralCount.Add(QPlayerPrefs.GetValueInt("NC_" + lay.ToString()));
         }
 
         //Activation
         m_Activation = new List<List<float>>();
-        for (int lay = 0; lay < this.m_LayerCount; lay++)
+        for (int lay = 0; lay < m_LayerCount; lay++)
         {
             m_Activation.Add(new List<float> { });
             for (int neu = 0; neu < m_NeuralCount[lay]; neu++)
@@ -185,7 +185,7 @@ public class QAIML
 
         //Weight
         m_Weight = new List<List<List<float>>>();
-        for (int lay = 0; lay < this.m_LayerCount - 1; lay++)
+        for (int lay = 0; lay < m_LayerCount - 1; lay++)
         {
             m_Weight.Add(new List<List<float>> { });
             for (int neuY = 0; neuY < m_NeuralCount[lay + 1]; neuY++)
@@ -196,7 +196,7 @@ public class QAIML
                     if (RandomNumber)
                     {
                         System.Random Rand = new System.Random();
-                        float Value = (float)((this.m_LayerCount * Rand.Next(1, 500) + m_NeuralCount[lay] * Rand.Next(500, 1000) + neuX * Rand.Next(100, 200) + neuY * Rand.Next(200, 300) + lay * Rand.Next(300, 400)) * Rand.Next(1, 50) / 100000.0) / 100.0f;
+                        float Value = (float)((m_LayerCount * Rand.Next(1, 500) + m_NeuralCount[lay] * Rand.Next(500, 1000) + neuX * Rand.Next(100, 200) + neuY * Rand.Next(200, 300) + lay * Rand.Next(300, 400)) * Rand.Next(1, 50) / 100000.0) / 100.0f;
                         m_Weight[lay][neuY].Add(Value);
                     }
                     else
@@ -210,7 +210,7 @@ public class QAIML
 
         //Bias
         m_Bias = new List<float>();
-        for (int lay = 0; lay < this.m_LayerCount - 1; lay++)
+        for (int lay = 0; lay < m_LayerCount - 1; lay++)
         {
             if (RandomNumber)
             {
@@ -226,7 +226,7 @@ public class QAIML
 
         //Sum
         m_Sum = new List<List<float>>();
-        for (int lay = 1; lay < this.m_LayerCount; lay++)
+        for (int lay = 1; lay < m_LayerCount; lay++)
         {
             m_Sum.Add(new List<float> { });
             for (int neu = 0; neu < m_NeuralCount[lay]; neu++)
@@ -237,7 +237,7 @@ public class QAIML
 
         //Error
         m_Error = new List<List<float>>();
-        for (int lay = 0; lay < this.m_LayerCount - 1; lay++)
+        for (int lay = 0; lay < m_LayerCount - 1; lay++)
         {
             m_Error.Add(new List<float> { });
             for (int neu = 0; neu < m_NeuralCount[lay + 1]; neu++)
@@ -248,7 +248,7 @@ public class QAIML
 
         //Desired
         m_Desired = new List<float>();
-        for (int neu = 0; neu < m_NeuralCount[this.m_LayerCount - 1]; neu++)
+        for (int neu = 0; neu < m_NeuralCount[m_LayerCount - 1]; neu++)
         {
             m_Desired.Add(0.0f);
         }
@@ -345,7 +345,7 @@ public class QAIML
     {
         if (Layer < m_LayerCount && Layer >= 0)
         {
-            this.m_Bias[Layer] = Bias;
+            m_Bias[Layer] = Bias;
         }
     }
 
@@ -360,7 +360,7 @@ public class QAIML
     {
         if (Layer < m_LayerCount - 1 && Layer >= 0)
         {
-            this.m_Weight[Layer][NeuralY][NeuralX] = Weight;
+            m_Weight[Layer][NeuralY][NeuralX] = Weight;
         }
     }
 

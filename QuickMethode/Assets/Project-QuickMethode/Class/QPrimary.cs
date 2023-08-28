@@ -104,28 +104,44 @@ public class QCircle
     public static float GetDegOppositeUD(float Deg360)
     {
         if (0f == Deg360 || Deg360 == 360f)
+        {
             return 180f;
+        }
 
         if (0f < Deg360 && Deg360 < 90f)
+        {
             return 90f + (90f - Deg360);
+        }
 
         if (Deg360 == 90f)
+        {
             return 90f;
+        }
 
         if (90f < Deg360 && Deg360 < 180f)
+        {
             return 90f - (Deg360 - 90f);
+        }
 
         if (Deg360 == 180f)
+        {
             return 0f;
+        }
 
         if (180f < Deg360 && Deg360 < 270f)
+        {
             return 270f + (270f - Deg360);
+        }
 
         if (Deg360 == 270f)
+        {
             return 270f;
+        }
 
         if (270f < Deg360 && Deg360 < 360f)
+        {
             return 270f - (Deg360 - 270f);
+        }
 
         Debug.LogError("Sonething wrong here!");
         return 90f;
@@ -134,28 +150,44 @@ public class QCircle
     public static float GetDegOppositeLR(float Deg360)
     {
         if (0f == Deg360 || Deg360 == 360f)
+        {
             return 0f;
+        }
 
         if (0f < Deg360 && Deg360 < 90f)
+        {
             return 360f - (0f + Deg360);
+        }
 
         if (Deg360 == 90f)
+        {
             return 270f;
+        }
 
         if (90f < Deg360 && Deg360 < 180f)
+        {
             return 180f + (180f - Deg360);
+        }
 
         if (Deg360 == 180f)
+        {
             return 180f;
+        }
 
         if (180f < Deg360 && Deg360 < 270f)
+        {
             return 180f + (Deg360 - 180f);
+        }
 
         if (Deg360 == 270f)
+        {
             return 90f;
+        }
 
         if (270f < Deg360 && Deg360 < 360f)
+        {
             return 0f - (360f - Deg360);
+        }
 
         Debug.LogError("Sonething wrong here!");
         return 0f;
@@ -182,8 +214,10 @@ public class QGeometry
     public static List<Vector2> GetGeometry(int Point, float Radius, float Deg)
     {
         if (Point < 3)
+        {
             //One shape must have 3 points at least!!
             return null;
+        }
 
         List<Vector2> Points = new List<Vector2>();
 
@@ -252,7 +286,9 @@ public class QColor
     public static void SetMaterial(MeshRenderer MessRenderer, float Alpha)
     {
         if (!MessRenderer.sharedMaterial.HasProperty("_Color"))
+        {
             return;
+        }
 
         Color Color = MessRenderer.material.color;
         SetColor(ref Color, Alpha);
@@ -262,7 +298,9 @@ public class QColor
     public static void SetMaterial(MeshRenderer MessRenderer, Color Color, float Alpha)
     {
         if (!MessRenderer.sharedMaterial.HasProperty("_Color"))
+        {
             return;
+        }
 
         SetColor(ref Color, Alpha);
         MessRenderer.material.color = Color;

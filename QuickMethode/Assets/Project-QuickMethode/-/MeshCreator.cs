@@ -20,9 +20,11 @@ public class MeshCreator : MonoBehaviour
         }
 
         // Create the mesh
-        Mesh msh = new Mesh();
-        msh.vertices = vertices;
-        msh.triangles = indices;
+        Mesh msh = new Mesh
+        {
+            vertices = vertices,
+            triangles = indices
+        };
         msh.RecalculateNormals();
         msh.RecalculateBounds();
 

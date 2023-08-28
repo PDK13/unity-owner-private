@@ -15,7 +15,7 @@ public class UIButtonHoldClick : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     [SerializeField]
     private Color m_ColorReady = Color.gray;
-    
+
     [SerializeField]
     private Color m_ColorHold = Color.yellow;
 

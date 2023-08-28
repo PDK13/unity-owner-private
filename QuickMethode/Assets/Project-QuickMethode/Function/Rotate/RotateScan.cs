@@ -24,14 +24,14 @@ public class RotateScan : MonoBehaviour
     public float DegSpeed { get => m_degSpeed; set => m_degSpeed = value; }
 
     public float CheckLength
-    { 
-        get => m_checkLength != 0 ? m_checkLength : Mathf.Infinity; 
-        set => m_checkLength = value != 0 ? value : Mathf.Infinity; 
+    {
+        get => m_checkLength != 0 ? m_checkLength : Mathf.Infinity;
+        set => m_checkLength = value != 0 ? value : Mathf.Infinity;
     }
     public float CheckRadius
-    { 
-        get => m_checkRadius; 
-        set => m_checkRadius = value; 
+    {
+        get => m_checkRadius;
+        set => m_checkRadius = value;
     }
     public LayerMask CheckMask { get => m_checkMask; set => m_checkMask = value; }
 
@@ -52,17 +52,23 @@ public class RotateScan : MonoBehaviour
 
     public bool TargetCheck { get => m_targetCheck; set => m_targetCheck = value; }
     public GameObject TargetLock { get => m_targetLock; set => m_targetLock = value; }
-    public float TargetDistance => m_targetLock != null ? Vector2.Distance(m_targetLock.transform.position, this.transform.position) : 0f;
+    public float TargetDistance => m_targetLock != null ? Vector2.Distance(m_targetLock.transform.position, transform.position) : 0f;
 
     private void FixedUpdate()
     {
         if (m_rotateLimit == null)
+        {
             return;
+        }
 
         if (m_targetLock == null)
+        {
             SetScan();
+        }
         else
+        {
             SetFollow();
+        }
     }
 
     private void SetScan()
@@ -72,15 +78,19 @@ public class RotateScan : MonoBehaviour
         SetCast();
 
         if (m_rotateLimit.DegLimitReach)
+        {
             m_degDir *= -1;
+        }
     }
 
     private void SetCast()
     {
         if (!m_targetCheck)
+        {
             return;
+        }
 
-        var Cast = QCast.GetCircleCast2DDir(transform.position, DirCurrent, m_checkRadius, m_checkLength, m_checkMask);
+        (GameObject Target, Vector2 Point)? Cast = QCast.GetCircleCast2DDir(transform.position, DirCurrent, m_checkRadius, m_checkLength, m_checkMask);
         if (Cast.HasValue)
         {
             m_targetLock = Cast.Value.Target;
@@ -96,13 +106,19 @@ public class RotateScan : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         if (m_rotateLimit == null)
+        {
             return;
+        }
 
         m_rotateLimit.SetGizmos(CheckLength, m_targetLock != null ? Color.red : Color.gray);
 
         if (Application.isPlaying)
+        {
             QGizmos.SetSpherecastDir(transform.position, DirCurrent, m_checkRadius, m_checkLength, m_targetLock != null ? Color.red : Color.gray);
+        }
         else
+        {
             QGizmos.SetSpherecastDir(transform.position, DirForward, m_checkRadius, m_checkLength, Color.white);
+        }
     }
 }

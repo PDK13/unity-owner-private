@@ -78,20 +78,26 @@ public class ControlJumpY2D : MonoBehaviour //From: Trịnh Văn Khoa (Searcher)
         }
 
         if (!m_jumpUp)
+        {
             //Jump Up continue!!
             return;
+        }
 
         if (m_rigidbody.velocity.y < 0)
+        {
             //Jump Up end!!
             m_jumpUp = false;
+        }
 
         #endregion
 
         #region -------------------------------- Jump Hold
 
         if (!m_jumpHold)
+        {
             //Jump Hold optional!!
             return;
+        }
 
         if (m_rigidbody.velocity.y > 0 && !m_jumpKeep)
         {
@@ -115,7 +121,10 @@ public class ControlJumpY2D : MonoBehaviour //From: Trịnh Văn Khoa (Searcher)
         m_jumpUp = true;
 
         if (m_iSetJumpContinue != null)
+        {
             StopCoroutine(m_iSetJumpContinue);
+        }
+
         m_iSetJumpContinue = StartCoroutine(ISetJumpContinue());
     } //Event Update!!
 
@@ -124,7 +133,9 @@ public class ControlJumpY2D : MonoBehaviour //From: Trịnh Văn Khoa (Searcher)
         m_jumpContinue = true;
 
         for (int Fixed = 0; Fixed < m_jumpUpdate; Fixed++)
+        {
             yield return new WaitForFixedUpdate();
+        }
 
         m_jumpContinue = false;
     }

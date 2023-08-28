@@ -122,7 +122,7 @@ public class QGizmos
     public static void SetSprite2D(SpriteRenderer From, Color Color)
     {
         Vector2 Size = QSprite.GetSpriteSizeUnit(From.sprite);
-        Vector2 Pos = (Vector2)From.transform.position;
+        Vector2 Pos = From.transform.position;
 
         Vector2 TL = Vector2.up * Size.y / 2 + Vector2.left * Size.x / 2;
         Vector2 TR = Vector2.up * Size.y / 2 + Vector2.right * Size.x / 2;
@@ -172,14 +172,19 @@ public class QGizmos
         List<List<Vector2>> Points = QCollider2D.GetPointsBorderPos(From, Square);
 
         if (Points.Count == 0)
+        {
             return;
+        }
 
         Vector2 Center = From.transform.position;
 
         for (int Group = 0; Group < Points.Count; Group++)
         {
             for (int Index = 1; Index < Points[Group].Count; Index++)
+            {
                 SetLine(Center + Points[Group][Index - 1], Center + Points[Group][Index], Color.red, 0.1f);
+            }
+
             SetLine(Center + Points[Group][0], Center + Points[Group][Points[Group].Count - 1], Color.red, 0.1f);
         }
     }

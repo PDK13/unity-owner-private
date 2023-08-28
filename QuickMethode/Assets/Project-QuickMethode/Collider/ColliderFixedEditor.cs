@@ -41,15 +41,21 @@ public class ColliderFixedEditor : Editor
 
             EditorGUILayout.PropertyField(m_fixedX);
             if (Target.FixedX != DirectionX.None)
+            {
                 EditorGUILayout.PropertyField(m_fixedOffsetX);
+            }
 
             EditorGUILayout.PropertyField(m_fixedY);
             if (Target.FixedY != DirectionY.None)
+            {
                 EditorGUILayout.PropertyField(m_fixedOffsetY);
+            }
 
             QEditor.SetSpace(10f);
             if (QEditor.SetButton("Fixed"))
+            {
                 Target.SetFixed();
+            }
         }
 
         serializedObject.ApplyModifiedProperties();
