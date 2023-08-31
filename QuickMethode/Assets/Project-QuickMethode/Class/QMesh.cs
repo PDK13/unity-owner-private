@@ -95,19 +95,19 @@ public class QMesh
         return (A * 0.5f);
     }
 
-    private static bool GetSnip(List<Vector2> m_points, int u, int v, int w, int n, int[] V)
+    private static bool GetSnip(List<Vector2> Points, int u, int v, int w, int n, int[] V)
     {
         int p;
-        Vector2 A = m_points[V[u]];
-        Vector2 B = m_points[V[v]];
-        Vector2 C = m_points[V[w]];
+        Vector2 A = Points[V[u]];
+        Vector2 B = Points[V[v]];
+        Vector2 C = Points[V[w]];
         if (Mathf.Epsilon > (((B.x - A.x) * (C.y - A.y)) - ((B.y - A.y) * (C.x - A.x))))
             return false;
         for (p = 0; p < n; p++)
         {
             if ((p == u) || (p == v) || (p == w))
                 continue;
-            Vector2 P = m_points[V[p]];
+            Vector2 P = Points[V[p]];
             if (GetInsideTriangle(A, B, C, P))
                 return false;
         }
