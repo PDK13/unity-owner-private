@@ -3,25 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class IsoDataBlockMove
+public class IsometricDataMove
 {
-    public string Key = "";
-    public IsoDataBlock.DataBlockType Type = IsoDataBlock.DataBlockType.Forward;
+    public DataBlockType Type = DataBlockType.Forward;
     public List<IsoDir> Dir = new List<IsoDir>();
-    public List<int> Length = new List<int>();
+    public List<int> DirDuration = new List<int>();
 
     [HideInInspector]
     public int Index = 0;
     [HideInInspector]
     public int Quantity = 1;
 
-    public List<IsoDataBlockMoveSingle> Data
+    public List<IsometricDataBlockMoveSingle> Data
     {
         get
         {
-            List<IsoDataBlockMoveSingle> Data = new List<IsoDataBlockMoveSingle>();
+            List<IsometricDataBlockMoveSingle> Data = new List<IsometricDataBlockMoveSingle>();
             for (int i = 0; i < Dir.Count; i++)
-                Data.Add(new IsoDataBlockMoveSingle(Dir[i], (Length.Count == Dir.Count ? Length[i] : 1)));
+            {
+                Data.Add(new IsometricDataBlockMoveSingle(Dir[i], (DirDuration.Count == Dir.Count ? DirDuration[i] : 1)));
+            }
+
             return Data;
         }
     }
@@ -31,43 +33,47 @@ public class IsoDataBlockMove
     public void SetDataNew()
     {
         Dir = new List<IsoDir>();
-        Length = new List<int>();
+        DirDuration = new List<int>();
     }
 
-    public void SetDataAdd(IsoDataBlockMoveSingle DataSingle)
+    public void SetDataAdd(IsometricDataBlockMoveSingle DataSingle)
     {
         if (DataSingle == null)
+        {
             return;
+        }
         //
         Dir.Add(DataSingle.Dir);
-        Length.Add(DataSingle.Length);
+        DirDuration.Add(DataSingle.Length);
     }
 
     public bool DataExist => Dir == null ? false : Dir.Count == 0 ? false : true;
 }
 
 [Serializable]
-public class IsoDataBlockMoveSingle
+public class IsometricDataBlockMoveSingle
 {
     public const char KEY_VALUE_ENCYPT = '|';
 
     public IsoDir Dir = IsoDir.None;
     public int Length = 1;
 
-    public string Encypt => QEncypt.GetEncypt(KEY_VALUE_ENCYPT, Length.ToString(), IsoVector.GetDirEncypt(Dir));
+    public string Encypt => QEncypt.GetEncypt(KEY_VALUE_ENCYPT, Length.ToString(), IsometricVector.GetDirEncypt(Dir));
 
-    public IsoDataBlockMoveSingle(IsoDir Dir, int Value)
+    public IsometricDataBlockMoveSingle(IsoDir Dir, int Value)
     {
         this.Dir = Dir;
-        this.Length = Value;
+        Length = Value;
     }
 
-    public static IsoDataBlockMoveSingle GetDencypt(string Value)
+    public static IsometricDataBlockMoveSingle GetDencypt(string Value)
     {
         if (Value == "")
+        {
             return null;
+        }
         //
         List<string> DataString = QEncypt.GetDencyptString(KEY_VALUE_ENCYPT, Value);
-        return new IsoDataBlockMoveSingle(IsoVector.GetDirDeEncyptEnum(DataString[1]), int.Parse(DataString[0]));
+        return new IsometricDataBlockMoveSingle(IsometricVector.GetDirDeEncyptEnum(DataString[1]), int.Parse(DataString[0]));
     }
 }

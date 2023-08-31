@@ -19,7 +19,10 @@ public class Trigger2DHelper : MonoBehaviour
             foreach (TriggerHandler h in m_onTriggerEnter2D)
             {
                 if (h == null)
+                {
                     continue;
+                }
+
                 Send(h, collision);
             }
         }
@@ -32,7 +35,10 @@ public class Trigger2DHelper : MonoBehaviour
             foreach (TriggerHandler h in m_onTriggerExit2D)
             {
                 if (h == null)
+                {
                     continue;
+                }
+
                 Send(h, collision);
             }
         }
@@ -45,7 +51,10 @@ public class Trigger2DHelper : MonoBehaviour
             foreach (TriggerHandler h in m_onTriggerStay2D)
             {
                 if (h == null)
+                {
                     continue;
+                }
+
                 Send(h, collision);
             }
         }
@@ -58,7 +67,10 @@ public class Trigger2DHelper : MonoBehaviour
             foreach (TriggerHandler h in m_onCollisionEnter2D)
             {
                 if (h == null)
+                {
                     continue;
+                }
+
                 Send(h, collision);
             }
         }
@@ -71,7 +83,10 @@ public class Trigger2DHelper : MonoBehaviour
             foreach (TriggerHandler h in m_onCollisionExit2D)
             {
                 if (h == null)
+                {
                     continue;
+                }
+
                 Send(h, collision);
             }
         }
@@ -84,18 +99,25 @@ public class Trigger2DHelper : MonoBehaviour
             foreach (TriggerHandler h in m_onCollisionStay2D)
             {
                 if (h == null)
+                {
                     continue;
+                }
+
                 Send(h, collision);
             }
         }
     }
 
-    void Send(TriggerHandler h, object data)
+    private void Send(TriggerHandler h, object data)
     {
         if (h.sender == null)
+        {
             h.gameObject.SendMessage(h.method, data);
+        }
         else
+        {
             h.gameObject.SendMessage(h.method, new CollisionData() { sender = h.sender, data = data });
+        }
     }
 
     [Serializable]

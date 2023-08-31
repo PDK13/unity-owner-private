@@ -12,7 +12,9 @@ public class RendererGeometryShapeEditor : Editor
         serializedObject.Update();
 
         if (QEditor.SetButton("Apply Shape"))
+        {
             Target.SetShape();
+        }
 
         serializedObject.ApplyModifiedProperties();
     }

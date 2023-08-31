@@ -59,7 +59,7 @@ public class SimpleWindowEditor : EditorWindow
         {
             if (GUILayout.Button("Button " + i.ToString(), GUILayout.Width(position.width / 3)))
             {
-                Debug.LogFormat("{0}: Button {1} Pressed!", this.name, i);
+                Debug.LogFormat("{0}: Button {1} Pressed!", name, i);
             }
         }
 

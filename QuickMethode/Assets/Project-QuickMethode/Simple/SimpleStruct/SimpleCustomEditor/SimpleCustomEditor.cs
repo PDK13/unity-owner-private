@@ -21,7 +21,7 @@ public class SimpleCustomEditor : MonoBehaviour
 
     public void SetOptionDebug()
     {
-        Debug.LogFormat("{0}: Option {1} was sellected!", this.name, m_VaribleA);
+        Debug.LogFormat("{0}: Option {1} was sellected!", name, m_VaribleA);
     }
 
     public Vector3[] GetPath()

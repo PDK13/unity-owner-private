@@ -19,13 +19,13 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    private float m_musicVolumn = 1f;
-    private float m_soundVolumn = 1f;
-    private bool m_musicMute = false;
-    private bool m_soundMute = false;
+    private readonly float m_musicVolumn = 1f;
+    private readonly float m_soundVolumn = 1f;
+    private readonly bool m_musicMute = false;
+    private readonly bool m_soundMute = false;
 
     private AudioData m_music;
-    private List<AudioData> m_sound = new List<AudioData>();
+    private readonly List<AudioData> m_sound = new List<AudioData>();
 
     private void Awake()
     {
@@ -53,7 +53,10 @@ public class SoundManager : MonoBehaviour
     public static void SetMusicStop()
     {
         if (m_this.m_music == null)
+        {
             return;
+        }
+
         Destroy(m_this.m_music.Source.gameObject);
         m_this.m_music = null;
     }
@@ -61,7 +64,10 @@ public class SoundManager : MonoBehaviour
     public static void SetMusicMute(bool Mute)
     {
         if (m_this.m_music == null)
+        {
             return;
+        }
+
         m_this.m_music.Source.mute = Mute;
     }
 
@@ -82,7 +88,9 @@ public class SoundManager : MonoBehaviour
         m_this.m_sound.Add(new AudioData(Audio, Volumn));
 
         if (!Loop)
+        {
             m_this.StartCoroutine(m_this.ISetSoundStop(Audio));
+        }
     }
 
     public static void SetSoundStart3D(AudioClip Sound, Vector2 Pos, float Distance, bool Loop, float Volumn = 1f)
@@ -100,7 +108,9 @@ public class SoundManager : MonoBehaviour
         m_this.m_sound.Add(new AudioData(Audio, Volumn));
 
         if (!Loop)
+        {
             m_this.StartCoroutine(m_this.ISetSoundStop(Audio));
+        }
     }
 
     private IEnumerator ISetSoundStop(AudioSource Audio)
@@ -112,20 +122,25 @@ public class SoundManager : MonoBehaviour
     public static void SetSoundStop()
     {
         m_this.StopAllCoroutines();
-        foreach(var Sound in m_this.m_sound)
+        foreach (AudioData Sound in m_this.m_sound)
         {
             if (Sound.Source != null)
+            {
                 Destroy(Sound.Source.gameObject);
+            }
+
             m_this.m_sound.Remove(Sound);
         }
     }
 
     public static void SetSoundMute(bool Mute)
     {
-        foreach (var Sound in m_this.m_sound)
+        foreach (AudioData Sound in m_this.m_sound)
         {
             if (Sound.Source != null)
+            {
                 Sound.Source.mute = Mute;
+            }
         }
     }
 

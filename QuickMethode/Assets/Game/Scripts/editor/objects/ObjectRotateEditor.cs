@@ -19,7 +19,7 @@ public class ObjectRotateEditor : Editor
     private Vector2 m_localMax;
     private bool m_update;
 
-    void OnEnable()
+    private void OnEnable()
     {
         m_key = serializedObject.FindProperty("m_key");
         m_timeRotate = serializedObject.FindProperty("m_timeRotate");
@@ -44,7 +44,10 @@ public class ObjectRotateEditor : Editor
         EditorGUILayout.PropertyField(m_loop);
         EditorGUILayout.PropertyField(m_canInvert);
         if (m_loop.boolValue)
+        {
             EditorGUILayout.PropertyField(m_loopType);
+        }
+
         EditorGUILayout.PropertyField(m_useLimits);
         if (m_useLimits.boolValue)
         {
@@ -58,15 +61,20 @@ public class ObjectRotateEditor : Editor
                 UpdateLocalPos();
             }
             else
+            {
                 m_update = false;
+            }
         }
         serializedObject.ApplyModifiedProperties();
     }
 
-    void OnSceneGUI()
+    private void OnSceneGUI()
     {
         if (!m_useLimits.boolValue)
+        {
             return;
+        }
+
         Handles.color = Color.blue;
         serializedObject.Update();
         EditorGUI.BeginChangeCheck();
@@ -74,13 +82,17 @@ public class ObjectRotateEditor : Editor
         m_maxAngle.vector2Value = Handles.PositionHandle(m_maxAngle.vector2Value, Quaternion.identity);
         serializedObject.ApplyModifiedProperties();
         if (EditorGUI.EndChangeCheck())
+        {
             UpdateLocalPos();
+        }
         else
             if (!m_update)
+        {
             m_target.UpdateLocalPosition(m_localMin, m_localMax);
+        }
     }
 
-    void UpdateLocalPos()
+    private void UpdateLocalPos()
     {
         m_localMin = m_target.localMinAngle;
         m_localMax = m_target.localMaxAngle;

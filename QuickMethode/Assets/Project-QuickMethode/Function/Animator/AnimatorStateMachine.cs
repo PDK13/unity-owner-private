@@ -11,7 +11,9 @@ public class AnimatorStateMachine : StateMachineBehaviour
     public override void OnStateEnter(Animator Component, AnimatorStateInfo StateInfo, int LayerIndex)
     {
         if (m_animatorController == null)
+        {
             m_animatorController = Component.GetComponent<AnimatorController>();
+        }
         //
         m_animatorController.SetOnTransitionEnter(StateInfo.shortNameHash);
     }
@@ -19,7 +21,9 @@ public class AnimatorStateMachine : StateMachineBehaviour
     public override void OnStateExit(Animator Component, AnimatorStateInfo StateInfo, int LayerIndex)
     {
         if (m_animatorController == null)
+        {
             m_animatorController = Component.GetComponent<AnimatorController>();
+        }
         //
         m_animatorController.SetOnTransitionExit(StateInfo.shortNameHash);
     }

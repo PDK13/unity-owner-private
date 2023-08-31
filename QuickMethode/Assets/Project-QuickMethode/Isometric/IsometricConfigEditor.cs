@@ -23,7 +23,9 @@ public class IsometricConfigEditor : Editor
         QEditorCustom.SetField(m_blockList);
 
         if (QEditor.SetButton("Refresh"))
+        {
             m_target.SetRefresh();
+        }
 
         QEditorCustom.SetApply(this);
     }

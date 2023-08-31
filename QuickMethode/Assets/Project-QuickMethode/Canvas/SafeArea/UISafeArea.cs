@@ -4,20 +4,20 @@ using UnityEngine;
 [ExecuteAlways]
 #endif
 public class UISafeArea : MonoBehaviour
-{   
-    void Start()
+{
+    private void Start()
     {
         SetUpdateSafeArea();
     }
 
 #if UNITY_EDITOR
-    void Update()
+    private void Update()
     {
         SetUpdateSafeArea();
     }
 #endif
 
-    void SetUpdateSafeArea()
+    private void SetUpdateSafeArea()
     {
         RectTransform m_RectTransform = GetComponent<RectTransform>();
         //m_RectTransform.sizeDelta = QResolution.GetCameraSizeUnit() - Vector2.one * 20;

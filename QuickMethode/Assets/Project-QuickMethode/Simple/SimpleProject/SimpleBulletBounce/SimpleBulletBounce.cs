@@ -7,7 +7,7 @@ public class SimpleBulletBounce : MonoBehaviour
 
     private void Start()
     {
-        Destroy(this.gameObject, 10f);
+        Destroy(gameObject, 10f);
     }
 
     private void Update()

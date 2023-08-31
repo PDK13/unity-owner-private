@@ -8,20 +8,32 @@ public class ControlBodyXY2D : MonoBehaviour
     private void Update()
     {
         if (Input.GetKey(KeyCode.LeftArrow))
+        {
             m_controlX.MoveDir = DirectionX.Left;
+        }
         else
         if (Input.GetKey(KeyCode.RightArrow))
+        {
             m_controlX.MoveDir = DirectionX.Right;
+        }
         else
+        {
             m_controlX.MoveDir = DirectionX.None;
+        }
         //
         if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
             m_controlY.SetEventClick();
+        }
 
         if (Input.GetKey(KeyCode.UpArrow))
+        {
             m_controlY.SetEventHold();
+        }
         else
+        {
             m_controlY.SetEventRelease();
+        }
     }
 
     private void FixedUpdate()

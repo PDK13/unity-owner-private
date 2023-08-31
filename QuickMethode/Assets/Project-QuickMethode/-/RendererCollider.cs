@@ -14,16 +14,24 @@ public class RendererCollider : MonoBehaviour
             m_CircleCollider = GetComponent<CircleCollider2D>();
 
             if (m_BoxCollider != null)
+            {
                 m_Collider = m_BoxCollider;
+            }
             else
             if (m_CircleCollider != null)
+            {
                 m_Collider = m_CircleCollider;
+            }
         }
 
         if (m_BoxCollider != null)
+        {
             QGizmos.SetCollider2D(m_BoxCollider, Color.white);
+        }
         else
         if (m_CircleCollider != null)
+        {
             QGizmos.SetCollider2D(m_CircleCollider, Color.white);
+        }
     }
 }

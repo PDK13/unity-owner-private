@@ -27,7 +27,9 @@ public class CoroutineManager : MonoBehaviour
             while (Running)
             {
                 if (Paused)
+                {
                     yield return null;
+                }
                 else
                 {
                     if (coroutine != null)
@@ -36,7 +38,9 @@ public class CoroutineManager : MonoBehaviour
                         {
                             bool ret = coroutine.MoveNext();
                             if (ret == false)
+                            {
                                 Running = false;
+                            }
                         }
                         catch (Exception e)
                         {
@@ -45,7 +49,9 @@ public class CoroutineManager : MonoBehaviour
                         yield return coroutine.Current;
                     }
                     else
+                    {
                         Running = false;
+                    }
                 }
             }
             m_iCoroutines.Remove(Id.ToString());
@@ -62,8 +68,11 @@ public class CoroutineManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        foreach (var task in m_iCoroutines.Values)
+        foreach (CoroutineTask task in m_iCoroutines.Values)
+        {
             task.Running = false;
+        }
+
         m_iCoroutines.Clear();
     }
 
@@ -80,7 +89,7 @@ public class CoroutineManager : MonoBehaviour
 
     public long SetCoroutineStart(IEnumerator Coroutine)
     {
-        if (this.gameObject.activeSelf)
+        if (gameObject.activeSelf)
         {
             CoroutineTask task = new CoroutineTask(GetNewId());
             m_iCoroutines.Add(task.Id.ToString(), task);
@@ -138,10 +147,14 @@ public class CoroutineManager : MonoBehaviour
     private IEnumerator ISetActionDelay(float Delay, Action onCalled)
     {
         if (Delay >= 0)
+        {
             yield return new WaitForSeconds(Delay);
+        }
 
         if (onCalled != null)
+        {
             onCalled();
+        }
     }
 
     public long SetActionDelay(float Delay, Action<object> onCalled, object Param)
@@ -152,9 +165,14 @@ public class CoroutineManager : MonoBehaviour
     private IEnumerator ISetActionDelay(float Delay, Action<object> onCalled, object Param)
     {
         if (Delay >= 0)
+        {
             yield return new WaitForSeconds(Delay);
+        }
+
         if (onCalled != null)
+        {
             onCalled(Param);
+        }
     }
 
     public long SetActionDelayRealTime(float Delay, Action onCalled)
@@ -165,9 +183,14 @@ public class CoroutineManager : MonoBehaviour
     private IEnumerator ISetActionDelayRealTime(float Delay, Action onCalled)
     {
         if (Delay >= 0)
+        {
             yield return new WaitForSecondsRealtime(Delay);
+        }
+
         if (onCalled != null)
+        {
             onCalled();
+        }
     }
 
     public long SetActionDelayRealTime(float Delay, Action<object> onCalled, object Param)
@@ -178,9 +201,14 @@ public class CoroutineManager : MonoBehaviour
     private IEnumerator ISetActionDelayRealTime(float Delay, Action<object> onCalled, object Param)
     {
         if (Delay >= 0)
+        {
             yield return new WaitForSecondsRealtime(Delay);
+        }
+
         if (onCalled != null)
+        {
             onCalled(Param);
+        }
     }
 
     #endregion

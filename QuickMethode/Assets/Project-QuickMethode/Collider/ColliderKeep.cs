@@ -17,7 +17,7 @@ public class ColliderKeep : MonoBehaviour
         public Vector2 BeginOffset;
         public Vector2 BeginSize;
 
-        public ColliderChild (Collider2D Collider, Vector2 BeginOffset, Vector2 BeginSize)
+        public ColliderChild(Collider2D Collider, Vector2 BeginOffset, Vector2 BeginSize)
         {
             this.Collider = Collider;
             this.BeginOffset = BeginOffset;
@@ -25,7 +25,7 @@ public class ColliderKeep : MonoBehaviour
         }
     }
 
-    private List<ColliderChild> m_colliderList = new List<ColliderChild>();
+    private readonly List<ColliderChild> m_colliderList = new List<ColliderChild>();
 
     private void Awake()
     {
@@ -36,13 +36,17 @@ public class ColliderKeep : MonoBehaviour
             Vector2 BeginSize = ColliderGet.bounds.size;
 
             if (ColliderGet.GetComponent<BoxCollider2D>())
+            {
                 BeginSize += (Vector2.one * ColliderGet.GetComponent<BoxCollider2D>().edgeRadius);
+            }
 
             m_colliderList.Add(new ColliderChild(ColliderGet, BeginOffset, BeginSize));
         }
 
         if (m_baseObject == null)
-            m_baseObject = this.transform;
+        {
+            m_baseObject = transform;
+        }
     }
 
     private void FixedUpdate()
@@ -54,7 +58,7 @@ public class ColliderKeep : MonoBehaviour
     {
         //Set Collider stay at it true Pos, while it Scale or Size is difference at begining!!
 
-        foreach(ColliderChild Collider in m_colliderList)
+        foreach (ColliderChild Collider in m_colliderList)
         {
             Vector2 Min = (Vector2)Collider.Collider.bounds.size - Collider.BeginSize;
             Vector2 Offset = Collider.BeginOffset;
@@ -80,13 +84,15 @@ public class ColliderKeep : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         if (m_colliderList == null)
+        {
             return;
+        }
 
         if (m_colliderList.Count > 0)
         {
             Vector2 Offset = m_colliderList[0].BeginOffset;
             Vector2 Size = m_colliderList[0].BeginSize;
-            QGizmos.SetWireCube((Vector2)this.transform.position + Offset, Size, Color.green);
+            QGizmos.SetWireCube((Vector2)transform.position + Offset, Size, Color.green);
         }
     }
 }

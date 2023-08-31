@@ -63,18 +63,28 @@ public class SimpleTimeCountDown : MonoBehaviour
 
     private void Update()
     {
-        if (m_TimeActive) return;
+        if (m_TimeActive)
+        {
+            return;
+        }
 
         if (Input.anyKeyDown)
         {
-            if (m_ISetTime != null) StopCoroutine(m_ISetTime);
+            if (m_ISetTime != null)
+            {
+                StopCoroutine(m_ISetTime);
+            }
+
             m_ISetTime = StartCoroutine(QTimeCountdown.ISetTime(MAX, COUNTDOWN, act_TimeActive));
         }
     }
 
     private void SetTime(QTimeCountdown TimeActive)
     {
-        if (TimeActive.Name != COUNTDOWN) return;
+        if (TimeActive.Name != COUNTDOWN)
+        {
+            return;
+        }
 
         if (TimeActive.Active)
         {

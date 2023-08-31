@@ -11,8 +11,11 @@ public class ObjectShaping : MonoBehaviour
 
     public void UpdateCirlePosition()
     {
-        if(transform.childCount == 0)
+        if (transform.childCount == 0)
+        {
             return;
+        }
+
         float ratio = 360f / transform.childCount;
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -22,13 +25,16 @@ public class ObjectShaping : MonoBehaviour
     }
     public void UpdatePolygonPosition()
     {
-        if(localNodes.Length < 1)
+        if (localNodes.Length < 1)
+        {
             return;
+        }
+
         int childCount = transform.childCount;
         float islandPosOffset = 0;
         List<float> distances = new List<float>();
         pathLength = 0;
-        for(int i = 1; i < localNodes.Length; i++)
+        for (int i = 1; i < localNodes.Length; i++)
         {
             float distance = Vector3.Distance(transform.TransformPoint(localNodes[i]), transform.TransformPoint(localNodes[i - 1]));
             distances.Add(distance);
@@ -37,7 +43,7 @@ public class ObjectShaping : MonoBehaviour
         float distanceBetweenIslands = pathLength / childCount;
         islandPosOffset = childCount == 1 ? (pathLength / 2) : ((pathLength - ((childCount - 1) * distanceBetweenIslands)) / 2);
 
-        for(int i = 0; i < childCount; i++)
+        for (int i = 0; i < childCount; i++)
         {
             int childIndex = i;
             int destinationLineIndex = 0;
@@ -47,11 +53,11 @@ public class ObjectShaping : MonoBehaviour
             Vector3 direction = Vector3.zero;
             float distanceFromStartPos = 0;
             Vector3 startPosByLineIndex = Vector3.zero;
-            
-            for(int j = 0; j < distances.Count; j++)
+
+            for (int j = 0; j < distances.Count; j++)
             {
                 tempDistance += distances[j];
-                if(tempDistance >= destinationDistance)
+                if (tempDistance >= destinationDistance)
                 {
                     destinationLineIndex = j;
                     int startPosIndex = destinationLineIndex;
@@ -69,7 +75,7 @@ public class ObjectShaping : MonoBehaviour
     public void UpdatePathLength()
     {
         pathLength = 0;
-        for(int i = 1; i < localNodes.Length; i++)
+        for (int i = 1; i < localNodes.Length; i++)
         {
             float distance = Vector3.Distance(transform.TransformPoint(localNodes[i]), transform.TransformPoint(localNodes[i - 1]));
             pathLength += distance;

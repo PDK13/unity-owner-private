@@ -13,14 +13,23 @@ public class BackgroundScale : MonoBehaviour
 
     private void Start()
     {
-        if (m_Camera == null) m_Camera = Camera.main.gameObject;
+        if (m_Camera == null)
+        {
+            m_Camera = Camera.main.gameObject;
+        }
     }
 
     private void LateUpdate()
     {
-        if (m_Camera == null) return;
+        if (m_Camera == null)
+        {
+            return;
+        }
 
-        if (QCamera.GetCameraSizeUnit(m_Camera.GetComponent<Camera>()) == m_ResolutionPrimary) return;
+        if (QCamera.GetCameraSizeUnit(m_Camera.GetComponent<Camera>()) == m_ResolutionPrimary)
+        {
+            return;
+        }
 
         m_ResolutionPrimary = QCamera.GetCameraSizeUnit(m_Camera.GetComponent<Camera>());
 

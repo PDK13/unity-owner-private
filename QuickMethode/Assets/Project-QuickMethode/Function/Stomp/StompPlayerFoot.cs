@@ -13,7 +13,9 @@ public class StompPlayerFoot : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.otherRigidbody.velocity.y > m_velocityMinY)
+        {
             return;
+        }
         //
         onStomp?.Invoke(collision.collider.GetComponent<StompEnemyHead>());
         //

@@ -26,7 +26,10 @@ public class CameraController : MonoBehaviour
     public static void SetScale(float Scale, float Duration)
     {
         if (Instance.m_tweenZoom != null)
+        {
             Instance.m_tweenZoom.Kill();
+        }
+
         Instance.m_tweenZoom = DOTween.To(() => Instance.m_virtualCamera.m_Lens.OrthographicSize, x => Instance.m_virtualCamera.m_Lens.OrthographicSize = x, Instance.m_baseOrthographicSize * Scale, Duration).SetEase(Ease.Linear);
         //
         onZoom?.Invoke(Instance.m_baseOrthographicSize * Scale, Duration);

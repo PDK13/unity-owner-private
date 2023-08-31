@@ -17,13 +17,17 @@ public class IsometricRenderer : MonoBehaviour
 
     #region ================================================================== Sprite Join
 
-    public void SetSpriteJoin(IsoVector PosPrimary)
+    public void SetSpriteJoin(IsometricVector PosPrimary)
     {
         if (m_spriteJoin == null)
+        {
             return;
+        }
 
         if (m_spriteJoin.Count <= 1)
+        {
             return;
+        }
 
         //Index = (|X| + |Y|) % Count
         GetComponent<SpriteRenderer>().sprite = m_spriteJoin[(Mathf.Abs((int)PosPrimary.X) + Mathf.Abs((int)PosPrimary.Y)) % m_spriteJoin.Count];

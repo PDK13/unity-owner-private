@@ -96,7 +96,7 @@ public class UIObjectMoveToPoint : MonoBehaviour
 
     public void SetUI_MoveTo(RectTransform m_MoveTo)
     {
-        this.m_RecTransform = m_MoveTo;
+        m_RecTransform = m_MoveTo;
     }
 
     public void SetUI_MoveTo(Vector3 m_MoveTo)
@@ -116,7 +116,7 @@ public class UIObjectMoveToPoint : MonoBehaviour
 
     public void SetUI_MoveTo_Offset(Vector2 m_MoveTo_Offset)
     {
-        this.m_MoveToOffset = m_MoveTo_Offset;
+        m_MoveToOffset = m_MoveTo_Offset;
     }
 
     public bool GetUI_MoveToDone()

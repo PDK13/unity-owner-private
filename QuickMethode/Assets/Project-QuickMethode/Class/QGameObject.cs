@@ -13,7 +13,9 @@ public class QGameObject
         GameObject GameObject = MonoBehaviour.Instantiate(Prepab);
 
         if (Parent != null)
+        {
             GameObject.transform.SetParent(Parent, WorldStay);
+        }
 
         GameObject.transform.position = Prepab.transform.position;
         GameObject.transform.localScale = Prepab.transform.localScale;
@@ -26,7 +28,9 @@ public class QGameObject
         GameObject GameObject = new GameObject(Name);
 
         if (Parent != null)
+        {
             GameObject.transform.SetParent(Parent, WorldStay);
+        }
 
         GameObject.transform.position = Vector3.zero;
         GameObject.transform.localScale = Vector3.one;
@@ -42,14 +46,21 @@ public class QGameObject
     {
         //Remove GameObject from Scene or Component from GameObject!!
 
-        if (From == null) return;
+        if (From == null)
+        {
+            return;
+        }
 
         if (Application.isEditor)
         {
             if (Application.isPlaying)
+            {
                 MonoBehaviour.Destroy(From);
+            }
             else
+            {
                 MonoBehaviour.DestroyImmediate(From);
+            }
         }
         else
         {
@@ -66,7 +77,9 @@ public class QGameObject
         if (From.parent != null)
         {
             if (Index < 0 || Index > From.parent.childCount - 1)
+            {
                 return;
+            }
         }
 
         From.SetSiblingIndex(Index);
@@ -136,9 +149,13 @@ public class QComponent
         //Get Component from GameObject. If null, Add Component to GameObject.
 
         if (From.GetComponent<T>() == null)
+        {
             return From.AddComponent<T>();
+        }
         else
+        {
             return From.GetComponent<T>();
+        }
     }
 
     public static T GetComponent<T>(Transform From) where T : Component
@@ -146,9 +163,13 @@ public class QComponent
         //Get Component from GameObject. If null, Add Component to GameObject.
 
         if (From.GetComponent<T>() == null)
+        {
             return From.gameObject.AddComponent<T>();
+        }
         else
+        {
             return From.gameObject.GetComponent<T>();
+        }
     }
 
     #endregion

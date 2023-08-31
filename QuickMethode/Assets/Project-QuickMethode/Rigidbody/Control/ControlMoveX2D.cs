@@ -54,15 +54,21 @@ public class ControlMoveX2D : MonoBehaviour
         get
         {
             if (MoveFixed)
+            {
                 return Vector2.left;
+            }
 
             if (m_degL >= 90f)
             {
                 if (m_wallClimb > 0 && !m_wallCheckPush)
+                {
                     return Vector2.up;
+                }
 
                 if (m_wallCheckPush)
+                {
                     return Vector2.left;
+                }
 
                 return Vector2.zero;
             }
@@ -76,8 +82,10 @@ public class ControlMoveX2D : MonoBehaviour
                     return Dir;
                 }
 
-                if (m_degR!= 0 && QCircle.GetDegOppositeUD(m_degR) <= m_surfaceLimit)
+                if (m_degR != 0 && QCircle.GetDegOppositeUD(m_degR) <= m_surfaceLimit)
+                {
                     return QCircle.GetPosXY(m_degR, 1f);
+                }
             }
             else
             if (m_degL != 0)
@@ -95,15 +103,21 @@ public class ControlMoveX2D : MonoBehaviour
         get
         {
             if (MoveFixed)
+            {
                 return Vector2.right;
+            }
 
             if (m_degR >= 90f)
             {
                 if (m_wallClimb > 0 && !m_wallCheckPush)
+                {
                     return Vector2.up;
+                }
 
                 if (m_wallCheckPush)
+                {
                     return Vector2.right;
+                }
 
                 return Vector2.zero;
             }
@@ -111,14 +125,20 @@ public class ControlMoveX2D : MonoBehaviour
             if (m_surfaceLimit > 0)
             {
                 if (m_degR != 0 && m_degR <= m_surfaceLimit)
+                {
                     return QCircle.GetPosXY(m_degR, 1f);
+                }
 
                 if (m_degL != 0 && QCircle.GetDegOppositeUD(m_degL) <= m_surfaceLimit)
+                {
                     return QCircle.GetPosXY(m_degL, 1f) * -1f;
+                }
             }
             else
             if (m_degR != 0)
+            {
                 return QCircle.GetPosXY(m_degR, 1f);
+            }
 
             return Vector2.right;
         }
@@ -168,7 +188,7 @@ public class ControlMoveX2D : MonoBehaviour
     #endregion
 
     private Rigidbody2D m_rigidbody;
-    
+
     private void Awake()
     {
         m_rigidbody = GetComponent<Rigidbody2D>();
@@ -179,16 +199,24 @@ public class ControlMoveX2D : MonoBehaviour
     public void SetProgessMove()
     {
         if (m_colliderBase == null)
+        {
             return;
+        }
 
         //Physic Material!!
         if (m_bodyOnAir)
+        {
             m_rigidbody.sharedMaterial = m_materialMove;
+        }
         else
         if (m_moveDir != DirectionX.None)
+        {
             m_rigidbody.sharedMaterial = m_materialMove;
+        }
         else
+        {
             m_rigidbody.sharedMaterial = m_materialStand;
+        }
 
         //Physic Cacualte!!
 
@@ -196,7 +224,9 @@ public class ControlMoveX2D : MonoBehaviour
         m_rigidbody.velocity = new Vector2(0f, m_rigidbody.velocity.y); //Reset Velocity X!!
 
         if (m_rigidbody.velocity.x > m_moveLimit || m_rigidbody.velocity.x < -m_moveLimit)
+        {
             m_rigidbody.AddForce(Vector3.left * (m_rigidbody.velocity.x / Mathf.Abs(m_rigidbody.velocity.x)) * m_moveDecrease, ForceMode2D.Impulse);
+        }
         else
         {
             //Move Surface Check - Increase Workflow!!
@@ -205,10 +235,14 @@ public class ControlMoveX2D : MonoBehaviour
                 if (m_moveChange > 0)
                 {
                     if (m_moveDir == DirectionX.Right && m_rigidbody.velocity.x < 0)
+                    {
                         m_rigidbody.AddForce(Vector3.left * (m_rigidbody.velocity.x / Mathf.Abs(m_rigidbody.velocity.x)) * m_moveChange, ForceMode2D.Impulse);
+                    }
                     else
                     if (m_moveDir == DirectionX.Left && m_rigidbody.velocity.x > 0)
+                    {
                         m_rigidbody.AddForce(Vector3.left * (m_rigidbody.velocity.x / Mathf.Abs(m_rigidbody.velocity.x)) * m_moveChange, ForceMode2D.Impulse);
+                    }
                 }
 
                 if (m_checkAlways)
@@ -229,14 +263,18 @@ public class ControlMoveX2D : MonoBehaviour
                     {
                         float MoveForce = (m_degR != 90f || m_wallCheckClimb || m_wallCheckPush ? m_moveForce : 0f) * m_moveRatio;
                         if (m_rigidbody.velocity.x < m_moveLimit)
+                        {
                             VelocityForce += DirMoveR * MoveForce;
+                        }
                     }
                     else
                     if (m_moveDir == DirectionX.Left)
                     {
                         float MoveForce = (m_degL != 90f || m_wallCheckClimb || m_wallCheckPush ? m_moveForce : 0f) * m_moveRatio;
                         if (m_rigidbody.velocity.x > -m_moveLimit)
+                        {
                             VelocityForce += DirMoveL * MoveForce;
+                        }
                     }
                 }
             }
@@ -246,19 +284,27 @@ public class ControlMoveX2D : MonoBehaviour
                 if (m_moveChange > 0)
                 {
                     if (m_moveDir == DirectionX.Right && m_rigidbody.velocity.x < 0)
+                    {
                         m_rigidbody.AddForce(Vector3.left * (m_rigidbody.velocity.x / Mathf.Abs(m_rigidbody.velocity.x)) * m_moveChange, ForceMode2D.Impulse);
+                    }
                     else
                     if (m_moveDir == DirectionX.Left && m_rigidbody.velocity.x > 0)
+                    {
                         m_rigidbody.AddForce(Vector3.left * (m_rigidbody.velocity.x / Mathf.Abs(m_rigidbody.velocity.x)) * m_moveChange, ForceMode2D.Impulse);
+                    }
                 }
 
                 if (m_moveDir != DirectionX.None)
                 {
                     if (m_moveDir == DirectionX.Right)
+                    {
                         VelocityForce += Vector2.right * m_moveForce * m_moveRatio;
+                    }
                     else
                     if (m_moveDir == DirectionX.Left)
+                    {
                         VelocityForce += Vector2.left * m_moveForce * m_moveRatio;
+                    }
                 }
             }
         }
@@ -283,12 +329,14 @@ public class ControlMoveX2D : MonoBehaviour
 
     private float GetCheckSurfaceL()
     {
-        var RayHitResultB = QCast.GetRaycast2DDir(PosRayLB, Vector2.left, m_surfaceLength, m_checkMask);
-        var RayHitResultT = QCast.GetRaycast2DDir(PosRayLT, Vector2.left, m_surfaceLength, m_checkMask);
+        (GameObject Target, Vector2 Point)? RayHitResultB = QCast.GetRaycast2DDir(PosRayLB, Vector2.left, m_surfaceLength, m_checkMask);
+        (GameObject Target, Vector2 Point)? RayHitResultT = QCast.GetRaycast2DDir(PosRayLT, Vector2.left, m_surfaceLength, m_checkMask);
 
         if (!RayHitResultB.HasValue || !RayHitResultT.HasValue)
+        {
             //Surely not Wall, continue Move Normally!!
             return 0;
+        }
 
         float Deg = QCircle.GetDeg360(RayHitResultB.Value.Point, RayHitResultT.Value.Point);
 
@@ -297,12 +345,14 @@ public class ControlMoveX2D : MonoBehaviour
 
     private float GetCheckSurfaceR()
     {
-        var RayHitResultB = QCast.GetRaycast2DDir(PosRayRB, Vector2.right, m_surfaceLength, m_checkMask);
-        var RayHitResultT = QCast.GetRaycast2DDir(PosRayRT, Vector2.right, m_surfaceLength, m_checkMask);
+        (GameObject Target, Vector2 Point)? RayHitResultB = QCast.GetRaycast2DDir(PosRayRB, Vector2.right, m_surfaceLength, m_checkMask);
+        (GameObject Target, Vector2 Point)? RayHitResultT = QCast.GetRaycast2DDir(PosRayRT, Vector2.right, m_surfaceLength, m_checkMask);
 
         if (!RayHitResultB.HasValue || !RayHitResultT.HasValue)
+        {
             //Surely not Wall, continue Move Normally!!
             return 0;
+        }
 
         float Deg = QCircle.GetDeg360(RayHitResultB.Value.Point, RayHitResultT.Value.Point);
 
@@ -329,7 +379,7 @@ public class ControlMoveX2D : MonoBehaviour
         }
 
         Vector2 PosRayAhead = QCollider2D.GetBorderPos(m_colliderBase, Move) + Vector2.up * m_wallOffset;
-        var RayHitSideResult = QCast.GetRaycast2DDir(PosRayAhead, Vector2.right * (int)Move, m_wallLength, m_checkMask);
+        (GameObject Target, Vector2 Point)? RayHitSideResult = QCast.GetRaycast2DDir(PosRayAhead, Vector2.right * (int)Move, m_wallLength, m_checkMask);
 
         m_wallCheckAhead = RayHitSideResult.HasValue; //Wall Check!!
 
@@ -337,30 +387,44 @@ public class ControlMoveX2D : MonoBehaviour
         {
             Rigidbody2D TargetBody = RayHitSideResult.Value.Target.GetComponent<Rigidbody2D>();
             if (TargetBody != null)
+            {
                 m_wallCheckPush = TargetBody.bodyType == RigidbodyType2D.Dynamic; //Wall can be push (Box)!!
+            }
             else
+            {
                 m_wallCheckPush = false; //Wall can't be push!!
+            }
         }
         else
+        {
             m_wallCheckPush = false; //No wall to push!!
+        }
     }
 
     private bool GetCheckWallClimb(DirectionX Move)
     {
         if (m_wallClimb == 0)
+        {
             return false;
+        }
 
         if (Move == DirectionX.None)
+        {
             return false;
+        }
 
         if (m_wallCheckAhead)
+        {
             //Surely Wall, not continue Climb Up!!
             return false;
+        }
 
-        var RayHitResult = QCast.GetRaycast2DDir(PosRayClimb, Vector2.down, m_wallClimb, m_checkMask);
+        (GameObject Target, Vector2 Point)? RayHitResult = QCast.GetRaycast2DDir(PosRayClimb, Vector2.down, m_wallClimb, m_checkMask);
 
         if (!RayHitResult.HasValue)
+        {
             return false;
+        }
 
         return true;
     }
@@ -370,7 +434,9 @@ public class ControlMoveX2D : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         if (m_colliderBase == null)
+        {
             return;
+        }
 
         //Direction Move!!
         Vector2 Centre = QCollider2D.GetBorderPos(m_colliderBase, Direction.Down) + Vector2.up * 0.1f;
