@@ -1,26 +1,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteInEditMode]
-public class Triangulator
+public class QMesh
 {
-    private List<Vector2> m_points = new List<Vector2>();
-
-    public Triangulator(Vector2[] points)
+    public static Mesh GetMesh(List<Vector2> Points)
     {
-        m_points = new List<Vector2>(points);
+        Vector2[] Vertices2D = Points.ToArray();
+        //
+        int[] Triangles = GetTriangles(Points);
+        //
+        Vector3[] Vertices = new Vector3[Vertices2D.Length];
+        for (int i = 0; i < Vertices.Length; i++)
+            Vertices[i] = new Vector3(Vertices2D[i].x, Vertices2D[i].y, 0);
+        //
+        Mesh Mesh = new Mesh();
+        Mesh.vertices = Vertices;
+        Mesh.triangles = Triangles;
+        Mesh.RecalculateNormals();
+        Mesh.RecalculateBounds();
+        //
+        return Mesh;
     }
 
-    public int[] Triangulate()
+    #region Mesh Caculator
+
+    private static int[] GetTriangles(List<Vector2> Points)
     {
         List<int> indices = new List<int>();
 
-        int n = m_points.Count;
+        int n = Points.Count;
         if (n < 3)
             return indices.ToArray();
 
         int[] V = new int[n];
-        if (Area() > 0)
+        if (GetArea(Points) > 0)
         {
             for (int v = 0; v < n; v++)
                 V[v] = v;
@@ -48,7 +61,7 @@ public class Triangulator
             if (nv <= w)
                 w = 0;
 
-            if (Snip(u, v, w, nv, V))
+            if (GetSnip(Points, u, v, w, nv, V))
             {
                 int a, b, c, s, t;
                 a = V[u];
@@ -69,20 +82,20 @@ public class Triangulator
         return indices.ToArray();
     }
 
-    private float Area()
+    private static float GetArea(List<Vector2> Points)
     {
-        int n = m_points.Count;
+        int n = Points.Count;
         float A = 0.0f;
         for (int p = n - 1, q = 0; q < n; p = q++)
         {
-            Vector2 pval = m_points[p];
-            Vector2 qval = m_points[q];
+            Vector2 pval = Points[p];
+            Vector2 qval = Points[q];
             A += pval.x * qval.y - qval.x * pval.y;
         }
         return (A * 0.5f);
     }
 
-    private bool Snip(int u, int v, int w, int n, int[] V)
+    private static bool GetSnip(List<Vector2> m_points, int u, int v, int w, int n, int[] V)
     {
         int p;
         Vector2 A = m_points[V[u]];
@@ -95,13 +108,13 @@ public class Triangulator
             if ((p == u) || (p == v) || (p == w))
                 continue;
             Vector2 P = m_points[V[p]];
-            if (InsideTriangle(A, B, C, P))
+            if (GetInsideTriangle(A, B, C, P))
                 return false;
         }
         return true;
     }
 
-    private bool InsideTriangle(Vector2 A, Vector2 B, Vector2 C, Vector2 P)
+    private static bool GetInsideTriangle(Vector2 A, Vector2 B, Vector2 C, Vector2 P)
     {
         float ax, ay, bx, by, cx, cy, apx, apy, bpx, bpy, cpx, cpy;
         float cCROSSap, bCROSScp, aCROSSbp;
@@ -119,4 +132,6 @@ public class Triangulator
 
         return ((aCROSSbp >= 0.0f) && (bCROSScp >= 0.0f) && (cCROSSap >= 0.0f));
     }
+
+    #endregion
 }
