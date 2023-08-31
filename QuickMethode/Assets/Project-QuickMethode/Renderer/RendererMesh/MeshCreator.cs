@@ -12,8 +12,13 @@ public class MeshCreator : MonoBehaviour
     [Min(0)] public float GeometryRadius = 2f;
     [Range(0, 360)] public float GeometryRotate = 0f;
 
+    [Min(0)] public float HoldRadius = 0f;
+
     public void SetCreate()
     {
+        if (Points.Count < 3)
+            return;
+        //
         if (GetComponent<MeshFilter>() == null)
             return;
         //
@@ -23,6 +28,28 @@ public class MeshCreator : MonoBehaviour
     public void SetCreateGeometry()
     {
         Points = QGeometry.GetGeometry(GeometryPoints, GeometryRadius, GeometryRotate);
+        //
+        SetCreate();
+    }
+
+    public void SetCreateGeometryHold()
+    {
+        if (HoldRadius == 0 || HoldRadius >= GeometryRadius)
+        {
+            SetCreateGeometry();
+            return;
+        }
+        //
+        List<Vector2> PointOutside = QGeometry.GetGeometry(GeometryPoints, GeometryRadius, GeometryRotate);
+        List<Vector2> PointInside = QGeometry.GetGeometry(GeometryPoints, HoldRadius, GeometryRotate);
+        //
+        Points = new List<Vector2>();
+        for (int i = 0; i < GeometryPoints; i++)
+        {
+            Points.Add(PointOutside[i]);
+            Points.Add(PointInside[i]);
+        }
+        //
         SetCreate();
     }
 }
@@ -40,6 +67,8 @@ public class MeshCreatorEditor : Editor
     private SerializedProperty GeometryRadius;
     private SerializedProperty GeometryRotate;
 
+    private SerializedProperty HoldRadius;
+
     private void OnEnable()
     {
         m_target = target as MeshCreator;
@@ -49,6 +78,8 @@ public class MeshCreatorEditor : Editor
         GeometryPoints = QEditorCustom.GetField(this, "GeometryPoints");
         GeometryRadius = QEditorCustom.GetField(this, "GeometryRadius");
         GeometryRotate = QEditorCustom.GetField(this, "GeometryRotate");
+        //
+        HoldRadius = QEditorCustom.GetField(this, "HoldRadius");
     }
 
     public override void OnInspectorGUI()
@@ -67,6 +98,10 @@ public class MeshCreatorEditor : Editor
         if (QEditor.SetButton("Generate Geometry"))
             m_target.SetCreateGeometry();
         //
+        QEditorCustom.SetField(HoldRadius);
+        //
+        if (QEditor.SetButton("Generate Geometry Hold"))
+            m_target.SetCreateGeometryHold();
         QEditorCustom.SetApply(this);
     }
 }
