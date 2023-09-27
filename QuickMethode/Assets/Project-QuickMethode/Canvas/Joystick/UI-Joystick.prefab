@@ -28,6 +28,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8413684383940028766}
   m_Father: {fileID: 8413684385292575831}
@@ -104,6 +105,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8413684383609579772}
   m_RootOrder: 0
@@ -180,6 +182,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8413684383609579772}
   m_Father: {fileID: 0}
@@ -240,13 +243,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43a0f992f6e1f2b4b82a70e985d91ff8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_LockPos: 1
-  m_AutoReset: 1
-  m_JoyStickLimit: {fileID: 8413684383609579772}
-  m_JoyStickButton: {fileID: 8413684383940028766}
-  m_LockXL: 0
-  m_LockXR: 0
-  m_LockYU: 0
-  m_LockYD: 0
-  m_JoyStickValuePrimary: {x: 0, y: 0}
-  m_JoyStickValue_Fixed: {x: 0, y: 0}
+  m_lockPos: 1
+  m_autoReset: 1
+  m_lockXL: 0
+  m_lockXR: 0
+  m_lockYU: 0
+  m_lockYD: 0
+  m_joyStickLimit: {fileID: 8413684383609579772}
+  m_joyStickButton: {fileID: 8413684383940028766}

@@ -4,51 +4,49 @@ using UnityEngine.EventSystems;
 
 public class UIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
-    [Header("UI")]
+    [SerializeField] private bool m_lockPos = true;
+    [SerializeField] private bool m_autoReset = true;
 
-    [SerializeField] private bool m_LockPos = true;
-    [SerializeField] private bool m_AutoReset = true;
+    [Space]
+    [SerializeField] private bool m_lockXL = false;
+    [SerializeField] private bool m_lockXR = false;
+    [SerializeField] private bool m_lockYU = false;
+    [SerializeField] private bool m_lockYD = false;
 
-    [SerializeField] private RectTransform m_JoyStickLimit;
+    [Space]
+    [SerializeField] private RectTransform m_joyStickLimit;
 
-    private Vector2 m_JoyStickLimitPosPrimary;
+    private Vector2 m_joyStickLimitPosPrimary;
 
-    [SerializeField] private RectTransform m_JoyStickButton;
+    [SerializeField] private RectTransform m_joyStickButton;
 
-    [Header("Lock")]
+    private Canvas m_canvas;
+    private Camera m_camera;
 
-    [SerializeField] private bool m_LockXL = false;
-    [SerializeField] private bool m_LockXR = false;
-    [SerializeField] private bool m_LockYU = false;
-    [SerializeField] private bool m_LockYD = false;
+    private Vector2 m_valuePrimary;
+    private Vector2 m_valueFixed;
 
-    private Canvas m_Canvas;
-    private Camera m_Camera;
+    private bool m_touch = false;
 
-    private Vector2 m_ValuePrimary;
-    private Vector2 m_ValueFixed;
-
-    private bool m_Touch = false;
-
-    public Action act_TouchOn;
-    public Action act_TouchOut;
+    public Action onTouchOn;
+    public Action onTouchOut;
 
     private void Start()
     {
         Vector2 center = new Vector2(0.5f, 0.5f);
-        m_JoyStickLimit.pivot = center;
-        m_JoyStickButton.anchorMin = center;
-        m_JoyStickButton.anchorMax = center;
-        m_JoyStickButton.pivot = center;
-        m_JoyStickButton.anchoredPosition = Vector2.zero;
+        m_joyStickLimit.pivot = center;
+        m_joyStickButton.anchorMin = center;
+        m_joyStickButton.anchorMax = center;
+        m_joyStickButton.pivot = center;
+        m_joyStickButton.anchoredPosition = Vector2.zero;
 
-        m_JoyStickLimitPosPrimary = m_JoyStickLimit.GetComponent<RectTransform>().anchoredPosition;
+        m_joyStickLimitPosPrimary = m_joyStickLimit.GetComponent<RectTransform>().anchoredPosition;
 
-        if (m_Canvas == null)
+        if (m_canvas == null)
         {
-            m_Canvas = GetComponentInParent<Canvas>();
+            m_canvas = GetComponentInParent<Canvas>();
 
-            if (m_Canvas == null)
+            if (m_canvas == null)
             {
                 Debug.LogErrorFormat("{0}: This parent doesn't is Canvas.", name);
             }
@@ -57,17 +55,17 @@ public class UIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
 
     #region Input Value
 
-    public Vector2 PrimaryValue => m_ValuePrimary; //True Value when Drag!!
+    public Vector2 PrimaryValue => m_valuePrimary; //True Value when Drag!!
 
-    public float PrimaryRadius => m_ValuePrimary.magnitude; //Distance Value from Center!!
+    public float PrimaryRadius => m_valuePrimary.magnitude; //Distance Value from Center!!
 
-    public Vector2 FixedValue => m_ValueFixed; //Fixed Value when Drag!!
+    public Vector2 FixedValue => m_valueFixed; //Fixed Value when Drag!!
 
-    public float FixedRadius => m_ValueFixed.magnitude; //Distance Value from Center!!
+    public float FixedRadius => m_valueFixed.magnitude; //Distance Value from Center!!
 
-    public float Deg => QCircle.GetDeg360(Vector2.zero, m_ValueFixed); //Deg Value from X-Axis Right!!
+    public float Deg => QCircle.GetDeg360(Vector2.zero, m_valueFixed); //Deg Value from X-Axis Right!!
 
-    public bool Touch => m_Touch;
+    public bool Touch => m_touch;
 
     #endregion
 
@@ -75,21 +73,21 @@ public class UIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        act_TouchOn?.Invoke();
+        onTouchOn?.Invoke();
 
-        m_Touch = true;
+        m_touch = true;
 
-        if (m_Canvas.renderMode == RenderMode.ScreenSpaceCamera)
+        if (m_canvas.renderMode == RenderMode.ScreenSpaceCamera)
         {
-            m_Camera = m_Canvas.worldCamera;
+            m_camera = m_canvas.worldCamera;
         }
 
-        if (!m_LockPos)
+        if (!m_lockPos)
         {
-            Vector2 m_JoyStickLimit_Pos = RectTransformUtility.WorldToScreenPoint(m_Camera, this.m_JoyStickLimit.position);
-            Vector2 m_JoyStickLimit = (eventData.position - m_JoyStickLimit_Pos) / m_Canvas.scaleFactor;
+            Vector2 m_JoyStickLimit_Pos = RectTransformUtility.WorldToScreenPoint(m_camera, this.m_joyStickLimit.position);
+            Vector2 m_JoyStickLimit = (eventData.position - m_JoyStickLimit_Pos) / m_canvas.scaleFactor;
 
-            this.m_JoyStickLimit.anchoredPosition = this.m_JoyStickLimit.anchoredPosition + m_JoyStickLimit;
+            this.m_joyStickLimit.anchoredPosition = this.m_joyStickLimit.anchoredPosition + m_JoyStickLimit;
         }
 
         OnDrag(eventData);
@@ -97,116 +95,92 @@ public class UIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
 
     public void OnDrag(PointerEventData eventData)
     {
-        Vector2 m_JoyStickLimit_Pos = RectTransformUtility.WorldToScreenPoint(m_Camera, m_JoyStickLimit.position);
-        Vector2 m_JoyStickLimitRadius = m_JoyStickLimit.sizeDelta / 2;
-
-        m_ValuePrimary = (eventData.position - m_JoyStickLimit_Pos) / (m_JoyStickLimitRadius * m_Canvas.scaleFactor);
-
-        //if (m_LockX)
-        //{
-        //    m_JoyStickValuePrimary.x = 0f;
-        //}
-
-        //if (m_LockY)
-        //{
-        //    m_JoyStickValuePrimary.y = 0f;
-        //}
-
-        if (m_LockXL && m_ValuePrimary.x < 0)
+        Vector2 m_JoyStickLimit_Pos = RectTransformUtility.WorldToScreenPoint(m_camera, m_joyStickLimit.position);
+        Vector2 m_JoyStickLimitRadius = m_joyStickLimit.sizeDelta / 2;
+        //
+        m_valuePrimary = (eventData.position - m_JoyStickLimit_Pos) / (m_JoyStickLimitRadius * m_canvas.scaleFactor);
+        //
+        if (m_lockXL && m_valuePrimary.x < 0)
+            m_valuePrimary.x = 0;
+        else
+        if (m_lockXR && m_valuePrimary.x > 0)
+            m_valuePrimary.x = 0;
+        //
+        if (m_lockYU && m_valuePrimary.y > 0)
+            m_valuePrimary.y = 0;
+        else
+        if (m_lockYD && m_valuePrimary.y < 0)
+            m_valuePrimary.y = 0;
+        //
+        m_valueFixed = m_valuePrimary;
+        //
+        if (m_valueFixed.magnitude > 0)
         {
-            m_ValuePrimary.x = 0;
+            if (m_valueFixed.magnitude > 1)
+                m_valueFixed = m_valueFixed.normalized;
         }
         else
-        if (m_LockXR && m_ValuePrimary.x > 0)
-        {
-            m_ValuePrimary.x = 0;
-        }
-
-        if (m_LockYU && m_ValuePrimary.y > 0)
-        {
-            m_ValuePrimary.y = 0;
-        }
-        else
-        if (m_LockYD && m_ValuePrimary.y < 0)
-        {
-            m_ValuePrimary.y = 0;
-        }
-
-        m_ValueFixed = m_ValuePrimary;
-
-        if (m_ValueFixed.magnitude > 0)
-        {
-            if (m_ValueFixed.magnitude > 1)
-            {
-                m_ValueFixed = m_ValueFixed.normalized;
-            }
-        }
-        else
-        {
-            m_ValueFixed = Vector2.zero;
-        }
-
-        m_JoyStickButton.anchoredPosition = m_ValueFixed * m_JoyStickLimitRadius * 1;
+            m_valueFixed = Vector2.zero;
+        //
+        m_joyStickButton.anchoredPosition = m_valueFixed * m_JoyStickLimitRadius * 1;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        act_TouchOut?.Invoke();
-
-        m_Touch = false;
-
-        m_ValuePrimary = Vector2.zero;
-        m_ValueFixed = Vector2.zero;
-        m_JoyStickButton.anchoredPosition = Vector2.zero;
-
-        if (m_AutoReset)
-        {
-            m_JoyStickLimit.anchoredPosition = m_JoyStickLimitPosPrimary;
-        }
+        onTouchOut?.Invoke();
+        //
+        m_touch = false;
+        //
+        m_valuePrimary = Vector2.zero;
+        m_valueFixed = Vector2.zero;
+        m_joyStickButton.anchoredPosition = Vector2.zero;
+        //
+        if (m_autoReset)
+            m_joyStickLimit.anchoredPosition = m_joyStickLimitPosPrimary;
     }
 
     #endregion
 
     #region Lock JoyStick
 
-    public void SetLockXL(bool m_LockXL)
+    public void SetLockXL(bool LockXL)
     {
-        this.m_LockXL = m_LockXL;
+        this.m_lockXL = LockXL;
     }
 
-    public void SetLockXR(bool m_LockXR)
+    public void SetLockXR(bool LockXR)
     {
-        this.m_LockXR = m_LockXR;
+        this.m_lockXR = LockXR;
     }
 
-    public void SetLockYU(bool m_LockYU)
+    public void SetLockYU(bool LockYU)
     {
-        this.m_LockYU = m_LockYU;
+        this.m_lockYU = LockYU;
     }
 
-    public void SetLockYD(bool m_LockYD)
+    public void SetLockYD(bool LockYD)
     {
-        this.m_LockYD = m_LockYD;
+        this.m_lockYD = LockYD;
     }
 
     public bool GetLockXL()
     {
-        return m_LockXL;
+        return m_lockXL;
     }
 
     public bool GetLockXR()
     {
-        return m_LockXR;
+        return m_lockXR;
     }
 
     public bool GetLockYU()
     {
-        return m_LockYU;
+        return m_lockYU;
     }
 
     public bool GetLockYD()
     {
-        return m_LockYD;
+        return m_lockYD;
     }
 
     #endregion
