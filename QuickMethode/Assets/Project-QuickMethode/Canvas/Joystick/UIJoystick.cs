@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static UnityEditor.PlayerSettings;
 
 public class UIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
@@ -20,8 +21,8 @@ public class UIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
 
     [SerializeField] private RectTransform m_joyStickButton;
 
-    private Canvas m_canvas;
-    private Camera m_camera;
+    [SerializeField] private Canvas m_canvas;
+    [SerializeField] private Camera m_camera;
 
     private Vector2 m_valuePrimary;
     private Vector2 m_valueFixed;
@@ -39,17 +40,15 @@ public class UIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
         m_joyStickButton.anchorMax = center;
         m_joyStickButton.pivot = center;
         m_joyStickButton.anchoredPosition = Vector2.zero;
-
+        //
         m_joyStickLimitPosPrimary = m_joyStickLimit.GetComponent<RectTransform>().anchoredPosition;
-
+        //
         if (m_canvas == null)
         {
             m_canvas = GetComponentInParent<Canvas>();
 
             if (m_canvas == null)
-            {
                 Debug.LogErrorFormat("{0}: This parent doesn't is Canvas.", name);
-            }
         }
     }
 
@@ -63,7 +62,14 @@ public class UIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
 
     public float FixedRadius => m_valueFixed.magnitude; //Distance Value from Center!!
 
-    public float Deg => QCircle.GetDeg360(Vector2.zero, m_valueFixed); //Deg Value from X-Axis Right!!
+    public float Deg
+    { 
+        get
+        {
+            float Deg = Mathf.Atan2(m_valueFixed.y, m_valueFixed.x) * Mathf.Rad2Deg;
+            return Deg >= 0 ? Deg : 360 + Deg;
+        }
+    } //Angle (Deg) of Joystick Drag!!
 
     public bool Touch => m_touch;
 
@@ -74,22 +80,20 @@ public class UIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
     public void OnPointerDown(PointerEventData eventData)
     {
         onTouchOn?.Invoke();
-
+        //
         m_touch = true;
-
+        //
         if (m_canvas.renderMode == RenderMode.ScreenSpaceCamera)
-        {
             m_camera = m_canvas.worldCamera;
-        }
-
+        //
         if (!m_lockPos)
         {
             Vector2 m_JoyStickLimit_Pos = RectTransformUtility.WorldToScreenPoint(m_camera, this.m_joyStickLimit.position);
             Vector2 m_JoyStickLimit = (eventData.position - m_JoyStickLimit_Pos) / m_canvas.scaleFactor;
-
+            //
             this.m_joyStickLimit.anchoredPosition = this.m_joyStickLimit.anchoredPosition + m_JoyStickLimit;
         }
-
+        //
         OnDrag(eventData);
     }
 
