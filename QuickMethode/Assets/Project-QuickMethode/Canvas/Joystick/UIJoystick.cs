@@ -15,23 +15,23 @@ public class UIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
     [SerializeField] private bool m_lockYD = false;
 
     [Space]
-    [SerializeField] private RectTransform m_joyStickLimit;
-
-    private Vector2 m_joyStickLimitPosPrimary;
-
-    [SerializeField] private RectTransform m_joyStickButton;
-
     [SerializeField] private Canvas m_canvas;
     [SerializeField] private Camera m_camera;
+
+    [Space]
+    [SerializeField] private RectTransform m_joyStickLimit;
+    [SerializeField] private RectTransform m_joyStickButton;
+
+    private Vector2 m_joyStickLimitPosPrimary;
 
     private Vector2 m_valuePrimary;
     private Vector2 m_valueFixed;
 
     private bool m_touch = false;
 
-    public Action onTouchDrag;
     public Action onTouchOn;
     public Action onTouchOut;
+    public Action onTouchDrag;
 
     private void Start()
     {
@@ -47,9 +47,15 @@ public class UIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
         if (m_canvas == null)
         {
             m_canvas = GetComponentInParent<Canvas>();
-
+            //
             if (m_canvas == null)
                 Debug.LogErrorFormat("{0}: This parent doesn't is Canvas.", name);
+        }
+        //
+        if (m_camera == null && m_canvas != null)
+        {
+            if (m_canvas.renderMode == RenderMode.ScreenSpaceCamera)
+                m_camera = m_canvas.worldCamera;
         }
     }
 
@@ -64,7 +70,7 @@ public class UIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
     public float FixedRadius => m_valueFixed.magnitude; //Distance Value from Center!!
 
     public float Deg
-    { 
+    {
         get
         {
             float Deg = Mathf.Atan2(m_valueFixed.y, m_valueFixed.x) * Mathf.Rad2Deg;
@@ -80,19 +86,19 @@ public class UIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (m_canvas == null)
+            return;
+        //
         onTouchOn?.Invoke();
         //
         m_touch = true;
         //
-        if (m_canvas.renderMode == RenderMode.ScreenSpaceCamera)
-            m_camera = m_canvas.worldCamera;
-        //
         if (!m_lockPos)
         {
-            Vector2 m_JoyStickLimit_Pos = RectTransformUtility.WorldToScreenPoint(m_camera, this.m_joyStickLimit.position);
-            Vector2 m_JoyStickLimit = (eventData.position - m_JoyStickLimit_Pos) / m_canvas.scaleFactor;
+            Vector2 JoyLimitPos = RectTransformUtility.WorldToScreenPoint(m_camera, m_joyStickLimit.position);
+            Vector2 JoyLimitLimit = (eventData.position - JoyLimitPos) / m_canvas.scaleFactor;
             //
-            this.m_joyStickLimit.anchoredPosition = this.m_joyStickLimit.anchoredPosition + m_JoyStickLimit;
+            m_joyStickLimit.anchoredPosition = m_joyStickLimit.anchoredPosition + JoyLimitLimit;
         }
         //
         OnDrag(eventData);
@@ -100,10 +106,13 @@ public class UIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
 
     public void OnDrag(PointerEventData eventData)
     {
-        Vector2 m_JoyStickLimit_Pos = RectTransformUtility.WorldToScreenPoint(m_camera, m_joyStickLimit.position);
-        Vector2 m_JoyStickLimitRadius = m_joyStickLimit.sizeDelta / 2;
+        if (m_canvas == null)
+            return;
         //
-        m_valuePrimary = (eventData.position - m_JoyStickLimit_Pos) / (m_JoyStickLimitRadius * m_canvas.scaleFactor);
+        Vector2 JoyLimitPos = RectTransformUtility.WorldToScreenPoint(m_camera, m_joyStickLimit.position);
+        Vector2 JoyLimitRadius = m_joyStickLimit.sizeDelta / 2;
+        //
+        m_valuePrimary = (eventData.position - JoyLimitPos) / (JoyLimitRadius * m_canvas.scaleFactor);
         //
         if (m_lockXL && m_valuePrimary.x < 0)
             m_valuePrimary.x = 0;
@@ -127,13 +136,16 @@ public class UIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
         else
             m_valueFixed = Vector2.zero;
         //
-        m_joyStickButton.anchoredPosition = m_valueFixed * m_JoyStickLimitRadius * 1;
+        m_joyStickButton.anchoredPosition = m_valueFixed * JoyLimitRadius * 1;
         //
         onTouchDrag?.Invoke();
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (m_canvas == null)
+            return;
+        //
         onTouchOut?.Invoke();
         //
         m_touch = false;
