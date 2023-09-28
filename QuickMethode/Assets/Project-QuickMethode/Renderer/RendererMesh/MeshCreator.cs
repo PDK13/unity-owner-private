@@ -32,32 +32,32 @@ public class MeshCreator : MonoBehaviour
 
     public void SetGenerateFilled()
     {
-        SetInit();
+        SetInitCircum();
+        //
         m_circum.SetFilledGenerate();
         //
         Points = m_circum.Points;
         Triangles = m_circum.Triangles;
         //
-        m_meshFilter.mesh = QMeshCircum.SetGenerate(m_circum);
+        QMeshCircum.SetGenerate(m_meshFilter, m_circum);
     }
 
     public void SetGenerateHollow()
     {
-        SetInit();
+        SetInitCircum();
+        //
         m_circum.SetHollowGenerate();
         //
         Points = m_circum.Points;
         Triangles = m_circum.Triangles;
         //
-        m_meshFilter.mesh = QMeshCircum.SetGenerate(m_circum);
+        QMeshCircum.SetGenerate(m_meshFilter, m_circum);
     }
 
-    private void SetInit()
+    private void SetInitCircum()
     {
         if (m_circum == null)
             m_circum = new QCircum();
-        //
-        m_meshFilter.sharedMesh = new Mesh();
         //
         m_circum.Point = FilledPoints;
         m_circum.Radius = FilledRadius;

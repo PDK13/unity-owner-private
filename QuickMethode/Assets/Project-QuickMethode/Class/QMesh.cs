@@ -140,6 +140,8 @@ public class QMesh
 
 public class QMeshCircum
 {
+    //Mesh - Create new: Should use in Editor Mode!!
+
     public static Mesh SetGenerate(Vector3[] Points, int[] Triangles)
     {
         Mesh Mesh = new Mesh();
@@ -199,5 +201,84 @@ public class QMeshCircum
         Mesh.RecalculateBounds();
         //
         return Mesh;
+    }
+
+    //Mesh - Clear All: Should use in Play Mode!!
+
+    public static void SetGenerate(MeshFilter MeshFilter, Vector3[] Points, int[] Triangles)
+    {
+        if (!Application.isPlaying)
+        {
+            MeshFilter.mesh = SetGenerate(Points, Triangles);
+            return;
+        }
+        //
+        MeshFilter.mesh.Clear();
+        MeshFilter.mesh.name = string.Format("{0}-{1}", Points.Length, Triangles.Length);
+        MeshFilter.mesh.vertices = Points;
+        MeshFilter.mesh.triangles = Triangles;
+        MeshFilter.mesh.RecalculateNormals();
+        MeshFilter.mesh.RecalculateBounds();
+    }
+
+    public static void SetGenerate(MeshFilter MeshFilter, QCircum Circum)
+    {
+        if (!Application.isPlaying)
+        {
+            MeshFilter.mesh = SetGenerate(Circum);
+            return;
+        }
+        //
+        MeshFilter.mesh.Clear();
+        MeshFilter.mesh.name = string.Format("{0}-{1}-{2}", Circum.Point, Circum.Radius + (Circum.Hollow ? "H" + Circum.RadiusHollow : "F"), Circum.Deg);
+        MeshFilter.mesh.vertices = Circum.Points;
+        MeshFilter.mesh.triangles = Circum.Triangles;
+        MeshFilter.mesh.RecalculateNormals();
+        MeshFilter.mesh.RecalculateBounds();
+    }
+
+    public static void SetFilledGenerate(MeshFilter MeshFilter, int Point, float Radius, float Deg)
+    {
+        if (!Application.isPlaying)
+        {
+            MeshFilter.mesh = SetFilledGenerate(Point, Radius, Deg);
+            return;
+        }
+        //
+        QCircum Circum = new QCircum();
+        Circum.Point = Point;
+        Circum.Radius = Radius;
+        Circum.Deg = Deg;
+        Circum.SetFilledGenerate();
+        //
+        MeshFilter.mesh.Clear();
+        MeshFilter.mesh.name = string.Format("{0}-{1}-{2}", Circum.Point, Circum.Radius + (Circum.Hollow ? "H" + Circum.RadiusHollow : "F"), Circum.Deg);
+        MeshFilter.mesh.vertices = Circum.Points;
+        MeshFilter.mesh.triangles = Circum.Triangles;
+        MeshFilter.mesh.RecalculateNormals();
+        MeshFilter.mesh.RecalculateBounds();
+    }
+
+    public static void SetHollowGenerate(MeshFilter MeshFilter, int Point, float Radius, float RadiusHollow, float Deg)
+    {
+        if (!Application.isPlaying)
+        {
+            MeshFilter.mesh = SetHollowGenerate(Point, Radius, RadiusHollow, Deg);
+            return;
+        }
+        //
+        QCircum Circum = new QCircum();
+        Circum.Point = Point;
+        Circum.Radius = Radius;
+        Circum.RadiusHollow = RadiusHollow;
+        Circum.Deg = Deg;
+        Circum.SetHollowGenerate();
+        //
+        MeshFilter.mesh.Clear();
+        MeshFilter.mesh.name = string.Format("{0}-{1}-{2}", Circum.Point, Circum.Radius + (Circum.Hollow ? "H" + Circum.RadiusHollow : "F"), Circum.Deg);
+        MeshFilter.mesh.vertices = Circum.Points;
+        MeshFilter.mesh.triangles = Circum.Triangles;
+        MeshFilter.mesh.RecalculateNormals();
+        MeshFilter.mesh.RecalculateBounds();
     }
 }
