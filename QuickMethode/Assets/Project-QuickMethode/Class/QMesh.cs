@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI.Extensions;
 
 public class QMesh
 {
@@ -134,4 +136,68 @@ public class QMesh
     }
 
     #endregion
+}
+
+public class QMeshCircum
+{
+    public static Mesh SetGenerate(Vector3[] Points, int[] Triangles)
+    {
+        Mesh Mesh = new Mesh();
+        Mesh.name = string.Format("{0}-{1}", Points.Length, Triangles.Length);
+        Mesh.vertices = Points;
+        Mesh.triangles = Triangles;
+        Mesh.RecalculateNormals();
+        Mesh.RecalculateBounds();
+        //
+        return Mesh;
+    }
+
+    public static Mesh SetGenerate(QCircum Circum)
+    {
+        Mesh Mesh = new Mesh();
+        Mesh.name = string.Format("{0}-{1}-{2}", Circum.Point, Circum.Radius + (Circum.Hollow ? "H" + Circum.RadiusHollow : "F"), Circum.Deg);
+        Mesh.vertices = Circum.Points;
+        Mesh.triangles = Circum.Triangles;
+        Mesh.RecalculateNormals();
+        Mesh.RecalculateBounds();
+        //
+        return Mesh;
+    }
+
+    public static Mesh SetFilledGenerate(int Point, float Radius, float Deg)
+    {
+        QCircum Circum = new QCircum();
+        Circum.Point = Point;
+        Circum.Radius = Radius;
+        Circum.Deg = Deg;
+        Circum.SetFilledGenerate();
+        //
+        Mesh Mesh = new Mesh();
+        Mesh.name = string.Format("{0}-{1}-{2}", Circum.Point, Circum.Radius + (Circum.Hollow ? "H" + Circum.RadiusHollow : "F"), Circum.Deg);
+        Mesh.vertices = Circum.Points;
+        Mesh.triangles = Circum.Triangles;
+        Mesh.RecalculateNormals();
+        Mesh.RecalculateBounds();
+        //
+        return Mesh;
+    }
+
+    public static Mesh SetHollowGenerate(int Point, float Radius, float RadiusHollow, float Deg)
+    {
+        QCircum Circum = new QCircum();
+        Circum.Point = Point;
+        Circum.Radius = Radius;
+        Circum.RadiusHollow = RadiusHollow;
+        Circum.Deg = Deg;
+        Circum.SetHollowGenerate();
+        //
+        Mesh Mesh = new Mesh();
+        Mesh.name = string.Format("{0}-{1}-{2}", Circum.Point, Circum.Radius + (Circum.Hollow ? "H" + Circum.RadiusHollow : "F"), Circum.Deg);
+        Mesh.vertices = Circum.Points;
+        Mesh.triangles = Circum.Triangles;
+        Mesh.RecalculateNormals();
+        Mesh.RecalculateBounds();
+        //
+        return Mesh;
+    }
 }

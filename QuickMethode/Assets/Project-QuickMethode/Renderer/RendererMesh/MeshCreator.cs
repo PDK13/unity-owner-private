@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,51 +5,64 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 public class MeshCreator : MonoBehaviour
 {
-    public List<Vector2> Points;
+    [SerializeField] private MeshFilter m_meshFilter;
 
-    [Min(3)] public int GeometryPoints = 3;
-    [Min(0)] public float GeometryRadius = 2f;
-    [Range(0, 360)] public float GeometryRotate = 0f;
+    private QCircum m_circum;
 
-    [Min(0)] public float HoldRadius = 0f;
+    [Space]
+    [Min(3)] public int FilledPoints = 3;
+    [Min(0)] public float FilledRadius = 2f;
+    public float FilledDeg = 0f;
 
-    public void SetCreate()
+    [Space]
+    [Min(0)] public float HollowRadius = 0f;
+
+    [Space]
+    public Vector3[] Points;
+    public int[] Triangles;
+
+    public void SetGenerate()
     {
-        if (Points.Count < 3)
-            return;
-        //
-        if (GetComponent<MeshFilter>() == null)
-            return;
-        //
-        GetComponent<MeshFilter>().mesh = QMesh.GetMesh(Points);
+        m_meshFilter.mesh.Clear();
+        m_meshFilter.mesh.vertices = Points;
+        m_meshFilter.mesh.triangles = Triangles;
+        m_meshFilter.mesh.RecalculateNormals();
+        m_meshFilter.mesh.RecalculateBounds();
     }
 
-    public void SetCreateGeometry()
+    public void SetGenerateFilled()
     {
-        Points = QGeometry.GetGeometry(GeometryPoints, GeometryRadius, GeometryRotate);
+        SetInit();
+        m_circum.SetFilledGenerate();
         //
-        SetCreate();
+        Points = m_circum.Points;
+        Triangles = m_circum.Triangles;
+        //
+        m_meshFilter.mesh = QMeshCircum.SetGenerate(m_circum);
     }
 
-    public void SetCreateGeometryHold()
+    public void SetGenerateHollow()
     {
-        if (HoldRadius == 0 || HoldRadius >= GeometryRadius)
-        {
-            SetCreateGeometry();
-            return;
-        }
+        SetInit();
+        m_circum.SetHollowGenerate();
         //
-        List<Vector2> PointOutside = QGeometry.GetGeometry(GeometryPoints, GeometryRadius, GeometryRotate);
-        List<Vector2> PointInside = QGeometry.GetGeometry(GeometryPoints, HoldRadius, GeometryRotate);
+        Points = m_circum.Points;
+        Triangles = m_circum.Triangles;
         //
-        Points = new List<Vector2>();
-        for (int i = 0; i < GeometryPoints; i++)
-        {
-            Points.Add(PointOutside[i]);
-            Points.Add(PointInside[i]);
-        }
+        m_meshFilter.mesh = QMeshCircum.SetGenerate(m_circum);
+    }
+
+    private void SetInit()
+    {
+        if (m_circum == null)
+            m_circum = new QCircum();
         //
-        SetCreate();
+        m_meshFilter.sharedMesh = new Mesh();
+        //
+        m_circum.Point = FilledPoints;
+        m_circum.Radius = FilledRadius;
+        m_circum.RadiusHollow = HollowRadius;
+        m_circum.Deg = FilledDeg;
     }
 }
 
@@ -61,47 +73,57 @@ public class MeshCreatorEditor : Editor
 {
     private MeshCreator m_target;
 
+    private SerializedProperty m_meshFilter;
+
+    private SerializedProperty FilledPoints;
+    private SerializedProperty FilledRadius;
+    private SerializedProperty FilledDeg;
+
+    private SerializedProperty HollowRadius;
+
     private SerializedProperty Points;
-
-    private SerializedProperty GeometryPoints;
-    private SerializedProperty GeometryRadius;
-    private SerializedProperty GeometryRotate;
-
-    private SerializedProperty HoldRadius;
+    private SerializedProperty Triangles;
 
     private void OnEnable()
     {
         m_target = target as MeshCreator;
         //
+        m_meshFilter = QEditorCustom.GetField(this, "m_meshFilter");
+        //
+        FilledPoints = QEditorCustom.GetField(this, "FilledPoints");
+        FilledRadius = QEditorCustom.GetField(this, "FilledRadius");
+        FilledDeg = QEditorCustom.GetField(this, "FilledDeg");
+        //
+        HollowRadius = QEditorCustom.GetField(this, "HollowRadius");
+        //
         Points = QEditorCustom.GetField(this, "Points");
-        //
-        GeometryPoints = QEditorCustom.GetField(this, "GeometryPoints");
-        GeometryRadius = QEditorCustom.GetField(this, "GeometryRadius");
-        GeometryRotate = QEditorCustom.GetField(this, "GeometryRotate");
-        //
-        HoldRadius = QEditorCustom.GetField(this, "HoldRadius");
+        Triangles = QEditorCustom.GetField(this, "Triangles");
     }
 
     public override void OnInspectorGUI()
     {
         QEditorCustom.SetUpdate(this);
         //
+        QEditorCustom.SetField(m_meshFilter);
+        //
+        QEditorCustom.SetField(FilledPoints);
+        QEditorCustom.SetField(FilledRadius);
+        QEditorCustom.SetField(FilledDeg);
+        //
+        if (QEditor.SetButton("Generate Filled"))
+            m_target.SetGenerateFilled();
+        //
+        QEditorCustom.SetField(HollowRadius);
+        //
+        if (QEditor.SetButton("Generate Hollow"))
+            m_target.SetGenerateHollow();
+        //
         QEditorCustom.SetField(Points);
+        QEditorCustom.SetField(Triangles);
         //
         if (QEditor.SetButton("Generate"))
-            m_target.SetCreate();
+            m_target.SetGenerate();
         //
-        QEditorCustom.SetField(GeometryPoints);
-        QEditorCustom.SetField(GeometryRadius);
-        QEditorCustom.SetField(GeometryRotate);
-        //
-        if (QEditor.SetButton("Generate Geometry"))
-            m_target.SetCreateGeometry();
-        //
-        QEditorCustom.SetField(HoldRadius);
-        //
-        if (QEditor.SetButton("Generate Geometry Hold"))
-            m_target.SetCreateGeometryHold();
         QEditorCustom.SetApply(this);
     }
 }

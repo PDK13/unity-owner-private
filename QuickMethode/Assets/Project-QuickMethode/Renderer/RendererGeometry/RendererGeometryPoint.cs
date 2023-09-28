@@ -11,7 +11,7 @@ public class RendererGeometryPoint : MonoBehaviour
 
     public List<Vector2> GetPoint()
     {
-        return QGeometry.GetGeometry(m_point, m_radius, m_deg);
+        return QCircum.GetGeometryPoints(m_point, m_radius, m_deg);
     }
 
     #endregion

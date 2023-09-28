@@ -169,15 +169,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c3b36733986d0c4d832f21ef82b3db5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_meshFilter: {fileID: 1401722769}
+  FilledPoints: 4
+  FilledRadius: 4
+  FilledDeg: 0
+  HollowRadius: 2
   Points:
-  - {x: 2, y: 0}
-  - {x: 4, y: 0}
-  - {x: 0, y: 4}
-  - {x: 0, y: 2}
-  GeometryPoints: 3
-  GeometryRadius: 2
-  GeometryRotate: 0
-  HoldRadius: 1
+  - {x: 4, y: 0, z: 0}
+  - {x: -0.00000017484555, y: 4, z: 0}
+  - {x: -4, y: -0.0000003496911, z: 0}
+  - {x: 0.000000047699523, y: -4, z: 0}
+  - {x: 2, y: 0, z: 0}
+  - {x: -0.00000008742278, y: 2, z: 0}
+  - {x: -2, y: -0.00000017484555, z: 0}
+  - {x: 0.000000023849761, y: -2, z: 0}
+  Triangles: 000000000400000001000000000000000700000004000000010000000500000002000000010000000400000005000000020000000600000003000000020000000500000006000000030000000700000000000000030000000600000007000000
 --- !u!33 &1401722769
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -185,7 +191,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1401722766}
-  m_Mesh: {fileID: 1650305538}
+  m_Mesh: {fileID: 2130907990}
 --- !u!23 &1401722770
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -194,8 +200,8 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1401722766}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
@@ -206,7 +212,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: cc0d680504c83104db59036cc59d5245, type: 2}
+  - {fileID: 2100000, guid: 7716fe2e40ea8d84bb59666262f92aa1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -228,25 +234,25 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!43 &1650305538
+--- !u!43 &2130907990
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: 
+  m_Name: 4-4H2-0
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
     firstByte: 0
-    indexCount: 6
+    indexCount: 24
     topology: 0
     baseVertex: 0
     firstVertex: 0
-    vertexCount: 4
+    vertexCount: 8
     localAABB:
-      m_Center: {x: 2, y: 2, z: 0}
-      m_Extent: {x: 2, y: 2, z: 0}
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 4, y: 4, z: 0}
   m_Shapes:
     vertices: []
     shapes: []
@@ -263,10 +269,10 @@ Mesh:
   m_KeepVertices: 1
   m_KeepIndices: 1
   m_IndexFormat: 0
-  m_IndexBuffer: 030002000100010000000300
+  m_IndexBuffer: 000004000100000007000400010005000200010004000500020006000300020005000600030007000000030006000700
   m_VertexData:
     serializedVersion: 3
-    m_VertexCount: 4
+    m_VertexCount: 8
     m_Channels:
     - stream: 0
       offset: 0
@@ -324,8 +330,8 @@ Mesh:
       offset: 0
       format: 0
       dimension: 0
-    m_DataSize: 96
-    _typelessdata: 0000004000000000000000000000000000000000000080bf0000804000000000000000000000000000000000000080bf0000000000008040000000000000000000000000000080bf0000000000000040000000000000000000000000000080bf
+    m_DataSize: 192
+    _typelessdata: 0000804000000000000000000000000000000000000080bf2ebd3bb400008040000000000000000000000000000080bf000080c02ebdbbb4000000000000000000000000000080bf2ede4c33000080c0000000000000000000000000000080bf0000004000000000000000000000000000000000000080bf2ebdbbb300000040000000000000000000000000000080bf000000c02ebd3bb4000000000000000000000000000080bf2edecc32000000c0000000000000000000000000000080bf
   m_CompressedMesh:
     m_Vertices:
       m_NumItems: 0
@@ -379,8 +385,8 @@ Mesh:
       m_BitSize: 0
     m_UVInfo: 0
   m_LocalAABB:
-    m_Center: {x: 2, y: 2, z: 0}
-    m_Extent: {x: 2, y: 2, z: 0}
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 4, y: 4, z: 0}
   m_MeshUsageFlags: 0
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
