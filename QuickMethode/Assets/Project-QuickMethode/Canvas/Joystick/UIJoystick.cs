@@ -29,6 +29,7 @@ public class UIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
 
     private bool m_touch = false;
 
+    public Action onTouchDrag;
     public Action onTouchOn;
     public Action onTouchOut;
 
@@ -127,6 +128,8 @@ public class UIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
             m_valueFixed = Vector2.zero;
         //
         m_joyStickButton.anchoredPosition = m_valueFixed * m_JoyStickLimitRadius * 1;
+        //
+        onTouchDrag?.Invoke();
     }
 
     public void OnPointerUp(PointerEventData eventData)
