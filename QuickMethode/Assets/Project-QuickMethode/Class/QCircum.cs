@@ -91,9 +91,9 @@ public class QCircum
         return Points;
     }
 
-    public int[] GetHollowTriangle(Vector3[] points)
+    public int[] GetHollowTriangle(Vector3[] Points)
     {
-        int PointCount = points.Length / 2;
+        int PointCount = Points.Length / 2;
         int TriangleCount = PointCount * 2;
         //
         List<int> Trianges = new List<int>();
