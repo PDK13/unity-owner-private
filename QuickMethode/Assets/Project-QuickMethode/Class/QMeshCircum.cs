@@ -60,7 +60,7 @@ public class QMeshCircum
         return m_mesh;
     }
 
-    public List<Vector3> GetFilledPoints(int Point, float Radius, float Deg)
+    private List<Vector3> GetFilledPoints(int Point, float Radius, float Deg)
     {
         if (Point < 3)
             //One shape must have 3 points at least!!
@@ -84,7 +84,7 @@ public class QMeshCircum
         return Points;
     }
 
-    public int[] GetFilledTriangle(Vector3[] Points)
+    private int[] GetFilledTriangle(Vector3[] Points)
     {
         int TriangleCount = Points.Length - 2;
         //
@@ -125,7 +125,7 @@ public class QMeshCircum
         return m_mesh;
     }
 
-    public List<Vector3> GetHollowPoints(int Point, float Radius, float RadiusHollow, float Deg)
+    private List<Vector3> GetHollowPoints(int Point, float Radius, float RadiusHollow, float Deg)
     {
         List<Vector3> Points = new List<Vector3>();
         //
@@ -135,7 +135,7 @@ public class QMeshCircum
         return Points;
     }
 
-    public int[] GetHollowTriangle(Vector3[] Points)
+    private int[] GetHollowTriangle(Vector3[] Points)
     {
         int PointCount = Points.Length / 2;
         int TriangleCount = PointCount * 2;
