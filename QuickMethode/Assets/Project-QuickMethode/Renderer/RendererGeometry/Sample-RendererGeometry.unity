@@ -11959,6 +11959,10 @@ PrefabInstance:
       value: 1.3823886
       objectReference: {fileID: 0}
     - target: {fileID: 1388580170489277997, guid: 9d1b8f90872b398438b713d819e4c906, type: 3}
+      propertyPath: m_ColliderPaths.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1388580170489277997, guid: 9d1b8f90872b398438b713d819e4c906, type: 3}
       propertyPath: m_CompositePaths.m_Paths.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -56634,6 +56638,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shape-ground-circle
       objectReference: {fileID: 0}
+    - target: {fileID: 4917480768781482646, guid: 9d1b8f90872b398438b713d819e4c906, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7045571253578565258, guid: 9d1b8f90872b398438b713d819e4c906, type: 3}
       propertyPath: m_AdaptiveUV
       value: 1
@@ -57317,40 +57325,60 @@ MonoBehaviour:
   m_Spline:
     m_IsOpenEnded: 0
     m_ControlPoints:
-    - position: {x: 0.70710677, y: 0.70710677, z: 0}
-      leftTangent: {x: 0, y: 0, z: 0}
-      rightTangent: {x: 0, y: 0, z: 0}
-      mode: 0
+    - position: {x: 2, y: 0, z: 0}
+      leftTangent: {x: -0.00000008463859, y: 0.71, z: -0}
+      rightTangent: {x: 0.00000008463859, y: -0.71, z: 0}
+      mode: 1
       height: 1
       bevelCutoff: 0
       bevelSize: 0
       spriteIndex: 0
       corner: 0
       m_CornerMode: 1
-    - position: {x: -0.70710677, y: 0.70710677, z: 0}
-      leftTangent: {x: 0, y: 0, z: 0}
-      rightTangent: {x: 0, y: 0, z: 0}
-      mode: 0
+    - position: {x: 0.99999994, y: -1.7320509, z: 0}
+      leftTangent: {x: 0.61487806, y: 0.35499996, z: -0}
+      rightTangent: {x: -0.61487806, y: -0.35499996, z: 0}
+      mode: 1
       height: 1
       bevelCutoff: 0
       bevelSize: 0
       spriteIndex: 0
       corner: 0
       m_CornerMode: 1
-    - position: {x: -0.70710665, y: -0.7071069, z: 0}
-      leftTangent: {x: 0, y: 0, z: 0}
-      rightTangent: {x: 0, y: 0, z: 0}
-      mode: 0
+    - position: {x: -1.0000001, y: -1.7320508, z: 0}
+      leftTangent: {x: 0.614878, y: -0.35500002, z: -0}
+      rightTangent: {x: -0.614878, y: 0.35500002, z: 0}
+      mode: 1
       height: 1
       bevelCutoff: 0
       bevelSize: 0
       spriteIndex: 0
       corner: 0
       m_CornerMode: 1
-    - position: {x: 0.707107, y: -0.70710653, z: 0}
-      leftTangent: {x: 0, y: 0, z: 0}
-      rightTangent: {x: 0, y: 0, z: 0}
-      mode: 0
+    - position: {x: -2, y: 0.00000017484555, z: 0}
+      leftTangent: {x: -0.000000042319297, y: -0.71, z: -0}
+      rightTangent: {x: 0.000000042319297, y: 0.71, z: 0}
+      mode: 1
+      height: 1
+      bevelCutoff: 0
+      bevelSize: 0
+      spriteIndex: 0
+      corner: 0
+      m_CornerMode: 1
+    - position: {x: -0.9999998, y: 1.7320509, z: 0}
+      leftTangent: {x: -0.6148781, y: -0.35499996, z: -0}
+      rightTangent: {x: 0.6148781, y: 0.35499996, z: 0}
+      mode: 1
+      height: 1
+      bevelCutoff: 0
+      bevelSize: 0
+      spriteIndex: 0
+      corner: 0
+      m_CornerMode: 1
+    - position: {x: 0.9999998, y: 1.7320509, z: 0}
+      leftTangent: {x: -0.614878, y: 0.35499996, z: -0}
+      rightTangent: {x: 0.614878, y: -0.35499996, z: 0}
+      mode: 1
       height: 1
       bevelCutoff: 0
       bevelSize: 0
@@ -57432,8 +57460,8 @@ SpriteShapeRenderer:
   - {fileID: 21300000, guid: 948c5a4d697875142a353d3261d983f6, type: 3}
   - {fileID: 21300000, guid: b79046eca32f94d4096e14b5472723f7, type: 3}
   m_LocalAABB:
-    m_Center: {x: 0, y: -0.00000011920929, z: 0}
-    m_Extent: {x: 1.2071068, y: 1.207107, z: 0}
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 2.5, y: 2.4971175, z: 0}
 --- !u!4 &6568096948360758563
 Transform:
   m_ObjectHideFlags: 0
@@ -57481,15 +57509,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_spriteShape: {fileID: 6568096948360758561}
-  FilledPoints: 4
-  FilledRadius: 1
-  FilledDeg: 45
+  FilledRadius: 5
+  FilledDeg: 0
   HollowRadius: 2
-  Points:
-  - {x: 0.70710677, y: 0.70710677, z: 0}
-  - {x: -0.70710677, y: 0.70710677, z: 0}
-  - {x: -0.70710665, y: -0.7071069, z: 0}
-  - {x: 0.707107, y: -0.70710653, z: 0}
+  HollowCut: 0
+  Points: []
 --- !u!1001 &7780319562370758212
 PrefabInstance:
   m_ObjectHideFlags: 0
