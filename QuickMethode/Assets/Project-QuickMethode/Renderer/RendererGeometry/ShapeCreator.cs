@@ -24,46 +24,17 @@ public class ShapeCreator : MonoBehaviour
 
     public void SetGenerate()
     {
-        m_spriteShape.spline.Clear();
-        for (int i = 0; i < Points.Length; i++)
-            m_spriteShape.spline.InsertPointAt(i, Points[i]);
+
     }
 
     public void SetGenerateFilled()
     {
-        SetInitCircum();
-        //
-        m_circum.SetFilledGenerate();
-        //
-        Points = m_circum.Points;
-        //
-        m_spriteShape.spline.Clear();
-        for (int i = 0; i < Points.Length; i++)
-            m_spriteShape.spline.InsertPointAt(i, Points[i]);
+
     }
 
     public void SetGenerateHollow()
     {
-        SetInitCircum();
-        //
-        m_circum.SetHollowGenerate();
-        //
-        Points = m_circum.Points;
-        //
-        m_spriteShape.spline.Clear();
-        for (int i = 0; i < Points.Length; i++)
-            m_spriteShape.spline.InsertPointAt(i, Points[i]);
-    }
 
-    private void SetInitCircum()
-    {
-        if (m_circum == null)
-            m_circum = new QMeshCircum();
-        //
-        m_circum.Point = FilledPoints;
-        m_circum.Radius = FilledRadius;
-        m_circum.RadiusHollow = HollowRadius;
-        m_circum.Deg = FilledDeg;
     }
 }
 

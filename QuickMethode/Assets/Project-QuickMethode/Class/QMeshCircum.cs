@@ -1,35 +1,63 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI.Extensions;
 
 public class QMeshCircum
 {
     #region Local
 
-    public int Point = 0;
-    public float Radius = 0;
-    public float RadiusHollow = 0;
-    public float Deg = 0;
+    private int m_point = 0;
+    private float m_radius = 0;
+    private float m_deg = 0;
+
+    private bool m_hollow = false;
+    private float m_radiusHollow = 0;
 
     private Vector3[] m_points;
     private int[] m_triangle;
-    private bool m_hollow = false;
+
+    private Mesh m_mesh;
+
+    public int Point => m_point;
+
+    public float Radius => m_radius;
+
+    public float Deg => m_deg;
+
+    public bool Hollow => m_hollow;
+
+    public float RadiusHollow => Hollow ? m_radiusHollow : 0f;
 
     public Vector3[] Points => m_points;
 
     public int[] Triangles => m_triangle;
 
-    public bool Hollow => m_hollow;
+    public Mesh Mesh => m_mesh;
 
     //Filled
 
-    public void SetFilledGenerate()
+    public Mesh SetFilledGenerate(int Point, float Radius, float Deg)
     {
         if (Point < 3)
-            return;
+            return null;
+        //
+        m_point = Point;
+        m_radius = Radius;
+        m_deg = Deg;
+        m_hollow = false;
+        m_radiusHollow = 0;
         //
         m_points = GetFilledPoints(Point, Radius, Deg).ToArray();
         m_triangle = GetFilledTriangle(m_points);
-        m_hollow = false;
+        //
+        m_mesh = new Mesh();
+        m_mesh.name = string.Format("{0}-{1}-{2}", m_point, m_radius + (m_hollow ? "H" + m_radiusHollow : "F"), m_deg);
+        m_mesh.vertices = m_points;
+        m_mesh.triangles = m_triangle;
+        m_mesh.RecalculateNormals();
+        m_mesh.RecalculateBounds();
+        //
+        return m_mesh;
     }
 
     public List<Vector3> GetFilledPoints(int Point, float Radius, float Deg)
@@ -73,14 +101,28 @@ public class QMeshCircum
 
     //Hollow
 
-    public void SetHollowGenerate()
+    public Mesh SetHollowGenerate(int Point, float Radius, float RadiusHollow, float Deg)
     {
-        if (Point < 3)
-            return;
+        if (m_point < 3)
+            return null;
         //
-        m_points = GetHollowPoints(Point, Radius, RadiusHollow, Deg).ToArray();
-        m_triangle = GetHollowTriangle(m_points);
+        m_point = Point;
+        m_radius = Radius;
+        m_deg = Deg;
         m_hollow = true;
+        m_radiusHollow = RadiusHollow;
+        //
+        m_points = GetHollowPoints(m_point, m_radius, m_radiusHollow, m_deg).ToArray();
+        m_triangle = GetHollowTriangle(m_points);
+        //
+        m_mesh = new Mesh();
+        m_mesh.name = string.Format("{0}-{1}-{2}", m_point, m_radius + (m_hollow ? "H" + m_radiusHollow : "F"), m_deg);
+        m_mesh.vertices = m_points;
+        m_mesh.triangles = m_triangle;
+        m_mesh.RecalculateNormals();
+        m_mesh.RecalculateBounds();
+        //
+        return m_mesh;
     }
 
     public List<Vector3> GetHollowPoints(int Point, float Radius, float RadiusHollow, float Deg)
@@ -121,122 +163,6 @@ public class QMeshCircum
     #endregion
 
     #region Static
-
-    //Mesh - Create new: Should use in Editor Mode!!
-
-    public static Mesh SetGenerate(QMeshCircum Circum)
-    {
-        Mesh Mesh = new Mesh();
-        Mesh.name = string.Format("{0}-{1}-{2}", Circum.Point, Circum.Radius + (Circum.Hollow ? "H" + Circum.RadiusHollow : "F"), Circum.Deg);
-        Mesh.vertices = Circum.Points;
-        Mesh.triangles = Circum.Triangles;
-        Mesh.RecalculateNormals();
-        Mesh.RecalculateBounds();
-        //
-        return Mesh;
-    }
-
-    public static Mesh SetFilledGenerate(int Point, float Radius, float Deg)
-    {
-        QMeshCircum Circum = new QMeshCircum();
-        Circum.Point = Point;
-        Circum.Radius = Radius;
-        Circum.Deg = Deg;
-        Circum.SetFilledGenerate();
-        //
-        Mesh Mesh = new Mesh();
-        Mesh.name = string.Format("{0}-{1}-{2}", Circum.Point, Circum.Radius + (Circum.Hollow ? "H" + Circum.RadiusHollow : "F"), Circum.Deg);
-        Mesh.vertices = Circum.Points;
-        Mesh.triangles = Circum.Triangles;
-        Mesh.RecalculateNormals();
-        Mesh.RecalculateBounds();
-        //
-        return Mesh;
-    }
-
-    public static Mesh SetHollowGenerate(int Point, float Radius, float RadiusHollow, float Deg)
-    {
-        QMeshCircum Circum = new QMeshCircum();
-        Circum.Point = Point;
-        Circum.Radius = Radius;
-        Circum.RadiusHollow = RadiusHollow;
-        Circum.Deg = Deg;
-        Circum.SetHollowGenerate();
-        //
-        Mesh Mesh = new Mesh();
-        Mesh.name = string.Format("{0}-{1}-{2}", Circum.Point, Circum.Radius + (Circum.Hollow ? "H" + Circum.RadiusHollow : "F"), Circum.Deg);
-        Mesh.vertices = Circum.Points;
-        Mesh.triangles = Circum.Triangles;
-        Mesh.RecalculateNormals();
-        Mesh.RecalculateBounds();
-        //
-        return Mesh;
-    }
-
-    //Mesh - Clear All: Should use in Play Mode!!
-
-    public static void SetGenerate(MeshFilter MeshFilter, QMeshCircum Circum)
-    {
-        if (!Application.isPlaying)
-        {
-            MeshFilter.mesh = SetGenerate(Circum);
-            return;
-        }
-        //
-        MeshFilter.mesh.Clear();
-        MeshFilter.mesh.name = string.Format("{0}-{1}-{2}", Circum.Point, Circum.Radius + (Circum.Hollow ? "H" + Circum.RadiusHollow : "F"), Circum.Deg);
-        MeshFilter.mesh.vertices = Circum.Points;
-        MeshFilter.mesh.triangles = Circum.Triangles;
-        MeshFilter.mesh.RecalculateNormals();
-        MeshFilter.mesh.RecalculateBounds();
-    }
-
-    public static void SetFilledGenerate(MeshFilter MeshFilter, int Point, float Radius, float Deg)
-    {
-        if (!Application.isPlaying)
-        {
-            MeshFilter.mesh = SetFilledGenerate(Point, Radius, Deg);
-            return;
-        }
-        //
-        QMeshCircum Circum = new QMeshCircum();
-        Circum.Point = Point;
-        Circum.Radius = Radius;
-        Circum.Deg = Deg;
-        Circum.SetFilledGenerate();
-        //
-        MeshFilter.mesh.Clear();
-        MeshFilter.mesh.name = string.Format("{0}-{1}-{2}", Circum.Point, Circum.Radius + (Circum.Hollow ? "H" + Circum.RadiusHollow : "F"), Circum.Deg);
-        MeshFilter.mesh.vertices = Circum.Points;
-        MeshFilter.mesh.triangles = Circum.Triangles;
-        MeshFilter.mesh.RecalculateNormals();
-        MeshFilter.mesh.RecalculateBounds();
-    }
-
-    public static void SetHollowGenerate(MeshFilter MeshFilter, int Point, float Radius, float RadiusHollow, float Deg)
-    {
-        if (!Application.isPlaying)
-        {
-            MeshFilter.mesh = SetHollowGenerate(Point, Radius, RadiusHollow, Deg);
-            return;
-        }
-        //
-        QMeshCircum Circum = new QMeshCircum();
-        Circum.Point = Point;
-        Circum.Radius = Radius;
-        Circum.RadiusHollow = RadiusHollow;
-        Circum.Deg = Deg;
-        Circum.SetHollowGenerate();
-        //
-        MeshFilter.mesh.Clear();
-        MeshFilter.mesh.name = string.Format("{0}-{1}-{2}", Circum.Point, Circum.Radius + (Circum.Hollow ? "H" + Circum.RadiusHollow : "F"), Circum.Deg);
-        MeshFilter.mesh.vertices = Circum.Points;
-        MeshFilter.mesh.triangles = Circum.Triangles;
-        MeshFilter.mesh.RecalculateNormals();
-        MeshFilter.mesh.RecalculateBounds();
-    }
-
-    //
 
     public static List<Vector2> GetGeometryPoints(int Point, float Radius, float Deg)
     {

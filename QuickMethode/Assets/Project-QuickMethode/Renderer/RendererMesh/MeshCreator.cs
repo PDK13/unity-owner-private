@@ -23,46 +23,45 @@ public class MeshCreator : MonoBehaviour
 
     public void SetGenerate()
     {
-        m_meshFilter.mesh.Clear();
-        m_meshFilter.mesh.vertices = Points;
-        m_meshFilter.mesh.triangles = Triangles;
-        m_meshFilter.mesh.RecalculateNormals();
-        m_meshFilter.mesh.RecalculateBounds();
+        if (Application.isPlaying)
+        {
+            m_meshFilter.mesh.Clear();
+            m_meshFilter.mesh.vertices = Points;
+            m_meshFilter.mesh.triangles = Triangles;
+            m_meshFilter.mesh.RecalculateNormals();
+            m_meshFilter.mesh.RecalculateBounds();
+        }
+        else
+        {
+            Mesh Mesh = new Mesh();
+            Mesh.vertices = Points;
+            Mesh.triangles = Triangles;
+            Mesh.RecalculateNormals();
+            Mesh.RecalculateBounds();
+            m_meshFilter.mesh = Mesh;
+        }
     }
 
     public void SetGenerateFilled()
     {
-        SetInitCircum();
+        if (m_circum == null)
+            m_circum = new QMeshCircum();
         //
-        m_circum.SetFilledGenerate();
+        m_meshFilter.mesh = m_circum.SetFilledGenerate(FilledPoints, FilledRadius, FilledDeg);
         //
         Points = m_circum.Points;
         Triangles = m_circum.Triangles;
-        //
-        QMeshCircum.SetGenerate(m_meshFilter, m_circum);
     }
 
     public void SetGenerateHollow()
     {
-        SetInitCircum();
-        //
-        m_circum.SetHollowGenerate();
-        //
-        Points = m_circum.Points;
-        Triangles = m_circum.Triangles;
-        //
-        QMeshCircum.SetGenerate(m_meshFilter, m_circum);
-    }
-
-    private void SetInitCircum()
-    {
         if (m_circum == null)
             m_circum = new QMeshCircum();
         //
-        m_circum.Point = FilledPoints;
-        m_circum.Radius = FilledRadius;
-        m_circum.RadiusHollow = HollowRadius;
-        m_circum.Deg = FilledDeg;
+        m_meshFilter.mesh = m_circum.SetHollowGenerate(FilledPoints, FilledRadius, HollowRadius, FilledDeg);
+        //
+        Points = m_circum.Points;
+        Triangles = m_circum.Triangles;
     }
 }
 
