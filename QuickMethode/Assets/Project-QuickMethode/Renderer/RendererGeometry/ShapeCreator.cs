@@ -1,11 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.U2D;
 
-[RequireComponent(typeof(MeshFilter))]
-[RequireComponent(typeof(MeshRenderer))]
-public class MeshCreator : MonoBehaviour
+public class ShapeCreator : MonoBehaviour
 {
-    [SerializeField] private MeshFilter m_meshFilter;
+    [SerializeField] private SpriteShapeController m_spriteShape;
 
     private QMeshCircum m_circum;
 
@@ -19,15 +21,12 @@ public class MeshCreator : MonoBehaviour
 
     [Space]
     public Vector3[] Points;
-    public int[] Triangles;
 
     public void SetGenerate()
     {
-        m_meshFilter.mesh.Clear();
-        m_meshFilter.mesh.vertices = Points;
-        m_meshFilter.mesh.triangles = Triangles;
-        m_meshFilter.mesh.RecalculateNormals();
-        m_meshFilter.mesh.RecalculateBounds();
+        m_spriteShape.spline.Clear();
+        for (int i = 0; i < Points.Length; i++)
+            m_spriteShape.spline.InsertPointAt(i, Points[i]);
     }
 
     public void SetGenerateFilled()
@@ -37,9 +36,10 @@ public class MeshCreator : MonoBehaviour
         m_circum.SetFilledGenerate();
         //
         Points = m_circum.Points;
-        Triangles = m_circum.Triangles;
         //
-        QMeshCircum.SetGenerate(m_meshFilter, m_circum);
+        m_spriteShape.spline.Clear();
+        for (int i = 0; i < Points.Length; i++)
+            m_spriteShape.spline.InsertPointAt(i, Points[i]);
     }
 
     public void SetGenerateHollow()
@@ -49,9 +49,10 @@ public class MeshCreator : MonoBehaviour
         m_circum.SetHollowGenerate();
         //
         Points = m_circum.Points;
-        Triangles = m_circum.Triangles;
         //
-        QMeshCircum.SetGenerate(m_meshFilter, m_circum);
+        m_spriteShape.spline.Clear();
+        for (int i = 0; i < Points.Length; i++)
+            m_spriteShape.spline.InsertPointAt(i, Points[i]);
     }
 
     private void SetInitCircum()
@@ -68,12 +69,12 @@ public class MeshCreator : MonoBehaviour
 
 #if UNITY_EDITOR
 
-[CustomEditor(typeof(MeshCreator))]
-public class MeshCreatorEditor : Editor
+[CustomEditor(typeof(ShapeCreator))]
+public class ShapeCreatorEditor : Editor
 {
-    private MeshCreator m_target;
+    private ShapeCreator m_target;
 
-    private SerializedProperty m_meshFilter;
+    private SerializedProperty m_spriteShape;
 
     private SerializedProperty FilledPoints;
     private SerializedProperty FilledRadius;
@@ -82,13 +83,12 @@ public class MeshCreatorEditor : Editor
     private SerializedProperty HollowRadius;
 
     private SerializedProperty Points;
-    private SerializedProperty Triangles;
 
     private void OnEnable()
     {
-        m_target = target as MeshCreator;
+        m_target = target as ShapeCreator;
         //
-        m_meshFilter = QEditorCustom.GetField(this, "m_meshFilter");
+        m_spriteShape = QEditorCustom.GetField(this, "m_spriteShape");
         //
         FilledPoints = QEditorCustom.GetField(this, "FilledPoints");
         FilledRadius = QEditorCustom.GetField(this, "FilledRadius");
@@ -97,14 +97,13 @@ public class MeshCreatorEditor : Editor
         HollowRadius = QEditorCustom.GetField(this, "HollowRadius");
         //
         Points = QEditorCustom.GetField(this, "Points");
-        Triangles = QEditorCustom.GetField(this, "Triangles");
     }
 
     public override void OnInspectorGUI()
     {
         QEditorCustom.SetUpdate(this);
         //
-        QEditorCustom.SetField(m_meshFilter);
+        QEditorCustom.SetField(m_spriteShape);
         //
         QEditorCustom.SetField(FilledPoints);
         QEditorCustom.SetField(FilledRadius);
@@ -119,7 +118,6 @@ public class MeshCreatorEditor : Editor
             m_target.SetGenerateHollow();
         //
         QEditorCustom.SetField(Points);
-        QEditorCustom.SetField(Triangles);
         //
         if (QEditor.SetButton("Generate"))
             m_target.SetGenerate();
