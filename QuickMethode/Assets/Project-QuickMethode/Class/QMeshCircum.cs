@@ -17,6 +17,7 @@ public class QMeshCircum
     private int[] m_triangle;
 
     private Mesh m_mesh;
+    private MeshFilter m_meshFilter;
 
     public int Point => m_point;
 
@@ -33,6 +34,16 @@ public class QMeshCircum
     public int[] Triangles => m_triangle;
 
     public Mesh Mesh => m_mesh;
+
+    public QMeshCircum()
+    {
+
+    }
+
+    public QMeshCircum(MeshFilter MeshFilter)
+    {
+        m_meshFilter = MeshFilter;
+    }
 
     //Filled
 
@@ -56,6 +67,9 @@ public class QMeshCircum
         m_mesh.triangles = m_triangle;
         m_mesh.RecalculateNormals();
         m_mesh.RecalculateBounds();
+        //
+        if (m_meshFilter != null)
+            m_meshFilter.mesh = m_mesh;
         //
         return m_mesh;
     }
@@ -121,6 +135,9 @@ public class QMeshCircum
         m_mesh.triangles = m_triangle;
         m_mesh.RecalculateNormals();
         m_mesh.RecalculateBounds();
+        //
+        if (m_meshFilter != null)
+            m_meshFilter.mesh = m_mesh;
         //
         return m_mesh;
     }

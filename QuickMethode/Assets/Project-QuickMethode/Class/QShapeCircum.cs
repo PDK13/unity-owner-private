@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D;
 
 public class QShapeCircum
 {
@@ -13,6 +14,13 @@ public class QShapeCircum
     private int m_cutHollow = 1;
 
     private Vector3[] m_points;
+
+    Spline m_spline;
+
+    public QShapeCircum(SpriteShapeController SpriteShapeController)
+    {
+        m_spline = SpriteShapeController.spline;
+    }
 
     #endregion
 }

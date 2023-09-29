@@ -45,9 +45,9 @@ public class MeshCreator : MonoBehaviour
     public void SetGenerateFilled()
     {
         if (m_circum == null)
-            m_circum = new QMeshCircum();
+            m_circum = new QMeshCircum(m_meshFilter);
         //
-        m_meshFilter.mesh = m_circum.SetFilledGenerate(FilledPoints, FilledRadius, FilledDeg);
+        m_circum.SetFilledGenerate(FilledPoints, FilledRadius, FilledDeg);
         //
         Points = m_circum.Points;
         Triangles = m_circum.Triangles;
@@ -56,9 +56,9 @@ public class MeshCreator : MonoBehaviour
     public void SetGenerateHollow()
     {
         if (m_circum == null)
-            m_circum = new QMeshCircum();
+            m_circum = new QMeshCircum(m_meshFilter);
         //
-        m_meshFilter.mesh = m_circum.SetHollowGenerate(FilledPoints, FilledRadius, HollowRadius, FilledDeg);
+        m_circum.SetHollowGenerate(FilledPoints, FilledRadius, HollowRadius, FilledDeg);
         //
         Points = m_circum.Points;
         Triangles = m_circum.Triangles;
