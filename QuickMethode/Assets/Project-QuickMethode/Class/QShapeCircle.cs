@@ -6,8 +6,6 @@ using UnityEngine.U2D;
 [Serializable]
 public class QShapeCircle
 {
-    #region Local
-
     private float m_radius = 0f;
 
     private bool m_hollow  = false;
@@ -130,6 +128,4 @@ public class QShapeCircle
             m_spline.SetRightTangent(i, rightTangent);
         }
     }
-
-    #endregion
 }
