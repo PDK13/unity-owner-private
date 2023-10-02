@@ -13,8 +13,11 @@ public class ShapeCircleCreator : MonoBehaviour
     [Min(2f)] public float FilledRadius = 2f;
 
     [Space]
-    [Min(1)] public float HollowRadius = 1f;
-    [Min(0)] public int HollowCut = 1;
+    [Min(1)] public int FilledCut = 1;
+
+    [Space]
+    [Min(1f)] public float HollowRadius = 1f;
+    [Min(0)] public int HollowCut = 0;
 
     [Space]
     public QShapeCircle Circum;
@@ -24,7 +27,17 @@ public class ShapeCircleCreator : MonoBehaviour
         if (Circum == null || !Application.isPlaying)
             Circum = new QShapeCircle(m_spriteShape);
         //
+        m_spriteShape.spline.isOpenEnded = false;
         Circum.SetFilledGenerate(FilledRadius);
+    }
+
+    public void SetGenerateFilledOpen()
+    {
+        if (Circum == null || !Application.isPlaying)
+            Circum = new QShapeCircle(m_spriteShape);
+        //
+        m_spriteShape.spline.isOpenEnded = true;
+        Circum.SetFilledGenerate(FilledRadius, FilledCut);
     }
 
     public void SetGenerateHollow()
@@ -32,6 +45,7 @@ public class ShapeCircleCreator : MonoBehaviour
         if (Circum == null || !Application.isPlaying)
             Circum = new QShapeCircle(m_spriteShape);
         //
+        m_spriteShape.spline.isOpenEnded = false;
         Circum.SetHollowGenerate(FilledRadius, HollowRadius, HollowCut);
     }
 }
@@ -46,6 +60,7 @@ public class ShapeCreatorEditor : Editor
     private SerializedProperty m_spriteShape;
 
     private SerializedProperty FilledRadius;
+    private SerializedProperty FilledCut;
 
     private SerializedProperty HollowRadius;
     private SerializedProperty HollowCut;
@@ -57,6 +72,7 @@ public class ShapeCreatorEditor : Editor
         m_spriteShape = QEditorCustom.GetField(this, "m_spriteShape");
         //
         FilledRadius = QEditorCustom.GetField(this, "FilledRadius");
+        FilledCut = QEditorCustom.GetField(this, "FilledCut");
         //
         HollowRadius = QEditorCustom.GetField(this, "HollowRadius");
         HollowCut = QEditorCustom.GetField(this, "HollowCut");
@@ -72,6 +88,11 @@ public class ShapeCreatorEditor : Editor
         //
         if (QEditor.SetButton("Generate Filled"))
             m_target.SetGenerateFilled();
+        //
+        QEditorCustom.SetField(FilledCut);
+        //
+        if (QEditor.SetButton("Generate Filled Open"))
+            m_target.SetGenerateFilledOpen();
         //
         QEditorCustom.SetField(HollowRadius);
         QEditorCustom.SetField(HollowCut);
