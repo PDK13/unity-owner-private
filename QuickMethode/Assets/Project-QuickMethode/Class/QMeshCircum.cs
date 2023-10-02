@@ -5,8 +5,6 @@ using UnityEngine;
 [Serializable]
 public class QMeshCircum
 {
-    #region Local
-
     private int m_point = 0;
     private float m_radius = 0;
     private float m_deg = 0;
@@ -177,9 +175,7 @@ public class QMeshCircum
         }
     }
 
-    #endregion
-
-    #region Static
+    //Static
 
     public static List<Vector2> GetGeometryPoints(int Point, float Radius, float Deg)
     {
@@ -204,6 +200,4 @@ public class QMeshCircum
 
         return Points;
     }
-
-    #endregion
 }

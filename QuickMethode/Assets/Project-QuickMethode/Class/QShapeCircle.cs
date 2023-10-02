@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.U2D;
 
 [Serializable]
-public class QShapeCircum
+public class QShapeCircle
 {
     #region Local
 
@@ -28,7 +28,7 @@ public class QShapeCircum
     private SpriteShapeController m_spriteShapeController;
     private Transform m_spriteShapeControllerTransform;
 
-    public QShapeCircum(SpriteShapeController SpriteShapeController)
+    public QShapeCircle(SpriteShapeController SpriteShapeController)
     {
         m_spriteShapeController = SpriteShapeController;
         m_spline = SpriteShapeController.spline;

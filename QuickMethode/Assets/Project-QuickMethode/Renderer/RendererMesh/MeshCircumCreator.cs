@@ -3,7 +3,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
-public class MeshCreator : MonoBehaviour
+public class MeshCircumCreator : MonoBehaviour
 {
     [SerializeField] private MeshFilter m_meshFilter;
 
@@ -68,10 +68,10 @@ public class MeshCreator : MonoBehaviour
 
 #if UNITY_EDITOR
 
-[CustomEditor(typeof(MeshCreator))]
+[CustomEditor(typeof(MeshCircumCreator))]
 public class MeshCreatorEditor : Editor
 {
-    private MeshCreator m_target;
+    private MeshCircumCreator m_target;
 
     private SerializedProperty m_meshFilter;
 
@@ -86,7 +86,7 @@ public class MeshCreatorEditor : Editor
 
     private void OnEnable()
     {
-        m_target = target as MeshCreator;
+        m_target = target as MeshCircumCreator;
         //
         m_meshFilter = QEditorCustom.GetField(this, "m_meshFilter");
         //

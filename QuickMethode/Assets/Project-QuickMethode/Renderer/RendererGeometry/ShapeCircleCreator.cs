@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.U2D;
 
-public class ShapeCreator : MonoBehaviour
+public class ShapeCircleCreator : MonoBehaviour
 {
     [SerializeField] private SpriteShapeController m_spriteShape;
 
@@ -17,12 +17,12 @@ public class ShapeCreator : MonoBehaviour
     [Min(0)] public int HollowCut = 1;
 
     [Space]
-    public QShapeCircum Circum;
+    public QShapeCircle Circum;
 
     public void SetGenerateFilled()
     {
         if (Circum == null || !Application.isPlaying)
-            Circum = new QShapeCircum(m_spriteShape);
+            Circum = new QShapeCircle(m_spriteShape);
         //
         Circum.SetFilledGenerate(FilledRadius);
     }
@@ -30,7 +30,7 @@ public class ShapeCreator : MonoBehaviour
     public void SetGenerateHollow()
     {
         if (Circum == null || !Application.isPlaying)
-            Circum = new QShapeCircum(m_spriteShape);
+            Circum = new QShapeCircle(m_spriteShape);
         //
         Circum.SetHollowGenerate(FilledRadius, HollowRadius, HollowCut);
     }
@@ -38,10 +38,10 @@ public class ShapeCreator : MonoBehaviour
 
 #if UNITY_EDITOR
 
-[CustomEditor(typeof(ShapeCreator))]
+[CustomEditor(typeof(ShapeCircleCreator))]
 public class ShapeCreatorEditor : Editor
 {
-    private ShapeCreator m_target;
+    private ShapeCircleCreator m_target;
 
     private SerializedProperty m_spriteShape;
 
@@ -52,7 +52,7 @@ public class ShapeCreatorEditor : Editor
 
     private void OnEnable()
     {
-        m_target = target as ShapeCreator;
+        m_target = target as ShapeCircleCreator;
         //
         m_spriteShape = QEditorCustom.GetField(this, "m_spriteShape");
         //
