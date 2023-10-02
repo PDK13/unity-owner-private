@@ -17,7 +17,7 @@ public class ShapeCreator : MonoBehaviour
 
     [Space]
     [Min(1)] public float HollowRadius = 1f;
-    [Min(1)] public int HollowCut = 1;
+    [Min(0)] public int HollowCut = 1;
 
     [Space]
     public Vector3[] Points;
@@ -33,6 +33,8 @@ public class ShapeCreator : MonoBehaviour
             m_circum = new QShapeCircum(m_spriteShape);
         //
         m_circum.SetFilledGenerate(FilledRadius);
+        //
+        Points = m_circum.Points;
     }
 
     public void SetGenerateHollow()
@@ -41,6 +43,8 @@ public class ShapeCreator : MonoBehaviour
             m_circum = new QShapeCircum(m_spriteShape);
         //
         m_circum.SetHollowGenerate(FilledRadius, HollowRadius, HollowCut);
+        //
+        Points = m_circum.Points;
     }
 }
 

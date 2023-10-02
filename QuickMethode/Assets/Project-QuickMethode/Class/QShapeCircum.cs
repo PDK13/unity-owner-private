@@ -15,6 +15,14 @@ public class QShapeCircum
 
     private Vector3[] m_points;
 
+    public float Radius => m_radius;
+
+    public float RadiusHollow => m_hollow ? m_radiusHollow : 0f;
+
+    public int CutHollow => m_cutHollow;
+
+    public Vector3[] Points => m_points;
+
     private Spline m_spline;
     private SpriteShapeController m_spriteShapeController;
     private Transform m_spriteShapeControllerTransform;
@@ -62,57 +70,56 @@ public class QShapeCircum
         }
     }
 
-    public void SetHollowGenerate(float Radius, float RadiusHollow, int CutHollow)
+    public void SetHollowGenerate(float Radius, float RadiusHollow, int CutHollow = 0)
     {
-        m_radius = Radius;
-        m_radiusHollow = RadiusHollow;
-        m_cutHollow = CutHollow;
+        m_radius = Radius >= 3 ? Radius : 3;
+        m_radiusHollow = RadiusHollow >= 2 ? (RadiusHollow >= m_radius ? m_radius - 1 : RadiusHollow) : 2;
+        m_cutHollow = CutHollow >= 0 ? CutHollow : 0;
         //
         List<Vector3> Points = new List<Vector3>();
         //
-        float OuterPiceAngle = 2 / Radius * 60;
-        int OuterPointsCount = (int)(360 / OuterPiceAngle);
-        int OuterSplineCount = m_spline.isOpenEnded ? (OuterPointsCount - m_cutHollow + 1) : OuterPointsCount;
-        //int OuterSplineCount = OuterPointsCount - m_cutHollow + 1;
-        OuterPiceAngle = 360f / OuterPointsCount;
+        float PiceAngle = 2 / m_radius * 60;
+        int PointsCount = (int)(360 / PiceAngle);
+        int SplineCount = PointsCount;
+        PiceAngle = 360f / PointsCount;
         //
         m_spline.Clear();
         //
-        for (int i = 0; i < OuterPointsCount; i++)
+        for (int i = 0; i < PointsCount; i++)
         {
-            float Angle = -i * OuterPiceAngle * Mathf.Deg2Rad;
-            Vector3 Pos = new Vector3(Mathf.Cos(Angle) * Radius, Mathf.Sin(Angle) * Radius, 0);
-            //
-            Points.Add(Pos);
-            //
-            if (i < OuterSplineCount)
-                m_spline.InsertPointAt(i, Pos);
+            if (i < PointsCount - m_cutHollow)
+            {
+                float Angle = -i * PiceAngle * Mathf.Deg2Rad;
+                Vector3 Pos = new Vector3(Mathf.Cos(Angle) * m_radius, Mathf.Sin(Angle) * m_radius, 0);
+                //
+                Points.Add(Pos);
+                //
+                if (i < SplineCount)
+                    m_spline.InsertPointAt(i, Pos);
+            }
         }
         //
-        float InnerPiceAngle = 2 / RadiusHollow * 60;
-        int InnerPointsCount = (int)(360 / InnerPiceAngle);
-        int InnerSplineCount = m_spline.isOpenEnded ? (InnerPointsCount - m_cutHollow + 1) : InnerPointsCount;
-        //int InnerSplineCount = InnerPointsCount - m_cutHollow + 1;
-        InnerPiceAngle = 360f / InnerPointsCount;
-        //
-        //
-        for (int i = 0; i < InnerPointsCount; i++)
+        for (int i = 0; i < PointsCount; i++)
         {
-            int IndexNew = InnerPointsCount - 1 - i;
-            //
-            float Angle = -IndexNew * InnerPiceAngle * Mathf.Deg2Rad;
-            Vector3 Pos = new Vector3(Mathf.Cos(Angle) * RadiusHollow, Mathf.Sin(Angle) * RadiusHollow, 0);
-            //
-            Points.Add(Pos);
-            //
-            if (IndexNew < InnerSplineCount)
-                m_spline.InsertPointAt(OuterPointsCount + i, Pos);
+            if (i >= m_cutHollow)
+            {
+                int InerIndex = PointsCount - 1 - i;
+                //
+                float Angle = -InerIndex * PiceAngle * Mathf.Deg2Rad;
+                Vector3 Pos = new Vector3(Mathf.Cos(Angle) * m_radiusHollow, Mathf.Sin(Angle) * m_radiusHollow, 0);
+                //
+                Points.Add(Pos);
+                //
+                if (InerIndex < SplineCount)
+                    m_spline.InsertPointAt(PointsCount + i - m_cutHollow * 2, Pos);
+            }
         }
         //
         m_points = Points.ToArray();
         //
-        float SplineCount = m_spline.GetPointCount();
-        int PointsCount = OuterPointsCount + InnerPointsCount;
+        SplineCount = m_spline.GetPointCount();
+        PointsCount = m_points.Length;
+        //
         for (int i = 0; i < SplineCount; i++)
         {
             m_spline.SetTangentMode(i, ShapeTangentMode.Continuous);
