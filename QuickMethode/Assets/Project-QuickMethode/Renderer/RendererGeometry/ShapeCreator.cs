@@ -11,7 +11,6 @@ public class ShapeCreator : MonoBehaviour
 
     [Space]
     [Min(2f)] public float FilledRadius = 2f;
-    public float FilledDeg = 0f;
 
     [Space]
     [Min(1)] public float HollowRadius = 1f;
@@ -22,7 +21,7 @@ public class ShapeCreator : MonoBehaviour
 
     public void SetGenerateFilled()
     {
-        if (Circum == null)
+        if (Circum == null || !Application.isPlaying)
             Circum = new QShapeCircum(m_spriteShape);
         //
         Circum.SetFilledGenerate(FilledRadius);
@@ -30,7 +29,7 @@ public class ShapeCreator : MonoBehaviour
 
     public void SetGenerateHollow()
     {
-        if (Circum == null)
+        if (Circum == null || !Application.isPlaying)
             Circum = new QShapeCircum(m_spriteShape);
         //
         Circum.SetHollowGenerate(FilledRadius, HollowRadius, HollowCut);
@@ -47,7 +46,6 @@ public class ShapeCreatorEditor : Editor
     private SerializedProperty m_spriteShape;
 
     private SerializedProperty FilledRadius;
-    private SerializedProperty FilledDeg;
 
     private SerializedProperty HollowRadius;
     private SerializedProperty HollowCut;
@@ -59,7 +57,6 @@ public class ShapeCreatorEditor : Editor
         m_spriteShape = QEditorCustom.GetField(this, "m_spriteShape");
         //
         FilledRadius = QEditorCustom.GetField(this, "FilledRadius");
-        FilledDeg = QEditorCustom.GetField(this, "FilledDeg");
         //
         HollowRadius = QEditorCustom.GetField(this, "HollowRadius");
         HollowCut = QEditorCustom.GetField(this, "HollowCut");
@@ -72,7 +69,6 @@ public class ShapeCreatorEditor : Editor
         QEditorCustom.SetField(m_spriteShape);
         //
         QEditorCustom.SetField(FilledRadius);
-        QEditorCustom.SetField(FilledDeg);
         //
         if (QEditor.SetButton("Generate Filled"))
             m_target.SetGenerateFilled();
