@@ -7,8 +7,6 @@ public class MeshCreator : MonoBehaviour
 {
     [SerializeField] private MeshFilter m_meshFilter;
 
-    private QMeshCircum m_circum;
-
     [Space]
     [Min(3)] public int FilledPoints = 3;
     [Min(0)] public float FilledRadius = 2f;
@@ -20,6 +18,9 @@ public class MeshCreator : MonoBehaviour
     [Space]
     public Vector3[] Points;
     public int[] Triangles;
+
+    [Space]
+    public QMeshCircum Circum;
 
     public void SetGenerate()
     {
@@ -44,24 +45,24 @@ public class MeshCreator : MonoBehaviour
 
     public void SetGenerateFilled()
     {
-        if (m_circum == null)
-            m_circum = new QMeshCircum(m_meshFilter);
+        if (Circum == null)
+            Circum = new QMeshCircum(m_meshFilter);
         //
-        m_circum.SetFilledGenerate(FilledPoints, FilledRadius, FilledDeg);
+        Circum.SetFilledGenerate(FilledPoints, FilledRadius, FilledDeg);
         //
-        Points = m_circum.Points;
-        Triangles = m_circum.Triangles;
+        Points = Circum.Points;
+        Triangles = Circum.Triangles;
     }
 
     public void SetGenerateHollow()
     {
-        if (m_circum == null)
-            m_circum = new QMeshCircum(m_meshFilter);
+        if (Circum == null)
+            Circum = new QMeshCircum(m_meshFilter);
         //
-        m_circum.SetHollowGenerate(FilledPoints, FilledRadius, HollowRadius, FilledDeg);
+        Circum.SetHollowGenerate(FilledPoints, FilledRadius, HollowRadius, FilledDeg);
         //
-        Points = m_circum.Points;
-        Triangles = m_circum.Triangles;
+        Points = Circum.Points;
+        Triangles = Circum.Triangles;
     }
 }
 

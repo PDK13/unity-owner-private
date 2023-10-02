@@ -9,8 +9,6 @@ public class ShapeCreator : MonoBehaviour
 {
     [SerializeField] private SpriteShapeController m_spriteShape;
 
-    private QShapeCircum m_circum;
-
     [Space]
     [Min(2f)] public float FilledRadius = 2f;
     public float FilledDeg = 0f;
@@ -20,31 +18,22 @@ public class ShapeCreator : MonoBehaviour
     [Min(0)] public int HollowCut = 1;
 
     [Space]
-    public Vector3[] Points;
-
-    public void SetGenerate()
-    {
-
-    }
+    public QShapeCircum Circum;
 
     public void SetGenerateFilled()
     {
-        if (m_circum == null)
-            m_circum = new QShapeCircum(m_spriteShape);
+        if (Circum == null)
+            Circum = new QShapeCircum(m_spriteShape);
         //
-        m_circum.SetFilledGenerate(FilledRadius);
-        //
-        Points = m_circum.Points;
+        Circum.SetFilledGenerate(FilledRadius);
     }
 
     public void SetGenerateHollow()
     {
-        if (m_circum == null)
-            m_circum = new QShapeCircum(m_spriteShape);
+        if (Circum == null)
+            Circum = new QShapeCircum(m_spriteShape);
         //
-        m_circum.SetHollowGenerate(FilledRadius, HollowRadius, HollowCut);
-        //
-        Points = m_circum.Points;
+        Circum.SetHollowGenerate(FilledRadius, HollowRadius, HollowCut);
     }
 }
 
@@ -63,8 +52,6 @@ public class ShapeCreatorEditor : Editor
     private SerializedProperty HollowRadius;
     private SerializedProperty HollowCut;
 
-    private SerializedProperty Points;
-
     private void OnEnable()
     {
         m_target = target as ShapeCreator;
@@ -76,8 +63,6 @@ public class ShapeCreatorEditor : Editor
         //
         HollowRadius = QEditorCustom.GetField(this, "HollowRadius");
         HollowCut = QEditorCustom.GetField(this, "HollowCut");
-        //
-        Points = QEditorCustom.GetField(this, "Points");
     }
 
     public override void OnInspectorGUI()
@@ -97,11 +82,6 @@ public class ShapeCreatorEditor : Editor
         //
         if (QEditor.SetButton("Generate Hollow"))
             m_target.SetGenerateHollow();
-        //
-        QEditorCustom.SetField(Points);
-        //
-        if (QEditor.SetButton("Generate"))
-            m_target.SetGenerate();
         //
         QEditorCustom.SetApply(this);
     }

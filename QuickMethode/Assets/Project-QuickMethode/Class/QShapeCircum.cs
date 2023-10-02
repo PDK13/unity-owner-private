@@ -1,8 +1,9 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
 
+[Serializable]
 public class QShapeCircum
 {
     #region Local
@@ -34,17 +35,20 @@ public class QShapeCircum
         m_spriteShapeControllerTransform = SpriteShapeController.transform;
     }
 
-    public void SetFilledGenerate(float Radius)
+    public void SetFilledGenerate(float Radius, int CutHollow = 0)
     {
+        m_spline.Clear();
+        //
         m_radius = Radius;
+        m_hollow = false;
+        m_radiusHollow = 0f;
+        m_cutHollow = CutHollow;
         //
         List<Vector3> Points = new List<Vector3>();
         //
         int PointsCount = (int)(360 / (2 / m_radius * 60));
-        int SplineCount = PointsCount;
+        int SplineCount = m_spline.isOpenEnded ? (PointsCount - CutHollow + 1) : PointsCount;
         float PiceAngle = 360f / PointsCount;
-        //
-        m_spline.Clear();
         //
         for (int i = 0; i < PointsCount; i++)
         {
@@ -62,9 +66,12 @@ public class QShapeCircum
         SetSplineGenerate();
     }
 
-    public void SetHollowGenerate(float Radius, float RadiusHollow, int CutHollow)
+    public void SetHollowGenerate(float Radius, float RadiusHollow, int CutHollow = 0)
     {
+        m_spline.Clear();
+        //
         m_radius = Radius;
+        m_hollow = true;
         m_radiusHollow = RadiusHollow;
         m_cutHollow = CutHollow;
         //
@@ -73,8 +80,6 @@ public class QShapeCircum
         int PointsCount = (int)(360 / (2 / m_radius * 60));
         int SplineCount = PointsCount;
         float PiceAngle = 360f / PointsCount;
-        //
-        m_spline.Clear();
         //
         for (int i = 0; i < PointsCount; i++)
         {

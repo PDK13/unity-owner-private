@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI.Extensions;
 
+[Serializable]
 public class QMeshCircum
 {
     #region Local
