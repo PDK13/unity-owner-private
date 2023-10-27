@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,12 +9,13 @@ public class ShapePlatformCreator : MonoBehaviour
 {
     [SerializeField] private SpriteShapeController m_spriteShape;
     [SerializeField] private CompositeCollider2D m_compositeCollider;
+    [SerializeField] private PolygonCollider2D m_poligonColider;
 
-    private PlatformStruct m_platformStruct;
+    [SerializeField] private PlatformStruct m_platformStruct;
 
     private void Awake()
     {
-        
+        m_platformStruct = new PlatformStruct(m_compositeCollider, m_poligonColider);
     }
 
     private void Start()
@@ -24,161 +25,83 @@ public class ShapePlatformCreator : MonoBehaviour
 
     private void Update()
     {
-        //if (m_platformStruct == null && m_compositeCollider != null)
-        //    m_platformStruct = new PlatformStruct(m_compositeCollider);
-        ////
-        //if (m_platformStruct != null)
-        //{
-        //    m_platformStruct.SetGenerate();
-        //    //
-        //    for (int i = 0; i < m_platformStruct.Platforms.Count; i++)
-        //    {
-        //        Debug.DrawLine(
-        //            this.transform.position + (Vector3)m_compositeCollider.offset + m_platformStruct.Platforms[i].PointA,
-        //            this.transform.position + (Vector3)m_compositeCollider.offset + m_platformStruct.Platforms[i].PointB,
-        //            Color.red);
-        //    }
-        //}
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
+        m_platformStruct.SetGenerate2();
         //
-        if (m_platformStruct == null && m_compositeCollider != null)
-            m_platformStruct = new PlatformStruct(m_compositeCollider);
-        //
-        if (m_platformStruct != null)
+        for (int i = 0; i < m_platformStruct.Platforms.Count; i++)
         {
-            m_platformStruct.SetGenerate();
-            //
-            for (int i = 0; i < m_platformStruct.Platforms.Count; i++)
-            {
-                Debug.DrawLine(
-                    this.transform.position + (Vector3)m_compositeCollider.offset + m_platformStruct.Platforms[i].PointA,
-                    this.transform.position + (Vector3)m_compositeCollider.offset + m_platformStruct.Platforms[i].PointB,
-                    Color.red);
-            }
+            Debug.DrawLine(
+                this.transform.position + (Vector3)m_compositeCollider.offset + (Vector3)m_platformStruct.Platforms[i].PointA,
+                this.transform.position + (Vector3)m_compositeCollider.offset + (Vector3)m_platformStruct.Platforms[i].PointB,
+                Color.red);
         }
     }
 }
 
+[Serializable]
 public class PlatformStruct
 {
     public List<PlatformSingle> Platforms = new List<PlatformSingle>();
 
-    private CompositeCollider2D m_compositeCollider;
+    [SerializeField] private CompositeCollider2D m_compositeCollider;
+    [SerializeField] private PolygonCollider2D m_polygonCollider;
 
-    public PlatformStruct(CompositeCollider2D SpriteShape)
+    public PlatformStruct(CompositeCollider2D SpriteShape, PolygonCollider2D polygonCollider)
     {
         m_compositeCollider = SpriteShape;
+        m_polygonCollider = polygonCollider;
     }
 
-    public void SetGenerate()
+    public void SetGenerate2()
     {
         Platforms = new List<PlatformSingle>();
         //
-        List<List<Vector2>> Points = GetPointsBorderPos();
-        for (int Group = 0; Group < Points.Count; Group++)
+        for (int Group = 0; Group < m_polygonCollider.pathCount; Group++)
         {
-            //Find a highest Point of this Group!!
-            int IndexStart = 0;
-            float HighStart = 0;
-            for (int Index = 0; Index < Points[Group].Count; Index++)
+            //Get Points in Group Path!!
+            List<Vector2> Points = m_polygonCollider.GetPath(Group).ToList();
+            //
+            //Check Points in Group!!
+            Vector2 PointA, PointB;
+            for (int Point = 0; Point < Points.Count - 1; Point++)
             {
-                if (Points[Group][Index].y <= HighStart)
-                    continue;
-                //
-                IndexStart = Index;
-                HighStart = Points[Group][Index].y;
+                PointA = Points[Point];
+                PointB = Points[Point + 1];
+                SetPlatformAdd(PointA, PointB);
             }
-            //Check where can Stand!!
-            //Check m_spriteShape Left to Right mean Stand, else not Stand!!
-            int IndexNext = IndexStart;
-            int IndexPrev = IndexNext - 1 >= 0 ? IndexNext - 1 : Points[Group].Count - 1;
-            do
-            {
-                //Index Run!!
-                IndexNext++;
-                IndexPrev++;
-                //
-                if (IndexNext >= Points[Group].Count)
-                    IndexNext = 0;
-                //
-                if (IndexPrev >= Points[Group].Count)
-                    IndexPrev = 0;
-                //
-                //Check Start - End Index?!
-                //
-                if (IndexNext == IndexStart)
-                    break;
-                //
-                //Check at Index!!
-                //
-                //===== This code is for tile!! =====
-                //
-                //if (Points[Group][IndexPrev].y != Points[Group][IndexNext].y)
-                //    continue;
-                ////
-                //if (Points[Group][IndexPrev].x <= Points[Group][IndexNext].x)
-                //    continue;
-                //
-                //===== This code is for tile!! =====
-                //
-                Vector2 PointA = Points[Group][IndexPrev];
-                Vector2 PointB = Points[Group][IndexNext];
-                Platforms.Add(new PlatformSingle(PointA, PointB));
-            }
-            while (IndexNext != IndexStart);
-            //Done Check current Group!!
+            PointA = Points[Points.Count - 1];
+            PointB = Points[0];
+            SetPlatformAdd(PointA, PointB);
         }
     }
 
-    public List<List<Vector2>> GetPointsBorderPos(bool Square = true)
+    private void SetPlatformAdd(Vector2 PointA, Vector2 PointB)
     {
-        //NOTE: Composite Collider split Points into Group if they're not contact with each other!!
-        List<List<Vector2>> PointsBorder = new List<List<Vector2>>();
-        for (int Group = 0; Group < m_compositeCollider.pathCount; Group++)
-        {
-            //Generate a new Group!!
-            PointsBorder.Add(new List<Vector2>());
-            //Get Points of this Group!!
-            Vector2[] Points = new Vector2[m_compositeCollider.GetPathPointCount(Group)];
-            m_compositeCollider.GetPath(Group, Points);
-            for (int Index = 0; Index < Points.Length; Index++)
-            {
-                //Generate new Points into each Group!!
-                if (Square)
-                {
-                    Vector2 Pos = new Vector2(Points[Index].x, Points[Index].y);
-                    if (Points.Contains(Pos))
-                        continue;
-                    //
-                    PointsBorder[Group].Add(Pos);
-                }
-                else
-                    PointsBorder[Group].Add(Points[Index]);
-            }
-            //Done Generate current Group!!
-        }
-
-        //Result local pos Points of Collider!!
-        return PointsBorder;
+        if (PointA.x >= PointB.x)
+            return;
+        //
+        double Deg = Math.Atan2(PointB.y - PointA.y, PointB.x - PointA.x) * Mathf.Rad2Deg;        //if (Deg > 90f || Deg < -90f)
+        if (Deg > 60f || Deg < -60f)
+            return;
+        //
+        //
+        this.Platforms.Add(new PlatformSingle(PointA, PointB));
     }
 }
 
+[Serializable]
 public class PlatformSingle
 {
-    public Vector3 PointA;
-    public Vector3 PointB;
+    public Vector2 PointA;
+    public Vector2 PointB;
     public float Deg;
     public float Length;
 
-    public PlatformSingle(Vector3 PointA, Vector3 PointB)
+    public PlatformSingle(Vector2 PointA, Vector2 PointB)
     {
         this.PointA = PointA;
         this.PointB = PointB;
         //
-
+        Deg = Mathf.Atan2(PointB.y - PointA.y, PointB.x - PointA.x) * Mathf.Rad2Deg;
+        Length = Vector2.Distance(PointA, PointB);
     }
 }

@@ -338,7 +338,7 @@ public class ControlMoveX2D : MonoBehaviour
             return 0;
         }
 
-        float Deg = QCircle.GetDeg360(RayHitResultB.Value.Point, RayHitResultT.Value.Point);
+        float Deg = QCircle.GetDegPoint(RayHitResultB.Value.Point, RayHitResultT.Value.Point, true);
 
         return 180f - Deg;
     }
@@ -354,7 +354,7 @@ public class ControlMoveX2D : MonoBehaviour
             return 0;
         }
 
-        float Deg = QCircle.GetDeg360(RayHitResultB.Value.Point, RayHitResultT.Value.Point);
+        float Deg = QCircle.GetDegPoint(RayHitResultB.Value.Point, RayHitResultT.Value.Point, true);
 
         return Deg;
     }
