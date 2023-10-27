@@ -1,107 +1,178 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.U2D;
 
-[ExecuteAlways]
 public class ShapePlatformCreator : MonoBehaviour
 {
-    [SerializeField] private SpriteShapeController m_spriteShape;
-    [SerializeField] private CompositeCollider2D m_compositeCollider;
+    [SerializeField] private LayerMask m_colliderMask;
+    [SerializeField] private float m_degLimit = 90f;
+
+    [Space]
     [SerializeField] private PolygonCollider2D m_poligonColider;
 
-    [SerializeField] private PlatformStruct m_platformStruct;
+    private ShapePlatformData m_shapePlatformData;
 
     private void Awake()
     {
-        m_platformStruct = new PlatformStruct(m_compositeCollider, m_poligonColider);
+        m_shapePlatformData = new ShapePlatformData(m_poligonColider, m_degLimit);
     }
 
     private void Start()
     {
-        
+        m_shapePlatformData.SetInit();
+        m_shapePlatformData.SetGenerate(m_colliderMask);
     }
 
-    private void Update()
+    private void OnDrawGizmos()
     {
-        m_platformStruct.SetGenerate2();
-        //
-        for (int i = 0; i < m_platformStruct.Platforms.Count; i++)
+        if (!Application.isPlaying)
         {
-            Debug.DrawLine(
-                this.transform.position + (Vector3)m_compositeCollider.offset + (Vector3)m_platformStruct.Platforms[i].PointA,
-                this.transform.position + (Vector3)m_compositeCollider.offset + (Vector3)m_platformStruct.Platforms[i].PointB,
-                Color.red);
+            ShapePlatformData ShapePlatformData = new ShapePlatformData(m_poligonColider, m_degLimit);
+            ShapePlatformData.SetInit();
+            //
+            Gizmos.color = Color.red;
+            for (int i = 0; i < ShapePlatformData.Platform.Length; i++)
+            {
+                Vector2 PointA = transform.position + (Vector3)ShapePlatformData.Platform[i].PointA;
+                Vector2 PointB = transform.position + (Vector3)ShapePlatformData.Platform[i].PointB;
+                //
+                Gizmos.DrawLine(PointA, PointB);
+                Gizmos.DrawWireSphere(PointA, 0.05f);
+                Gizmos.DrawWireSphere(PointB, 0.05f);
+            }
         }
     }
 }
 
-[Serializable]
-public class PlatformStruct
+public class ShapePlatformData
 {
-    public List<PlatformSingle> Platforms = new List<PlatformSingle>();
-
-    [SerializeField] private CompositeCollider2D m_compositeCollider;
     [SerializeField] private PolygonCollider2D m_polygonCollider;
+    [SerializeField] private float DegLimit;
+    [SerializeField] private List<ShapePlatformSingle> m_platform = new List<ShapePlatformSingle>();
 
-    public PlatformStruct(CompositeCollider2D SpriteShape, PolygonCollider2D polygonCollider)
+    public ShapePlatformSingle[] Platform => m_platform.ToArray();
+
+    public ShapePlatformData(PolygonCollider2D polygonCollider, float degLimit)
     {
-        m_compositeCollider = SpriteShape;
         m_polygonCollider = polygonCollider;
+        DegLimit = degLimit;
     }
 
-    public void SetGenerate2()
+    //
+
+    public void SetGenerate()
     {
-        Platforms = new List<PlatformSingle>();
+        if (!Application.isPlaying)
+            return;
+        //
+        GameObject Group = new GameObject("platform-group");
+        //
+        Transform GroupTransform = Group.transform;
+        GroupTransform.SetParent(m_polygonCollider.transform);
+        GroupTransform.localPosition = Vector3.zero;
+        //
+        for (int i = 0; i < m_platform.Count; i++)
+        {
+            GameObject Platform = new GameObject("platform");
+            Platform.layer = m_polygonCollider.gameObject.layer;
+            //
+            Transform PlatformTransform = Platform.transform;
+            PlatformTransform.SetParent(GroupTransform);
+            PlatformTransform.localPosition = Vector3.zero;
+            //
+            EdgeCollider2D EdgeCollider2D = Platform.AddComponent<EdgeCollider2D>();
+            EdgeCollider2D.points = m_platform[i].Points;
+            EdgeCollider2D.usedByEffector = true;
+            //
+            PlatformEffector2D PlatformEffector2D = Platform.AddComponent<PlatformEffector2D>();
+            PlatformEffector2D.useColliderMask = false;
+            PlatformEffector2D.surfaceArc = 160f;
+            PlatformEffector2D.rotationalOffset = m_platform[i].Deg;
+        }
+        //
+        m_polygonCollider.enabled = false;
+    }
+
+    public void SetGenerate(LayerMask ColliderMask)
+    {
+        if (!Application.isPlaying)
+            return;
+        //
+        GameObject Group = new GameObject("platform-group");
+        //
+        Transform GroupTransform = Group.transform;
+        GroupTransform.SetParent(m_polygonCollider.transform);
+        GroupTransform.localPosition = Vector3.zero;
+        //
+        for (int i = 0; i < m_platform.Count; i++)
+        {
+            GameObject Platform = new GameObject("platform");
+            //
+            Transform PlatformTransform = Platform.transform;
+            PlatformTransform.SetParent(GroupTransform);
+            PlatformTransform.localPosition = Vector3.zero;
+            //
+            EdgeCollider2D EdgeCollider2D = Platform.AddComponent<EdgeCollider2D>();
+            EdgeCollider2D.points = m_platform[i].Points;
+            EdgeCollider2D.usedByEffector = true;
+            //
+            PlatformEffector2D PlatformEffector2D = Platform.AddComponent<PlatformEffector2D>();
+            PlatformEffector2D.colliderMask = ColliderMask;
+            PlatformEffector2D.surfaceArc = 160f;
+            PlatformEffector2D.rotationalOffset = m_platform[i].Deg;
+        }
+        //
+        m_polygonCollider.enabled = false;
+    }
+
+    //
+
+    public void SetInit()
+    {
+        m_platform = new List<ShapePlatformSingle>();
         //
         for (int Group = 0; Group < m_polygonCollider.pathCount; Group++)
         {
-            //Get Points in Group Path!!
-            List<Vector2> Points = m_polygonCollider.GetPath(Group).ToList();
+            //=== GET POINTS IN GROUP
+            Vector2[] Point = m_polygonCollider.GetPath(Group);
             //
-            //Check Points in Group!!
-            Vector2 PointA, PointB;
-            for (int Point = 0; Point < Points.Count - 1; Point++)
-            {
-                PointA = Points[Point];
-                PointB = Points[Point + 1];
-                SetPlatformAdd(PointA, PointB);
-            }
-            PointA = Points[Points.Count - 1];
-            PointB = Points[0];
-            SetPlatformAdd(PointA, PointB);
+            //=== CHECK POINTS IN GROUP
+            for (int Index = 0; Index < Point.Length - 1; Index++)
+                SetInit(Point[Index], Point[Index + 1]);
+            SetInit(Point[Point.Length - 1], Point[0]);
         }
     }
 
-    private void SetPlatformAdd(Vector2 PointA, Vector2 PointB)
+    private void SetInit(Vector2 PointA, Vector2 PointB)
     {
         if (PointA.x >= PointB.x)
             return;
         //
-        double Deg = Math.Atan2(PointB.y - PointA.y, PointB.x - PointA.x) * Mathf.Rad2Deg;        //if (Deg > 90f || Deg < -90f)
-        if (Deg > 60f || Deg < -60f)
+        double Deg = Math.Atan2(PointB.y - PointA.y, PointB.x - PointA.x) * Mathf.Rad2Deg;
+        if (Deg > DegLimit || Deg < -DegLimit)
             return;
         //
-        //
-        this.Platforms.Add(new PlatformSingle(PointA, PointB));
+        this.m_platform.Add(new ShapePlatformSingle(PointA, PointB));
     }
 }
 
-[Serializable]
-public class PlatformSingle
+public class ShapePlatformSingle
 {
-    public Vector2 PointA;
-    public Vector2 PointB;
-    public float Deg;
-    public float Length;
+    public Vector2 PointA { private set; get; }
 
-    public PlatformSingle(Vector2 PointA, Vector2 PointB)
+    public Vector2 PointB { private set; get; }
+
+    public Vector2[] Points => new Vector2[2] { PointA, PointB };
+
+    public Vector2 PointCentre => (PointA + PointB) / 2;
+
+    public float Deg => Mathf.Atan2(PointB.y - PointA.y, PointB.x - PointA.x) * Mathf.Rad2Deg;
+
+    public float Length => Vector2.Distance(PointA, PointB);
+
+    public ShapePlatformSingle(Vector2 PointA, Vector2 PointB)
     {
         this.PointA = PointA;
         this.PointB = PointB;
-        //
-        Deg = Mathf.Atan2(PointB.y - PointA.y, PointB.x - PointA.x) * Mathf.Rad2Deg;
-        Length = Vector2.Distance(PointA, PointB);
     }
 }
