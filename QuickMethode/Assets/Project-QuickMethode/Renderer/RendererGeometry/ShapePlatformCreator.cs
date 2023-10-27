@@ -75,6 +75,7 @@ public class ShapePlatformData
         {
             GameObject Platform = new GameObject("platform");
             Platform.layer = m_polygonCollider.gameObject.layer;
+            Platform.tag = m_polygonCollider.gameObject.tag;
             //
             Transform PlatformTransform = Platform.transform;
             PlatformTransform.SetParent(GroupTransform);
@@ -107,6 +108,8 @@ public class ShapePlatformData
         for (int i = 0; i < m_platform.Count; i++)
         {
             GameObject Platform = new GameObject("platform");
+            Platform.layer = m_polygonCollider.gameObject.layer;
+            Platform.tag = m_polygonCollider.gameObject.tag;
             //
             Transform PlatformTransform = Platform.transform;
             PlatformTransform.SetParent(GroupTransform);
