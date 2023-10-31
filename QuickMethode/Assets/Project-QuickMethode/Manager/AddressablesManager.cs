@@ -35,6 +35,16 @@ public class AddressablesManager : MonoBehaviour
         Instance = this;
     }
 
+    public void SetLoad<T>(AssetReference m_asset, T Result)
+    {
+        AsyncOperationHandle<T> AsyncHandle = m_asset.LoadAssetAsync<T>();
+        //
+        AsyncHandle.Completed += ((AsyncOperationHandle<T> Handle) =>
+        {
+            Result = Handle.Result;
+        });
+    }
+
     //Scene
 
     public void SetSceneLoad(string TagOrPath, bool ActiveOnLoad = true)
