@@ -29,6 +29,11 @@ public class AddressablesManager : MonoBehaviour
         return Addressables.LoadAssetAsync<T>(TagOrPath);
     }
 
+    public void SetAssetsRelease<T>(AsyncOperationHandle<T> Asset)
+    {
+        Asset.Completed += (AsyncOperationHandle<T> Handle) => Addressables.Release(Asset);
+    }
+
     //Scene
 
     public AsyncOperationHandle<SceneInstance> SetSceneLoad(AssetReference Asset, bool ActiveOnLoad = false)
@@ -60,7 +65,7 @@ public class AddressablesManager : MonoBehaviour
 
     public void SetPrefabRelease(AsyncOperationHandle<GameObject> Prefab)
     {
-        Prefab.Completed += (AsyncOperationHandle<GameObject> Handle) => Addressables.Release(Prefab);
+        Prefab.Completed += (AsyncOperationHandle<GameObject> Handle) => Addressables.ReleaseInstance(Prefab);
     }
 }
 
