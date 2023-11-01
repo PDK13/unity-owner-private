@@ -180,5 +180,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69a4d58888ed0b146b480dafbc1c445a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sprite: {fileID: 0}
-  gameObject: {fileID: 0}
+  m_loadPrefab: {fileID: 0}
+  m_loadSprite: {fileID: 0}
+  m_labelReference:
+    m_LabelString: myPrefab
+  m_instantiatePrefab: {fileID: 0}

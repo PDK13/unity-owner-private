@@ -1,11 +1,15 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class SimpleAddressables : MonoBehaviour
 {
     [SerializeField] private GameObject m_loadPrefab;
     [SerializeField] private Sprite m_loadSprite;
+
+    [Space]
+    [SerializeField] private AssetLabelReference m_labelReference;
     [SerializeField] private GameObject m_instantiatePrefab;
 
     private IEnumerator Start()
@@ -24,7 +28,7 @@ public class SimpleAddressables : MonoBehaviour
         //
         yield return new WaitForEndOfFrame();
         //
-        AddressablesManager.Instance.SetAssetsLoad<Sprite>("mySprite").Completed += (AsyncOperationHandle<Sprite> Handle) => m_loadSprite = Handle.Result;
+        AddressablesManager.Instance.SetAssetsLoad<Sprite>("mySprite").Completed += (Handle) => m_loadSprite = Handle.Result;
         if (m_loadSprite != null)
             Debug.Log("[Debug] Load Sprite Complete...");
         else
@@ -38,7 +42,7 @@ public class SimpleAddressables : MonoBehaviour
         //
         Debug.Log("[Debug] Start Instantiate...");
         //
-        var PrefabInstantiate = AddressablesManager.Instance.SetPrefabInstantiate("myPrefab");
+        var PrefabInstantiate = AddressablesManager.Instance.SetPrefabInstantiate(m_labelReference.labelString);
         yield return PrefabInstantiate;
         m_instantiatePrefab = PrefabInstantiate.Result.gameObject;
         if (m_instantiatePrefab != null)
