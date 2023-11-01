@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -12,22 +10,6 @@ public class AddressablesManager : MonoBehaviour
 {
     public static AddressablesManager Instance;
 
-    //Varible: Scene
-
-    private AsyncOperationHandle<SceneInstance> m_sceneLoaded;
-    private bool m_sceneReady = true;
-
-    public Action onSceneLoad;
-    public Action onSceneActive;
-
-    //Varible: GameObject
-
-    private List<GameObject> m_gameObject = new List<GameObject>();
-    private List<AsyncOperationHandle<GameObject>> m_gameObjectAsync = new List<AsyncOperationHandle<GameObject>>();
-
-    public Action<GameObject> onGameObjectCreate;
-    public Action<GameObject> onGameObjectDestroy;
-
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -35,83 +17,50 @@ public class AddressablesManager : MonoBehaviour
         Instance = this;
     }
 
-    public void SetLoad<T>(AssetReference m_asset, T Result)
+    //Assets
+
+    public AsyncOperationHandle<T> SetAssetsLoad<T>(AssetReference Asset)
     {
-        AsyncOperationHandle<T> AsyncHandle = m_asset.LoadAssetAsync<T>();
-        //
-        AsyncHandle.Completed += ((AsyncOperationHandle<T> Handle) =>
-        {
-            Result = Handle.Result;
-        });
+        return Asset.LoadAssetAsync<T>();
+    }
+
+    public AsyncOperationHandle<T> SetAssetsLoad<T>(string TagOrPath)
+    {
+        return Addressables.LoadAssetAsync<T>(TagOrPath);
     }
 
     //Scene
 
-    public void SetSceneLoad(string TagOrPath, bool ActiveOnLoad = true)
+    public AsyncOperationHandle<SceneInstance> SetSceneLoad(AssetReference Asset, bool ActiveOnLoad = false)
     {
-        if (!m_sceneReady)
-            return;
-        m_sceneReady = false;
-        //
-        //TAG: If Scene aldready got it Tag, then just called it with that Tag
-        //PATH: If Scene have not Tag, then called it by Path start from "Assets\.."
-        m_sceneLoaded = Addressables.LoadSceneAsync(TagOrPath, UnityEngine.SceneManagement.LoadSceneMode.Single, false);
-        onSceneLoad?.Invoke();
-        //
-        if (ActiveOnLoad)
-            SetSceneActive();
+        return Asset.LoadSceneAsync(UnityEngine.SceneManagement.LoadSceneMode.Single, ActiveOnLoad);
     }
 
-    public void SetSceneActive()
+    public AsyncOperationHandle<SceneInstance> SetSceneLoad(string TagOrPath, bool ActiveOnLoad = false)
     {
-        m_sceneLoaded.Completed += ((AsyncOperationHandle<SceneInstance> Handle) =>
-        {
-            m_sceneReady = true;
-            //
-            m_sceneLoaded.Result.ActivateAsync();
-            onSceneActive?.Invoke();
-        });
+        return Addressables.LoadSceneAsync(TagOrPath, UnityEngine.SceneManagement.LoadSceneMode.Single, ActiveOnLoad);
+    }
+
+    public void SetSceneActive(AsyncOperationHandle<SceneInstance> Scene)
+    {
+        Scene.Completed += (AsyncOperationHandle<SceneInstance> Handle) => Scene.Result.ActivateAsync();
     }
 
     //GameObject
 
-    public AsyncOperationHandle<GameObject> SetGameObjectCreate(AssetReference Prefab)
+    public AsyncOperationHandle<GameObject> SetPrefabInstantiate(AssetReference Asset)
     {
-        AsyncOperationHandle<GameObject> AsyncHandle = Prefab.InstantiateAsync();
-        //
-        AsyncHandle.Completed += ((AsyncOperationHandle<GameObject> Handle) => 
-        {
-            m_gameObject.Add(AsyncHandle.Result);
-            m_gameObjectAsync.Add(AsyncHandle);
-            onGameObjectCreate?.Invoke(AsyncHandle.Result);
-        });
-        //
-        return AsyncHandle;
+        return Asset.InstantiateAsync();
     }
 
-    public void SetGameObjectDestroy(AsyncOperationHandle<GameObject> GameObject)
+    public AsyncOperationHandle<GameObject> SetPrefabInstantiate(string TagOrPath)
     {
-        onGameObjectDestroy?.Invoke(GameObject.Result);
-        m_gameObject.RemoveAt(m_gameObjectAsync.IndexOf(GameObject));
-        m_gameObjectAsync.Remove(GameObject);
-        //
-        Addressables.Release(GameObject);
+        return Addressables.InstantiateAsync(TagOrPath);
     }
 
-    public bool SetGameObjectDestroy(GameObject GameObject)
+    public void SetPrefabRelease(AsyncOperationHandle<GameObject> Prefab)
     {
-        int Index = m_gameObject.IndexOf(GameObject);
-        //
-        if (Index < 0)
-            return false;
-        //
-        Addressables.Release(m_gameObjectAsync[Index]);
-        //
-        m_gameObjectAsync.RemoveAt(Index);
-        m_gameObject.Remove(GameObject);
-        onGameObjectDestroy?.Invoke(GameObject);
-        //
-        return true;
+        Prefab.Completed += (AsyncOperationHandle<GameObject> Handle) => Addressables.Release(Prefab);
     }
 }
 
