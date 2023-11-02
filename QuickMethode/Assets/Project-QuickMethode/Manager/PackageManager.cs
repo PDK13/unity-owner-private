@@ -1,17 +1,17 @@
 using System.Collections;
 using UnityEngine;
-using UnityEditor.PackageManager;
 using System.Linq;
 using System.Collections.Generic;
-using System;
+#if UNITY_EDITOR
+using UnityEditor.PackageManager;
+#endif
 
 public class PackageManager : MonoBehaviour
 {
+#if UNITY_EDITOR
+
     //NOTE: To get Package Name, go to Window\Package Manager to see them!!
     [SerializeField] private List<string> m_package = new List<string>() { "com.unity.ide.vscode", };
-
-    public static Action onPackageSucess;
-    public static Action onPackageFail;
 
     private IEnumerator Start()
     {
@@ -19,20 +19,13 @@ public class PackageManager : MonoBehaviour
         //
         while (!pack.IsCompleted) yield return null;
         //
-        bool Missed = false;
         foreach(string Package in m_package)
         {
             var haveProgrids = pack.Result.FirstOrDefault(q => q.name == Package);
             if (haveProgrids == null)
-            {
-                Missed = true;
                 Debug.LogFormat("[PackageManager] Missing {0}", Package);
-            }
         }
-        //
-        if (Missed)
-            onPackageFail?.Invoke();
-        else
-            onPackageSucess?.Invoke();
     }
+
+#endif
 }
