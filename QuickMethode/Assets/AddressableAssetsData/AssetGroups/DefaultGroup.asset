@@ -10,23 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Default Local Group
+  m_Name: DefaultGroup
   m_EditorClassIdentifier: 
-  m_GroupName: Default Local Group
+  m_GroupName: DefaultGroup
   m_Data:
     m_SerializedData: []
   m_GUID: 0e7ee041c0200ca41aed8d3f2caeb4c2
-  m_SerializeEntries:
-  - m_GUID: ba4bc9ba3d4cdaa459292915dde07791
-    m_Address: Assets/Project-QuickMethode/Simple/SimpleStruct/SimpleAddressables/SimpleAddressableSprite.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - mySprite
-  - m_GUID: 68ac2dacbf74e4c4e8f427f53ecd5730
-    m_Address: Assets/Project-QuickMethode/Simple/SimpleStruct/SimpleAddressables/SimpleAddressablesPrefab.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - myPrefab
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: e61cdcdaea5318c4ca80ad7d4bde95da, type: 2}
   m_SchemaSet:

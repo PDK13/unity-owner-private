@@ -33,9 +33,9 @@ public class AddressablesTool : EditorWindow
     {
         AddressableAssetSettings settings = AssetDatabase.LoadAssetAtPath<ScriptableObject>(PATH_ADDRESSABLES_SETTING) as AddressableAssetSettings;
         //
-        List<string> labels = settings.GetLabels();
-        foreach (string label in labels)
-            settings.RemoveLabel(label, true);
+        //List<string> labels = settings.GetLabels();
+        //foreach (string label in labels)
+        //    settings.RemoveLabel(label, true);
         //
         AssetDatabase.Refresh();
         if (settings == null)
