@@ -60,10 +60,10 @@ public class IsometricTool : EditorWindow
 
     #endregion
 
-    [MenuItem("Tools/IsometricTool")]
+    [MenuItem("Tools/Isometric")]
     public static void Init()
     {
-        GetWindow<IsometricTool>("IsometricTool");
+        GetWindow<IsometricTool>("Isometric");
     }
 
     private void OnEnable()
