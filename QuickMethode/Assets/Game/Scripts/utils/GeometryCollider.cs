@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
-using UnityEngine.Experimental.U2D;
-using UnityEngine.Serialization;
 using UnityEngine.U2D;
 
 #if UNITY_EDITOR
