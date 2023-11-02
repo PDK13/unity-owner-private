@@ -1,10 +1,12 @@
+#if UNITY_EDITOR
+
 using System.Reflection;
-using UnityEditor;
-using UnityEditor.AddressableAssets.Settings.GroupSchemas;
-using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 using UnityEngine.ResourceManagement.Util;
 using System.IO;
+using UnityEditor;
+using UnityEditor.AddressableAssets.Settings.GroupSchemas;
+using UnityEditor.AddressableAssets.Settings;
 
 public class AddressablesTool : EditorWindow
 {
@@ -75,3 +77,5 @@ public class AddressablesTool : EditorWindow
         AssetDatabase.Refresh();
     }
 }
+
+#endif
