@@ -23,7 +23,7 @@ public class SimpleAddressables : MonoBehaviour
         //
         Debug.Log("[Debug] Start Loading...");
         //
-        var PrefabLoad = AddressablesManager.Instance.SetAssetsLoad<GameObject>("myPrefab");
+        var PrefabLoad = QAddressables.SetAssetsLoad<GameObject>("myPrefab");
         yield return PrefabLoad;
         m_loadPrefab = PrefabLoad.Result;
         if (m_loadPrefab != null)
@@ -34,7 +34,7 @@ public class SimpleAddressables : MonoBehaviour
         Debug.Log("------------------------");
         yield return new WaitForSeconds(3f); //Rest a bit before new run testing!!
         //
-        AddressablesManager.Instance.SetAssetsLoad<Sprite>("mySprite").Completed += (Handle) => m_loadSprite = Handle.Result;
+        QAddressables.SetAssetsLoad<Sprite>("mySprite").Completed += (Handle) => m_loadSprite = Handle.Result;
         if (m_loadSprite != null)
             Debug.Log("[Debug] Load Sprite Complete...");
         else
@@ -49,7 +49,7 @@ public class SimpleAddressables : MonoBehaviour
         //
         Debug.Log("[Debug] Start Instantiate...");
         //
-        var PrefabInstantiate = AddressablesManager.Instance.SetPrefabInstantiate(m_labelReferencePrefab.labelString);
+        var PrefabInstantiate = QAddressables.SetPrefabInstantiate(m_labelReferencePrefab.labelString);
         yield return PrefabInstantiate;
         m_instantiatePrefab = PrefabInstantiate.Result.gameObject;
         if (m_instantiatePrefab != null)
@@ -64,7 +64,7 @@ public class SimpleAddressables : MonoBehaviour
         //
         Debug.Log("[Debug] Start Release...");
         //
-        AddressablesManager.Instance.SetPrefabRelease(PrefabInstantiate);
+        QAddressables.SetPrefabRelease(PrefabInstantiate);
         if (m_instantiatePrefab == null)
             Debug.Log("[Debug] Release Prefab Complete..."); 
         else
@@ -77,7 +77,7 @@ public class SimpleAddressables : MonoBehaviour
         //
         Debug.Log("[Debug] Start Load Same...");
         //
-        var SpriteSame = AddressablesManager.Instance.SetAssetsLoadList<Sprite>(m_labelReferenceSame.labelString);
+        var SpriteSame = QAddressables.SetAssetsLoadList<Sprite>(m_labelReferenceSame.labelString);
         yield return SpriteSame;
         m_loadSpriteSame = SpriteSame.Result.ToList();
         //

@@ -8,6 +8,6 @@ public class NewBehaviourScript : MonoBehaviour
     {
         var Character = new Dictionary<string, GameObject>();
 
-        var PrefabLoad = AddressablesManager.Instance.SetAssetsLoad<GameObject>("myPrefab");
+        var PrefabLoad = QAddressables.SetAssetsLoad<GameObject>("myPrefab");
     }
 }
