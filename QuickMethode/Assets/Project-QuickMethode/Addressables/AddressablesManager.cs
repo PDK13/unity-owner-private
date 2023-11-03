@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
+using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -24,9 +25,14 @@ public class AddressablesManager : MonoBehaviour
         return Asset.LoadAssetAsync<T>();
     }
 
-    public AsyncOperationHandle<T> SetAssetsLoad<T>(string TagOrPath)
+    public AsyncOperationHandle<T> SetAssetsLoad<T>(string LabelOrPath)
     {
-        return Addressables.LoadAssetAsync<T>(TagOrPath);
+        return Addressables.LoadAssetAsync<T>(LabelOrPath);
+    }
+
+    public AsyncOperationHandle<IList<T>> SetAssetsLoadList<T>(string Label)
+    {
+        return Addressables.LoadAssetsAsync<T>(Label, null);
     }
 
     public void SetAssetsRelease<T>(AsyncOperationHandle<T> Asset)
@@ -41,9 +47,9 @@ public class AddressablesManager : MonoBehaviour
         return Asset.LoadSceneAsync(UnityEngine.SceneManagement.LoadSceneMode.Single, ActiveOnLoad);
     }
 
-    public AsyncOperationHandle<SceneInstance> SetSceneLoad(string TagOrPath, bool ActiveOnLoad = false)
+    public AsyncOperationHandle<SceneInstance> SetSceneLoad(string LabelOrPath, bool ActiveOnLoad = false)
     {
-        return Addressables.LoadSceneAsync(TagOrPath, UnityEngine.SceneManagement.LoadSceneMode.Single, ActiveOnLoad);
+        return Addressables.LoadSceneAsync(LabelOrPath, UnityEngine.SceneManagement.LoadSceneMode.Single, ActiveOnLoad);
     }
 
     public void SetSceneActive(AsyncOperationHandle<SceneInstance> Scene)
@@ -58,9 +64,9 @@ public class AddressablesManager : MonoBehaviour
         return Asset.InstantiateAsync();
     }
 
-    public AsyncOperationHandle<GameObject> SetPrefabInstantiate(string TagOrPath)
+    public AsyncOperationHandle<GameObject> SetPrefabInstantiate(string LabelOrPath)
     {
-        return Addressables.InstantiateAsync(TagOrPath);
+        return Addressables.InstantiateAsync(LabelOrPath);
     }
 
     public void SetPrefabRelease(AsyncOperationHandle<GameObject> Prefab)

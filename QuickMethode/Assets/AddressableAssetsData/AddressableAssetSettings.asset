@@ -87,6 +87,8 @@ MonoBehaviour:
     - default
     - mySprite
     - myPrefab
+    - myInstantiate
+    - mySame
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 3fee05dc5b12a624f8037af460aea922, type: 2}

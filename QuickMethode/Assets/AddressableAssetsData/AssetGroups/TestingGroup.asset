@@ -27,6 +27,23 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - mySprite
+  - m_GUID: 5912bdfebca1f6c479fae9a94e0664b6
+    m_Address: Assets/Project-QuickMethode/Simple/SimpleStruct/SimpleAddressables/SimpleAddressablesInstantiate.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - myInstantiate
+  - m_GUID: 02d6e898c31c8934cba25f57b5f3ee69
+    m_Address: Assets/Project-QuickMethode/Simple/SimpleStruct/SimpleAddressables/SimpleAddressablesSame
+      1.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - mySame
+  - m_GUID: 5d9dde36decc3644caa53512250672e0
+    m_Address: Assets/Project-QuickMethode/Simple/SimpleStruct/SimpleAddressables/SimpleAddressablesSame
+      2.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - mySame
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: e61cdcdaea5318c4ca80ad7d4bde95da, type: 2}
   m_SchemaSet:

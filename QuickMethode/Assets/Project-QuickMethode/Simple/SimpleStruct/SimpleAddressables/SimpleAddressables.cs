@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -8,8 +10,12 @@ public class SimpleAddressables : MonoBehaviour
     [SerializeField] private Sprite m_loadSprite;
 
     [Space]
-    [SerializeField] private AssetLabelReference m_labelReference;
+    [SerializeField] private AssetLabelReference m_labelReferencePrefab;
     [SerializeField] private GameObject m_instantiatePrefab;
+
+    [Space]
+    [SerializeField] private AssetLabelReference m_labelReferenceSame;
+    [SerializeField] private List<Sprite> m_loadSpriteSame;
 
     private IEnumerator Start()
     {
@@ -25,7 +31,8 @@ public class SimpleAddressables : MonoBehaviour
         else
             Debug.Log("[Debug] Load Prefab Un-Complete...");
         //
-        yield return new WaitForEndOfFrame();
+        Debug.Log("------------------------");
+        yield return new WaitForSeconds(3f); //Rest a bit before new run testing!!
         //
         AddressablesManager.Instance.SetAssetsLoad<Sprite>("mySprite").Completed += (Handle) => m_loadSprite = Handle.Result;
         if (m_loadSprite != null)
@@ -37,11 +44,12 @@ public class SimpleAddressables : MonoBehaviour
         //
         Debug.Log("[Debug] End Loading...");
         //
-        yield return new WaitForEndOfFrame();
+        Debug.Log("------------------------");
+        yield return new WaitForSeconds(3f); //Rest a bit before new run testing!!
         //
         Debug.Log("[Debug] Start Instantiate...");
         //
-        var PrefabInstantiate = AddressablesManager.Instance.SetPrefabInstantiate(m_labelReference.labelString);
+        var PrefabInstantiate = AddressablesManager.Instance.SetPrefabInstantiate(m_labelReferencePrefab.labelString);
         yield return PrefabInstantiate;
         m_instantiatePrefab = PrefabInstantiate.Result.gameObject;
         if (m_instantiatePrefab != null)
@@ -49,7 +57,12 @@ public class SimpleAddressables : MonoBehaviour
         else
             Debug.Log("[Debug] Instantiate Prefab Un-Complete...");
         //
-        yield return new WaitForSeconds(3);
+        Debug.Log("[Debug] End Instantiate...");
+        //
+        Debug.Log("------------------------");
+        yield return new WaitForSeconds(3f); //Rest a bit before new run testing!!
+        //
+        Debug.Log("[Debug] Start Release...");
         //
         AddressablesManager.Instance.SetPrefabRelease(PrefabInstantiate);
         if (m_instantiatePrefab == null)
@@ -57,7 +70,17 @@ public class SimpleAddressables : MonoBehaviour
         else
             Debug.Log("[Debug] Release Prefab Un-Complete..."); //Will get here!!
         //
-        Debug.Log("[Debug] End Instantiate...");
+        Debug.Log("[Debug] End Release...");
         //
+        Debug.Log("------------------------");
+        yield return new WaitForSeconds(3f); //Rest a bit before new run testing!!
+        //
+        Debug.Log("[Debug] Start Load Same...");
+        //
+        var SpriteSame = AddressablesManager.Instance.SetAssetsLoadList<Sprite>(m_labelReferenceSame.labelString);
+        yield return SpriteSame;
+        m_loadSpriteSame = SpriteSame.Result.ToList();
+        //
+        Debug.Log("[Debug] End Load Same...");
     }
 }
