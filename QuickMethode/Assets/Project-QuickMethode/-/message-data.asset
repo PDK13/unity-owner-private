@@ -20,6 +20,23 @@ MonoBehaviour:
     DelayAlpha: 0.1
     DelaySpace: 0
     DelayFinal: 1
+  - m_text: 'My name is '
+    m_color: {r: 0, g: 0, b: 0, a: 0}
+    DelayAlpha: 0.1
+    DelaySpace: 1
+    DelayFinal: 0
+  - m_text: 'TORIEL '
+    m_color: {r: 1, g: 0, b: 0, a: 1}
+    DelayAlpha: 0.1
+    DelaySpace: 1
+    DelayFinal: 0
+  - m_text: 'and I am a killer!
+
+'
+    m_color: {r: 0, g: 0, b: 0, a: 0}
+    DelayAlpha: 0.1
+    DelaySpace: 1
+    DelayFinal: 1
   - m_text: 'I WILL KILL YOU!
 
       I WILL NO MERCY!
