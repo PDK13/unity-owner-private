@@ -27,7 +27,7 @@ public class MessageManager : MonoBehaviour
             //
             string Text = MessageSingle.Text;
             //
-            if (Text != null)
+            if (Text == null)
                 continue;
             //
             if (Text != "")
