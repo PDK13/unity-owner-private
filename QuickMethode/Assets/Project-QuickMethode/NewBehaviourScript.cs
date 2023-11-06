@@ -14,12 +14,14 @@ public class NewBehaviourScript : MonoBehaviour
         //
         yield return new WaitForSeconds(3f);
         //
-        List<MessageSingle> MessageList = new List<MessageSingle>();
-        MessageList.Add(new MessageSingle("Hello!", 0.1f, 0f));
-        MessageList.Add(new MessageSingle(" ", 2f, 0f));
-        MessageList.Add(new MessageSingle("I will kill you here!", 0f, 2f));
+        MessageManagerData MessageData = new MessageManagerData();
+        MessageData.SetWriteByCharacter("Hello there!\n", 0.1f);
+        MessageData.SetDelay(2f);
+        MessageData.SetWriteByWord("I WILL KILL YOU!\n", 1f);
+        MessageData.SetDelay(2f);
+        MessageData.SetWrite(QColor.GetColorHexFormat(Color.red, "HA HA HA!\n"), 0.1f, 1f);
         //
-        yield return MessageManager.Instance.ISetWrite(m_tmpMyText, MessageList);
+        yield return MessageManager.Instance.ISetWrite(m_tmpMyText, MessageData);
         //
         Debug.Log("[Debug] Message End!!");
     }

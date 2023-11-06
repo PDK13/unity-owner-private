@@ -20,32 +20,93 @@ public class MessageManager : MonoBehaviour
         StopAllCoroutines();
     }
 
-    public IEnumerator ISetWrite(TextMeshProUGUI TextMessPro, List<MessageSingle> Message)
+    public IEnumerator ISetWrite(TextMeshProUGUI TextMessPro, MessageManagerData MessageData)
     {
-        foreach (MessageSingle MessageItem in Message)
+        foreach (MessageManagerDataSingle MessageSingle in MessageData.List)
         {
-
-            foreach(char MessageChar in MessageItem.Text)
+            bool ColorFormat = false;
+            //
+            if (MessageSingle.Text == null)
             {
+                yield return new WaitForSeconds(MessageSingle.DelayAlpha);
+                continue;
+            }
+            //
+            foreach(char MessageChar in MessageSingle.Text)
+            {
+                //TEXT:
                 TextMessPro.text += MessageChar;
                 //
-                if (MessageChar == ' ')
-                    yield return new WaitForSeconds(MessageItem.DelaySpace);
+                //COLOR:
+                if (!ColorFormat && MessageChar == '<')
+                {
+                    ColorFormat = true;
+                    continue;
+                }
                 else
-                    yield return new WaitForSeconds(MessageItem.DelayAlpha);
+                if (ColorFormat && MessageChar == '>')
+                {
+                    ColorFormat = false;
+                    continue;
+                }
+                //
+                //DELAY:
+                if (ColorFormat)
+                    continue;
+                //
+                if (MessageChar == ' ')
+                    yield return new WaitForSeconds(MessageSingle.DelaySpace);
+                else
+                    yield return new WaitForSeconds(MessageSingle.DelayAlpha);
             }
         }
     }
 }
 
 [Serializable]
-public class MessageSingle
+public class MessageManagerData
+{
+    public List<MessageManagerDataSingle> List;
+
+    public MessageManagerData()
+    {
+        List = new List<MessageManagerDataSingle>();
+    }
+
+    public void SetWrite(string Text)
+    {
+        List.Add(new MessageManagerDataSingle(Text, 0f, 0f));
+    }
+
+    public void SetWrite(string Text, float DelayAlpha, float DelaySpace)
+    {
+        List.Add(new MessageManagerDataSingle(Text, DelayAlpha, DelaySpace));
+    }
+
+    public void SetWriteByCharacter(string Text, float Delay)
+    {
+        List.Add(new MessageManagerDataSingle(Text, Delay, 0f));
+    }
+
+    public void SetWriteByWord(string Text, float Delay)
+    {
+        List.Add(new MessageManagerDataSingle(Text, 0f, Delay));
+    }
+
+    public void SetDelay(float Delay)
+    {
+        List.Add(new MessageManagerDataSingle(null, Delay, 0f));
+    }
+}
+
+[Serializable]
+public class MessageManagerDataSingle
 {
     public string Text;
     public float DelayAlpha;
     public float DelaySpace;
 
-    public MessageSingle(string Text, float DelayAlpha, float DelaySpace)
+    public MessageManagerDataSingle(string Text, float DelayAlpha, float DelaySpace)
     {
         this.Text = Text;
         this.DelayAlpha = DelayAlpha;
