@@ -54,7 +54,10 @@ public class MessageManager : MonoBehaviour
                     if (ColorFormat)
                         continue;
                     //
-                    if (MessageSingle.DelaySpace > 0 && (MessageChar == ' ' || MessageChar == '\n' || MessageChar == '\t'))
+                    //if (MessageSingle.DelayFinal > 0 && (MessageChar == '\n'))
+                    //    yield return new WaitForSeconds(MessageSingle.DelayFinal);
+                    //else
+                    if (MessageSingle.DelaySpace > 0 && (MessageChar == ' '))
                         yield return new WaitForSeconds(MessageSingle.DelaySpace);
                     else
                     if (MessageSingle.DelayAlpha > 0)
