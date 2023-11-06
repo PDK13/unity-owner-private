@@ -20,19 +20,27 @@ public class MessageManager : MonoBehaviour
         StopAllCoroutines();
     }
 
-    public IEnumerator ISetWrite(TextMeshProUGUI TextMessPro, MessageManagerData MessageData)
+    public IEnumerator ISetWrite(TextMeshProUGUI TextMessPro, MessageConfig MessageData)
     {
-        foreach (MessageManagerDataSingle MessageSingle in MessageData.List)
+        foreach (MessageConfigSingle MessageSingle in MessageData.List)
         {
             bool ColorFormat = false;
             //
-            if (MessageSingle.Text == null)
+            string Text = MessageSingle.Text;
+            //
+            if (Text == null)
+            {
+                yield return new WaitForSeconds(MessageSingle.DelayAlpha);
+                continue;
+            }
+            else
+            if (Text == "")
             {
                 yield return new WaitForSeconds(MessageSingle.DelayAlpha);
                 continue;
             }
             //
-            foreach(char MessageChar in MessageSingle.Text)
+            foreach (char MessageChar in Text)
             {
                 //TEXT:
                 TextMessPro.text += MessageChar;
@@ -54,9 +62,10 @@ public class MessageManager : MonoBehaviour
                 if (ColorFormat)
                     continue;
                 //
-                if (MessageChar == ' ')
+                if (MessageSingle.DelaySpace > 0 && MessageChar == ' ')
                     yield return new WaitForSeconds(MessageSingle.DelaySpace);
                 else
+                if (MessageSingle.DelayAlpha > 0)
                     yield return new WaitForSeconds(MessageSingle.DelayAlpha);
             }
         }
@@ -64,51 +73,84 @@ public class MessageManager : MonoBehaviour
 }
 
 [Serializable]
-public class MessageManagerData
+[CreateAssetMenu(fileName = "message-data", menuName = "", order = 0)]
+public class MessageConfig : ScriptableObject
 {
-    public List<MessageManagerDataSingle> List;
+    public List<MessageConfigSingle> List;
 
-    public MessageManagerData()
+    public MessageConfig()
     {
-        List = new List<MessageManagerDataSingle>();
+        List = new List<MessageConfigSingle>();
     }
 
     public void SetWrite(string Text)
     {
-        List.Add(new MessageManagerDataSingle(Text, 0f, 0f));
+        List.Add(new MessageConfigSingle(Text, Color.clear, 0f, 0f));
     }
+
+    public void SetWrite(string Text, Color Color)
+    {
+        List.Add(new MessageConfigSingle(Text, Color, 0f, 0f));
+    }
+
+    //
 
     public void SetWrite(string Text, float DelayAlpha, float DelaySpace)
     {
-        List.Add(new MessageManagerDataSingle(Text, DelayAlpha, DelaySpace));
+        List.Add(new MessageConfigSingle(Text, Color.clear, DelayAlpha, DelaySpace));
     }
+
+    public void SetWrite(string Text, Color Color, float DelayAlpha, float DelaySpace)
+    {
+        List.Add(new MessageConfigSingle(Text, Color, DelayAlpha, DelaySpace));
+    }
+
+    //
 
     public void SetWriteByCharacter(string Text, float Delay)
     {
-        List.Add(new MessageManagerDataSingle(Text, Delay, 0f));
+        List.Add(new MessageConfigSingle(Text, Color.clear, Delay, 0f));
     }
+
+    public void SetWriteByCharacter(string Text, Color Color, float Delay)
+    {
+        List.Add(new MessageConfigSingle(Text, Color, Delay, 0f));
+    }
+
+    //
 
     public void SetWriteByWord(string Text, float Delay)
     {
-        List.Add(new MessageManagerDataSingle(Text, 0f, Delay));
+        List.Add(new MessageConfigSingle(Text, Color.clear, 0f, Delay));
     }
+
+    public void SetWriteByWord(string Text, Color Color, float Delay)
+    {
+        List.Add(new MessageConfigSingle(Text, Color, 0f, Delay));
+    }
+    
+    //
 
     public void SetDelay(float Delay)
     {
-        List.Add(new MessageManagerDataSingle(null, Delay, 0f));
+        List.Add(new MessageConfigSingle(null, Color.clear, Delay, 0f));
     }
 }
 
 [Serializable]
-public class MessageManagerDataSingle
+public class MessageConfigSingle
 {
-    public string Text;
+    [SerializeField] private string m_text;
+    [SerializeField] private Color m_color;
     public float DelayAlpha;
     public float DelaySpace;
 
-    public MessageManagerDataSingle(string Text, float DelayAlpha, float DelaySpace)
+    public string Text => m_color != Color.clear ? QColor.GetColorHexFormat(m_color, m_text) : m_text;
+
+    public MessageConfigSingle(string Text, Color Color, float DelayAlpha, float DelaySpace)
     {
-        this.Text = Text;
+        this.m_text = Text;
+        this.m_color = Color;
         this.DelayAlpha = DelayAlpha;
         this.DelaySpace = DelaySpace;
     }
