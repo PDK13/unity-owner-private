@@ -28,37 +28,37 @@ public class MessageManager : MonoBehaviour
             string Text = MessageSingle.Text;
             //
             if (Text != null)
+                continue;
+            //
+            if (Text != "")
             {
-                if (Text != "")
+                foreach (char MessageChar in Text)
                 {
-                    foreach (char MessageChar in Text)
+                    //TEXT:
+                    TextMessPro.text += MessageChar;
+                    //
+                    //COLOR:
+                    if (!ColorFormat && MessageChar == '<')
                     {
-                        //TEXT:
-                        TextMessPro.text += MessageChar;
-                        //
-                        //COLOR:
-                        if (!ColorFormat && MessageChar == '<')
-                        {
-                            ColorFormat = true;
-                            continue;
-                        }
-                        else
-                        if (ColorFormat && MessageChar == '>')
-                        {
-                            ColorFormat = false;
-                            continue;
-                        }
-                        //
-                        //DELAY:
-                        if (ColorFormat)
-                            continue;
-                        //
-                        if (MessageSingle.DelaySpace > 0 && MessageChar == ' ')
-                            yield return new WaitForSeconds(MessageSingle.DelaySpace);
-                        else
-                        if (MessageSingle.DelayAlpha > 0)
-                            yield return new WaitForSeconds(MessageSingle.DelayAlpha);
+                        ColorFormat = true;
+                        continue;
                     }
+                    else
+                    if (ColorFormat && MessageChar == '>')
+                    {
+                        ColorFormat = false;
+                        continue;
+                    }
+                    //
+                    //DELAY:
+                    if (ColorFormat)
+                        continue;
+                    //
+                    if (MessageSingle.DelaySpace > 0 && MessageChar == ' ')
+                        yield return new WaitForSeconds(MessageSingle.DelaySpace);
+                    else
+                    if (MessageSingle.DelayAlpha > 0)
+                        yield return new WaitForSeconds(MessageSingle.DelayAlpha);
                 }
             }
             //
