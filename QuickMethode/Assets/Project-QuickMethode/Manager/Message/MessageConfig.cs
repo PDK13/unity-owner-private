@@ -22,7 +22,7 @@ public class MessageConfig : ScriptableObject
         List.Add(new MessageConfigSingle(Text, Color, DelayAlpha, DelaySpace, DelayFianl));
     }
 
-    public void SetWriteByCharacter(string Text, Color Color, float Delay)
+    public void SetWriteByChar(string Text, Color Color, float Delay)
     {
         List.Add(new MessageConfigSingle(Text, Color, Delay, 0f, 0f));
     }
