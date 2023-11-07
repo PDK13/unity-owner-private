@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class MessageManager : MonoBehaviour
@@ -12,6 +13,15 @@ public class MessageManager : MonoBehaviour
     #region Varible: Setting
 
     [SerializeField] private StringConfig m_stringConfig;
+
+    #endregion
+
+    #region Varible: Debug
+
+    private enum DebugType { None = 0, Primary = 1, Full = int.MaxValue, }
+
+    [Space]
+    [SerializeField] private DebugType m_debug = DebugType.None;
 
     #endregion
 
@@ -38,22 +48,25 @@ public class MessageManager : MonoBehaviour
     }
 
     private MessageCommandType m_command = MessageCommandType.Text;
-    private MessageDataConfig m_data;
+    [SerializeField] private MessageDataConfig m_data;
 
-    private TextMeshProUGUI m_tmp;
-    private string m_current = "";
+    [SerializeField] private TextMeshProUGUI m_tmp;
+    [SerializeField] private string m_current = "";
 
     private Coroutine m_iSetMessageShowSingle;
 
     public List<MessageDataConfigChoice> ChoiceList => m_data.Choice;
 
-    private bool m_active = false;
-    private bool m_choice = false;
+    [SerializeField] private bool m_active = false;
+    [SerializeField] private bool m_choice = false;
 
     public MessageStageType Stage
     {
         get
         {
+            if (m_command == MessageCommandType.None)
+                return MessageStageType.None;
+            //
             if (m_active & m_choice)
                 return MessageStageType.Choice;
             //
@@ -66,6 +79,8 @@ public class MessageManager : MonoBehaviour
             return MessageStageType.None;
         }
     }
+
+    [SerializeField] private MessageStageType m_stage = MessageStageType.None;
 
     #endregion
 
@@ -99,8 +114,10 @@ public class MessageManager : MonoBehaviour
         m_command = MessageCommandType.None;
         m_active = true;
         m_choice = false;
+        m_stage = Stage;
         //
-        Debug.Log("[Message] Start!");
+        if ((int)m_debug > (int)DebugType.None)
+            Debug.Log("[Message] Start!");
         //
         for (int i = 0; i < m_data.Message.Count; i++)
         {
@@ -123,30 +140,34 @@ public class MessageManager : MonoBehaviour
                 //
                 //PROGESS:
                 m_command = MessageCommandType.Text;
+                m_stage = Stage;
                 onText?.Invoke(true);
                 //
-                Debug.Log("[Message] " + m_current);
+                if ((int)m_debug > (int)DebugType.None)
+                    Debug.Log("[Message] " + m_current);
                 //
                 m_iSetMessageShowSingle = StartCoroutine(ISetMessageShowSingle(MessageSingle));
                 yield return new WaitUntil(() => m_command == MessageCommandType.Skip || m_command == MessageCommandType.Done);
                 //
                 //DONE:
                 m_command = MessageCommandType.Wait;
+                m_stage = Stage;
                 onText?.Invoke(false);
                 //
                 m_tmp.text = m_current;
             }
-            //
-            //FINAL:
-            if (MessageSingle.DelayFinal > 0)
-                yield return new WaitForSeconds(MessageSingle.DelayFinal);
-            //
             //WAIT:
             if (m_current != "" && i < m_data.Message.Count - 1)
             {
-                m_command = MessageCommandType.Wait;
+                //FINAL:
+                if (MessageSingle.DelayFinal > 0)
+                    yield return new WaitForSeconds(MessageSingle.DelayFinal);
                 //
-                Debug.Log("[Message] Next?");
+                m_command = MessageCommandType.Wait;
+                m_stage = Stage;
+                //
+                if ((int)m_debug > (int)DebugType.None)
+                    Debug.Log("[Message] Next?");
                 //
                 onWait?.Invoke(true);
                 yield return new WaitUntil(() => m_command == MessageCommandType.Next);
@@ -157,14 +178,21 @@ public class MessageManager : MonoBehaviour
         m_command = m_data.ChoiceAvaible ? MessageCommandType.Wait : MessageCommandType.None;
         m_active = m_data.ChoiceAvaible;
         m_choice = m_data.ChoiceAvaible;
+        m_stage = Stage;
         //
         onChoice?.Invoke(m_active);
         onEnd?.Invoke(!m_active);
         //
         if (m_choice)
-            Debug.Log("[Message] Choice?");
+        {
+            if ((int)m_debug > (int)DebugType.None)
+                Debug.Log("[Message] Choice?");
+        }
         else
-            Debug.Log("[Message] End!");
+        {
+            if ((int)m_debug > (int)DebugType.None)
+                Debug.Log("[Message] End!");
+        }
     }
 
     private IEnumerator ISetMessageShowSingle(MessageDataConfigText MessageSingle)
@@ -217,6 +245,9 @@ public class MessageManager : MonoBehaviour
             return;
         //
         m_command = MessageCommandType.Next;
+        //
+        if ((int)m_debug > (int)DebugType.None)
+            Debug.Log("[Message] Next!");
     }
 
     public void SetSkip()
@@ -232,7 +263,8 @@ public class MessageManager : MonoBehaviour
         //
         m_command = MessageCommandType.Skip;
         //
-        Debug.Log("[Message] Skip!");
+        if ((int)m_debug > (int)DebugType.None)
+            Debug.Log("[Message] Skip!");
     }
 
     public void SetChoice(int ChoiceIndex)
@@ -251,7 +283,8 @@ public class MessageManager : MonoBehaviour
         m_data = m_data.Choice[ChoiceIndex].Next;
         StartCoroutine(ISetMessageShow());
         //
-        Debug.Log("[Message] Choice " + ChoiceIndex);
+        if ((int)m_debug > (int)DebugType.None)
+            Debug.LogFormat("[Message] Choice {0}: {1}", ChoiceIndex, m_data.Choice[ChoiceIndex].Name);
     }
 
     public void SetStop()
@@ -272,3 +305,54 @@ public enum MessageStageType
     Wait,
     Choice,
 }
+
+#if UNITY_EDITOR
+
+[CustomEditor(typeof(MessageManager))]
+public class MessageManagerEditor : Editor
+{
+    private MessageManager Target;
+
+    private SerializedProperty m_stringConfig;
+
+    private SerializedProperty m_debug;
+    private SerializedProperty m_data;
+    private SerializedProperty m_tmp;
+    private SerializedProperty m_current;
+    private SerializedProperty m_stage;
+
+    private void OnEnable()
+    {
+        Target = target as MessageManager;
+        //
+        m_stringConfig = QEditorCustom.GetField(this, "m_stringConfig");
+        //
+        m_debug = QEditorCustom.GetField(this, "m_debug");
+        m_data = QEditorCustom.GetField(this, "m_data");
+        m_tmp = QEditorCustom.GetField(this, "m_tmp");
+        m_current = QEditorCustom.GetField(this, "m_current");
+        m_stage = QEditorCustom.GetField(this, "m_stage");
+    }
+
+    public override void OnInspectorGUI()
+    {
+        QEditorCustom.SetUpdate(this);
+        //
+        QEditorCustom.SetField(m_stringConfig);
+        //
+        QEditorCustom.SetField(m_debug);
+        //
+        QEditor.SetDisableGroupBegin();
+        //
+        QEditorCustom.SetField(m_data);
+        QEditorCustom.SetField(m_tmp);
+        QEditorCustom.SetField(m_current);
+        QEditorCustom.SetField(m_stage);
+        //
+        QEditor.SetDisableGroupEnd();
+        //
+        QEditorCustom.SetApply(this);
+    }
+}
+
+#endif
