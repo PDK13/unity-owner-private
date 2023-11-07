@@ -23,7 +23,7 @@ public class MessageManager : MonoBehaviour
 
     public IEnumerator ISetWrite(TextMeshProUGUI TextMessPro, MessageDataConfig MessageData)
     {
-        foreach (MessageDataConfigSingle MessageSingle in MessageData.List)
+        foreach (MessageDataConfigText MessageSingle in MessageData.List)
         {
             bool HtmlFormat = false;
             //

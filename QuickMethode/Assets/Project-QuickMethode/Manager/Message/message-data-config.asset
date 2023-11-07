@@ -23,3 +23,7 @@ MonoBehaviour:
     DelayAlpha: 0.1
     DelaySpace: 0
     DelayFinal: 1
+  Choice:
+  - Name: Are you sure?
+    Description: If you choice this, you will die!!
+    Next: {fileID: 0}
