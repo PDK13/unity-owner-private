@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MessageManager : MonoBehaviour
@@ -17,9 +18,9 @@ public class MessageManager : MonoBehaviour
     #region Event
 
     public Action<bool> onWait;
-    public Action onStart;
-    public Action onChoice;
-    public Action onEnd;
+    public Action<bool> onText;
+    public Action<bool> onChoice;
+    public Action<bool> onEnd;
 
     #endregion
 
@@ -27,30 +28,46 @@ public class MessageManager : MonoBehaviour
 
     private enum MessageCommandType
     {
+        None,
         Text,
+        Done,
         Wait,
         Next,
         Skip,
         Choice,
     }
 
-    private MessageCommandType m_messageCommand = MessageCommandType.Text;
-    private MessageDataConfig m_messageData;
-    private TextMeshProUGUI m_textMessPro;
-    private string m_messageCurrent = "";
-    private int m_messageChoice = -1;
+    private MessageCommandType m_command = MessageCommandType.Text;
+    private MessageDataConfig m_data;
+
+    private TextMeshProUGUI m_tmp;
+    private string m_current = "";
 
     private Coroutine m_iSetMessageShowSingle;
 
-    public bool Text => m_messageCommand == MessageCommandType.Text;
+    public List<MessageDataConfigChoice> ChoiceList => m_data.Choice;
 
-    public bool Wait => m_messageCommand == MessageCommandType.Wait;
+    private bool m_active = false;
+    private bool m_choice = false;
 
-    public List<MessageDataConfigChoice> Choice => m_messageData.Choice;
+    public MessageStageType Stage
+    {
+        get
+        {
+            if (m_active & m_choice)
+                return MessageStageType.Choice;
+            //
+            if (m_active & m_command == MessageCommandType.Wait)
+                return MessageStageType.Wait;
+            //
+            if (m_active & m_command == MessageCommandType.Text)
+                return MessageStageType.Text;
+            //
+            return MessageStageType.None;
+        }
+    }
 
     #endregion
-
-    private bool m_stop = false;
 
     private void Awake()
     {
@@ -64,42 +81,60 @@ public class MessageManager : MonoBehaviour
         StopAllCoroutines();
     }
 
+    #region Main
+
     public void SetStart(TextMeshProUGUI TextMessPro, MessageDataConfig MessageData)
     {
-        m_messageData = MessageData;
-        m_textMessPro = TextMessPro;
+        if (m_active)
+            return;
+        //
+        m_data = MessageData;
+        m_tmp = TextMessPro;
         //
         StartCoroutine(ISetMessageShow());
     }
 
     private IEnumerator ISetMessageShow()
     {
-        onStart?.Invoke();
+        m_command = MessageCommandType.None;
+        m_active = true;
+        m_choice = false;
         //
-        foreach (MessageDataConfigText MessageSingle in m_messageData.Message)
+        Debug.Log("[Message] Start!");
+        //
+        for (int i = 0; i < m_data.Message.Count; i++)
         {
-            m_messageCurrent = MessageSingle.Text;
+            MessageDataConfigText MessageSingle = m_data.Message[i];
+            m_current = MessageSingle.Text;
             //
             //MESSAGE:
-            if (m_messageCurrent == null)
-                m_textMessPro.text = "...";
+            if (m_current == null)
+                m_tmp.text = "...";
             else
-            if (m_messageCurrent == "")
-                m_textMessPro.text = "...";
+            if (m_current == "")
+                m_tmp.text = "...";
             else
             {
                 //BEGIN:
-                m_textMessPro.text = "";
+                m_tmp.text = "";
                 //
                 if (m_stringConfig != null)
-                    m_messageCurrent = m_stringConfig.GetColorHexFormatReplace(m_messageCurrent);
+                    m_current = m_stringConfig.GetColorHexFormatReplace(m_current);
                 //
                 //PROGESS:
+                m_command = MessageCommandType.Text;
+                onText?.Invoke(true);
+                //
+                Debug.Log("[Message] " + m_current);
+                //
                 m_iSetMessageShowSingle = StartCoroutine(ISetMessageShowSingle(MessageSingle));
-                yield return new WaitUntil(() => m_messageCommand == MessageCommandType.Skip || m_messageCommand == MessageCommandType.Wait);
+                yield return new WaitUntil(() => m_command == MessageCommandType.Skip || m_command == MessageCommandType.Done);
                 //
                 //DONE:
-                m_textMessPro.text = m_messageCurrent;
+                m_command = MessageCommandType.Wait;
+                onText?.Invoke(false);
+                //
+                m_tmp.text = m_current;
             }
             //
             //FINAL:
@@ -107,32 +142,39 @@ public class MessageManager : MonoBehaviour
                 yield return new WaitForSeconds(MessageSingle.DelayFinal);
             //
             //WAIT:
-            if (m_messageCurrent != "" && MessageSingle.DelayWait)
+            if (m_current != "" && i < m_data.Message.Count - 1)
             {
-                m_messageCommand = MessageCommandType.Wait;
+                m_command = MessageCommandType.Wait;
+                //
+                Debug.Log("[Message] Next?");
                 //
                 onWait?.Invoke(true);
-                yield return new WaitUntil(() => m_messageCommand == MessageCommandType.Next);
+                yield return new WaitUntil(() => m_command == MessageCommandType.Next);
                 onWait?.Invoke(false);
             }
         }
         //
-        if (m_messageData.ChoiceAvaible)
-            onChoice?.Invoke();
+        m_command = m_data.ChoiceAvaible ? MessageCommandType.Wait : MessageCommandType.None;
+        m_active = m_data.ChoiceAvaible;
+        m_choice = m_data.ChoiceAvaible;
+        //
+        onChoice?.Invoke(m_active);
+        onEnd?.Invoke(!m_active);
+        //
+        if (m_choice)
+            Debug.Log("[Message] Choice?");
         else
-            onEnd?.Invoke();
+            Debug.Log("[Message] End!");
     }
 
     private IEnumerator ISetMessageShowSingle(MessageDataConfigText MessageSingle)
     {
-        m_messageCommand = MessageCommandType.Text;
-        //
         bool HtmlFormat = false;
         //
-        foreach (char MessageChar in m_messageCurrent)
+        foreach (char MessageChar in m_current)
         {
             //TEXT:
-            m_textMessPro.text += MessageChar;
+            m_tmp.text += MessageChar;
             //
             //COLOR:
             if (!HtmlFormat && MessageChar == '<')
@@ -158,36 +200,75 @@ public class MessageManager : MonoBehaviour
                 yield return new WaitForSeconds(MessageSingle.DelayAlpha);
         }
         //
-        m_messageCommand = MessageCommandType.Wait;
+        m_command = MessageCommandType.Done;
     }
+
+    #endregion
+
+    #region Control
 
     public void SetNext()
     {
-        if (m_messageCommand != MessageCommandType.Wait)
+        if (Stage != MessageStageType.Wait)
+            return;
+        //
+        if (m_command != MessageCommandType.Wait)
             //When current message in done show up, press Next to move on next message!
             return;
         //
-        m_messageCommand = MessageCommandType.Next;
+        m_command = MessageCommandType.Next;
     }
 
     public void SetSkip()
     {
-        if (m_messageCommand != MessageCommandType.Text)
+        if (Stage != MessageStageType.Text)
+            return;
+        //
+        if (m_command != MessageCommandType.Text)
             //When current message is showing up, press Next to skip and show full message!
             return;
         //
         StopCoroutine(m_iSetMessageShowSingle);
-        m_messageCommand = MessageCommandType.Skip;
+        //
+        m_command = MessageCommandType.Skip;
+        //
+        Debug.Log("[Message] Skip!");
     }
 
     public void SetChoice(int ChoiceIndex)
     {
-        if (m_messageCommand != MessageCommandType.Wait)
+        if (Stage != MessageStageType.Choice)
+            return;
+        //
+        if (m_command != MessageCommandType.Wait)
             //When current message in done show up and got choice option, press Choice Option to move on next message!
             return;
         //
-        m_messageCommand = MessageCommandType.Choice;
+        if (ChoiceIndex < 0 || ChoiceIndex > m_data.Choice.Count - 1)
+            return;
         //
-
+        m_command = MessageCommandType.Choice;
+        m_data = m_data.Choice[ChoiceIndex].Next;
+        StartCoroutine(ISetMessageShow());
+        //
+        Debug.Log("[Message] Choice " + ChoiceIndex);
     }
+
+    public void SetStop()
+    {
+        StopAllCoroutines();
+        StopCoroutine(m_iSetMessageShowSingle);
+        //
+        m_tmp.text = "";
+    }
+
+    #endregion
+}
+
+public enum MessageStageType
+{
+    None,
+    Text,
+    Wait,
+    Choice,
 }

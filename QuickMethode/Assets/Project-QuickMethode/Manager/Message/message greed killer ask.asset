@@ -12,15 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c6ff8ca28e90d74f8f47bd3237fd694, type: 3}
   m_Name: message greed killer ask
   m_EditorClassIdentifier: 
-  List:
-  - Text: Yes.
-    Clear: 0
-    DelayAlpha: 0.1
+  Message:
+  - Text: You should shut your mouth!!
+    DelayAlpha: 0
     DelaySpace: 0
-    DelayFinal: 1
-  - Text: I'm sure about that.
-    Clear: 1
-    DelayAlpha: 0.1
-    DelaySpace: 0
-    DelayFinal: 1
+    DelayFinal: 0
+    DelayWait: 0
   Choice: []

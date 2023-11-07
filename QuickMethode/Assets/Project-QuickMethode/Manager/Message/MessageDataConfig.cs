@@ -49,7 +49,6 @@ public class MessageDataConfigText
     public float DelayAlpha;
     public float DelaySpace;
     public float DelayFinal;
-    public bool DelayWait;
 
     public MessageDataConfigText(string Text, float DelayAlpha, float DelaySpace, float DelayFinal)
     {
