@@ -25,7 +25,7 @@ public class MessageManager : MonoBehaviour
     {
         foreach (MessageDataConfigSingle MessageSingle in MessageData.List)
         {
-            bool ColorFormat = false;
+            bool HtmlFormat = false;
             //
             string Text = MessageSingle.Text;
             //
@@ -46,20 +46,20 @@ public class MessageManager : MonoBehaviour
                     TextMessPro.text += MessageChar;
                     //
                     //COLOR:
-                    if (!ColorFormat && MessageChar == '<')
+                    if (!HtmlFormat && MessageChar == '<')
                     {
-                        ColorFormat = true;
+                        HtmlFormat = true;
                         continue;
                     }
                     else
-                    if (ColorFormat && MessageChar == '>')
+                    if (HtmlFormat && MessageChar == '>')
                     {
-                        ColorFormat = false;
+                        HtmlFormat = false;
                         continue;
                     }
                     //
                     //DELAY:
-                    if (ColorFormat)
+                    if (HtmlFormat)
                         continue;
                     //
                     if (MessageSingle.DelaySpace > 0 && (MessageChar == ' '))
