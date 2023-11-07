@@ -7,6 +7,8 @@ public class MessageManager : MonoBehaviour
 {
     public static MessageManager Instance;
 
+    [SerializeField] private StringConfig m_colorConfig;
+
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -19,9 +21,9 @@ public class MessageManager : MonoBehaviour
         StopAllCoroutines();
     }
 
-    public IEnumerator ISetWrite(TextMeshProUGUI TextMessPro, MessageConfig MessageData)
+    public IEnumerator ISetWrite(TextMeshProUGUI TextMessPro, MessageDataConfig MessageData)
     {
-        foreach (MessageConfigSingle MessageSingle in MessageData.List)
+        foreach (MessageDataConfigSingle MessageSingle in MessageData.List)
         {
             bool ColorFormat = false;
             //
@@ -30,8 +32,14 @@ public class MessageManager : MonoBehaviour
             if (Text == null)
                 continue;
             //
+            if (MessageSingle.Clear)
+                TextMessPro.text = "";
+            //
             if (Text != "")
             {
+                if (m_colorConfig != null)
+                    Text = m_colorConfig.GetColorHexFormatReplace(Text);
+                //
                 foreach (char MessageChar in Text)
                 {
                     //TEXT:
@@ -54,9 +62,6 @@ public class MessageManager : MonoBehaviour
                     if (ColorFormat)
                         continue;
                     //
-                    //if (MessageSingle.DelayFinal > 0 && (MessageChar == '\n'))
-                    //    yield return new WaitForSeconds(MessageSingle.DelayFinal);
-                    //else
                     if (MessageSingle.DelaySpace > 0 && (MessageChar == ' '))
                         yield return new WaitForSeconds(MessageSingle.DelaySpace);
                     else

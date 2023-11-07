@@ -223,9 +223,7 @@ public class IsometricBlock : MonoBehaviour
 
     public void SetSpriteAlpha(float Alpha)
     {
-        Color Color = GetComponent<SpriteRenderer>().color;
-        QColor.SetColor(ref Color, Alpha);
-        GetComponent<SpriteRenderer>().color = Color;
+        GetComponent<SpriteRenderer>().color = QColor.GetColor(GetComponent<SpriteRenderer>().color, Alpha);
     }
 
     public void SetSpriteColor(Color Color, float Alpha = 1)

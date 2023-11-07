@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -5,8 +6,10 @@ using UnityEngine;
 
 public class NewBehaviourScript : MonoBehaviour
 {
-    [SerializeField] private MessageConfig m_messageConfig;
+    [SerializeField] private MessageDataConfig m_messageConfig;
     [SerializeField] private TextMeshProUGUI m_tmpMyText;
+
+    private DateTime m_time = DateTime.Now;
 
     private IEnumerator Start()
     {
@@ -26,5 +29,13 @@ public class NewBehaviourScript : MonoBehaviour
         yield return MessageManager.Instance.ISetWrite(m_tmpMyText, m_messageConfig);
         //
         Debug.Log("[Debug] Message End!!");
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.LogFormat("[Debug] {0}", (DateTime.Now - m_time).TotalSeconds);
+        }
     }
 }
