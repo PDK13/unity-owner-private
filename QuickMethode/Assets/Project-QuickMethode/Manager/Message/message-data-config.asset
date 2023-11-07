@@ -18,7 +18,7 @@ MonoBehaviour:
     DelayAlpha: 0.1
     DelaySpace: 0
     DelayFinal: 1
-  - Text: My name is #redToriel#clear.#sprite
+  - Text: My name is #red#spriteToriel#clear.
     Clear: 1
     DelayAlpha: 0.1
     DelaySpace: 0
