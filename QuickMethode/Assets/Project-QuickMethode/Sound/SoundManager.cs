@@ -21,8 +21,12 @@ public class SoundManager : MonoBehaviour
 
     private readonly float m_musicVolumn = 1f;
     private readonly float m_soundVolumn = 1f;
+#pragma warning disable IDE0051 // Remove unused private members
     private readonly bool m_musicMute = false;
+#pragma warning restore IDE0051 // Remove unused private members
+#pragma warning disable IDE0051 // Remove unused private members
     private readonly bool m_soundMute = false;
+#pragma warning restore IDE0051 // Remove unused private members
 
     private AudioData m_music;
     private readonly List<AudioData> m_sound = new List<AudioData>();

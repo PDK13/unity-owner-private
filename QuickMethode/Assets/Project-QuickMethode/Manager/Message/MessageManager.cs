@@ -80,7 +80,9 @@ public class MessageManager : MonoBehaviour
         }
     }
 
-    [SerializeField] private MessageStageType m_stage = MessageStageType.None;
+#pragma warning disable IDE0052 // Remove unread private members
+    [SerializeField] private MessageStageType m_stage = MessageStageType.None; //Editor only!!
+#pragma warning restore IDE0052 // Remove unread private members
 
     #endregion
 
