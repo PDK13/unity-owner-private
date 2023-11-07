@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c6ff8ca28e90d74f8f47bd3237fd694, type: 3}
+  m_Name: message greed killer
+  m_EditorClassIdentifier: 
+  Message:
+  - Text: Hello! Today is a good day?
+    DelayAlpha: 0.1
+    DelaySpace: 0
+    DelayFinal: 1
+    DelayWait: 1
+  - Text: I am #redToriel#clear.
+    DelayAlpha: 0.1
+    DelaySpace: 0
+    DelayFinal: 1
+    DelayWait: 1
+  Choice:
+  - Name: Are you sure?
+    Description: If you choice this, you will die!!
+    Next: {fileID: 11400000, guid: 9250568ce447be64eb9ff52173d42121, type: 2}
+  - Name: Ok then.
+    Description: If you choice this, you will live!!
+    Next: {fileID: 11400000, guid: 8b2ba4d6d2d441c499a2c43cd631dff4, type: 2}

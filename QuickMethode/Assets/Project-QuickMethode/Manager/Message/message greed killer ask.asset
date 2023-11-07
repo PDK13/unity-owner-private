@@ -10,20 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c6ff8ca28e90d74f8f47bd3237fd694, type: 3}
-  m_Name: message-data-config
+  m_Name: message greed killer ask
   m_EditorClassIdentifier: 
   List:
-  - Text: Hello!#return
+  - Text: Yes.
     Clear: 0
     DelayAlpha: 0.1
     DelaySpace: 0
     DelayFinal: 1
-  - Text: My name is #red#spriteToriel#clear.
+  - Text: I'm sure about that.
     Clear: 1
     DelayAlpha: 0.1
     DelaySpace: 0
     DelayFinal: 1
-  Choice:
-  - Name: Are you sure?
-    Description: If you choice this, you will die!!
-    Next: {fileID: 0}
+  Choice: []
