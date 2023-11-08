@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Camera ORTHOGRAPHIC 2D only!
 /// </summary>
-public class QCamera2D
+public class QCamera
 {
     //Required only ONE Main Camera (with tag Main Camera) for the true result!!
 

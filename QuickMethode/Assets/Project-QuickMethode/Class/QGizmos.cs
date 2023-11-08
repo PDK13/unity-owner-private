@@ -111,7 +111,7 @@ public class QGizmos
     {
         Gizmos.color = Color;
 
-        Vector2 Resolution = QCamera2D.GetCameraSizeUnit();
+        Vector2 Resolution = QCamera.GetCameraSizeUnit();
         Gizmos.DrawWireCube((Vector2)From.transform.position, Resolution);
     }
 

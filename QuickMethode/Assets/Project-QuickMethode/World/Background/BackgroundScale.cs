@@ -26,12 +26,12 @@ public class BackgroundScale : MonoBehaviour
             return;
         }
 
-        if (QCamera2D.GetCameraSizeUnit(m_Camera.GetComponent<Camera>()) == m_ResolutionPrimary)
+        if (QCamera.GetCameraSizeUnit(m_Camera.GetComponent<Camera>()) == m_ResolutionPrimary)
         {
             return;
         }
 
-        m_ResolutionPrimary = QCamera2D.GetCameraSizeUnit(m_Camera.GetComponent<Camera>());
+        m_ResolutionPrimary = QCamera.GetCameraSizeUnit(m_Camera.GetComponent<Camera>());
 
         foreach (SpriteRenderer m_Primary in m_Primarys)
         {

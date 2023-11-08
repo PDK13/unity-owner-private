@@ -26,7 +26,7 @@ public class SimpleCameraPointCanvas : MonoBehaviour
     {
         m_anchorPos = m_recTransform.anchoredPosition;
 
-        m_anchorPosMouse = QCamera2D.GetPosMouseToCanvas(); //Target
+        m_anchorPosMouse = QCamera.GetPosMouseToCanvas(); //Target
 
         m_recTransform.anchoredPosition = m_anchorPosMouse;
     }

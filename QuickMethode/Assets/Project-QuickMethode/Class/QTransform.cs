@@ -157,7 +157,7 @@ public class QRecTransform
     {
         //Anchor Primary mean Anchor Min(0;0) and Max(0;0) or at the BL of screen!
         Vector2 AnchorPos = From.anchoredPosition;
-        Vector2 ScreenSize = QCamera2D.GetCameraSizePixel();
+        Vector2 ScreenSize = QCamera.GetCameraSizePixel();
         Vector2 AnchorPosMin = new Vector2(ScreenSize.x * From.anchorMin.x, ScreenSize.y * From.anchorMin.y);
         Vector2 AnchorPosMax = new Vector2(ScreenSize.x * From.anchorMax.x, ScreenSize.y * From.anchorMax.y);
         Vector2 AnchorPosBD = AnchorPos + (AnchorPosMax - AnchorPosMin) * 0.5f + AnchorPosMin;
@@ -168,7 +168,7 @@ public class QRecTransform
     {
         //Anchor Primary mean Anchor Min(0;0) and Max(0;0) or at the BL of screen!
         //Anchor Centre mean Anchor Min(0.5;0.5) and Max(0.5;0.5) or at the centre of screen!
-        Vector2 ScreenSize = QCamera2D.GetCameraSizePixel();
+        Vector2 ScreenSize = QCamera.GetCameraSizePixel();
         Vector2 AnchorPosMin = new Vector2(ScreenSize.x * ToAnchorsMin.x, ScreenSize.y * ToAnchorsMin.y);
         Vector2 AnchorPosMax = new Vector2(ScreenSize.x * ToAnchorsMax.x, ScreenSize.y * ToAnchorsMax.y);
         Vector2 AnchorPos = (AnchorPosMax - AnchorPosMin) * 0.5f + AnchorPosMin - FromAnchorPosPrimary;
