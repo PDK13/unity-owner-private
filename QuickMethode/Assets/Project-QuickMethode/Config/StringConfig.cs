@@ -43,6 +43,7 @@ public class StringConfig : ScriptableObject
         //To create an "TMP_Sprite Assets", first select an Texture, then Right-Mouse/Create/TextMeshPro/SpriteAssets.
         //To add an "TMP_Sprite Assets" to an TextMeshPro component, expain "Extra Setting" at bottom of component.
         //To easy use on "TMP_Sprite Assets", just drag Sprite from that Texture to list, then set Code.
+        //If change name of Sprite from Sprite Asset, this will not work anymore.
         //*NOTE*
         foreach (SpriteCodeConfig Item in m_sprite)
             Value = Value.Replace(Item.Code, string.Format("<sprite name=\"{0}\">", Item.Sprite.name));
