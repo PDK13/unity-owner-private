@@ -27,10 +27,6 @@ public class MessageManager : MonoBehaviour
 
     #region Event
 
-    //public Action<bool> onWait;
-    //public Action<bool> onText;
-    //public Action<bool> onChoice;
-    //public Action<bool> onEnd;
     public Action<MessageStageType> onStage;
 
     #endregion
