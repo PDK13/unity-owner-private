@@ -27,10 +27,11 @@ public class MessageManager : MonoBehaviour
 
     #region Event
 
-    public Action<bool> onWait;
-    public Action<bool> onText;
-    public Action<bool> onChoice;
-    public Action<bool> onEnd;
+    //public Action<bool> onWait;
+    //public Action<bool> onText;
+    //public Action<bool> onChoice;
+    //public Action<bool> onEnd;
+    public Action<MessageStageType> onStage;
 
     #endregion
 
@@ -60,29 +61,9 @@ public class MessageManager : MonoBehaviour
     [SerializeField] private bool m_active = false;
     [SerializeField] private bool m_choice = false;
 
-    public MessageStageType Stage
-    {
-        get
-        {
-            if (m_command == MessageCommandType.None)
-                return MessageStageType.None;
-            //
-            if (m_active & m_choice)
-                return MessageStageType.Choice;
-            //
-            if (m_active & m_command == MessageCommandType.Wait)
-                return MessageStageType.Wait;
-            //
-            if (m_active & m_command == MessageCommandType.Text)
-                return MessageStageType.Text;
-            //
-            return MessageStageType.None;
-        }
-    }
+    [SerializeField] private MessageStageType m_stage = MessageStageType.None;
 
-#pragma warning disable IDE0052 // Remove unread private members
-    [SerializeField] private MessageStageType m_stage = MessageStageType.None; //Editor only!!
-#pragma warning restore IDE0052 // Remove unread private members
+    public MessageStageType Stage => m_stage;
 
     #endregion
 
@@ -116,7 +97,8 @@ public class MessageManager : MonoBehaviour
         m_command = MessageCommandType.None;
         m_active = true;
         m_choice = false;
-        m_stage = Stage;
+        //
+        SetStage(MessageStageType.Start);
         //
         if ((int)m_debug > (int)DebugType.None)
             Debug.Log("[Message] Start!");
@@ -142,8 +124,8 @@ public class MessageManager : MonoBehaviour
                 //
                 //PROGESS:
                 m_command = MessageCommandType.Text;
-                m_stage = Stage;
-                onText?.Invoke(true);
+                //
+                SetStage(MessageStageType.Text);
                 //
                 if ((int)m_debug > (int)DebugType.None)
                     Debug.Log("[Message] " + m_current);
@@ -152,38 +134,28 @@ public class MessageManager : MonoBehaviour
                 yield return new WaitUntil(() => m_command == MessageCommandType.Skip || m_command == MessageCommandType.Done);
                 //
                 //DONE:
-                m_command = MessageCommandType.Wait;
-                m_stage = Stage;
-                onText?.Invoke(false);
-                //
                 m_tmp.text = m_current;
             }
             //WAIT:
             if (m_current != "" && i < m_data.Message.Count - 1)
             {
                 //FINAL:
-                if (MessageSingle.DelayFinal > 0)
-                    yield return new WaitForSeconds(MessageSingle.DelayFinal);
-                //
                 m_command = MessageCommandType.Wait;
-                m_stage = Stage;
+                //
+                SetStage(MessageStageType.Wait);
                 //
                 if ((int)m_debug > (int)DebugType.None)
                     Debug.Log("[Message] Next?");
                 //
-                onWait?.Invoke(true);
                 yield return new WaitUntil(() => m_command == MessageCommandType.Next);
-                onWait?.Invoke(false);
             }
         }
         //
-        m_command = m_data.ChoiceAvaible ? MessageCommandType.Wait : MessageCommandType.None;
+        m_command = m_data.ChoiceAvaible ? MessageCommandType.Choice : MessageCommandType.None;
         m_active = m_data.ChoiceAvaible;
         m_choice = m_data.ChoiceAvaible;
-        m_stage = Stage;
         //
-        onChoice?.Invoke(m_active);
-        onEnd?.Invoke(!m_active);
+        SetStage(m_choice ? MessageStageType.Choice : MessageStageType.End);
         //
         if (m_choice)
         {
@@ -223,14 +195,33 @@ public class MessageManager : MonoBehaviour
             if (HtmlFormat)
                 continue;
             //
-            if (MessageSingle.DelaySpace > 0 && (MessageChar == ' '))
-                yield return new WaitForSeconds(MessageSingle.DelaySpace);
-            else
-            if (MessageSingle.DelayAlpha > 0)
-                yield return new WaitForSeconds(MessageSingle.DelayAlpha);
+            switch (MessageChar)
+            {
+                case '.':
+                case '?':
+                case '!':
+                case ':':
+                    if (MessageSingle.DelayMark > 0)
+                        yield return new WaitForSeconds(MessageSingle.DelayMark);
+                    break;
+                case ' ':
+                    if (MessageSingle.DelaySpace > 0)
+                        yield return new WaitForSeconds(MessageSingle.DelaySpace);
+                    break;
+                default:
+                    if (MessageSingle.DelayAlpha > 0)
+                        yield return new WaitForSeconds(MessageSingle.DelayAlpha);
+                    break;
+            }
         }
         //
         m_command = MessageCommandType.Done;
+    }
+
+    private void SetStage(MessageStageType Stage)
+    {
+        m_stage = Stage;
+        onStage?.Invoke(Stage);
     }
 
     #endregion
@@ -239,9 +230,6 @@ public class MessageManager : MonoBehaviour
 
     public void SetNext()
     {
-        if (Stage != MessageStageType.Wait)
-            return;
-        //
         if (m_command != MessageCommandType.Wait)
             //When current message in done show up, press Next to move on next message!
             return;
@@ -254,9 +242,6 @@ public class MessageManager : MonoBehaviour
 
     public void SetSkip()
     {
-        if (Stage != MessageStageType.Text)
-            return;
-        //
         if (m_command != MessageCommandType.Text)
             //When current message is showing up, press Next to skip and show full message!
             return;
@@ -271,10 +256,7 @@ public class MessageManager : MonoBehaviour
 
     public void SetChoice(int ChoiceIndex)
     {
-        if (Stage != MessageStageType.Choice)
-            return;
-        //
-        if (m_command != MessageCommandType.Wait)
+        if (m_command != MessageCommandType.Choice)
             //When current message in done show up and got choice option, press Choice Option to move on next message!
             return;
         //
@@ -303,9 +285,14 @@ public class MessageManager : MonoBehaviour
 public enum MessageStageType
 {
     None,
+    //
+    Start,
+    //
     Text,
     Wait,
     Choice,
+    //
+    End,
 }
 
 #if UNITY_EDITOR

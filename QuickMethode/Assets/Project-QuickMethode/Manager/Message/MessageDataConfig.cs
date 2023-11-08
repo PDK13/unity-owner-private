@@ -10,36 +10,6 @@ public class MessageDataConfig : ScriptableObject
     public List<MessageDataConfigChoice> Choice;
 
     public bool ChoiceAvaible => Choice == null ? false : Choice.Count > 0;
-
-    public MessageDataConfig()
-    {
-        Message = new List<MessageDataConfigText>();
-    }
-
-    public void SetWrite(string Text)
-    {
-        Message.Add(new MessageDataConfigText(Text,  0f, 0f, 0f));
-    }
-
-    public void SetWrite(string Text, float DelayAlpha, float DelaySpace, float DelayFianl)
-    {
-        Message.Add(new MessageDataConfigText(Text, DelayAlpha, DelaySpace, DelayFianl));
-    }
-
-    public void SetWriteByChar(string Text, float Delay)
-    {
-        Message.Add(new MessageDataConfigText(Text, Delay, 0f, 0f));
-    }
-
-    public void SetWriteByWord(string Text, float Delay)
-    {
-        Message.Add(new MessageDataConfigText(Text, 0f, Delay, 0f));
-    }
-
-    public void SetWriteDelay(float Delay)
-    {
-        Message.Add(new MessageDataConfigText("", 0f, 0f, Delay));
-    }
 }
 
 [Serializable]
@@ -48,15 +18,7 @@ public class MessageDataConfigText
     public string Text;
     public float DelayAlpha;
     public float DelaySpace;
-    public float DelayFinal;
-
-    public MessageDataConfigText(string Text, float DelayAlpha, float DelaySpace, float DelayFinal)
-    {
-        this.Text = Text;
-        this.DelayAlpha = DelayAlpha;
-        this.DelaySpace = DelaySpace;
-        this.DelayFinal = DelayFinal;
-    }
+    public float DelayMark;
 }
 
 [Serializable]

@@ -16,11 +16,15 @@ MonoBehaviour:
   - Text: Hello! Today is a good day?
     DelayAlpha: 0.1
     DelaySpace: 0
-    DelayFinal: 1
-  - Text: I am #redToriel#clear.
+    DelayMark: 0.5
+  - Text: I am #redToriel#clear.#returnI am a killer.
     DelayAlpha: 0.1
     DelaySpace: 0
-    DelayFinal: 1
+    DelayMark: 0.5
+  - Text: ...#returnDo you have any question?
+    DelayAlpha: 0.1
+    DelaySpace: 0
+    DelayMark: 0.5
   Choice:
   - Name: Are you sure?
     Description: If you choice this, you will die!!
