@@ -1,6 +1,8 @@
 using System.IO;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 /// <summary>
 /// Camera ORTHOGRAPHIC 2D only!
@@ -75,6 +77,8 @@ public class QScreenCapture
 {
     //Get Image from 'QSprite.GetScreenShot()' class!
 
+#if UNITY_EDITOR
+
     [MenuItem("Tools/ScreenCapture")]
     private static void SetScreenCapture()
     {
@@ -82,6 +86,8 @@ public class QScreenCapture
         while (QPath.GetPathFileExist(QPath.GetPath(QPath.PathType.Picture, string.Format("{0}_{1}.png", Application.productName, Index)))) Index++;
         SetScreenCapture(QPath.GetPath(QPath.PathType.Picture, string.Format("{0}_{1}.png", Application.productName, Index)));
     }
+
+#endif
 
     public static void SetScreenCapture(string Path)
     {
