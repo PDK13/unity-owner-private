@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -176,7 +177,7 @@ public class QComponent
 
     #region ==================================== Button
 
-    public static void SetButton(UnityEngine.UI.Button From, UnityAction Action)
+    public static void SetButton(Button From, UnityAction Action)
     {
         //Add an void methode to Action!!
 

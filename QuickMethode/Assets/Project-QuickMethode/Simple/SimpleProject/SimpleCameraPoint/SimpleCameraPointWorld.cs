@@ -14,7 +14,7 @@ public class SimpleCameraPointWorld : MonoBehaviour
 
     private void Update()
     {
-        Vector3 Pos = QCamera.GetPosMouseToWorld();
+        Vector3 Pos = QCamera2D.GetPosMouseToWorld();
         Pos.z = transform.position.z;
         transform.position = Pos;
     }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BackgroundScale : MonoBehaviour
 {
-    [SerializeField] private QResolution.UnitScaleType m_SpriteScale = QResolution.UnitScaleType.Span;
+    [SerializeField] private QSprite.UnitScaleType m_SpriteScale = QSprite.UnitScaleType.Span;
 
     [SerializeField] private List<SpriteRenderer> m_Primarys;
 
@@ -26,19 +26,16 @@ public class BackgroundScale : MonoBehaviour
             return;
         }
 
-        if (QCamera.GetCameraSizeUnit(m_Camera.GetComponent<Camera>()) == m_ResolutionPrimary)
+        if (QCamera2D.GetCameraSizeUnit(m_Camera.GetComponent<Camera>()) == m_ResolutionPrimary)
         {
             return;
         }
 
-        m_ResolutionPrimary = QCamera.GetCameraSizeUnit(m_Camera.GetComponent<Camera>());
+        m_ResolutionPrimary = QCamera2D.GetCameraSizeUnit(m_Camera.GetComponent<Camera>());
 
         foreach (SpriteRenderer m_Primary in m_Primarys)
         {
-            m_Primary.size = QResolution.GetSizeUnitScaled(
-                QSprite.GetSpriteSizeUnit(m_Primary.sprite),
-                m_ResolutionPrimary,
-                m_SpriteScale);
+            m_Primary.size = QSprite.GetSizeUnitScaled(QSprite.GetSpriteSizeUnit(m_Primary.sprite), m_ResolutionPrimary, m_SpriteScale);
         }
     }
 }

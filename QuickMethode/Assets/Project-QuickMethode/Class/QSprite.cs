@@ -158,4 +158,62 @@ public class QSprite
     }
 
     #endregion
+
+    #region ==================================== Convert
+
+    public enum UnitScaleType { Width, Height, Span, Primary, Tarket, }
+
+    public static Vector2 GetSizeUnitScaled(Sprite SpritePrimary, Sprite SpriteTarket, UnitScaleType SpriteScale)
+    {
+        return GetSizeUnitScaled(QSprite.GetSpriteSizeUnit(SpritePrimary), QSprite.GetSpriteSizeUnit(SpriteTarket), SpriteScale);
+    }
+
+    public static Vector2 GetSizeUnitScaled(Vector2 SizeUnitPrimary, Vector2 SizeUnitTarket, UnitScaleType SpriteScale)
+    {
+        Vector2 SizeUnitFinal = new Vector2();
+
+        switch (SpriteScale)
+        {
+            case UnitScaleType.Width:
+                {
+                    float OffsetX = SizeUnitTarket.x / SizeUnitPrimary.x;
+                    float SizeUnitFinalX = SizeUnitPrimary.x * OffsetX;
+                    float SizeUnitFinalY = SizeUnitPrimary.y * OffsetX;
+                    SizeUnitFinal = new Vector2(SizeUnitFinalX, SizeUnitFinalY);
+                }
+                break;
+            case UnitScaleType.Height:
+                {
+                    float OffsetY = SizeUnitTarket.y / SizeUnitPrimary.y;
+                    float SizeUnitFinalX = SizeUnitPrimary.x * OffsetY;
+                    float SizeUnitFinalY = SizeUnitPrimary.y * OffsetY;
+                    SizeUnitFinal = new Vector2(SizeUnitFinalX, SizeUnitFinalY);
+                }
+                break;
+            case UnitScaleType.Span:
+                {
+                    float OffsetX = SizeUnitTarket.x / SizeUnitPrimary.x;
+                    float OffsetY = SizeUnitTarket.y / SizeUnitPrimary.y;
+                    if (OffsetX < OffsetY)
+                    {
+                        SizeUnitFinal = GetSizeUnitScaled(SizeUnitPrimary, SizeUnitTarket, UnitScaleType.Height);
+                    }
+                    else
+                    {
+                        SizeUnitFinal = GetSizeUnitScaled(SizeUnitPrimary, SizeUnitTarket, UnitScaleType.Width);
+                    }
+                }
+                break;
+            case UnitScaleType.Primary:
+                SizeUnitFinal = SizeUnitPrimary;
+                break;
+            case UnitScaleType.Tarket:
+                SizeUnitFinal = SizeUnitTarket;
+                break;
+        }
+
+        return SizeUnitFinal;
+    }
+
+    #endregion
 }

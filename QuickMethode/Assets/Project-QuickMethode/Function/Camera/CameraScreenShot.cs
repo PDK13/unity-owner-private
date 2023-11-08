@@ -27,7 +27,7 @@ public class CameraScreenShot : MonoBehaviour
             return;
         m_shotNextFrame = false;
         //
-        QScreen.SetScreenShotFullScreen();
+        QScreenShot.SetScreenShotFullScreen();
     }
 
     public void SetShot()

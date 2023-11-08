@@ -33,11 +33,6 @@ public class QScene
         SceneManager.LoadScene(SceneName, LoadSceneMode);
     }
 
-    public static (int Index, string Name) GetSceneCurrent()
-    {
-        return (GetSceneCurrentBuildIndex(), GetSceneCurrentName());
-    }
-
     public static string GetSceneCurrentName()
     {
         return SceneManager.GetActiveScene().name;
@@ -117,11 +112,10 @@ public class QControl
     }
 
     #endregion
+}
 
-    #region ==================================== Device
-
-    #region Android - Vibrator
-
+public class QDeviceVibrate
+{
     public static bool VibrateHandle = true;
 
 #if UNITY_ANDROID
@@ -201,8 +195,4 @@ public class QControl
             }
 #endif
     }
-
-    #endregion
-
-    #endregion
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class QColor
 {
@@ -15,21 +16,21 @@ public class QColor
 
     #region ==================================== Color - Hex Color
 
-    private static string GetColorHex(Color Color)
+    public static string GetTextHex(Color Color)
     {
         return ColorUtility.ToHtmlStringRGB(Color);
     }
 
-    public static string GetColorHexFormat(Color Color)
+    public static string GetTextHexCode(Color Color)
     {
-        string ColorHex = GetColorHex(Color);
+        string ColorHex = GetTextHex(Color);
         string ColorHexCode = string.Format("#{0}", ColorHex);
         return ColorHexCode;
     }
 
-    public static string GetColorHexFormat(Color Color, string Text)
+    public static string GetTextHexFormat(Color Color, string Text)
     {
-        string ColorHex = GetColorHex(Color);
+        string ColorHex = GetTextHex(Color);
         string TextFormat = string.Format("<#{0}>{1}</color>", ColorHex, Text);
         return TextFormat;
     }
@@ -125,12 +126,12 @@ public class QColor
 
     #region ==================================== Color - Image
 
-    public static void SetSprite(UnityEngine.UI.Image Image, float Alpha)
+    public static void SetSprite(Image Image, float Alpha)
     {
         Image.color = GetColor(Image.color, Alpha);
     }
 
-    public static void SetSprite(UnityEngine.UI.Image Image, Color Color, float Alpha)
+    public static void SetSprite(Image Image, Color Color, float Alpha)
     {
         Image.color = GetColor(Color, Alpha);
     }
