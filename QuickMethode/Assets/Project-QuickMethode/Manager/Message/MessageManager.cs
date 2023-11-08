@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class MessageManager : MonoBehaviour
 {
-    public static MessageManager Instance;
+    public static MessageManager Instance { private set; get; }
 
     #region Varible: Setting
 

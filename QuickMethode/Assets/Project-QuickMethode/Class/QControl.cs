@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -45,28 +46,6 @@ public class QScene
     public static int GetSceneCurrentBuildIndex()
     {
         return SceneManager.GetActiveScene().buildIndex;
-    }
-
-    //
-
-    [MenuItem("Tools/Screenshot")]
-    private static void SetScreenshot()
-    {
-        SetScreenshot(QFileIO.GetPath(QPath.PathType.Picture), Application.productName, true);
-    }
-
-    public static void SetScreenshot(string PathFolder, string FileName, bool FileCheck)
-    {
-        if (FileCheck)
-        {
-            int Index = 0;
-            while (System.IO.File.Exists(PathFolder + "/" + string.Format("{0}_{1}", FileName, Index) + ".png")) Index++;
-            ScreenCapture.CaptureScreenshot(PathFolder + "/" + string.Format("{0}_{1}", FileName, Index) + ".png");
-        }
-        else
-        {
-            ScreenCapture.CaptureScreenshot(PathFolder + "/" + string.Format("{0}", FileName) + ".png");
-        }
     }
 }
 

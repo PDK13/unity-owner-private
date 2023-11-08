@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public static CameraController Instance;
+    public static CameraController Instance { private set; get; }
 
     [SerializeField] private CinemachineVirtualCamera m_virtualCamera;
     [SerializeField] private Transform m_follow;

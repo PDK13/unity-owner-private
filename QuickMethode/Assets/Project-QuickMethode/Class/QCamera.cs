@@ -1,3 +1,5 @@
+using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 public class QCamera
@@ -125,4 +127,64 @@ public class QResolution
     }
 
     #endregion
+}
+
+public class QScreen
+{
+    #region ScreenCapture
+
+    [MenuItem("Tools/ScreenCapture")]
+    private static void SetScreenCapture()
+    {
+        int Index = 0;
+        while (QPath.GetPathFileExist(QPath.GetPath(QPath.PathType.Picture, string.Format("{0}_{1}.png", Application.productName, Index)))) Index++;
+        SetScreenCapture(QPath.GetPath(QPath.PathType.Picture, string.Format("{0}_{1}.png", Application.productName, Index)));
+    }
+
+    public static void SetScreenCapture(string Path)
+    {
+        ScreenCapture.CaptureScreenshot(Path);
+        Debug.Log("[ScreenCapture] " + Path);
+    }
+
+    #endregion
+
+    #region ScreenShot
+
+    /// <summary>
+    /// Work inside 'OnPostRender()' methode with Camera component!
+    /// </summary>
+    public static void SetScreenShotFullScreen()
+    {
+        int Index = 0;
+        while (QPath.GetPathFileExist(QPath.GetPath(QPath.PathType.Picture, string.Format("{0}_{1}.png", Application.productName, Index)))) Index++;
+        SetScreenShotFullScreen(QPath.GetPath(QPath.PathType.Picture, string.Format("{0}_{1}.png", Application.productName, Index)));
+    }
+
+    /// <summary>
+    /// Work inside 'OnPostRender()' methode with Camera component!
+    /// </summary>
+    public static void SetScreenShotFullScreen(string Path)
+    {
+        SetScreenShot(Camera.main.pixelWidth, Camera.main.pixelHeight, 0f, 0f, Path);
+    }
+
+    /// <summary>
+    /// Work inside 'OnPostRender()' methode with Camera component!
+    /// </summary>
+    public static void SetScreenShot(int Width, int Height, float PosX, float PosY, string Path)
+    {
+        Texture2D TextureScreen = new Texture2D(Width, Height, TextureFormat.RGB24, false);
+        Rect RectScreen = new Rect(PosX, PosY, Width, Height);
+        TextureScreen.ReadPixels(RectScreen, 0, 0);
+        //
+        byte[] ByteEncode = TextureScreen.EncodeToPNG();
+        File.WriteAllBytes(Path, ByteEncode);
+        //
+        Debug.Log("[ScreenShot] " + Path);
+    }
+
+    #endregion
+
+    //Get Image from 'QSprite.GetScreenShot()' class!
 }
