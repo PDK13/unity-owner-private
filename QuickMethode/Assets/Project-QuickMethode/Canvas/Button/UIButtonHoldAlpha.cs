@@ -23,9 +23,9 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
     [Serializable]
     public class AlphaEventSingle
     {
-        public float Normal = 1.00f;
-        public float Ready = 0.50f;
-        public float Hold = 0.25f;
+        [Range(0f, 1f)] public float Normal = 1.00f;
+        [Range(0f, 1f)] public float Ready = 0.50f;
+        [Range(0f, 1f)] public float Hold = 0.25f;
     }
 
     public AlphaEventSingle AlphaEvent;
