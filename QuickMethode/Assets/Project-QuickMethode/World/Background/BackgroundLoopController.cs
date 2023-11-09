@@ -12,7 +12,7 @@ public class BackgroundLoopController : MonoBehaviour
     [SerializeField] private SpriteRenderer m_background;
     private float m_backgroundLocalX = 0;
     private float m_backgroundBoundX;
-    private Vector2 BackgroundSize => QSprite.GetSpriteSizeUnit(m_background.sprite);
+    private Vector2 BackgroundSize => QSprite.GetSizeUnit(m_background.sprite);
 
     [SerializeField] private bool m_layerMask = false;
     [SerializeField] private bool m_layerLimitY = false;
@@ -69,7 +69,7 @@ public class BackgroundLoopController : MonoBehaviour
                     m_backgroundLayer[i].PrimaryPosY = m_backgroundLayer[i].Transform.localPosition.y;
 
                     m_backgroundLayer[i].Layer.drawMode = SpriteDrawMode.Tiled;
-                    Vector2 SizeSprite = QSprite.GetSpriteSizeUnit(m_backgroundLayer[i].Layer.sprite);
+                    Vector2 SizeSprite = QSprite.GetSizeUnit(m_backgroundLayer[i].Layer.sprite);
                     m_backgroundLayer[i].Layer.size = new Vector2(SizeSprite.x * 3, SizeSprite.y);
                 }
                 break;
@@ -157,7 +157,7 @@ public class BackgroundLoopController : MonoBehaviour
             for (int i = 0; i < 3; i++)
             {
                 Vector2 Pos = (Vector2)transform.position + LayerOffset;
-                Vector2 Border = QSprite.GetSpriteSizeUnit(m_background.sprite) * LayerScale + Vector2.one * (-0.1f) * i;
+                Vector2 Border = QSprite.GetSizeUnit(m_background.sprite) * LayerScale + Vector2.one * (-0.1f) * i;
                 QGizmos.SetWireCube(Pos, Border, Color.cyan);
             }
 
@@ -184,7 +184,7 @@ public class BackgroundLoopLayer
     [HideInInspector]
     public float PrimaryPosY;
 
-    public Vector2 Size => QSprite.GetSpriteSizeUnit(Layer.sprite);
+    public Vector2 Size => QSprite.GetSizeUnit(Layer.sprite);
 
     public BackgroundLoopLayer(SpriteRenderer SpriteRenderer, float SpeedX = 0.5f, bool FollowY = true)
     {

@@ -3,39 +3,27 @@ using UnityEngine;
 
 public class BackgroundScale : MonoBehaviour
 {
-    [SerializeField] private QSprite.UnitScaleType m_SpriteScale = QSprite.UnitScaleType.Span;
+    [SerializeField] private UnitScaleType m_scale = UnitScaleType.Span;
+    [SerializeField] private Camera m_camera;
 
-    [SerializeField] private List<SpriteRenderer> m_Primarys;
+    [SerializeField] private List<SpriteRenderer> m_background;
 
-    [SerializeField] private GameObject m_Camera;
-
-    private Vector2 m_ResolutionPrimary = new Vector2();
+    private Vector2 m_cameraResolution = new Vector2();
 
     private void Start()
     {
-        if (m_Camera == null)
-        {
-            m_Camera = Camera.main.gameObject;
-        }
+        if (m_camera == null)
+            m_camera = Camera.main;
     }
 
     private void LateUpdate()
     {
-        if (m_Camera == null)
-        {
+        if (m_camera == null) 
             return;
-        }
-
-        if (QCamera.GetCameraSizeUnit(m_Camera.GetComponent<Camera>()) == m_ResolutionPrimary)
-        {
-            return;
-        }
-
-        m_ResolutionPrimary = QCamera.GetCameraSizeUnit(m_Camera.GetComponent<Camera>());
-
-        foreach (SpriteRenderer m_Primary in m_Primarys)
-        {
-            m_Primary.size = QSprite.GetSizeUnitScaled(QSprite.GetSpriteSizeUnit(m_Primary.sprite), m_ResolutionPrimary, m_SpriteScale);
-        }
+        //
+        m_cameraResolution = QCamera.GetCameraSizeUnit(m_camera.GetComponent<Camera>());
+        //
+        foreach (SpriteRenderer Background in m_background)
+            Background.size = QSpriteScale.GetSizeUnitScaled(QSprite.GetSizeUnit(Background.sprite), m_cameraResolution, m_scale);
     }
 }
