@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TestButtonHold : MonoBehaviour
 {
-    [SerializeField] private UIButtonHold m_btnTest;
+    [SerializeField] private UIButtonHoldColor m_btnTest;
 
     private void Update()
     {
