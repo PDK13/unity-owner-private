@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class TextMessage : MonoBehaviour
 {
     [SerializeField] private MessageDataConfig m_messageConfig;
     [SerializeField] private TextMeshProUGUI m_tmpMyText;
