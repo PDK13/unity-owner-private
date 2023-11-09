@@ -41,6 +41,7 @@ public class QMeshCircum
     public void SetFilledGenerate(int Point, float Radius, float Deg)
     {
         if (Point < 3)
+            //One shape must have 3 points at least!!
             return;
         //
         m_point = Point;
@@ -98,7 +99,8 @@ public class QMeshCircum
 
     public void SetHollowGenerate(int Point, float Radius, float RadiusHollow, float Deg)
     {
-        if (m_point < 3)
+        if (Point < 3)
+            //One shape must have 3 points at least!!
             return;
         //
         m_point = Point;
