@@ -290,15 +290,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 399144399}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61f15e67726f089478a770a56fb56066, type: 3}
+  m_Script: {fileID: 11500000, guid: 3d5f9e1ce5271834d9e33689cb017d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Target: {fileID: 399144400}
-  DelayHold: 0
+  Image: {fileID: 399144401}
+  Transform: {fileID: 399144400}
+  CanvasGroup: {fileID: 399144404}
+  DelayHold: 1
   ColorEvent:
+    Normal: {r: 1, g: 1, b: 1, a: 1}
+    Ready: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    Hold: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  ScaleEvent:
     Normal: {x: 1, y: 1}
     Ready: {x: 1.25, y: 1.25}
     Hold: {x: 1.5, y: 1.5}
+  AlphaEvent:
+    Normal: 1
+    Ready: 0.5
+    Hold: 0.25
   PointerEvent:
     PointerHold:
       m_PersistentCalls:

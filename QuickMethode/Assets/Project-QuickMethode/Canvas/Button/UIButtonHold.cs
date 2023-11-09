@@ -6,8 +6,10 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
+    public Image Image;
+    public Transform Transform;
     public CanvasGroup CanvasGroup;
 
     [Min(0)]
@@ -21,6 +23,22 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
     public bool HoldActive { private set; get; } = false;
 
     [Serializable]
+    public class ColorEventSingle
+    {
+        public Color Normal = Color.white;
+        public Color Ready = Color.gray;
+        public Color Hold = Color.yellow;
+    }
+
+    [Serializable]
+    public class ScaleEventSingle
+    {
+        public Vector2 Normal = Vector2.one * 1.00f;
+        public Vector2 Ready = Vector2.one * 1.25f;
+        public Vector2 Hold = Vector2.one * 1.50f;
+    }
+
+    [Serializable]
     public class AlphaEventSingle
     {
         public float Normal = 1.00f;
@@ -28,6 +46,8 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
         public float Hold = 0.25f;
     }
 
+    public ColorEventSingle ColorEvent;
+    public ScaleEventSingle ScaleEvent;
     public AlphaEventSingle AlphaEvent;
 
     [Serializable]
@@ -45,6 +65,12 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     private void Start()
     {
+        if (Image == null)
+            Image = GetComponent<Image>();
+        //
+        if (Transform == null)
+            Transform = GetComponent<Transform>();
+        //
         if (CanvasGroup == null)
             CanvasGroup = GetComponent<CanvasGroup>();
     }
@@ -78,6 +104,8 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void SetButtonPress()
     {
+        Image.color = ColorEvent.Ready;
+        Transform.localScale = ScaleEvent.Ready;
         CanvasGroup.alpha = AlphaEvent.Ready;
         //
         SetEventPointerDown();
@@ -99,9 +127,17 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
             Ready = true;
             //
             if (Hold || HoldActive)
+            {
+                Image.color = ColorEvent.Hold;
+                Transform.localScale = ScaleEvent.Hold;
                 CanvasGroup.alpha = AlphaEvent.Hold;
+            }
             else
+            {
+                Image.color = ColorEvent.Ready;
+                Transform.localScale = ScaleEvent.Ready;
                 CanvasGroup.alpha = AlphaEvent.Ready;
+            }
             //
             PointerEvent.PointerEnter?.Invoke();
         }
@@ -116,9 +152,17 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
             Ready = false;
             //
             if (Hold)
+            {
+                Image.color = HoldActive ? ColorEvent.Hold : ColorEvent.Ready;
+                Transform.localScale = HoldActive ? ScaleEvent.Hold : ScaleEvent.Ready;
                 CanvasGroup.alpha = HoldActive ? AlphaEvent.Hold : AlphaEvent.Ready;
+            }
             else
+            {
+                Image.color = ColorEvent.Normal;
+                Transform.localScale = ScaleEvent.Normal;
                 CanvasGroup.alpha = AlphaEvent.Normal;
+            }
             //
             PointerEvent.PointerExit?.Invoke();
         }
@@ -138,12 +182,24 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
         HoldActive = false;
         //
         if (Hold)
+        {
+            Image.color = HoldActive ? ColorEvent.Hold : ColorEvent.Ready;
+            Transform.localScale = HoldActive ? ScaleEvent.Hold : ScaleEvent.Ready;
             CanvasGroup.alpha = HoldActive ? AlphaEvent.Hold : AlphaEvent.Ready;
+        }
         else
         if (Ready)
+        {
+            Image.color = ColorEvent.Ready;
+            Transform.localScale = ScaleEvent.Ready;
             CanvasGroup.alpha = AlphaEvent.Ready;
+        }
         else
-            CanvasGroup.alpha = AlphaEvent.Normal;
+        {
+            Image.color = ColorEvent.Normal;
+            Transform.localScale = ScaleEvent.Normal;
+            CanvasGroup.alpha = AlphaEvent.Ready;
+        }
         //
         PointerEvent.PointerUp?.Invoke();
         //
@@ -156,6 +212,8 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
             yield return new WaitForSeconds(DelayHold);
         //
         HoldActive = true;
+        Image.color = ColorEvent.Hold;
+        Transform.localScale = ScaleEvent.Hold;
         CanvasGroup.alpha = AlphaEvent.Hold;
         //
         while (Hold)
