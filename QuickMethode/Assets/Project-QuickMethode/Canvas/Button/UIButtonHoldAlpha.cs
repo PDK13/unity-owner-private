@@ -10,15 +10,11 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
 {
     public CanvasGroup CanvasGroup;
 
+    public bool Lock = false;
+
     [Min(0)]
     [Tooltip("Duration delay before active hold event")]
     public float DelayHold = 0f;
-
-    public bool Ready { private set; get; } = false;
-
-    public bool Hold { private set; get; } = false;
-
-    public bool HoldActive { private set; get; } = false;
 
     [Serializable]
     public class AlphaEventSingle
@@ -42,6 +38,12 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
     }
 
     [SerializeField] private PointerEventSingle PointerEvent;
+
+    public bool Ready { private set; get; } = false;
+
+    public bool Hold { private set; get; } = false;
+
+    public bool HoldActive { private set; get; } = false;
 
     private void Start()
     {
@@ -92,6 +94,9 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     private void SetEventPointerEnter()
     {
+        if (Lock)
+            return;
+        //
         if (Application.platform == RuntimePlatform.Android)
             SetEventPointerDown();
         else
@@ -109,6 +114,9 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     private void SetEventPointerExit()
     {
+        if (Lock)
+            return;
+        //
         if (Application.platform == RuntimePlatform.Android)
             SetEventPointerUp();
         else
@@ -126,6 +134,9 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     private void SetEventPointerDown()
     {
+        if (Lock)
+            return;
+        //
         Hold = true;
         PointerEvent.PointerDown?.Invoke();
         //
@@ -134,6 +145,9 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     private void SetEventPointerUp()
     {
+        if (Lock)
+            return;
+        //
         Hold = false;
         HoldActive = false;
         //
