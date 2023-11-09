@@ -6,7 +6,7 @@ public class BackgroundScale : MonoBehaviour
     [SerializeField] private UnitScaleType m_scale = UnitScaleType.Span;
     [SerializeField] private Camera m_camera;
 
-    [SerializeField] private List<SpriteRenderer> m_background;
+    [SerializeField] private List<SpriteRenderer> m_background = new List<SpriteRenderer>();
 
     private Vector2 m_cameraResolution = new Vector2();
 
