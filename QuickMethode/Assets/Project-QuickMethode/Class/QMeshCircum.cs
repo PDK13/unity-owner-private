@@ -169,11 +169,11 @@ public class QMeshCircum
         }
         else
         {
-            m_meshFilter.mesh.Clear();
-            m_meshFilter.mesh.vertices = m_points;
-            m_meshFilter.mesh.triangles = m_triangle;
-            m_meshFilter.mesh.RecalculateNormals();
-            m_meshFilter.mesh.RecalculateBounds();
+            m_meshFilter.sharedMesh.Clear();
+            m_meshFilter.sharedMesh.vertices = m_points;
+            m_meshFilter.sharedMesh.triangles = m_triangle;
+            m_meshFilter.sharedMesh.RecalculateNormals();
+            m_meshFilter.sharedMesh.RecalculateBounds();
         }
     }
 
