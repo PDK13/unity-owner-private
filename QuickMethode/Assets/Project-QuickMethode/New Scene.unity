@@ -294,7 +294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Image: {fileID: 399144401}
-  Transform: {fileID: 399144400}
+  RectTransform: {fileID: 399144400}
   CanvasGroup: {fileID: 399144404}
   DelayHold: 1
   ColorEvent:

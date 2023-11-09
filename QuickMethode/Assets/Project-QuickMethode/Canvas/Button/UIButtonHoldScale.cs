@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 public class UIButtonHoldScale : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
-    public Transform Transform;
+    public RectTransform RectTransform;
 
     [Min(0)]
     [Tooltip("Duration delay before active hold event")]
@@ -44,8 +44,8 @@ public class UIButtonHoldScale : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     private void Start()
     {
-        if (Transform == null)
-            Transform = GetComponent<Transform>();
+        if (RectTransform == null)
+            RectTransform = GetComponent<RectTransform>();
     }
 
     private void OnDestroy()
@@ -77,7 +77,7 @@ public class UIButtonHoldScale : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void SetButtonPress()
     {
-        Transform.localScale = ScaleEvent.Ready;
+        RectTransform.localScale = ScaleEvent.Ready;
         //
         SetEventPointerDown();
     }
@@ -98,9 +98,9 @@ public class UIButtonHoldScale : MonoBehaviour, IPointerEnterHandler, IPointerEx
             Ready = true;
             //
             if (Hold || HoldActive)
-                Transform.localScale = ScaleEvent.Hold;
+                RectTransform.localScale = ScaleEvent.Hold;
             else
-                Transform.localScale = ScaleEvent.Ready;
+                RectTransform.localScale = ScaleEvent.Ready;
             //
             PointerEvent.PointerEnter?.Invoke();
         }
@@ -115,9 +115,9 @@ public class UIButtonHoldScale : MonoBehaviour, IPointerEnterHandler, IPointerEx
             Ready = false;
             //
             if (Hold)
-                Transform.localScale = HoldActive ? ScaleEvent.Hold : ScaleEvent.Ready;
+                RectTransform.localScale = HoldActive ? ScaleEvent.Hold : ScaleEvent.Ready;
             else
-                Transform.localScale = ScaleEvent.Normal;
+                RectTransform.localScale = ScaleEvent.Normal;
             //
             PointerEvent.PointerExit?.Invoke();
         }
@@ -137,12 +137,12 @@ public class UIButtonHoldScale : MonoBehaviour, IPointerEnterHandler, IPointerEx
         HoldActive = false;
         //
         if (Hold)
-            Transform.localScale = HoldActive ? ScaleEvent.Hold : ScaleEvent.Ready;
+            RectTransform.localScale = HoldActive ? ScaleEvent.Hold : ScaleEvent.Ready;
         else
         if (Ready)
-            Transform.localScale = ScaleEvent.Ready;
+            RectTransform.localScale = ScaleEvent.Ready;
         else
-            Transform.localScale = ScaleEvent.Normal;
+            RectTransform.localScale = ScaleEvent.Normal;
         //
         PointerEvent.PointerUp?.Invoke();
         //
@@ -155,7 +155,7 @@ public class UIButtonHoldScale : MonoBehaviour, IPointerEnterHandler, IPointerEx
             yield return new WaitForSeconds(DelayHold);
         //
         HoldActive = true;
-        Transform.localScale = ScaleEvent.Hold;
+        RectTransform.localScale = ScaleEvent.Hold;
         //
         while (Hold)
         {

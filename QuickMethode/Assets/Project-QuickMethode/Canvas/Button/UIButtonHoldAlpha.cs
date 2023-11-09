@@ -46,7 +46,7 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
     private void Start()
     {
         if (CanvasGroup == null)
-            CanvasGroup = GetComponent<CanvasGroup>();
+            CanvasGroup = QComponent.GetComponent<CanvasGroup>(gameObject);
     }
 
     private void OnDestroy()

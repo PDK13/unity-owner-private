@@ -45,7 +45,7 @@ public class UIButtonHoldColor : MonoBehaviour, IPointerEnterHandler, IPointerEx
     private void Start()
     {
         if (Target == null)
-            Target = GetComponent<Image>();
+            Target = QComponent.GetComponent<Image>(gameObject);
     }
 
     private void OnDestroy()
