@@ -202,7 +202,7 @@ GameObject:
   - component: {fileID: 399144402}
   - component: {fileID: 399144401}
   - component: {fileID: 399144404}
-  - component: {fileID: 399144403}
+  - component: {fileID: 399144405}
   m_Layer: 5
   m_Name: btn-hold
   m_TagString: Untagged
@@ -269,7 +269,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 399144399}
   m_CullTransparentMesh: 1
---- !u!114 &399144403
+--- !u!225 &399144404
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 399144399}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &399144405
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -278,15 +290,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 399144399}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3e3e48c05cdc214688c7a1789ebcb7e, type: 3}
+  m_Script: {fileID: 11500000, guid: 61f15e67726f089478a770a56fb56066, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Target: {fileID: 399144404}
-  DelayHold: 1
+  Target: {fileID: 399144400}
+  DelayHold: 0
   ColorEvent:
-    Normal: 1
-    Ready: 0.5
-    Hold: 0.25
+    Normal: {x: 1, y: 1}
+    Ready: {x: 1.25, y: 1.25}
+    Hold: {x: 1.5, y: 1.5}
   PointerEvent:
     PointerHold:
       m_PersistentCalls:
@@ -303,18 +315,6 @@ MonoBehaviour:
     PointerExit:
       m_PersistentCalls:
         m_Calls: []
---- !u!225 &399144404
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 399144399}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!1 &444938536
 GameObject:
   m_ObjectHideFlags: 0
