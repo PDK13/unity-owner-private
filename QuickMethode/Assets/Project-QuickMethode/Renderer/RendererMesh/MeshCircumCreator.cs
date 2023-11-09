@@ -271,6 +271,16 @@ public class MeshCircumCreatorData
             m_meshFilter.mesh = Mesh;
         }
         else
+        if (m_meshFilter.mesh != null)
+        {
+            m_meshFilter.mesh.Clear();
+            m_meshFilter.mesh.vertices = Points;
+            m_meshFilter.mesh.triangles = Triangles;
+            m_meshFilter.mesh.RecalculateNormals();
+            m_meshFilter.mesh.RecalculateBounds();
+        }
+        else
+        if (m_meshFilter.sharedMesh != null)
         {
             m_meshFilter.sharedMesh.Clear();
             m_meshFilter.sharedMesh.vertices = Points;
