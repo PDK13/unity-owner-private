@@ -1,15 +1,22 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+[RequireComponent(typeof(MeshFilter))]
+[RequireComponent(typeof(MeshRenderer))]
 public class RendererCircumMesh : MonoBehaviour
 {
+    [SerializeField] private MeshFilter m_meshFilter;
+
+    //OUTER:
     [SerializeField][Range(3, 60)] private int m_outerPoint = 3;
     float[] m_outerPointRatio = new float[3];
     //
     [SerializeField][Min(0)] private float m_outerRadius = 2f;
     [SerializeField] private float m_outerDeg = 0f;
+
+    //INTER:
+    [SerializeField][Min(0)] private float m_interRadius = 2f;
     //
     private RendererCircumMeshData m_data;
 
@@ -56,11 +63,61 @@ public class RendererCircumMesh : MonoBehaviour
         set => m_outerDeg = value;
     }
 
+    //
+
+    public float InterRadius
+    {
+        get => m_interRadius;
+        set => m_interRadius = value >= 0 ? value : m_interRadius;
+    }
+
     public RendererCircumMeshData Data => m_data;
 
     public void SetGenerate()
     {
-        m_data = new RendererCircumMeshData(OuterPointRatio, OuterRadius, OuterDeg);
+        m_data = new RendererCircumMeshData(OuterPointRatio, OuterRadius, InterRadius, OuterDeg);
+        //
+        if (m_meshFilter == null)
+            return;
+        //
+        if (Application.isPlaying)
+        {
+            Mesh Mesh = new Mesh();
+            Mesh.name = string.Format("{0}-{1}-{2}-{3}", OuterPoint, OuterRadius, InterRadius, OuterDeg);
+            Mesh.vertices = m_data.Points;
+            Mesh.triangles = m_data.Triangles;
+            Mesh.RecalculateNormals();
+            Mesh.RecalculateBounds();
+            m_meshFilter.mesh = Mesh;
+        }
+        else
+        if (m_meshFilter.mesh != null)
+        {
+            m_meshFilter.mesh.Clear();
+            m_meshFilter.mesh.vertices = m_data.Points;
+            m_meshFilter.mesh.triangles = m_data.Triangles;
+            m_meshFilter.mesh.RecalculateNormals();
+            m_meshFilter.mesh.RecalculateBounds();
+        }
+        else
+        if (m_meshFilter.sharedMesh != null)
+        {
+            m_meshFilter.sharedMesh.Clear();
+            m_meshFilter.sharedMesh.vertices = m_data.Points;
+            m_meshFilter.sharedMesh.triangles = m_data.Triangles;
+            m_meshFilter.sharedMesh.RecalculateNormals();
+            m_meshFilter.sharedMesh.RecalculateBounds();
+        }
+        else
+        {
+            Mesh Mesh = new Mesh();
+            Mesh.name = string.Format("{0}-{1}-{2}-{3}", OuterPoint, OuterRadius, InterRadius, OuterDeg);
+            Mesh.vertices = m_data.Points;
+            Mesh.triangles = m_data.Triangles;
+            Mesh.RecalculateNormals();
+            Mesh.RecalculateBounds();
+            m_meshFilter.mesh = Mesh;
+        }
     }
 
     #region Sample
@@ -78,7 +135,7 @@ public class RendererCircumMesh : MonoBehaviour
         }
         //
         OuterDeg = -18f;
-        Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
+        Data.SetGenerate(m_outerPointRatio, m_outerRadius, m_interRadius, m_outerDeg);
     }
 
     public void SetSampleStarB()
@@ -95,7 +152,7 @@ public class RendererCircumMesh : MonoBehaviour
         }
         //
         OuterDeg = 30f;
-        Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
+        Data.SetGenerate(m_outerPointRatio, m_outerRadius, m_interRadius, m_outerDeg);
     }
 
     //
@@ -113,7 +170,7 @@ public class RendererCircumMesh : MonoBehaviour
         }
         //
         OuterDeg = -18f;
-        Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
+        Data.SetGenerate(m_outerPointRatio, m_outerRadius, m_interRadius, m_outerDeg);
     }
 
     public void SetSampleStarD()
@@ -136,7 +193,7 @@ public class RendererCircumMesh : MonoBehaviour
         }
         //
         OuterDeg = 0f;
-        Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
+        Data.SetGenerate(m_outerPointRatio, m_outerRadius, m_interRadius, m_outerDeg);
     }
 
     //
@@ -161,7 +218,7 @@ public class RendererCircumMesh : MonoBehaviour
         }
         //
         OuterDeg = 22.5f;
-        Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
+        Data.SetGenerate(m_outerPointRatio, m_outerRadius, m_interRadius, m_outerDeg);
     }
 
     public void SetSampleStarF()
@@ -185,7 +242,7 @@ public class RendererCircumMesh : MonoBehaviour
         }
         //
         OuterDeg = 15f;
-        Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
+        Data.SetGenerate(m_outerPointRatio, m_outerRadius, m_interRadius, m_outerDeg);
     }
 
     #endregion
@@ -209,20 +266,33 @@ public class RendererCircumMesh : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         QGizmos.SetWireSphere(this.transform.position, OuterRadius, Color.gray);
+        QGizmos.SetWireSphere(this.transform.position, InterRadius, Color.gray);
         //
         SetGenerate();
         //
-        Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
+        Data.SetGenerate(m_outerPointRatio, m_outerRadius, m_interRadius, m_outerDeg);
         //
+        //OUTER:
         Vector3 PointA, PointB;
         for (int i = 0; i < Data.Point - 1; i++)
         {
-            PointA = this.transform.position + Data.Points[i];
-            PointB = this.transform.position + Data.Points[i + 1];
+            PointA = this.transform.position + Data.OuterPoints[i];
+            PointB = this.transform.position + Data.OuterPoints[i + 1];
             QGizmos.SetLine(PointA, PointB, Color.green, 0.1f);
         }
-        PointA = this.transform.position + Data.Points[Data.Points.Length - 1];
-        PointB = this.transform.position + Data.Points[0];
+        PointA = this.transform.position + Data.OuterPoints[Data.OuterPoints.Length - 1];
+        PointB = this.transform.position + Data.OuterPoints[0];
+        QGizmos.SetLine(PointA, PointB, Color.green, 0.1f);
+        //
+        //INTER:
+        for (int i = 0; i < Data.Point - 1; i++)
+        {
+            PointA = this.transform.position + Data.InterPoints[i];
+            PointB = this.transform.position + Data.InterPoints[i + 1];
+            QGizmos.SetLine(PointA, PointB, Color.green, 0.1f);
+        }
+        PointA = this.transform.position + Data.InterPoints[Data.InterPoints.Length - 1];
+        PointB = this.transform.position + Data.InterPoints[0];
         QGizmos.SetLine(PointA, PointB, Color.green, 0.1f);
     }
 
@@ -231,31 +301,45 @@ public class RendererCircumMesh : MonoBehaviour
 
 public class RendererCircumMeshData
 {
+    //OUTER:
+
     public int Point { private set; get; } = 0;
-    public float Radius { private set; get; } = 0;
+    public float OuterRadius { private set; get; } = 0;
     public float Deg { private set; get; } = 0;
 
-    public Vector3[] Points { private set; get; } = new Vector3[0];
+    public Vector3[] OuterPoints { private set; get; } = new Vector3[0];
     public float[] PointsRatio { private set; get; } = new float[0];
+
+    //INTER:
+
+    public float InterRadius { private set; get; } = 0;
+
+    public Vector3[] InterPoints { private set; get; } = new Vector3[0];
+
+    //MESH:
+
+    public Vector3[] Points { private set; get; } = new Vector3[0];
+
+    public int[] Triangles { private set; get; } = new int[0];
 
     public RendererCircumMeshData()
     {
         //...
     }
 
-    public RendererCircumMeshData(int Point, float Radius, float Deg)
+    public RendererCircumMeshData(int Point, float OuterRadius, float InterRadius, float Deg)
     {
-        SetOuterGenerate(Point, Radius, Deg);
+        SetGenerate(Point, OuterRadius, InterRadius, Deg);
     }
 
-    public RendererCircumMeshData(float[] PointRatio, float Radius, float Deg)
+    public RendererCircumMeshData(float[] PointRatio, float OuterRadius, float InterRadius, float Deg)
     {
-        SetOuterGenerate(PointRatio, Radius, Deg);
+        SetGenerate(PointRatio, OuterRadius, InterRadius, Deg);
     }
 
     //
 
-    public bool SetOuterGenerate(int Point, float Radius, float Deg)
+    public bool SetGenerate(int Point, float OuterRadius, float InterRadius, float Deg)
     {
         if (Point < 3)
             //One shape must have 3 points at least!!
@@ -263,15 +347,26 @@ public class RendererCircumMeshData
         //
         this.Point = Point;
         this.PointsRatio = new float[0];
-        this.Radius = Radius;
+        this.OuterRadius = OuterRadius;
+        this.InterRadius = InterRadius;
         this.Deg = Deg;
         //
-        this.Points = Getm_outerPoint();
+        this.OuterPoints = GetInterterPoint(OuterRadius);
+        this.InterPoints = GetInterterPoint(InterRadius);
+        this.OuterPoints = GetPointRatio(OuterPoints, PointsRatio);
+        this.InterPoints = GetPointRatio(InterPoints, PointsRatio);
+        //
+        List<Vector3> Points = new List<Vector3>();
+        Points.AddRange(OuterPoints);
+        Points.AddRange(InterPoints);
+        this.Points = Points.ToArray();
+        //
+        this.Triangles = GetFilledTriangle();
         //
         return true;
     }
 
-    public bool SetOuterGenerate(float[] PointRatio, float Radius, float Deg)
+    public bool SetGenerate(float[] PointRatio, float OuterRadius, float InterRadius, float Deg)
     {
         if (PointRatio.Length < 3)
             //One shape must have 3 points at least!!
@@ -279,16 +374,26 @@ public class RendererCircumMeshData
         //
         this.Point = PointRatio.Length;
         this.PointsRatio = PointRatio;
-        this.Radius = Radius;
+        this.OuterRadius = OuterRadius;
+        this.InterRadius = InterRadius;
         this.Deg = Deg;
         //
-        this.Points = Getm_outerPoint();
-        this.Points = GetOuterPointRatio();
+        this.OuterPoints = GetInterterPoint(OuterRadius);
+        this.InterPoints = GetInterterPoint(InterRadius);
+        this.OuterPoints = GetPointRatio(OuterPoints, PointsRatio);
+        this.InterPoints = GetPointRatio(InterPoints, PointsRatio);
+        //
+        List<Vector3> Points = new List<Vector3>();
+        Points.AddRange(OuterPoints);
+        Points.AddRange(InterPoints);
+        this.Points = Points.ToArray();
+        //
+        this.Triangles = GetHollowTriangle();
         //
         return true;
     }
 
-    private Vector3[] Getm_outerPoint()
+    private Vector3[] GetInterterPoint(float Radius)
     {
         if (Point < 3)
             //One shape must have 3 points at least!!
@@ -312,12 +417,53 @@ public class RendererCircumMeshData
         return Points.ToArray();
     }
 
-    private Vector3[] GetOuterPointRatio()
+    private Vector3[] GetPointRatio(Vector3[] Points, float[] PointsRatio)
     {
-        Vector3[] Points = this.Points;
         for (int i = 0; i < PointsRatio.Length; i++)
             Points[i] = Points[i] + Points[i].normalized * PointsRatio[i];
         return Points;
+    }
+
+    //MESH:
+
+    private int[] GetFilledTriangle()
+    {
+        int TriangleCount = Points.Length - 2;
+        //
+        List<int> Trianges = new List<int>();
+        for (int i = 0; i < TriangleCount; i++)
+        {
+            Trianges.Add(0);
+            Trianges.Add(i + 2);
+            Trianges.Add(i + 1);
+        }
+        //
+        return Trianges.ToArray();
+    }
+
+    private int[] GetHollowTriangle()
+    {
+        int PointCount = Points.Length / 2;
+        int TriangleCount = PointCount * 2;
+        //
+        List<int> Trianges = new List<int>();
+        for (int i = 0; i < PointCount; i++)
+        {
+            int OuterIndex = i;
+            int InnerIndex = i + PointCount;
+            //
+            //First Triangle Start at Outer Edgle i
+            Trianges.Add(OuterIndex);
+            Trianges.Add(InnerIndex);
+            Trianges.Add((i + 1) % PointCount);
+            //
+            //Second Triangle Start at Outer Edgle i
+            Trianges.Add(OuterIndex);
+            Trianges.Add(PointCount + ((PointCount + i - 1) % PointCount));
+            Trianges.Add(OuterIndex + PointCount);
+        }
+        //
+        return Trianges.ToArray();
     }
 }
 
@@ -328,27 +474,43 @@ public class RendererCircumMeshEditor : Editor
 {
     private RendererCircumMesh m_target;
 
+    private SerializedProperty m_meshFilter;
+
     private SerializedProperty m_outerPoint;
     private SerializedProperty m_outerRadius;
     private SerializedProperty m_outerDeg;
+    //
+    private SerializedProperty m_interPoint;
+    private SerializedProperty m_interRadius;
 
     private Vector2 m_scrollOuterPointRatio;
+    private Vector2 m_scrollInterPointRatio;
 
     private void OnEnable()
     {
         m_target = target as RendererCircumMesh;
         //
+        m_meshFilter = QEditorCustom.GetField(this, "m_meshFilter");
+        //
         m_outerPoint = QEditorCustom.GetField(this, "m_outerPoint");
         m_outerRadius = QEditorCustom.GetField(this, "m_outerRadius");
         m_outerDeg = QEditorCustom.GetField(this, "m_outerDeg");
+        //
+        m_interPoint = QEditorCustom.GetField(this, "m_interPoint");
+        m_interRadius = QEditorCustom.GetField(this, "m_interRadius");
     }
 
     public override void OnInspectorGUI()
     {
         QEditorCustom.SetUpdate(this);
         //
+        QEditorCustom.SetField(m_meshFilter);
+        //
+        QEditor.SetSpace(10);
+        //
         QEditor.SetLabel("SETTING", QEditor.GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter));
         //
+        //OUTER:
         QEditorCustom.SetField(m_outerPoint);
         //
         if (m_target.OuterPointRatio.Length != m_target.OuterPoint)
@@ -366,8 +528,10 @@ public class RendererCircumMeshEditor : Editor
             QEditor.SetLabel(string.Format("{0}", i), QEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter), QEditor.GetGUIWidth(25));
             m_target.OuterPointRatio[i] = QEditor.SetField(m_target.OuterPointRatio[i], null, QEditor.GetGUIWidth(50));
             //
-            if (i < m_target.Data.Points.Length)
-                QEditor.SetLabel(((Vector2)m_target.Data.Points[i]).ToString(), QEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter));
+            if (m_target.Data != null)
+                if (m_target.Data.OuterPoints != null)
+                    if (i < m_target.Data.OuterPoints.Length)
+                        QEditor.SetLabel(((Vector2)m_target.Data.OuterPoints[i]).ToString(), QEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter));
             //
             QEditor.SetHorizontalEnd();
             //VIEW:
@@ -378,6 +542,9 @@ public class RendererCircumMeshEditor : Editor
         //
         QEditorCustom.SetField(m_outerRadius);
         QEditorCustom.SetField(m_outerDeg);
+        //
+        //INTER:
+        QEditorCustom.SetField(m_interRadius);
         //
         QEditor.SetSpace(10);
         //
