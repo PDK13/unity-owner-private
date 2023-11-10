@@ -122,13 +122,13 @@ public class MeshCircumCreatorData
         this.Hollow = false;
         this.RadiusHollow = 0;
         //
-        this.Points = GetFilledPoints();
+        this.Points = GetFilledPoints(this.Point, this.Radius, this.Deg);
         this.Triangles = GetFilledTriangle();
         //
         SetMeshFilter();
     }
 
-    private Vector3[] GetFilledPoints()
+    private Vector3[] GetFilledPoints(int Point, float Radius, float Deg)
     {
         if (Point < 3)
             //One shape must have 3 points at least!!
@@ -182,16 +182,15 @@ public class MeshCircumCreatorData
         this.Hollow = false;
         this.RadiusHollow = 0;
         //
-        this.Points = GetFilledPoints();
-        this.Points = GetFilledPointRatio();
+        this.Points = GetFilledPoints(this.Point, this.Radius, this.Deg);
+        this.Points = GetFilledPointRatio(this.Points);
         this.Triangles = GetFilledTriangle();
         //
         SetMeshFilter();
     }
 
-    private Vector3[] GetFilledPointRatio()
+    private Vector3[] GetFilledPointRatio(Vector3[] Points)
     {
-        Vector3[] Points = this.Points;
         for (int i = 0; i < PointsRatio.Length; i++)
             Points[i] = Points[i] + Points[i].normalized * PointsRatio[i];
         return Points;
@@ -222,8 +221,8 @@ public class MeshCircumCreatorData
     {
         List<Vector3> Points = new List<Vector3>();
         //
-        Points.AddRange(GetFilledPoints());
-        Points.AddRange(GetFilledPoints());
+        Points.AddRange(GetFilledPoints(this.Point, this.Radius, this.Deg));
+        Points.AddRange(GetFilledPoints(this.Point, this.RadiusHollow, this.Deg));
         //
         return Points.ToArray();
     }
@@ -287,6 +286,16 @@ public class MeshCircumCreatorData
             m_meshFilter.sharedMesh.triangles = Triangles;
             m_meshFilter.sharedMesh.RecalculateNormals();
             m_meshFilter.sharedMesh.RecalculateBounds();
+        }
+        else
+        {
+            Mesh Mesh = new Mesh();
+            Mesh.name = string.Format("{0}-{1}-{2}", Point, Radius + (Hollow ? "H" + RadiusHollow : "F"), Deg);
+            Mesh.vertices = Points;
+            Mesh.triangles = Triangles;
+            Mesh.RecalculateNormals();
+            Mesh.RecalculateBounds();
+            m_meshFilter.mesh = Mesh;
         }
     }
 
