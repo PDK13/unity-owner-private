@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6342659127725374407}
   - component: {fileID: 6342659127725374403}
   m_Layer: 0
-  m_Name: simple-shape-platform-creator
+  m_Name: simple-platform-creator-shape
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

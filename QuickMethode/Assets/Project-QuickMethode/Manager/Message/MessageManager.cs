@@ -28,6 +28,7 @@ public class MessageManager : MonoBehaviour
     #region Event
 
     public Action<MessageStageType> onStage;
+    public Action<int> onChoice;
 
     #endregion
 
@@ -77,6 +78,11 @@ public class MessageManager : MonoBehaviour
 
     #region Main
 
+    /// <summary>
+    /// Start message with config data
+    /// </summary>
+    /// <param name="TextMessPro"></param>
+    /// <param name="MessageData"></param>
     public void SetStart(TextMeshProUGUI TextMessPro, MessageDataConfig MessageData)
     {
         if (m_active)
@@ -85,11 +91,15 @@ public class MessageManager : MonoBehaviour
         m_data = MessageData;
         m_tmp = TextMessPro;
         //
-        StartCoroutine(ISetMessageShow());
+        StartCoroutine(ISetMessageShow(false));
     }
 
-    private IEnumerator ISetMessageShow()
+    private IEnumerator ISetMessageShow(bool WaitForNextMessage)
     {
+        if (WaitForNextMessage)
+            //Not check when first show message!!
+            yield return new WaitUntil(() => m_command == MessageCommandType.Next);
+        //
         m_command = MessageCommandType.None;
         m_active = true;
         m_choice = false;
@@ -224,6 +234,9 @@ public class MessageManager : MonoBehaviour
 
     #region Control
 
+    /// <summary>
+    /// Next message; or continue message after choice option delay continue message
+    /// </summary>
     public void SetNext()
     {
         if (m_command != MessageCommandType.Wait)
@@ -236,6 +249,9 @@ public class MessageManager : MonoBehaviour
             Debug.Log("[Message] Next!");
     }
 
+    /// <summary>
+    /// Skip current message, until got choice option or end message
+    /// </summary>
     public void SetSkip()
     {
         if (m_command != MessageCommandType.Text)
@@ -250,29 +266,49 @@ public class MessageManager : MonoBehaviour
             Debug.Log("[Message] Skip!");
     }
 
-    public void SetChoice(int ChoiceIndex)
+    /// <summary>
+    /// Choice option of message when avaible
+    /// </summary>
+    /// <param name="ChoiceIndex"></param>
+    /// <param name="NextMessage">If false, must call 'Next' methode for continue message of last option choice</param>
+    public void SetChoice(int ChoiceIndex, bool NextMessage = true)
     {
         if (m_command != MessageCommandType.Choice)
-            //When current message in done show up and got choice option, press Choice Option to move on next message!
+            //When current message in done show up and got choice option, press choice option to move on next message!
             return;
         //
         if (ChoiceIndex < 0 || ChoiceIndex > m_data.Choice.Count - 1)
             return;
         //
-        m_command = MessageCommandType.Choice;
+        m_command = NextMessage ? MessageCommandType.Next : MessageCommandType.Wait;
         m_data = m_data.Choice[ChoiceIndex].Next;
-        StartCoroutine(ISetMessageShow());
+        //
+        onChoice?.Invoke(ChoiceIndex);
+        //
+        StartCoroutine(ISetMessageShow(true));
         //
         if ((int)m_debug > (int)DebugType.None)
             Debug.LogFormat("[Message] Choice {0}: {1}", ChoiceIndex, m_data.Choice[ChoiceIndex].Name);
     }
 
+    /// <summary>
+    /// Stop message
+    /// </summary>
     public void SetStop()
     {
         StopAllCoroutines();
         StopCoroutine(m_iSetMessageShowSingle);
         //
+        m_command = MessageCommandType.None;
+        m_active = false;
+        m_choice = false;
+        //
+        SetStage(MessageStageType.End);
+        //
         m_tmp.text = "";
+        //
+        if ((int)m_debug > (int)DebugType.None)
+            Debug.LogFormat("[Message] Stop!");
     }
 
     #endregion
@@ -281,13 +317,13 @@ public class MessageManager : MonoBehaviour
 public enum MessageStageType
 {
     None,
-    //
+    //Trigger when Start
     Start,
-    //
+    //Trigger when Show
     Text,
     Wait,
     Choice,
-    //
+    //Trigger when End
     End,
 }
 
