@@ -28,6 +28,8 @@ public class MessageManager : MonoBehaviour
     #region Event
 
     public Action<MessageStageType> onStage;
+    public Action<MessageDataConfigTextAuthor> onTextAuthor;
+    public Action<MessageDataConfigTextTrigger> onTextTrigger;
     public Action<int> onChoice;
 
     #endregion
@@ -123,6 +125,9 @@ public class MessageManager : MonoBehaviour
             else
             {
                 //BEGIN:
+                onTextAuthor?.Invoke(m_data.Message[i].Author);
+                onTextTrigger?.Invoke(m_data.Message[i].Trigger);
+                //
                 m_tmp.text = "";
                 //
                 if (m_stringConfig != null)
@@ -207,16 +212,16 @@ public class MessageManager : MonoBehaviour
                 case '?':
                 case '!':
                 case ':':
-                    if (MessageSingle.DelayMark > 0)
-                        yield return new WaitForSeconds(MessageSingle.DelayMark);
+                    if (MessageSingle.Delay.Mark > 0)
+                        yield return new WaitForSeconds(MessageSingle.Delay.Mark);
                     break;
                 case ' ':
-                    if (MessageSingle.DelaySpace > 0)
-                        yield return new WaitForSeconds(MessageSingle.DelaySpace);
+                    if (MessageSingle.Delay.Space > 0)
+                        yield return new WaitForSeconds(MessageSingle.Delay.Space);
                     break;
                 default:
-                    if (MessageSingle.DelayAlpha > 0)
-                        yield return new WaitForSeconds(MessageSingle.DelayAlpha);
+                    if (MessageSingle.Delay.Alpha > 0)
+                        yield return new WaitForSeconds(MessageSingle.Delay.Alpha);
                     break;
             }
         }

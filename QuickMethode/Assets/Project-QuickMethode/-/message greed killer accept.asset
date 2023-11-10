@@ -14,8 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Message:
   - Text: Good boy!
-    DelayAlpha: 0
-    DelaySpace: 0
-    DelayFinal: 0
-    DelayWait: 0
+    Author:
+      Avatar: {fileID: 0}
+      Name: 
+    Delay:
+      Alpha: 0.1
+      Space: 0
+      Mark: 0.5
+    Trigger:
+      Code: 
+      Object: {fileID: 0}
   Choice: []

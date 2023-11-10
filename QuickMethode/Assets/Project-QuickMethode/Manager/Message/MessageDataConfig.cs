@@ -16,9 +16,31 @@ public class MessageDataConfig : ScriptableObject
 public class MessageDataConfigText
 {
     public string Text;
-    public float DelayAlpha;
-    public float DelaySpace;
-    public float DelayMark;
+    public MessageDataConfigTextAuthor Author;
+    public MessageDataConfigTextDelay Delay;
+    public MessageDataConfigTextTrigger Trigger;
+}
+
+[Serializable]
+public class MessageDataConfigTextDelay
+{
+    public float Alpha;
+    public float Space;
+    public float Mark;
+}
+
+[Serializable]
+public class MessageDataConfigTextAuthor
+{
+    public Sprite Avatar;
+    public string Name;
+}
+
+[Serializable]
+public class MessageDataConfigTextTrigger
+{
+    public string Code;
+    public GameObject Object;
 }
 
 [Serializable]
