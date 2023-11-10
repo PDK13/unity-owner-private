@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class RendererCircumPoint : MonoBehaviour
+public class RendererCircumMesh : MonoBehaviour
 {
     [SerializeField][Range(3, 60)] private int m_outerPoint = 3;
     float[] m_outerPointRatio = new float[3];
@@ -11,11 +11,11 @@ public class RendererCircumPoint : MonoBehaviour
     [SerializeField][Min(0)] private float m_outerRadius = 2f;
     [SerializeField] private float m_outerDeg = 0f;
     //
-    private RendererCircumPointData m_data;
+    private RendererCircumMeshData m_data;
 
-    public int OuterPoint 
-    { 
-        get => m_outerPoint; 
+    public int OuterPoint
+    {
+        get => m_outerPoint;
         set
         {
             if (value < 3)
@@ -44,23 +44,23 @@ public class RendererCircumPoint : MonoBehaviour
         }
     }
 
-    public float OuterRadius 
-    { 
-        get => m_outerRadius; 
-        set => m_outerRadius = value >= 0 ? value : m_outerRadius; 
-    }
-    
-    public float OuterDeg 
-    { 
-        get => m_outerDeg; 
-        set => m_outerDeg = value; 
+    public float OuterRadius
+    {
+        get => m_outerRadius;
+        set => m_outerRadius = value >= 0 ? value : m_outerRadius;
     }
 
-    public RendererCircumPointData Data => m_data;
+    public float OuterDeg
+    {
+        get => m_outerDeg;
+        set => m_outerDeg = value;
+    }
+
+    public RendererCircumMeshData Data => m_data;
 
     public void SetGenerate()
     {
-        m_data = new RendererCircumPointData(OuterPointRatio, OuterRadius, OuterDeg);
+        m_data = new RendererCircumMeshData(OuterPointRatio, OuterRadius, OuterDeg);
     }
 
     #region Sample
@@ -80,7 +80,7 @@ public class RendererCircumPoint : MonoBehaviour
         OuterDeg = -18f;
         Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
     }
-    
+
     public void SetSampleStarB()
     {
         OuterPoint = 12;
@@ -181,7 +181,7 @@ public class RendererCircumPoint : MonoBehaviour
                 if (Draw > 4)
                     Draw = 1;
             }
-                
+
         }
         //
         OuterDeg = 15f;
@@ -215,7 +215,7 @@ public class RendererCircumPoint : MonoBehaviour
         Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
         //
         Vector3 PointA, PointB;
-        for (int i = 0; i < Data.Point - 1; i++) 
+        for (int i = 0; i < Data.Point - 1; i++)
         {
             PointA = this.transform.position + Data.Points[i];
             PointB = this.transform.position + Data.Points[i + 1];
@@ -229,7 +229,7 @@ public class RendererCircumPoint : MonoBehaviour
     #endregion
 }
 
-public class RendererCircumPointData
+public class RendererCircumMeshData
 {
     public int Point { private set; get; } = 0;
     public float Radius { private set; get; } = 0;
@@ -238,17 +238,17 @@ public class RendererCircumPointData
     public Vector3[] Points { private set; get; } = new Vector3[0];
     public float[] PointsRatio { private set; get; } = new float[0];
 
-    public RendererCircumPointData()
+    public RendererCircumMeshData()
     {
         //...
     }
 
-    public RendererCircumPointData(int Point, float Radius, float Deg)
+    public RendererCircumMeshData(int Point, float Radius, float Deg)
     {
         SetOuterGenerate(Point, Radius, Deg);
     }
 
-    public RendererCircumPointData(float[] PointRatio, float Radius, float Deg)
+    public RendererCircumMeshData(float[] PointRatio, float Radius, float Deg)
     {
         SetOuterGenerate(PointRatio, Radius, Deg);
     }
@@ -323,10 +323,10 @@ public class RendererCircumPointData
 
 #if UNITY_EDITOR
 
-[CustomEditor(typeof(RendererCircumPoint))]
-public class RendererCircumPointEditor : Editor
+[CustomEditor(typeof(RendererCircumMesh))]
+public class RendererCircumMeshEditor : Editor
 {
-    private RendererCircumPoint m_target;
+    private RendererCircumMesh m_target;
 
     private SerializedProperty m_outerPoint;
     private SerializedProperty m_outerRadius;
@@ -336,7 +336,7 @@ public class RendererCircumPointEditor : Editor
 
     private void OnEnable()
     {
-        m_target = target as RendererCircumPoint;
+        m_target = target as RendererCircumMesh;
         //
         m_outerPoint = QEditorCustom.GetField(this, "m_outerPoint");
         m_outerRadius = QEditorCustom.GetField(this, "m_outerRadius");
@@ -366,10 +366,8 @@ public class RendererCircumPointEditor : Editor
             QEditor.SetLabel(string.Format("{0}", i), QEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter), QEditor.GetGUIWidth(25));
             m_target.OuterPointRatio[i] = QEditor.SetField(m_target.OuterPointRatio[i], null, QEditor.GetGUIWidth(50));
             //
-            if (m_target.Data != null)
-                if (m_target.Data.Points != null)
-                    if (i < m_target.Data.Points.Length)
-                        QEditor.SetLabel(((Vector2)m_target.Data.Points[i]).ToString(), QEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter));
+            if (i < m_target.Data.Points.Length)
+                QEditor.SetLabel(((Vector2)m_target.Data.Points[i]).ToString(), QEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter));
             //
             QEditor.SetHorizontalEnd();
             //VIEW:
