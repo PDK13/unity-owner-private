@@ -35,11 +35,11 @@ public class TextMessage : MonoBehaviour
             case MessageStageType.Choice:
                 if (Input.GetKeyDown(KeyCode.Z))
                 {
-                    MessageManager.Instance.SetChoice(0);
+                    MessageManager.Instance.SetChoiceActive(0);
                 }
                 if (Input.GetKeyDown(KeyCode.X))
                 {
-                    MessageManager.Instance.SetChoice(1);
+                    MessageManager.Instance.SetChoiceActive(1);
                 }
                 break;
         }

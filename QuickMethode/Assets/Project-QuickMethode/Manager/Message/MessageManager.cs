@@ -27,10 +27,25 @@ public class MessageManager : MonoBehaviour
 
     #region Event
 
-    public Action<MessageStageType> onStage;
-    public Action<MessageDataConfigTextAuthor> onTextAuthor;
-    public Action<MessageDataConfigTextTrigger> onTextTrigger;
-    public Action<int> onChoice;
+    /// <summary>
+    /// Message system stage current active
+    /// </summary>
+    public Action<MessageStageType> onStageActive;
+
+    /// <summary>
+    /// Message system current author and trigger active
+    /// </summary>
+    public Action<MessageDataConfigTextAuthor, MessageDataConfigTextTrigger> onTextActive;
+
+    /// <summary>
+    /// Message system current choice check
+    /// </summary>
+    public Action<int, MessageDataConfigChoice> onChoiceCheck;
+
+    /// <summary>
+    /// Message system current choice active
+    /// </summary>
+    public Action<int, MessageDataConfigChoice> onChoiceActive;
 
     #endregion
 
@@ -62,6 +77,9 @@ public class MessageManager : MonoBehaviour
 
     [SerializeField] private MessageStageType m_stage = MessageStageType.None;
 
+    /// <summary>
+    /// Message system stage current
+    /// </summary>
     public MessageStageType Stage => m_stage;
 
     #endregion
@@ -114,7 +132,7 @@ public class MessageManager : MonoBehaviour
         for (int i = 0; i < m_data.Message.Count; i++)
         {
             MessageDataConfigText MessageSingle = m_data.Message[i];
-            m_current = MessageSingle.Text;
+            m_current = MessageSingle.Message;
             //
             //MESSAGE:
             if (m_current == null)
@@ -125,8 +143,7 @@ public class MessageManager : MonoBehaviour
             else
             {
                 //BEGIN:
-                onTextAuthor?.Invoke(m_data.Message[i].Author);
-                onTextTrigger?.Invoke(m_data.Message[i].Trigger);
+                onTextActive?.Invoke(m_data.Message[i].Author, m_data.Message[i].Trigger);
                 //
                 m_tmp.text = "";
                 //
@@ -232,7 +249,7 @@ public class MessageManager : MonoBehaviour
     private void SetStage(MessageStageType Stage)
     {
         m_stage = Stage;
-        onStage?.Invoke(Stage);
+        onStageActive?.Invoke(Stage);
     }
 
     #endregion
@@ -272,11 +289,27 @@ public class MessageManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Check choice option of message when avaible
+    /// </summary>
+    /// <param name="ChoiceIndex"></param>
+    public void SetChoiceCheck(int ChoiceIndex)
+    {
+        if (m_command != MessageCommandType.Choice)
+            //When current message in done show up and got choice option, move choice option to get imformation of choice!
+            return;
+        //
+        if (ChoiceIndex < 0 || ChoiceIndex > m_data.Choice.Count - 1)
+            return;
+        //
+        onChoiceCheck?.Invoke(ChoiceIndex, m_data.Choice[ChoiceIndex]);
+    }
+
+    /// <summary>
     /// Choice option of message when avaible
     /// </summary>
     /// <param name="ChoiceIndex"></param>
     /// <param name="NextMessage">If false, must call 'Next' methode for continue message of last option choice</param>
-    public void SetChoice(int ChoiceIndex, bool NextMessage = true)
+    public void SetChoiceActive(int ChoiceIndex, bool NextMessage = true)
     {
         if (m_command != MessageCommandType.Choice)
             //When current message in done show up and got choice option, press choice option to move on next message!
@@ -288,12 +321,12 @@ public class MessageManager : MonoBehaviour
         m_command = NextMessage ? MessageCommandType.Next : MessageCommandType.Wait;
         m_data = m_data.Choice[ChoiceIndex].Next;
         //
-        onChoice?.Invoke(ChoiceIndex);
+        onChoiceActive?.Invoke(ChoiceIndex, m_data.Choice[ChoiceIndex]);
         //
         StartCoroutine(ISetMessageShow(true));
         //
         if ((int)m_debug > (int)DebugType.None)
-            Debug.LogFormat("[Message] Choice {0}: {1}", ChoiceIndex, m_data.Choice[ChoiceIndex].Name);
+            Debug.LogFormat("[Message] Choice {0}: {1}", ChoiceIndex, m_data.Choice[ChoiceIndex].Text);
     }
 
     /// <summary>

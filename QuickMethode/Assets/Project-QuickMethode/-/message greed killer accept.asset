@@ -15,8 +15,8 @@ MonoBehaviour:
   Message:
   - Text: Good boy!
     Author:
-      Avatar: {fileID: 0}
       Name: 
+      Avatar: {fileID: 0}
     Delay:
       Alpha: 0.1
       Space: 0

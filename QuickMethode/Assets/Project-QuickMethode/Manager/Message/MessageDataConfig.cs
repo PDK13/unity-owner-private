@@ -15,7 +15,7 @@ public class MessageDataConfig : ScriptableObject
 [Serializable]
 public class MessageDataConfigText
 {
-    public string Text;
+    public string Message;
     public MessageDataConfigTextAuthor Author;
     public MessageDataConfigTextDelay Delay;
     public MessageDataConfigTextTrigger Trigger;
@@ -32,8 +32,8 @@ public class MessageDataConfigTextDelay
 [Serializable]
 public class MessageDataConfigTextAuthor
 {
-    public Sprite Avatar;
     public string Name;
+    public Sprite Avatar;
 }
 
 [Serializable]
@@ -46,7 +46,8 @@ public class MessageDataConfigTextTrigger
 [Serializable]
 public class MessageDataConfigChoice 
 {
-    public string Name;
-    public string Description;
+    public string Text;
+    public string Message;
+    public MessageDataConfigTextAuthor Author;
     public MessageDataConfig Next;
 }
