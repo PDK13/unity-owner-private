@@ -47,7 +47,7 @@ SpriteShapeRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -84,8 +84,8 @@ SpriteShapeRenderer:
   m_ShapeTexture: {fileID: 0}
   m_Sprites: []
   m_LocalAABB:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 2.5000002, y: 2.5000002, z: 0}
+    m_Center: {x: 0, y: 0.5, z: 0}
+    m_Extent: {x: 5, y: 4.5, z: 0}
 --- !u!114 &6342659127725374402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Spline:
     m_IsOpenEnded: 0
     m_ControlPoints:
-    - position: {x: -2.5, y: -2.5, z: 0}
+    - position: {x: -3.5, y: -4, z: 0}
       leftTangent: {x: 0, y: 0, z: 0}
       rightTangent: {x: 0, y: 0, z: 0}
       mode: 0
@@ -111,7 +111,7 @@ MonoBehaviour:
       spriteIndex: 0
       corner: 1
       m_CornerMode: 1
-    - position: {x: -2.5, y: 2.5, z: 0}
+    - position: {x: -2.5, y: -0.5, z: 0}
       leftTangent: {x: 0, y: 0, z: 0}
       rightTangent: {x: 0, y: 0, z: 0}
       mode: 0
@@ -121,7 +121,7 @@ MonoBehaviour:
       spriteIndex: 0
       corner: 1
       m_CornerMode: 1
-    - position: {x: 2.5, y: 2.5, z: 0}
+    - position: {x: -5, y: 2.5, z: 0}
       leftTangent: {x: 0, y: 0, z: 0}
       rightTangent: {x: 0, y: 0, z: 0}
       mode: 0
@@ -131,7 +131,67 @@ MonoBehaviour:
       spriteIndex: 0
       corner: 1
       m_CornerMode: 1
-    - position: {x: 2.5, y: -2.5, z: 0}
+    - position: {x: -1.5, y: 2.5, z: 0}
+      leftTangent: {x: 0, y: 0, z: 0}
+      rightTangent: {x: 0, y: 0, z: 0}
+      mode: 0
+      height: 1
+      bevelCutoff: 0
+      bevelSize: 0
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: 0, y: 5, z: 0}
+      leftTangent: {x: 0, y: 0, z: 0}
+      rightTangent: {x: 0, y: 0, z: 0}
+      mode: 0
+      height: 1
+      bevelCutoff: 0
+      bevelSize: 0
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: 1.5, y: 2.5, z: 0}
+      leftTangent: {x: 0, y: 0, z: 0}
+      rightTangent: {x: 0, y: 0, z: 0}
+      mode: 0
+      height: 1
+      bevelCutoff: 0
+      bevelSize: 0
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: 5, y: 2.5, z: 0}
+      leftTangent: {x: 0, y: 0, z: 0}
+      rightTangent: {x: 0, y: 0, z: 0}
+      mode: 0
+      height: 1
+      bevelCutoff: 0
+      bevelSize: 0
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: 2.5, y: -0.5, z: 0}
+      leftTangent: {x: 0, y: 0, z: 0}
+      rightTangent: {x: 0, y: 0, z: 0}
+      mode: 0
+      height: 1
+      bevelCutoff: 0
+      bevelSize: 0
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: 3.5, y: -4, z: 0}
+      leftTangent: {x: 0, y: 0, z: 0}
+      rightTangent: {x: 0, y: 0, z: 0}
+      mode: 0
+      height: 1
+      bevelCutoff: 0
+      bevelSize: 0
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: 0, y: -2, z: 0}
       leftTangent: {x: 0, y: 0, z: 0}
       rightTangent: {x: 0, y: 0, z: 0}
       mode: 0
@@ -182,13 +242,19 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -2.5, y: -2.5}
-      - {x: -2.5, y: 2.5}
-      - {x: 2.5, y: 2.5}
-      - {x: 2.5, y: -2.5}
-      - {x: -2.257037, y: -2.5}
-      - {x: -2.4362962, y: -2.5}
-      - {x: -2.5, y: -2.5}
+    - - {x: -3.5, y: -4}
+      - {x: -2.5, y: -0.5}
+      - {x: -5, y: 2.5}
+      - {x: -1.5, y: 2.5}
+      - {x: 0, y: 5}
+      - {x: 1.5, y: 2.5}
+      - {x: 5, y: 2.5}
+      - {x: 2.5, y: -0.5}
+      - {x: 3.5, y: -4}
+      - {x: 0, y: -2}
+      - {x: -3.329926, y: -3.9028149}
+      - {x: -3.4554074, y: -3.9745185}
+      - {x: -3.5, y: -4}
 --- !u!66 &6342659127725374406
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -209,37 +275,44 @@ CompositeCollider2D:
   m_ColliderPaths:
   - m_Collider: {fileID: 6342659127725374405}
     m_ColliderPaths:
-    - - X: -25000000
-        Y: -25000000
+    - - X: -35000000
+        Y: -40000000
       - X: -25000000
+        Y: -5000000
+      - X: -50000000
+        Y: 25000000
+      - X: -15000000
+        Y: 25000000
+      - X: 0
+        Y: 50000000
+      - X: 15000000
+        Y: 25000000
+      - X: 50000000
         Y: 25000000
       - X: 25000000
-        Y: 25000000
-      - X: 25000000
-        Y: -25000000
-      - X: -22570370
-        Y: -25000000
-      - X: -24362962
-        Y: -25000000
-      - X: -25000000
-        Y: -25000000
+        Y: -5000000
+      - X: 35000000
+        Y: -40000000
+      - X: 0
+        Y: -20000000
+      - X: -33299260
+        Y: -39028148
+      - X: -34554072
+        Y: -39745184
+      - X: -35000000
+        Y: -40000000
   m_CompositePaths:
     m_Paths:
-    - - {x: -2.0000293, y: -5.5}
-      - {x: -1.9999707, y: -3}
-      - {x: 5.5, y: -2.999971}
-      - {x: 5.4999857, y: 0.3090244}
-      - {x: 0.2235998, y: 2.9472134}
-      - {x: -0.2572534, y: 2.9287431}
-      - {x: -2.5000138, y: 1.5831035}
-      - {x: -4.710901, y: 2.9096355}
-      - {x: -5.000004, y: 3}
-      - {x: -8, y: 2.999971}
-      - {x: -7.9999704, y: -0.5}
-      - {x: -5.5, y: -0.5000294}
-      - {x: -5.5000296, y: -3}
-      - {x: -8, y: -3.0000293}
-      - {x: -7.9999704, y: -5.5}
+    - - {x: 3.4999225, y: -3.9999561}
+      - {x: 2.5000088, y: -0.4999892}
+      - {x: 4.999925, y: 2.5}
+      - {x: 1.4999923, y: 2.500013}
+      - {x: -0.0000283, y: 4.999953}
+      - {x: -1.5000151, y: 2.5}
+      - {x: -4.999952, y: 2.4999425}
+      - {x: -2.5000038, y: -0.50001353}
+      - {x: -3.4999225, y: -3.9999561}
+      - {x: 0.0000133, y: -2.0000076}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
 --- !u!50 &6342659127725374407
@@ -277,6 +350,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_colliderMask:
     serializedVersion: 2
-    m_Bits: 64
-  m_degLimit: 90
-  m_poligonColider: {fileID: 6342659127725374405}
+    m_Bits: 1
+  m_degLimit: 60

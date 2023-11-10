@@ -77,7 +77,7 @@ public class RendererCircumPoint : MonoBehaviour
             OuterPointRatio[i] = OuterRadius * 0.6f;
         }
         //
-        OuterDeg = -18f;
+        OuterDeg = 17.5f;
         Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
     }
     
@@ -88,7 +88,7 @@ public class RendererCircumPoint : MonoBehaviour
         for (int i = 0; i < OuterPoint; i++)
         {
             if (i % 4 == 0)
-                OuterPointRatio[i] = OuterRadius * 0.3f;
+                OuterPointRatio[i] = OuterRadius * 0.1f;
             else
             if (i % 2 != 0)
                 OuterPointRatio[i] = OuterRadius * 0.6f;
@@ -112,7 +112,7 @@ public class RendererCircumPoint : MonoBehaviour
             OuterPointRatio[i] = OuterRadius * 0.5f;
         }
         //
-        OuterDeg = -18f;
+        OuterDeg = 17.5f;
         Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
     }
 

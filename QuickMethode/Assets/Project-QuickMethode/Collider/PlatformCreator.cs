@@ -2,32 +2,36 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShapePlatformCreator : MonoBehaviour
+[RequireComponent(typeof(PolygonCollider2D))]
+public class PlatformCreator : MonoBehaviour
 {
     [SerializeField] private LayerMask m_colliderMask;
     [SerializeField] private float m_degLimit = 90f;
 
-    [Space]
-    [SerializeField] private PolygonCollider2D m_poligonColider;
-
-    private ShapePlatformData m_shapePlatformData;
+    private PolygonCollider2D m_poligonColider;
+    private PlatformCreatorData m_platformData;
 
     private void Awake()
     {
-        m_shapePlatformData = new ShapePlatformData(m_poligonColider, m_degLimit);
+        m_poligonColider = GetComponent<PolygonCollider2D>();
+        //
+        m_platformData = new PlatformCreatorData(m_poligonColider, m_degLimit);
     }
 
     private void Start()
     {
-        m_shapePlatformData.SetInit();
-        m_shapePlatformData.SetGenerate(m_colliderMask);
+        m_platformData.SetInit();
+        m_platformData.SetGenerate(m_colliderMask);
     }
 
     private void OnDrawGizmos()
     {
         if (!Application.isPlaying)
         {
-            ShapePlatformData ShapePlatformData = new ShapePlatformData(m_poligonColider, m_degLimit);
+            if (m_poligonColider == null)
+                m_poligonColider = GetComponent<PolygonCollider2D>();
+            //
+            PlatformCreatorData ShapePlatformData = new PlatformCreatorData(m_poligonColider, m_degLimit);
             ShapePlatformData.SetInit();
             //
             Gizmos.color = Color.red;
@@ -44,7 +48,7 @@ public class ShapePlatformCreator : MonoBehaviour
     }
 }
 
-public class ShapePlatformData
+public class PlatformCreatorData
 {
     [SerializeField] private PolygonCollider2D m_polygonCollider;
     [SerializeField] private float DegLimit;
@@ -52,7 +56,7 @@ public class ShapePlatformData
 
     public ShapePlatformSingle[] Platform => m_platform.ToArray();
 
-    public ShapePlatformData(PolygonCollider2D polygonCollider, float degLimit)
+    public PlatformCreatorData(PolygonCollider2D polygonCollider, float degLimit)
     {
         m_polygonCollider = polygonCollider;
         DegLimit = degLimit;
