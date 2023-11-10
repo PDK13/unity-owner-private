@@ -10,6 +10,8 @@ public class RendererCircumPoint : MonoBehaviour
     //
     [SerializeField][Min(0)] private float m_outerRadius = 2f;
     [SerializeField] private float m_outerDeg = 0f;
+    //
+    private RendererCircumPointData m_data;
 
     public int OuterPoint 
     { 
@@ -54,6 +56,13 @@ public class RendererCircumPoint : MonoBehaviour
         set => m_outerDeg = value; 
     }
 
+    public RendererCircumPointData Data => m_data;
+
+    public void SetGenerate()
+    {
+        m_data = new RendererCircumPointData(OuterPointRatio, OuterRadius, OuterDeg);
+    }
+
     #region Sample
 
     public void SetSampleStarA()
@@ -69,7 +78,7 @@ public class RendererCircumPoint : MonoBehaviour
         }
         //
         OuterDeg = -18f;
-        m_editorData.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
+        Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
     }
     
     public void SetSampleStarB()
@@ -86,7 +95,7 @@ public class RendererCircumPoint : MonoBehaviour
         }
         //
         OuterDeg = 30f;
-        m_editorData.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
+        Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
     }
 
     //
@@ -104,7 +113,7 @@ public class RendererCircumPoint : MonoBehaviour
         }
         //
         OuterDeg = -18f;
-        m_editorData.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
+        Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
     }
 
     public void SetSampleStarD()
@@ -127,7 +136,7 @@ public class RendererCircumPoint : MonoBehaviour
         }
         //
         OuterDeg = 0f;
-        m_editorData.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
+        Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
     }
 
     //
@@ -152,7 +161,7 @@ public class RendererCircumPoint : MonoBehaviour
         }
         //
         OuterDeg = 22.5f;
-        m_editorData.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
+        Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
     }
 
     public void SetSampleStarF()
@@ -176,16 +185,12 @@ public class RendererCircumPoint : MonoBehaviour
         }
         //
         OuterDeg = 15f;
-        m_editorData.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
+        Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
     }
 
     #endregion
 
     #region Editor
-
-    private RendererCircumPointData m_editorData;
-
-    public RendererCircumPointData EditorData => m_editorData;
 
     public void SetEditorPointsRatioChange()
     {
@@ -203,22 +208,21 @@ public class RendererCircumPoint : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        if (m_editorData == null)
-            m_editorData = new RendererCircumPointData();
-        //
         QGizmos.SetWireSphere(this.transform.position, OuterRadius, Color.gray);
         //
-        m_editorData.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
+        SetGenerate();
+        //
+        Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
         //
         Vector3 PointA, PointB;
-        for (int i = 0; i < m_editorData.Point - 1; i++) 
+        for (int i = 0; i < Data.Point - 1; i++) 
         {
-            PointA = this.transform.position + m_editorData.Points[i];
-            PointB = this.transform.position + m_editorData.Points[i + 1];
+            PointA = this.transform.position + Data.Points[i];
+            PointB = this.transform.position + Data.Points[i + 1];
             QGizmos.SetLine(PointA, PointB, Color.green, 0.1f);
         }
-        PointA = this.transform.position + m_editorData.Points[m_editorData.Points.Length - 1];
-        PointB = this.transform.position + m_editorData.Points[0];
+        PointA = this.transform.position + Data.Points[Data.Points.Length - 1];
+        PointB = this.transform.position + Data.Points[0];
         QGizmos.SetLine(PointA, PointB, Color.green, 0.1f);
     }
 
@@ -362,8 +366,8 @@ public class RendererCircumPointEditor : Editor
             QEditor.SetLabel(string.Format("{0}", i), QEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter), QEditor.GetGUIWidth(25));
             m_target.OuterPointRatio[i] = QEditor.SetField(m_target.OuterPointRatio[i], null, QEditor.GetGUIWidth(50));
             //
-            if (i < m_target.EditorData.Points.Length)
-                QEditor.SetLabel(((Vector2)m_target.EditorData.Points[i]).ToString(), QEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter));
+            if (i < m_target.Data.Points.Length)
+                QEditor.SetLabel(((Vector2)m_target.Data.Points[i]).ToString(), QEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter));
             //
             QEditor.SetHorizontalEnd();
             //VIEW:
