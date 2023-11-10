@@ -74,7 +74,7 @@ public class RendererCircumPoint : MonoBehaviour
             if (i % 2 != 0)
                 continue;
             //
-            OuterPointRatio[i] = OuterRadius * 0.6f * -1;
+            OuterPointRatio[i] = OuterRadius * 0.6f;
         }
         //
         OuterDeg = -18f;
@@ -88,10 +88,10 @@ public class RendererCircumPoint : MonoBehaviour
         for (int i = 0; i < OuterPoint; i++)
         {
             if (i % 4 == 0)
-                OuterPointRatio[i] = OuterRadius * 0.3f * -1;
+                OuterPointRatio[i] = OuterRadius * 0.3f;
             else
             if (i % 2 != 0)
-                OuterPointRatio[i] = OuterRadius * 0.6f * -1;
+                OuterPointRatio[i] = OuterRadius * 0.6f;
         }
         //
         OuterDeg = 30f;
@@ -109,7 +109,7 @@ public class RendererCircumPoint : MonoBehaviour
             if (i % 3 != 0)
                 continue;
             //
-            OuterPointRatio[i] = OuterRadius * 0.5f * -1;
+            OuterPointRatio[i] = OuterRadius * 0.5f;
         }
         //
         OuterDeg = -18f;
@@ -124,11 +124,11 @@ public class RendererCircumPoint : MonoBehaviour
         for (int i = 0; i < OuterPoint; i++)
         {
             if (i % 3 == 0)
-                OuterPointRatio[i] = OuterRadius * 0.4f * -1;
+                OuterPointRatio[i] = OuterRadius * 0.4f;
             else
             {
                 if (Draw == 1 || Draw == 2)
-                    OuterPointRatio[i] = OuterRadius * 0.1f * -1;
+                    OuterPointRatio[i] = OuterRadius * 0.1f;
                 Draw++;
                 if (Draw > 4)
                     Draw = 1;
@@ -149,11 +149,11 @@ public class RendererCircumPoint : MonoBehaviour
         for (int i = 0; i < OuterPoint; i++)
         {
             if (i % 3 == 0)
-                OuterPointRatio[i] = OuterRadius * 0.4f * -1;
+                OuterPointRatio[i] = OuterRadius * 0.4f;
             else
             {
                 if (Draw == 1 || Draw == 2)
-                    OuterPointRatio[i] = OuterRadius * 0.2f * -1;
+                    OuterPointRatio[i] = OuterRadius * 0.2f;
                 Draw++;
                 if (Draw > 4)
                     Draw = 1;
@@ -172,11 +172,11 @@ public class RendererCircumPoint : MonoBehaviour
         for (int i = 0; i < OuterPoint; i++)
         {
             if (i % 3 == 0)
-                OuterPointRatio[i] = OuterRadius * 0.6f * -1;
+                OuterPointRatio[i] = OuterRadius * 0.6f;
             else
             {
                 if (Draw == 1 || Draw == 2)
-                    OuterPointRatio[i] = OuterRadius * 0.3f * -1;
+                    OuterPointRatio[i] = OuterRadius * 0.3f;
                 Draw++;
                 if (Draw > 4)
                     Draw = 1;

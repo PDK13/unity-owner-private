@@ -99,7 +99,7 @@ public class RendererCircumMesh : MonoBehaviour
         if (Application.isPlaying)
         {
             Mesh Mesh = new Mesh();
-            Mesh.name = string.Format("{0}-{1}-{2}-{3}", OuterPoint, OuterRadius, InterRadius, OuterDeg);
+            Mesh.name = this.name;
             Mesh.vertices = m_data.Points;
             Mesh.triangles = m_data.Triangles;
             Mesh.RecalculateNormals();
@@ -127,7 +127,7 @@ public class RendererCircumMesh : MonoBehaviour
         else
         {
             Mesh Mesh = new Mesh();
-            Mesh.name = string.Format("{0}-{1}-{2}-{3}", OuterPoint, OuterRadius, InterRadius, OuterDeg);
+            Mesh.name = this.name;
             Mesh.vertices = m_data.Points;
             Mesh.triangles = m_data.Triangles;
             Mesh.RecalculateNormals();
