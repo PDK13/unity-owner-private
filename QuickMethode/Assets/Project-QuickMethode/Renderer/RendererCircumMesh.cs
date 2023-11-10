@@ -16,6 +16,7 @@ public class RendererCircumMesh : MonoBehaviour
     [SerializeField] private float m_outerDeg = 0f;
 
     //INTER:
+    [Space]
     [SerializeField][Min(0)] private float m_interRadius = 2f;
     //
     private RendererCircumMeshData m_data;
@@ -54,7 +55,16 @@ public class RendererCircumMesh : MonoBehaviour
     public float OuterRadius
     {
         get => m_outerRadius;
-        set => m_outerRadius = value >= 0 ? value : m_outerRadius;
+        set
+        {
+            if (value < 0)
+                value = 0;
+            //
+            if (value < InterRadius)
+                InterRadius = value;
+            //
+            m_outerRadius = value;
+        }
     }
 
     public float OuterDeg
@@ -68,7 +78,13 @@ public class RendererCircumMesh : MonoBehaviour
     public float InterRadius
     {
         get => m_interRadius;
-        set => m_interRadius = value >= 0 ? value : m_interRadius;
+        set
+        {
+            if (value > OuterRadius)
+                OuterRadius = value;
+            //
+            m_interRadius = value;
+        }
     }
 
     public RendererCircumMeshData Data => m_data;
@@ -131,7 +147,7 @@ public class RendererCircumMesh : MonoBehaviour
             if (i % 2 != 0)
                 continue;
             //
-            OuterPointRatio[i] = OuterRadius * 0.6f * -1;
+            OuterPointRatio[i] = OuterRadius * 0.6f;
         }
         //
         OuterDeg = -18f;
@@ -145,10 +161,10 @@ public class RendererCircumMesh : MonoBehaviour
         for (int i = 0; i < OuterPoint; i++)
         {
             if (i % 4 == 0)
-                OuterPointRatio[i] = OuterRadius * 0.3f * -1;
+                OuterPointRatio[i] = OuterRadius * 0.3f;
             else
             if (i % 2 != 0)
-                OuterPointRatio[i] = OuterRadius * 0.6f * -1;
+                OuterPointRatio[i] = OuterRadius * 0.6f;
         }
         //
         OuterDeg = 30f;
@@ -166,7 +182,7 @@ public class RendererCircumMesh : MonoBehaviour
             if (i % 3 != 0)
                 continue;
             //
-            OuterPointRatio[i] = OuterRadius * 0.5f * -1;
+            OuterPointRatio[i] = OuterRadius * 0.5f;
         }
         //
         OuterDeg = -18f;
@@ -181,11 +197,11 @@ public class RendererCircumMesh : MonoBehaviour
         for (int i = 0; i < OuterPoint; i++)
         {
             if (i % 3 == 0)
-                OuterPointRatio[i] = OuterRadius * 0.4f * -1;
+                OuterPointRatio[i] = OuterRadius * 0.4f;
             else
             {
                 if (Draw == 1 || Draw == 2)
-                    OuterPointRatio[i] = OuterRadius * 0.1f * -1;
+                    OuterPointRatio[i] = OuterRadius * 0.1f;
                 Draw++;
                 if (Draw > 4)
                     Draw = 1;
@@ -206,11 +222,11 @@ public class RendererCircumMesh : MonoBehaviour
         for (int i = 0; i < OuterPoint; i++)
         {
             if (i % 3 == 0)
-                OuterPointRatio[i] = OuterRadius * 0.4f * -1;
+                OuterPointRatio[i] = OuterRadius * 0.4f;
             else
             {
                 if (Draw == 1 || Draw == 2)
-                    OuterPointRatio[i] = OuterRadius * 0.2f * -1;
+                    OuterPointRatio[i] = OuterRadius * 0.2f;
                 Draw++;
                 if (Draw > 4)
                     Draw = 1;
@@ -229,11 +245,11 @@ public class RendererCircumMesh : MonoBehaviour
         for (int i = 0; i < OuterPoint; i++)
         {
             if (i % 3 == 0)
-                OuterPointRatio[i] = OuterRadius * 0.6f * -1;
+                OuterPointRatio[i] = OuterRadius * 0.6f;
             else
             {
                 if (Draw == 1 || Draw == 2)
-                    OuterPointRatio[i] = OuterRadius * 0.3f * -1;
+                    OuterPointRatio[i] = OuterRadius * 0.3f;
                 Draw++;
                 if (Draw > 4)
                     Draw = 1;
@@ -512,6 +528,12 @@ public class RendererCircumMeshEditor : Editor
         //
         //OUTER:
         QEditorCustom.SetField(m_outerPoint);
+        //
+        if (m_target.OuterRadius < m_target.InterRadius)
+            m_target.InterRadius = m_target.OuterRadius;
+        else
+        if (m_target.InterRadius > m_target.OuterRadius)
+            m_target.OuterRadius = m_target.InterRadius;
         //
         if (m_target.OuterPointRatio.Length != m_target.OuterPoint)
             m_target.OuterPointRatio = new float[m_target.OuterPoint];
