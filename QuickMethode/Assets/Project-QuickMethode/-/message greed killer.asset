@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: message greed killer
   m_EditorClassIdentifier: 
   Message:
-  - Text: Hello! Today is a good day?
+  - Message: asdasd
     Author:
-      Avatar: {fileID: 0}
       Name: 
+      Avatar: {fileID: 0}
     Delay:
       Alpha: 0.1
       Space: 0
@@ -24,10 +24,10 @@ MonoBehaviour:
     Trigger:
       Code: 
       Object: {fileID: 0}
-  - Text: I am #redToriel#clear.#returnI am a killer.
+  - Message: 
     Author:
-      Avatar: {fileID: 0}
       Name: 
+      Avatar: {fileID: 0}
     Delay:
       Alpha: 0.1
       Space: 0
@@ -35,10 +35,10 @@ MonoBehaviour:
     Trigger:
       Code: 
       Object: {fileID: 0}
-  - Text: ...#returnDo you have any question?
+  - Message: 
     Author:
-      Avatar: {fileID: 0}
       Name: 
+      Avatar: {fileID: 0}
     Delay:
       Alpha: 0.1
       Space: 0
@@ -47,9 +47,15 @@ MonoBehaviour:
       Code: 
       Object: {fileID: 0}
   Choice:
-  - Name: Are you sure?
-    Description: If you choice this, you will die!!
+  - Text: 
+    Message: 
+    Author:
+      Name: 
+      Avatar: {fileID: 0}
     Next: {fileID: 11400000, guid: 9250568ce447be64eb9ff52173d42121, type: 2}
-  - Name: Ok then.
-    Description: If you choice this, you will live!!
+  - Text: 23
+    Message: 
+    Author:
+      Name: 
+      Avatar: {fileID: 0}
     Next: {fileID: 11400000, guid: 8b2ba4d6d2d441c499a2c43cd631dff4, type: 2}
