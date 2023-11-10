@@ -215,14 +215,14 @@ public class RendererCircumPoint : MonoBehaviour
         Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
         //
         Vector3 PointA, PointB;
-        for (int i = 0; i < Data.Point - 1; i++) 
+        for (int i = 0; i < Data.OuterPoint - 1; i++) 
         {
-            PointA = this.transform.position + Data.Points[i];
-            PointB = this.transform.position + Data.Points[i + 1];
+            PointA = this.transform.position + Data.OuterPoints[i];
+            PointB = this.transform.position + Data.OuterPoints[i + 1];
             QGizmos.SetLine(PointA, PointB, Color.green, 0.1f);
         }
-        PointA = this.transform.position + Data.Points[Data.Points.Length - 1];
-        PointB = this.transform.position + Data.Points[0];
+        PointA = this.transform.position + Data.OuterPoints[Data.OuterPoints.Length - 1];
+        PointB = this.transform.position + Data.OuterPoints[0];
         QGizmos.SetLine(PointA, PointB, Color.green, 0.1f);
     }
 
@@ -231,12 +231,12 @@ public class RendererCircumPoint : MonoBehaviour
 
 public class RendererCircumPointData
 {
-    public int Point { private set; get; } = 0;
-    public float Radius { private set; get; } = 0;
-    public float Deg { private set; get; } = 0;
+    public int OuterPoint { private set; get; } = 0;
+    public float OuterRadius { private set; get; } = 0;
+    public float OuterDeg { private set; get; } = 0;
 
-    public Vector3[] Points { private set; get; } = new Vector3[0];
-    public float[] PointsRatio { private set; get; } = new float[0];
+    public Vector3[] OuterPoints { private set; get; } = new Vector3[0];
+    public float[] OuterPointsRatio { private set; get; } = new float[0];
 
     public RendererCircumPointData()
     {
@@ -261,12 +261,12 @@ public class RendererCircumPointData
             //One shape must have 3 points at least!!
             return false;
         //
-        this.Point = Point;
-        this.PointsRatio = new float[0];
-        this.Radius = Radius;
-        this.Deg = Deg;
+        this.OuterPoint = Point;
+        this.OuterPointsRatio = new float[0];
+        this.OuterRadius = Radius;
+        this.OuterDeg = Deg;
         //
-        this.Points = Getm_outerPoint();
+        this.OuterPoints = GetOuterterPoint();
         //
         return true;
     }
@@ -277,35 +277,35 @@ public class RendererCircumPointData
             //One shape must have 3 points at least!!
             return false;
         //
-        this.Point = PointRatio.Length;
-        this.PointsRatio = PointRatio;
-        this.Radius = Radius;
-        this.Deg = Deg;
+        this.OuterPoint = PointRatio.Length;
+        this.OuterPointsRatio = PointRatio;
+        this.OuterRadius = Radius;
+        this.OuterDeg = Deg;
         //
-        this.Points = Getm_outerPoint();
-        this.Points = GetOuterPointRatio();
+        this.OuterPoints = GetOuterterPoint();
+        this.OuterPoints = GetOuterPointRatio();
         //
         return true;
     }
 
-    private Vector3[] Getm_outerPoint()
+    private Vector3[] GetOuterterPoint()
     {
-        if (Point < 3)
+        if (OuterPoint < 3)
             //One shape must have 3 points at least!!
             return null;
         //
         List<Vector3> Points = new List<Vector3>();
         //
-        float RadSpace = (360 / Point) * (Mathf.PI / 180);
-        float RadStart = (Deg) * (Mathf.PI / 180);
+        float RadSpace = (360 / OuterPoint) * (Mathf.PI / 180);
+        float RadStart = (OuterDeg) * (Mathf.PI / 180);
         float RadCur = RadStart;
         //
-        Vector3 PointStart = new Vector3(Mathf.Cos(RadStart) * Radius, Mathf.Sin(RadStart) * Radius, 0f);
+        Vector3 PointStart = new Vector3(Mathf.Cos(RadStart) * OuterRadius, Mathf.Sin(RadStart) * OuterRadius, 0f);
         Points.Add(PointStart);
-        for (int i = 1; i < Point; i++)
+        for (int i = 1; i < OuterPoint; i++)
         {
             RadCur += RadSpace;
-            Vector3 NewPoint = new Vector3(Mathf.Cos(RadCur) * Radius, Mathf.Sin(RadCur) * Radius, 0f);
+            Vector3 NewPoint = new Vector3(Mathf.Cos(RadCur) * OuterRadius, Mathf.Sin(RadCur) * OuterRadius, 0f);
             Points.Add(NewPoint);
         }
         //
@@ -314,9 +314,9 @@ public class RendererCircumPointData
 
     private Vector3[] GetOuterPointRatio()
     {
-        Vector3[] Points = this.Points;
-        for (int i = 0; i < PointsRatio.Length; i++)
-            Points[i] = Points[i] + Points[i].normalized * PointsRatio[i];
+        Vector3[] Points = this.OuterPoints;
+        for (int i = 0; i < OuterPointsRatio.Length; i++)
+            Points[i] = Points[i] + Points[i].normalized * OuterPointsRatio[i];
         return Points;
     }
 }
@@ -367,9 +367,9 @@ public class RendererCircumPointEditor : Editor
             m_target.OuterPointRatio[i] = QEditor.SetField(m_target.OuterPointRatio[i], null, QEditor.GetGUIWidth(50));
             //
             if (m_target.Data != null)
-                if (m_target.Data.Points != null)
-                    if (i < m_target.Data.Points.Length)
-                        QEditor.SetLabel(((Vector2)m_target.Data.Points[i]).ToString(), QEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter));
+                if (m_target.Data.OuterPoints != null)
+                    if (i < m_target.Data.OuterPoints.Length)
+                        QEditor.SetLabel(((Vector2)m_target.Data.OuterPoints[i]).ToString(), QEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter));
             //
             QEditor.SetHorizontalEnd();
             //VIEW:
