@@ -17,3 +17,7 @@ MonoBehaviour:
     Avatar: {fileID: 0}
   - Name: Angel
     Avatar: {fileID: 0}
+  MessageDataDefault:
+    DelayAlpha: 0.1
+    DelaySpace: 0
+    DelayMark: 0.5

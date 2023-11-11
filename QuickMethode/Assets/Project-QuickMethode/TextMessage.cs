@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class TextMessage : MonoBehaviour
 {
-    [SerializeField] private MessageDataConfig m_messageConfig;
+    [SerializeField] private MessageDataConfigText m_messageConfig;
     [SerializeField] private TextMeshProUGUI m_tmpMyText;
 
     private IEnumerator Start()

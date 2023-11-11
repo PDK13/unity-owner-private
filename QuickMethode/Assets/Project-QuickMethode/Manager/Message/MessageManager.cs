@@ -13,7 +13,7 @@ public class MessageManager : MonoBehaviour
     #region Varible: Setting
 
     [SerializeField] private StringConfig m_stringConfig;
-    [SerializeField] private MessageDataConfigAuthor m_authorConfig;
+    [SerializeField] private MessageDataConfig m_authorConfig;
 
     private string m_authorConfigError = "";
 
@@ -38,17 +38,17 @@ public class MessageManager : MonoBehaviour
     /// <summary>
     /// Message system current author and trigger active
     /// </summary>
-    public Action<MessageDataConfigText> onTextActive;
+    public Action<MessageDataText> onTextActive;
 
     /// <summary>
     /// Message system current choice check
     /// </summary>
-    public Action<int, MessageDataConfigChoice> onChoiceCheck;
+    public Action<int, MessageDataChoice> onChoiceCheck;
 
     /// <summary>
     /// Message system current choice active
     /// </summary>
-    public Action<int, MessageDataConfigChoice> onChoiceActive;
+    public Action<int, MessageDataChoice> onChoiceActive;
 
     #endregion
 
@@ -66,14 +66,14 @@ public class MessageManager : MonoBehaviour
     }
 
     private MessageCommandType m_command = MessageCommandType.Text;
-    [SerializeField] private MessageDataConfig m_data;
+    [SerializeField] private MessageDataConfigText m_data;
 
     [SerializeField] private TextMeshProUGUI m_tmp;
     [SerializeField] private string m_current = "";
 
     private Coroutine m_iSetMessageShowSingle;
 
-    public List<MessageDataConfigChoice> ChoiceList => m_data.Choice;
+    public List<MessageDataChoice> ChoiceList => m_data.Choice;
 
     [SerializeField] private bool m_active = false;
     [SerializeField] private bool m_choice = false;
@@ -108,7 +108,7 @@ public class MessageManager : MonoBehaviour
         if (m_authorConfig != null)
             return;
         //
-        var AuthorConfigFound = QAssetsDatabase.GetScriptableObject<MessageDataConfigAuthor>("");
+        var AuthorConfigFound = QAssetsDatabase.GetScriptableObject<MessageDataConfig>("");
         //
         if (AuthorConfigFound == null)
         {
@@ -150,7 +150,7 @@ public class MessageManager : MonoBehaviour
     /// </summary>
     /// <param name="TextMessPro"></param>
     /// <param name="MessageData"></param>
-    public void SetStart(TextMeshProUGUI TextMessPro, MessageDataConfig MessageData)
+    public void SetStart(TextMeshProUGUI TextMessPro, MessageDataConfigText MessageData)
     {
         if (m_active)
             return;
@@ -178,7 +178,7 @@ public class MessageManager : MonoBehaviour
         //
         for (int i = 0; i < m_data.Message.Count; i++)
         {
-            MessageDataConfigText MessageSingle = m_data.Message[i];
+            MessageDataText MessageSingle = m_data.Message[i];
             m_current = MessageSingle.Message;
             //
             //MESSAGE:
@@ -244,7 +244,7 @@ public class MessageManager : MonoBehaviour
         }
     }
 
-    private IEnumerator ISetMessageShowSingle(MessageDataConfigText MessageSingle)
+    private IEnumerator ISetMessageShowSingle(MessageDataText MessageSingle)
     {
         bool HtmlFormat = false;
         //
