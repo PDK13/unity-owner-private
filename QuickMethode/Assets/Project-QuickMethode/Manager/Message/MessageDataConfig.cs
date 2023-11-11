@@ -67,7 +67,7 @@ public class MessageDataConfigTextAuthor
 [Serializable]
 public class MessageDataText
 {
-    public int AuthorIndex;
+    public int AuthorIndex; //Use index for 'AuthorName' and 'AuthorAvatar'!!
     public string Message;
     //
     public float DelayAlpha;
