@@ -15,9 +15,9 @@ MonoBehaviour:
   Author:
   - Name: '#emty'
     Avatar: {fileID: 0}
-  - Name: Angel
+  - Name: God
     Avatar: {fileID: 0}
   MessageTextDelayDefault:
-    DelayAlpha: 0.1
+    DelayAlpha: 0
     DelaySpace: 0
-    DelayMark: 0.5
+    DelayMark: 0

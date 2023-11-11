@@ -25,7 +25,7 @@ public class MessageDataConfigTextEditor : Editor
     private MessageDataConfigText m_target;
     private MessageDataConfig m_authorConfig;
 
-    private string m_authorConfigError = "";
+    private string m_debugError = "";
 
     private int m_messageCount = 0;
     private int m_choiceCount = 0;
@@ -49,9 +49,9 @@ public class MessageDataConfigTextEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        if (m_authorConfigError != "")
+        if (m_debugError != "")
         {
-            QEditorCustom.SetLabel(m_authorConfigError, QEditorCustom.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter));
+            QEditorCustom.SetLabel(m_debugError, QEditorCustom.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter));
             return;
         }
         //
@@ -72,27 +72,27 @@ public class MessageDataConfigTextEditor : Editor
         //
         if (AuthorConfigFound == null)
         {
-            m_authorConfigError = "Author Config not found, please create one";
-            Debug.Log("[Message] " + m_authorConfigError);
+            m_debugError = "Config not found, please create one";
+            Debug.Log("[Message] " + m_debugError);
             return;
         }
         //
         if (AuthorConfigFound.Count == 0)
         {
-            m_authorConfigError = "Author Config not found, please create one";
-            Debug.Log("[Message] " + m_authorConfigError);
+            m_debugError = "Config not found, please create one";
+            Debug.Log("[Message] " + m_debugError);
             return;
         }
         //
         if (AuthorConfigFound.Count > 1)
-            Debug.Log("[Message] Author Config found more than one, get the first one found");
+            Debug.Log("[Message] Config found more than one, get the first one found");
         //
         m_authorConfig = AuthorConfigFound[0];
         //
         if (m_authorConfig.Author.Count == 0)
         {
-            m_authorConfigError = "Author Config not have any data, please add one";
-            Debug.Log("[Message] " + m_authorConfigError);
+            m_debugError = "Author Config not have any data, please add one";
+            Debug.Log("[Message] " + m_debugError);
             return;
         }
         //
@@ -106,7 +106,7 @@ public class MessageDataConfigTextEditor : Editor
         m_messageTriggerShow = new List<bool>();
         while (m_messageTriggerShow.Count < m_target.Message.Count) m_messageTriggerShow.Add(false);
         //
-        m_authorConfigError = "";
+        m_debugError = "";
     }
 
     private void SetGUIGroupMessage()
