@@ -12,26 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c6ff8ca28e90d74f8f47bd3237fd694, type: 3}
   m_Name: message-text-config
   m_EditorClassIdentifier: 
-  Message:
-  - AuthorIndex: 0
-    Message: 
-    DelayAlpha: 0
-    DelaySpace: 0
-    DelayMark: 0
-    Code: 
-    Object: {fileID: 0}
-  - AuthorIndex: 0
-    Message: 
-    DelayAlpha: 0
-    DelaySpace: 0
-    DelayMark: 0
-    Code: 
-    Object: {fileID: 0}
-  - AuthorIndex: 0
-    Message: 
-    DelayAlpha: 0
-    DelaySpace: 0
-    DelayMark: 0
-    Code: 
-    Object: {fileID: 0}
+  Message: []
   Choice: []

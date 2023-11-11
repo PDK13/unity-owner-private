@@ -270,6 +270,11 @@ public class QEditor
         return (GameObject)EditorGUILayout.ObjectField("", Value, typeof(GameObject), true, GUILayoutOption);
     }
 
+    public static T SetField<T>(T Value, params GUILayoutOption[] GUILayoutOption) where T : ScriptableObject
+    {
+        return (T)EditorGUILayout.ObjectField("", Value, typeof(T), true, GUILayoutOption);
+    }
+
     #endregion
 
     #endregion

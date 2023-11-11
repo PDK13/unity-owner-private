@@ -54,6 +54,8 @@ public class MessageDataConfig : ScriptableObject
     }
 }
 
+//Data
+
 [Serializable]
 public class MessageDataConfigTextAuthor
 {
@@ -88,14 +90,6 @@ public class MessageDataText
 }
 
 [Serializable]
-public class MessageDataTextDelayDefault
-{
-    public float DelayAlpha;
-    public float DelaySpace;
-    public float DelayMark;
-}
-
-[Serializable]
 public class MessageDataChoice
 {
     public string Text;
@@ -104,4 +98,14 @@ public class MessageDataChoice
     public string Message;
     //
     public MessageDataConfigText Next;
+}
+
+//Editor
+
+[Serializable]
+public class MessageDataTextDelayDefault
+{
+    public float DelayAlpha;
+    public float DelaySpace;
+    public float DelayMark;
 }
