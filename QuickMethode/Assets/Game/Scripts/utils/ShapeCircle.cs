@@ -25,7 +25,7 @@ public class ShapeCircle : MonoBehaviour
 
         float piceAngle = 2 / m_radius * 60;
         int count = (int)(360 / piceAngle);
-        int max = spl.isOpenEnded ?  (count - m_piceCut + 1) : count;
+        int max = spl.isOpenEnded ? (count - m_piceCut + 1) : count;
         piceAngle = 360f / count;
         spl.Clear();
         List<Vector3> path = new List<Vector3>();
@@ -36,7 +36,7 @@ public class ShapeCircle : MonoBehaviour
             float y = Mathf.Sin(angle) * m_radius;
             Vector3 pos = new Vector3(x, y);
             path.Add(pos);
-            if(i < max)
+            if (i < max)
                 spl.InsertPointAt(i, new Vector3(x, y));
         }
 

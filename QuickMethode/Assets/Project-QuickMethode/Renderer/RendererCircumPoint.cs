@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -13,9 +12,9 @@ public class RendererCircumPoint : MonoBehaviour
     //
     private RendererCircumPointData m_data;
 
-    public int OuterPoint 
-    { 
-        get => m_outerPoint; 
+    public int OuterPoint
+    {
+        get => m_outerPoint;
         set
         {
             if (value < 3)
@@ -44,16 +43,16 @@ public class RendererCircumPoint : MonoBehaviour
         }
     }
 
-    public float OuterRadius 
-    { 
-        get => m_outerRadius; 
-        set => m_outerRadius = value >= 0 ? value : m_outerRadius; 
+    public float OuterRadius
+    {
+        get => m_outerRadius;
+        set => m_outerRadius = value >= 0 ? value : m_outerRadius;
     }
-    
-    public float OuterDeg 
-    { 
-        get => m_outerDeg; 
-        set => m_outerDeg = value; 
+
+    public float OuterDeg
+    {
+        get => m_outerDeg;
+        set => m_outerDeg = value;
     }
 
     public RendererCircumPointData Data => m_data;
@@ -80,7 +79,7 @@ public class RendererCircumPoint : MonoBehaviour
         OuterDeg = 17.5f;
         Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
     }
-    
+
     public void SetSampleStarB()
     {
         OuterPoint = 12;
@@ -181,7 +180,7 @@ public class RendererCircumPoint : MonoBehaviour
                 if (Draw > 4)
                     Draw = 1;
             }
-                
+
         }
         //
         OuterDeg = 15f;
@@ -215,7 +214,7 @@ public class RendererCircumPoint : MonoBehaviour
         Data.SetOuterGenerate(m_outerPointRatio, m_outerRadius, m_outerDeg);
         //
         Vector3 PointA, PointB;
-        for (int i = 0; i < Data.OuterPoint - 1; i++) 
+        for (int i = 0; i < Data.OuterPoint - 1; i++)
         {
             PointA = this.transform.position + Data.OuterPoints[i];
             PointB = this.transform.position + Data.OuterPoints[i + 1];

@@ -8,11 +8,11 @@ public class RotateScan : MonoBehaviour
     [SerializeField] private RotateLimit m_rotateLimit; //Might use this component with "RotateLimit" component on same GameObject!!
 
     [Space]
-    [SerializeField] [Min(0)] private float m_degSpeed = 1f;
+    [SerializeField][Min(0)] private float m_degSpeed = 1f;
 
     [Space]
-    [SerializeField] [Min(0)] private float m_checkLength = 5f;
-    [SerializeField] [Min(0)] private float m_checkRadius = 1f;
+    [SerializeField][Min(0)] private float m_checkLength = 5f;
+    [SerializeField][Min(0)] private float m_checkRadius = 1f;
     [SerializeField] private LayerMask m_checkMask;
 
     [Space]

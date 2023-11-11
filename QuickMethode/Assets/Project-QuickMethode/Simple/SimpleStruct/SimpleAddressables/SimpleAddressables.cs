@@ -66,7 +66,7 @@ public class SimpleAddressables : MonoBehaviour
         //
         QAddressables.SetPrefabRelease(PrefabInstantiate);
         if (m_instantiatePrefab == null)
-            Debug.Log("[Debug] Release Prefab Complete..."); 
+            Debug.Log("[Debug] Release Prefab Complete...");
         else
             Debug.Log("[Debug] Release Prefab Un-Complete..."); //Will get here!!
         //

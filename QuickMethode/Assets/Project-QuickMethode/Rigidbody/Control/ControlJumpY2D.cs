@@ -7,9 +7,9 @@ public class ControlJumpY2D : MonoBehaviour //From: Trịnh Văn Khoa (Searcher)
 
     [Header("Jump")]
     [SerializeField] private bool m_jumpHold = true;
-    [SerializeField] [Min(0)] private float m_jumpForce = 10f;
-    [SerializeField] [Min(0)] private float m_jumpRatio = 1f;
-    [SerializeField] [Min(1)] private int m_jumpUpdate = 2;
+    [SerializeField][Min(0)] private float m_jumpForce = 10f;
+    [SerializeField][Min(0)] private float m_jumpRatio = 1f;
+    [SerializeField][Min(1)] private int m_jumpUpdate = 2;
 
     private float JumpForceCurrent => m_jumpForce * m_jumpRatio;
 
@@ -25,8 +25,8 @@ public class ControlJumpY2D : MonoBehaviour //From: Trịnh Văn Khoa (Searcher)
     #region Varible: Hold
 
     [Header("Down")]
-    [SerializeField] [Min(0)] private float m_downStop = 1f;
-    [SerializeField] [Min(0)] private float m_downForce = 1f;
+    [SerializeField][Min(0)] private float m_downStop = 1f;
+    [SerializeField][Min(0)] private float m_downForce = 1f;
 
     [Header("Gravity")]
     [SerializeField] private float m_gravityScale = 1f;

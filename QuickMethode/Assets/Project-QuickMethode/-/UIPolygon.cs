@@ -1,7 +1,6 @@
 /// Credit CiaccoDavide
 /// Sourced from - http://ciaccodavi.de/unity/uipolygon
 
-using System.Collections.Generic;
 
 namespace UnityEngine.UI.Extensions
 {

@@ -8,18 +8,18 @@ public class ControlMoveX2D : MonoBehaviour
 
     [Header("Move")]
     [SerializeField] private bool m_moveSurface = true;
-    [SerializeField] [Min(0)] private float m_moveForce = 10f;  //Can be change by methode!!
-    [SerializeField] [Min(0)] private float m_moveRatio = 1f;   //Can be change by methode!!
-    [SerializeField] [Min(0)] private float m_moveLimit = 10f;
-    [SerializeField] [Min(0)] private float m_moveDecrease = 3f;
-    [SerializeField] [Min(0)] private float m_moveChange = 20f;
+    [SerializeField][Min(0)] private float m_moveForce = 10f;  //Can be change by methode!!
+    [SerializeField][Min(0)] private float m_moveRatio = 1f;   //Can be change by methode!!
+    [SerializeField][Min(0)] private float m_moveLimit = 10f;
+    [SerializeField][Min(0)] private float m_moveDecrease = 3f;
+    [SerializeField][Min(0)] private float m_moveChange = 20f;
 
     private Vector2 m_moveForceAdd = Vector2.zero;  //Velocity Move will be force continue still it value!!
     private bool m_moveFixed = false;               //Velocity Move will be force to Vector2.Left or Vector2.Right instead caculate!!
 
     [Header("Wall")]
-    [SerializeField] [Min(0)] private float m_wallClimb = 0.1f;
-    [SerializeField] [Min(0)] private float m_wallLength = 0.01f;
+    [SerializeField][Min(0)] private float m_wallClimb = 0.1f;
+    [SerializeField][Min(0)] private float m_wallLength = 0.01f;
     [SerializeField] private float m_wallOffset = 0f;
 
     private bool m_wallCheckAhead;
@@ -34,8 +34,8 @@ public class ControlMoveX2D : MonoBehaviour
     #region Varible: Surface
 
     [Header("Surface")]
-    [SerializeField] [Min(0)] private float m_surfaceLimit = 70f;       //Deg!!
-    [SerializeField] [Min(0)] private float m_surfaceLength = 0.05f;
+    [SerializeField][Min(0)] private float m_surfaceLimit = 70f;       //Deg!!
+    [SerializeField][Min(0)] private float m_surfaceLength = 0.05f;
     [SerializeField] private float m_surfaceOffset = 0f;
 
     private float m_degL;

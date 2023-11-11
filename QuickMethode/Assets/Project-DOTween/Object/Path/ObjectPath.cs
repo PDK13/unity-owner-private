@@ -49,8 +49,8 @@ public class ObjectPath : MonoBehaviour
     public ElevatorActive MoveType => m_activeType;
     public ElevatorPath PathType => m_pathType;
     //
-    [SerializeField] [Min(0)] private float m_duration = 4f;
-    [SerializeField] [Min(0)] private float m_timeScaleRevert = 1f;
+    [SerializeField][Min(0)] private float m_duration = 4f;
+    [SerializeField][Min(0)] private float m_timeScaleRevert = 1f;
 
     [SerializeField] private List<Vector2> m_pathList;
     private Vector2 m_posStart;

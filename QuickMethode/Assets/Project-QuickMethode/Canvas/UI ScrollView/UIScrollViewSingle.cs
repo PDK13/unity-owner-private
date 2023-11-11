@@ -14,7 +14,7 @@ public class UIScrollViewSingle : MonoBehaviour
     [SerializeField] private ScrollRect.MovementType m_movementType = ScrollRect.MovementType.Clamped;
 
     [Space]
-    [SerializeField] [Min(1)] private int m_itemConstraint = 1;
+    [SerializeField][Min(1)] private int m_itemConstraint = 1;
     [SerializeField] private Vector2 m_itemSize = new Vector2(100f, 100f);
     [SerializeField] private Vector2 m_itemSpacing = new Vector2(5f, 5f);
 

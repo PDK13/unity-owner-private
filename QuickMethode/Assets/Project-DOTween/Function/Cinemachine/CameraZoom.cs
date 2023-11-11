@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class CameraZoom : MonoBehaviour
 {
-    [SerializeField] [Min(0)] private float m_scale = 1f;
-    [SerializeField] [Min(0)] private float m_duration = 2f;
+    [SerializeField][Min(0)] private float m_scale = 1f;
+    [SerializeField][Min(0)] private float m_duration = 2f;
 
     [Space]
     [SerializeField] private List<string> m_tag;

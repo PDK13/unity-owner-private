@@ -18,7 +18,7 @@ public class BackgroundScale : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (m_camera == null) 
+        if (m_camera == null)
             return;
         //
         m_cameraResolution = QCamera.GetCameraSizeUnit(m_camera.GetComponent<Camera>());

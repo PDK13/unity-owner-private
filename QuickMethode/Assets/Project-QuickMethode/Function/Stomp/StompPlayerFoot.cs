@@ -6,7 +6,7 @@ public class StompPlayerFoot : MonoBehaviour
     public Action<StompEnemyHead> onStomp;
 
     [SerializeField] private GameObject m_base;
-    [SerializeField] [Min(0)] private float m_velocityMinY = 0.5f;
+    [SerializeField][Min(0)] private float m_velocityMinY = 0.5f;
 
     public GameObject Base => m_base;
 

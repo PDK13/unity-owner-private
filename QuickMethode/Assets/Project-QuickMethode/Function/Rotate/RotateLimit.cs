@@ -3,7 +3,7 @@ using UnityEngine;
 public class RotateLimit : MonoBehaviour
 {
     [SerializeField] private float m_degForward = 0;
-    [SerializeField] [Range(0f, 360f)] private float m_degWidth = 60f;
+    [SerializeField][Range(0f, 360f)] private float m_degWidth = 60f;
 
     private float m_degCurrent;
 

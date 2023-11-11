@@ -15,32 +15,32 @@ namespace SpriteShapeExtras
     {
         [SerializeField]
         private bool m_updateCollider = false;
-    
+
         private int m_hashCode = 0;
-    
+
         void Start()
         {
-            
+
         }
-    
+
         void Update()
         {
             if (m_updateCollider)
                 Bake(gameObject, false);
         }
-    
+
         static public void Bake(GameObject go, bool forced)
         {
             var spriteShapeController = go.GetComponent<SpriteShapeController>();
             var spriteShapeRenderer = go.GetComponent<SpriteShapeRenderer>();
             var polyCollider = go.GetComponent<PolygonCollider2D>();
             var geometryCollider = go.GetComponent<GeometryCollider>();
-    
+
             if (spriteShapeController != null && polyCollider != null)
             {
                 var spline = spriteShapeController.spline;
                 if (geometryCollider != null)
-                { 
+                {
                     int splineHashCode = spline.GetHashCode();
                     if (splineHashCode == geometryCollider.m_hashCode && !forced)
                         return;
@@ -52,7 +52,7 @@ namespace SpriteShapeExtras
                 NativeArray<SpriteShapeSegment> geomArray;
                 spriteShapeRenderer.GetChannels(65536, out indexArray, out posArray, out uv0Array);
                 geomArray = spriteShapeRenderer.GetSegments(spline.GetPointCount() * 8);
-    
+
                 NativeArray<ushort> indexArrayLocal = new NativeArray<ushort>(indexArray.Length, Allocator.Temp);
                 int indexCount = 0, vertexCount = 0, counter = 0;
                 for (int u = 0; u < geomArray.Length; ++u)
@@ -72,7 +72,7 @@ namespace SpriteShapeExtras
                 OuterEdges(polyCollider, indexArrayLocal, posArray, indexCount);
             }
         }
-    
+
         // Generate the outer edges from the Renderer mesh. Based on code from www.h3xed.com
         static void OuterEdges(PolygonCollider2D polygonCollider, NativeArray<ushort> triangles, NativeSlice<Vector3> vertices, int triangleCount)
         {
@@ -95,7 +95,7 @@ namespace SpriteShapeExtras
                     }
                 }
             }
-    
+
             // Create edge lookup (Key is first vertex, Value is second vertex, of each edge)
             Dictionary<int, int> lookup = new Dictionary<int, int>();
             foreach (KeyValuePair<int, int> edge in edges.Values)
@@ -105,10 +105,10 @@ namespace SpriteShapeExtras
                     lookup.Add(edge.Key, edge.Value);
                 }
             }
-    
+
             // Create empty polygon collider
             polygonCollider.pathCount = 0;
-    
+
             // Loop through edge vertices in order
             int startVert = 0;
             int nextVert = startVert;
@@ -116,56 +116,56 @@ namespace SpriteShapeExtras
             List<Vector2> colliderPath = new List<Vector2>();
             while (true)
             {
-    
+
                 // Add vertex to collider path
                 colliderPath.Add(vertices[nextVert]);
-    
+
                 // Get next vertex
                 nextVert = lookup[nextVert];
-    
+
                 // Store highest vertex (to know what shape to move to next)
                 if (nextVert > highestVert)
                 {
                     highestVert = nextVert;
                 }
-    
+
                 // Shape complete
                 if (nextVert == startVert)
                 {
-    
+
                     // Add path to polygon collider
                     polygonCollider.pathCount++;
                     polygonCollider.SetPath(polygonCollider.pathCount - 1, colliderPath.ToArray());
                     colliderPath.Clear();
-    
+
                     // Go to next shape if one exists
                     if (lookup.ContainsKey(highestVert + 1))
                     {
-    
+
                         // Set starting and next vertices
                         startVert = highestVert + 1;
                         nextVert = startVert;
-    
+
                         // Continue to next loop
                         continue;
                     }
-    
+
                     // No more verts
                     break;
                 }
             }
         }
-    
-    #if UNITY_EDITOR
-    
+
+#if UNITY_EDITOR
+
         [MenuItem("SpriteShape/Generate Geometry Collider", false, 358)]
         public static void BakeGeometryCollider()
         {
             if (Selection.activeGameObject != null)
                 GeometryCollider.Bake(Selection.activeGameObject, true);
         }
-    
-    #endif
+
+#endif
     }
 
 }
