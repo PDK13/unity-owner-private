@@ -13,9 +13,9 @@ public class MessageManager : MonoBehaviour
     #region Varible: Setting
 
     [SerializeField] private StringConfig m_stringConfig;
-    [SerializeField] private MessageDataConfig m_authorConfig;
+    [SerializeField] private MessageDataConfig m_messageConfig;
 
-    private string m_authorConfigError = "";
+    private string m_messageConfigError = "";
 
     #endregion
 
@@ -105,40 +105,40 @@ public class MessageManager : MonoBehaviour
 
     public void SetConfigAuthor()
     {
-        if (m_authorConfig != null)
+        if (m_messageConfig != null)
             return;
         //
-        var AuthorConfigFound = QAssetsDatabase.GetScriptableObject<MessageDataConfig>("");
+        var messageConfigFound = QAssetsDatabase.GetScriptableObject<MessageDataConfig>("");
         //
-        if (AuthorConfigFound == null)
+        if (messageConfigFound == null)
         {
-            m_authorConfigError = "Author Config not found, please create one";
-            Debug.Log("[Message] " + m_authorConfigError);
+            m_messageConfigError = "Author Config not found, please create one";
+            Debug.Log("[Message] " + m_messageConfigError);
             return;
         }
         //
-        if (AuthorConfigFound.Count == 0)
+        if (messageConfigFound.Count == 0)
         {
-            m_authorConfigError = "Author Config not found, please create one";
-            Debug.Log("[Message] " + m_authorConfigError);
+            m_messageConfigError = "Author Config not found, please create one";
+            Debug.Log("[Message] " + m_messageConfigError);
             return;
         }
         //
-        if (AuthorConfigFound.Count > 1)
+        if (messageConfigFound.Count > 1)
             Debug.Log("[Message] Author Config found more than one, get the first one found");
         //
-        m_authorConfig = AuthorConfigFound[0];
+        m_messageConfig = messageConfigFound[0];
         //
-        if (m_authorConfig.Author.Count == 0)
+        if (m_messageConfig.Author.Count == 0)
         {
-            m_authorConfigError = "Author Config not have any data, please add one";
-            Debug.Log("[Message] " + m_authorConfigError);
+            m_messageConfigError = "Author Config not have any data, please add one";
+            Debug.Log("[Message] " + m_messageConfigError);
             return;
         }
         //
         //CONTINUE:
         //
-        m_authorConfigError = "";
+        m_messageConfigError = "";
     }
 
     #endregion

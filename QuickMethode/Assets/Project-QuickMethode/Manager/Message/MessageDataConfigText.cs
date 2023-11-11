@@ -55,6 +55,58 @@ public class MessageDataConfigTextEditor : Editor
             return;
         }
         //
+        SetGUIGroupMessage();
+        //
+
+    }
+
+    //
+
+    private void SetConfigAuthorFind()
+    {
+        var AuthorConfigFound = QAssetsDatabase.GetScriptableObject<MessageDataConfig>("");
+        //
+        if (AuthorConfigFound == null)
+        {
+            m_authorConfigError = "Author Config not found, please create one";
+            Debug.Log("[Message] " + m_authorConfigError);
+            return;
+        }
+        //
+        if (AuthorConfigFound.Count == 0)
+        {
+            m_authorConfigError = "Author Config not found, please create one";
+            Debug.Log("[Message] " + m_authorConfigError);
+            return;
+        }
+        //
+        if (AuthorConfigFound.Count > 1)
+            Debug.Log("[Message] Author Config found more than one, get the first one found");
+        //
+        m_authorConfig = AuthorConfigFound[0];
+        //
+        if (m_authorConfig.Author.Count == 0)
+        {
+            m_authorConfigError = "Author Config not have any data, please add one";
+            Debug.Log("[Message] " + m_authorConfigError);
+            return;
+        }
+        //
+        //CONTINUE:
+        //
+        m_messageAuthorName = m_authorConfig.AuthorName;
+        //
+        m_messageDelayShow = new List<bool>();
+        while (m_messageDelayShow.Count < m_target.Message.Count) m_messageDelayShow.Add(false);
+        //
+        m_messageTriggerShow = new List<bool>();
+        while (m_messageTriggerShow.Count < m_target.Message.Count) m_messageTriggerShow.Add(false);
+        //
+        m_authorConfigError = "";
+    }
+
+    private void SetGUIGroupMessage()
+    {
         QEditorCustom.SetLabel("MESSAGE", QEditorCustom.GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter));
         //
         //COUNT:
@@ -75,7 +127,7 @@ public class MessageDataConfigTextEditor : Editor
         //
         while (m_messageCount > m_target.Message.Count)
         {
-            m_target.Message.Add(new MessageDataText(m_authorConfig.MessageDataDelayDefault));
+            m_target.Message.Add(new MessageDataText(m_authorConfig.MessageTextDelayDefault));
             m_messageDelayShow.Add(false);
             m_messageTriggerShow.Add(false);
         }
@@ -184,49 +236,6 @@ public class MessageDataConfigTextEditor : Editor
             QEditorCustom.SetSpace(10);
         }
         QEditorCustom.SetScrollViewEnd();
-    }
-
-    private void SetConfigAuthorFind()
-    {
-        var AuthorConfigFound = QAssetsDatabase.GetScriptableObject<MessageDataConfig>("");
-        //
-        if (AuthorConfigFound == null)
-        {
-            m_authorConfigError = "Author Config not found, please create one";
-            Debug.Log("[Message] " + m_authorConfigError);
-            return;
-        }
-        //
-        if (AuthorConfigFound.Count == 0)
-        {
-            m_authorConfigError = "Author Config not found, please create one";
-            Debug.Log("[Message] " + m_authorConfigError);
-            return;
-        }
-        //
-        if (AuthorConfigFound.Count > 1)
-            Debug.Log("[Message] Author Config found more than one, get the first one found");
-        //
-        m_authorConfig = AuthorConfigFound[0];
-        //
-        if (m_authorConfig.Author.Count == 0)
-        {
-            m_authorConfigError = "Author Config not have any data, please add one";
-            Debug.Log("[Message] " + m_authorConfigError);
-            return;
-        }
-        //
-        //CONTINUE:
-        //
-        m_messageAuthorName = m_authorConfig.AuthorName;
-        //
-        m_messageDelayShow = new List<bool>();
-        while (m_messageDelayShow.Count < m_target.Message.Count) m_messageDelayShow.Add(false);
-        //
-        m_messageTriggerShow = new List<bool>();
-        while (m_messageTriggerShow.Count < m_target.Message.Count) m_messageTriggerShow.Add(false);
-        //
-        m_authorConfigError = "";
     }
 }
 

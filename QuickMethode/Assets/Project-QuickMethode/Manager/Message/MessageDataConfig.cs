@@ -8,7 +8,7 @@ public class MessageDataConfig : ScriptableObject
 {
     public List<MessageDataConfigTextAuthor> Author = new List<MessageDataConfigTextAuthor>();
 
-    public MessageDataTextDelayDefault MessageDataDelayDefault;
+    public MessageDataTextDelayDefault MessageTextDelayDefault;
 
     public List<string> AuthorName
     {
@@ -65,7 +65,6 @@ public class MessageDataConfigTextAuthor
 public class MessageDataText
 {
     public int AuthorIndex;
-    //
     public string Message;
     //
     public float DelayAlpha;
@@ -100,7 +99,9 @@ public class MessageDataTextDelayDefault
 public class MessageDataChoice
 {
     public string Text;
-    public string Message;
+    //
     public int AuthorIndex;
+    public string Message;
+    //
     public MessageDataConfigText Next;
 }
