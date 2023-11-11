@@ -300,7 +300,7 @@ public class QEditor
         GUI.backgroundColor = Color;
     }
 
-    public static void SetSpace(float Space)
+    public static void SetSpace(float Space = 10)
     {
         GUILayout.Space(Space);
     }
@@ -403,7 +403,7 @@ public class QEditor
 ///<summary>
 ///Caution: Unity Editor only!
 ///</summary>
-public class QEditorWindow
+public class QEditorWindow : QEditor
 {
     #region ==================================== GUI Primary
 
@@ -453,7 +453,7 @@ public class QEditorWindow
 ///<summary>
 ///Caution: Unity Editor only!
 ///</summary>
-public class QEditorCustom
+public class QEditorCustom : QEditor
 {
     #region ==================================== GUI Primary
 
@@ -508,7 +508,7 @@ public class QEditorCustom
 ///<summary>
 ///Caution: Unity Editor only!
 ///</summary>
-public class QEditorObject
+public class QEditorObject : QEditor
 {
     #region ==================================== GUI Primary
 

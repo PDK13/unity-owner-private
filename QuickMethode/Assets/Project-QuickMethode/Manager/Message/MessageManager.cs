@@ -13,6 +13,9 @@ public class MessageManager : MonoBehaviour
     #region Varible: Setting
 
     [SerializeField] private StringConfig m_stringConfig;
+    [SerializeField] private MessageDataConfigAuthor m_authorConfig;
+
+    private string m_authorConfigError = "";
 
     #endregion
 
@@ -35,7 +38,7 @@ public class MessageManager : MonoBehaviour
     /// <summary>
     /// Message system current author and trigger active
     /// </summary>
-    public Action<MessageDataConfigTextAuthor, MessageDataConfigTextTrigger> onTextActive;
+    public Action<MessageDataConfigText> onTextActive;
 
     /// <summary>
     /// Message system current choice check
@@ -89,12 +92,56 @@ public class MessageManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         //
         Instance = this;
+        //
+        SetConfigAuthor();
     }
 
     private void OnDestroy()
     {
         StopAllCoroutines();
     }
+
+    #region Config
+
+    public void SetConfigAuthor()
+    {
+        if (m_authorConfig != null)
+            return;
+        //
+        var AuthorConfigFound = QAssetsDatabase.GetScriptableObject<MessageDataConfigAuthor>("");
+        //
+        if (AuthorConfigFound == null)
+        {
+            m_authorConfigError = "Author Config not found, please create one";
+            Debug.Log("[Message] " + m_authorConfigError);
+            return;
+        }
+        //
+        if (AuthorConfigFound.Count == 0)
+        {
+            m_authorConfigError = "Author Config not found, please create one";
+            Debug.Log("[Message] " + m_authorConfigError);
+            return;
+        }
+        //
+        if (AuthorConfigFound.Count > 1)
+            Debug.Log("[Message] Author Config found more than one, get the first one found");
+        //
+        m_authorConfig = AuthorConfigFound[0];
+        //
+        if (m_authorConfig.Author.Count == 0)
+        {
+            m_authorConfigError = "Author Config not have any data, please add one";
+            Debug.Log("[Message] " + m_authorConfigError);
+            return;
+        }
+        //
+        //CONTINUE:
+        //
+        m_authorConfigError = "";
+    }
+
+    #endregion
 
     #region Main
 
@@ -143,7 +190,7 @@ public class MessageManager : MonoBehaviour
             else
             {
                 //BEGIN:
-                onTextActive?.Invoke(m_data.Message[i].Author, m_data.Message[i].Trigger);
+                onTextActive?.Invoke(m_data.Message[i]);
                 //
                 m_tmp.text = "";
                 //
@@ -229,16 +276,16 @@ public class MessageManager : MonoBehaviour
                 case '?':
                 case '!':
                 case ':':
-                    if (MessageSingle.Delay.Mark > 0)
-                        yield return new WaitForSeconds(MessageSingle.Delay.Mark);
+                    if (MessageSingle.DelayMark > 0)
+                        yield return new WaitForSeconds(MessageSingle.DelayMark);
                     break;
                 case ' ':
-                    if (MessageSingle.Delay.Space > 0)
-                        yield return new WaitForSeconds(MessageSingle.Delay.Space);
+                    if (MessageSingle.DelaySpace > 0)
+                        yield return new WaitForSeconds(MessageSingle.DelaySpace);
                     break;
                 default:
-                    if (MessageSingle.Delay.Alpha > 0)
-                        yield return new WaitForSeconds(MessageSingle.Delay.Alpha);
+                    if (MessageSingle.DelayAlpha > 0)
+                        yield return new WaitForSeconds(MessageSingle.DelayAlpha);
                     break;
             }
         }
@@ -370,7 +417,7 @@ public enum MessageStageType
 [CustomEditor(typeof(MessageManager))]
 public class MessageManagerEditor : Editor
 {
-    private MessageManager Target;
+    private MessageManager m_target;
 
     private SerializedProperty m_stringConfig;
 
@@ -382,7 +429,7 @@ public class MessageManagerEditor : Editor
 
     private void OnEnable()
     {
-        Target = target as MessageManager;
+        m_target = target as MessageManager;
         //
         m_stringConfig = QEditorCustom.GetField(this, "m_stringConfig");
         //
@@ -391,6 +438,8 @@ public class MessageManagerEditor : Editor
         m_tmp = QEditorCustom.GetField(this, "m_tmp");
         m_current = QEditorCustom.GetField(this, "m_current");
         m_stage = QEditorCustom.GetField(this, "m_stage");
+        //
+        m_target.SetConfigAuthor();
     }
 
     public override void OnInspectorGUI()
