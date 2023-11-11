@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "message-config", menuName = "Message/Message Config", order = 0)]
@@ -109,3 +110,47 @@ public class MessageDataTextDelayDefault
     public float DelaySpace;
     public float DelayMark;
 }
+
+#if UNITY_EDITOR
+
+[CustomEditor(typeof(MessageDataConfig))]
+public class MessageDataConfigEditor : Editor
+{
+    private MessageDataConfig m_target;
+
+    private SerializedProperty Author;
+    private SerializedProperty MessageTextDelayDefault;
+
+    private void OnEnable()
+    {
+        m_target = target as MessageDataConfig;
+        //
+        Author = QEditorCustom.GetField(this, "Author");
+        MessageTextDelayDefault = QEditorCustom.GetField(this, "MessageTextDelayDefault");
+    }
+
+    private void OnDisable()
+    {
+        int Index = 0;
+        while (Index < m_target.Author.Count)
+        {
+            if (m_target.Author[Index].Name == "")
+                m_target.Author.RemoveAt(Index);
+            else
+                Index++;
+        }
+        QEditorCustom.SetDirty(m_target);
+    }
+
+    public override void OnInspectorGUI()
+    {
+        QEditorCustom.SetUpdate(this);
+        //
+        QEditorCustom.SetField(Author);
+        QEditorCustom.SetField(MessageTextDelayDefault);
+        //
+        QEditorCustom.SetApply(this);
+    }
+}
+
+#endif
