@@ -60,6 +60,8 @@ public class MessageDataConfigTextEditor : Editor
         QEditorCustom.SetSpace(10f);
         //
         SetGUIGroupChoice();
+        //
+        QEditorCustom.SetDirty(m_target);
     }
 
     //

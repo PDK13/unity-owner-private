@@ -101,6 +101,17 @@ public class QEditor
 
     #endregion
 
+    #region ------------------------------------ Dirty: Modify an object without creating an undo entry, but still ensure the change is registered and not lost...
+
+    //Data in 'ScriptableObject' will not be saved if not called 'Dirty' at the end of 'OnInspectorGUI()' methode!
+
+    public static void SetDirty(Object Target)
+    {
+        EditorUtility.SetDirty(Target);
+    }
+
+    #endregion
+
     #region ------------------------------------ Label
 
     public static void SetLabel(string Label, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
