@@ -23,8 +23,8 @@ public class MessageDataConfigTextEditor : Editor
     private const float LABEL_WIDTH = 65f;
 
     private MessageDataConfigText m_target;
-    private MessageDataConfig m_authorConfig;
 
+    private MessageDataConfig m_messageConfig;
     private string m_debugError = "";
 
     private int m_messageCount = 0;
@@ -44,7 +44,7 @@ public class MessageDataConfigTextEditor : Editor
         m_messageCount = m_target.Message.Count;
         m_choiceCount = m_target.Message.Count;
         //
-        SetConfigAuthorFind();
+        SetConfigFind();
     }
 
     public override void OnInspectorGUI()
@@ -66,8 +66,11 @@ public class MessageDataConfigTextEditor : Editor
 
     //
 
-    private void SetConfigAuthorFind()
+    private void SetConfigFind()
     {
+        if (m_messageConfig != null)
+            return;
+        //
         var AuthorConfigFound = QAssetsDatabase.GetScriptableObject<MessageDataConfig>("");
         //
         if (AuthorConfigFound == null)
@@ -87,9 +90,9 @@ public class MessageDataConfigTextEditor : Editor
         if (AuthorConfigFound.Count > 1)
             Debug.Log("[Message] Config found more than one, get the first one found");
         //
-        m_authorConfig = AuthorConfigFound[0];
+        m_messageConfig = AuthorConfigFound[0];
         //
-        if (m_authorConfig.Author.Count == 0)
+        if (m_messageConfig.Author.Count == 0)
         {
             m_debugError = "Author Config not have any data, please add one";
             Debug.Log("[Message] " + m_debugError);
@@ -98,7 +101,7 @@ public class MessageDataConfigTextEditor : Editor
         //
         //CONTINUE:
         //
-        m_authorName = m_authorConfig.AuthorName;
+        m_authorName = m_messageConfig.AuthorName;
         //
         m_messageDelayShow = new List<bool>();
         while (m_messageDelayShow.Count < m_target.Message.Count) m_messageDelayShow.Add(false);
@@ -131,7 +134,7 @@ public class MessageDataConfigTextEditor : Editor
         //
         while (m_messageCount > m_target.Message.Count)
         {
-            m_target.Message.Add(new MessageDataText(m_authorConfig.MessageTextDelayDefault));
+            m_target.Message.Add(new MessageDataText(m_messageConfig.MessageTextDelayDefault));
             m_messageDelayShow.Add(false);
             m_messageTriggerShow.Add(false);
         }

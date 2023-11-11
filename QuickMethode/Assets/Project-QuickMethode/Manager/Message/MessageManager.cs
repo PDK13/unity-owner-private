@@ -12,10 +12,10 @@ public class MessageManager : MonoBehaviour
 
     #region Varible: Setting
 
-    [SerializeField] private StringConfig m_stringConfig;
     [SerializeField] private MessageDataConfig m_messageConfig;
+    [SerializeField] private StringConfig m_stringConfig;
 
-    private string m_messageConfigError = "";
+    private string m_debugError = "";
 
     #endregion
 
@@ -93,7 +93,7 @@ public class MessageManager : MonoBehaviour
         //
         Instance = this;
         //
-        SetConfigAuthor();
+        SetConfigFind();
     }
 
     private void OnDestroy()
@@ -103,42 +103,33 @@ public class MessageManager : MonoBehaviour
 
     #region Config
 
-    public void SetConfigAuthor()
+    public void SetConfigFind()
     {
         if (m_messageConfig != null)
             return;
         //
-        var messageConfigFound = QAssetsDatabase.GetScriptableObject<MessageDataConfig>("");
+        var AuthorConfigFound = QAssetsDatabase.GetScriptableObject<MessageDataConfig>("");
         //
-        if (messageConfigFound == null)
+        if (AuthorConfigFound == null)
         {
-            m_messageConfigError = "Author Config not found, please create one";
-            Debug.Log("[Message] " + m_messageConfigError);
+            m_debugError = "Config not found, please create one";
+            Debug.Log("[Message] " + m_debugError);
             return;
         }
         //
-        if (messageConfigFound.Count == 0)
+        if (AuthorConfigFound.Count == 0)
         {
-            m_messageConfigError = "Author Config not found, please create one";
-            Debug.Log("[Message] " + m_messageConfigError);
+            m_debugError = "Config not found, please create one";
+            Debug.Log("[Message] " + m_debugError);
             return;
         }
         //
-        if (messageConfigFound.Count > 1)
-            Debug.Log("[Message] Author Config found more than one, get the first one found");
+        if (AuthorConfigFound.Count > 1)
+            Debug.Log("[Message] Config found more than one, get the first one found");
         //
-        m_messageConfig = messageConfigFound[0];
+        m_messageConfig = AuthorConfigFound[0];
         //
-        if (m_messageConfig.Author.Count == 0)
-        {
-            m_messageConfigError = "Author Config not have any data, please add one";
-            Debug.Log("[Message] " + m_messageConfigError);
-            return;
-        }
-        //
-        //CONTINUE:
-        //
-        m_messageConfigError = "";
+        m_debugError = "";
     }
 
     #endregion
@@ -419,6 +410,7 @@ public class MessageManagerEditor : Editor
 {
     private MessageManager m_target;
 
+    private SerializedProperty m_messageConfig;
     private SerializedProperty m_stringConfig;
 
     private SerializedProperty m_debug;
@@ -431,6 +423,7 @@ public class MessageManagerEditor : Editor
     {
         m_target = target as MessageManager;
         //
+        m_messageConfig = QEditorCustom.GetField(this, "m_messageConfig");
         m_stringConfig = QEditorCustom.GetField(this, "m_stringConfig");
         //
         m_debug = QEditorCustom.GetField(this, "m_debug");
@@ -439,13 +432,14 @@ public class MessageManagerEditor : Editor
         m_current = QEditorCustom.GetField(this, "m_current");
         m_stage = QEditorCustom.GetField(this, "m_stage");
         //
-        m_target.SetConfigAuthor();
+        m_target.SetConfigFind();
     }
 
     public override void OnInspectorGUI()
     {
         QEditorCustom.SetUpdate(this);
         //
+        QEditorCustom.SetField(m_messageConfig);
         QEditorCustom.SetField(m_stringConfig);
         //
         QEditorCustom.SetField(m_debug);

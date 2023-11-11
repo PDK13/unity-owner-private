@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731715, g: 0.13414735, b: 0.121078536, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -133,7 +133,6 @@ GameObject:
   m_Component:
   - component: {fileID: 195269235}
   - component: {fileID: 195269236}
-  - component: {fileID: 195269237}
   m_Layer: 0
   m_Name: manager
   m_TagString: Untagged
@@ -169,6 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_stringConfig: {fileID: 11400000, guid: 30a4b23d4142fa5479febd36bc32087d, type: 2}
+  m_messageConfig: {fileID: 11400000, guid: b036ec7fb93ffd8428118253dc67fde4, type: 2}
   m_debug: 0
   m_data: {fileID: 0}
   m_tmp: {fileID: 0}
@@ -176,20 +176,6 @@ MonoBehaviour:
   m_active: 0
   m_choice: 0
   m_stage: 0
---- !u!114 &195269237
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 195269234}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0eff3b6e2a07ed049b11338d24648e7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_messageConfig: {fileID: 11400000, guid: 1adaaca4b1b73b844b01991582bf2d3a, type: 2}
-  m_tmpMyText: {fileID: 1186135800}
 --- !u!1 &399144399
 GameObject:
   m_ObjectHideFlags: 0
@@ -636,9 +622,10 @@ MonoBehaviour:
   sides: 3
   rotation: 0
   VerticesDistances:
-  - 0
-  - 0
-  - 0
+  - 1
+  - 1
+  - 1
+  - 1
 --- !u!222 &1052227789
 CanvasRenderer:
   m_ObjectHideFlags: 0
