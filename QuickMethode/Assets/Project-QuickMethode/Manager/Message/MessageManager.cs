@@ -73,7 +73,7 @@ public class MessageManager : MonoBehaviour
 
     private Coroutine m_iSetMessageShowSingle;
 
-    public List<MessageDataChoice> ChoiceList => m_data.Choice;
+    public List<MessageDataChoice> ChoiceList => m_data.Choice; //Should get this data when message at choice stage!!
 
     [SerializeField] private bool m_active = false;
     [SerializeField] private bool m_choice = false;
