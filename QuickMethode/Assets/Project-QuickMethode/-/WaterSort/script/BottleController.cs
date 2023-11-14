@@ -12,6 +12,8 @@ public class BottleController : MonoBehaviour
 
     private Color BottleColorTop => m_bottleColor.Count > 0 ? m_bottleColor[m_bottleColor.Count - 1] : Color.clear;
 
+    private Color m_bottleColorTop;
+
     [Space]
     [SerializeField] private float m_timeRotate = 3.0f;
     private float m_timeRotateCurrent;
@@ -27,9 +29,8 @@ public class BottleController : MonoBehaviour
     {
         get
         {
-            Color ColorTop = BottleColorTop;
             for (int i = m_bottleColor.Count - 1; i >= 0; i--)
-                if (!m_bottleColor[i].Equals(ColorTop))
+                if (!m_bottleColor[i].Equals(m_bottleColorTop))
                     return i + 1;
             return 0;
         }
@@ -88,6 +89,7 @@ public class BottleController : MonoBehaviour
         m_timeRotateCurrent = 0; //Time in curve to get value at the time of lerp value!
         m_timeRotateLerp = 0; //Time in ratio of Time Rotate from 0..1 value!
         float AngleValue = 0;
+        m_bottleColorTop = BottleColorTop;
         m_limitRotationValue = LimitRotation;
         //
         while (m_timeRotateCurrent < m_timeRotate)
@@ -112,7 +114,13 @@ public class BottleController : MonoBehaviour
         //
         yield return ISetRotateBack();
         //
-        m_bottleColor.RemoveAt(m_bottleColor.Count - 1);
+        for (int  i = m_bottleColor.Count - 1; i >= 0; i--)
+        {
+            if (m_bottleColor[i].Equals(m_bottleColorTop))
+                m_bottleColor.RemoveAt(m_bottleColor.Count - 1);
+            else
+                break;
+        }
         //
         m_rotateActive = false;
     }
