@@ -24,7 +24,7 @@ public class BottleController : MonoBehaviour
                 else
                     Count++;
             }
-            return 0;
+            return Count;
         }
     }
 
@@ -160,6 +160,8 @@ public class BottleController : MonoBehaviour
                 break;
         }
         //
+        m_bottleFillIn.SetColorFillUpdate();
+        //
         m_rotateActive = false;
     }
 
@@ -192,7 +194,7 @@ public class BottleController : MonoBehaviour
 
     private bool GetColorCheck(Color Color, int Count)
     {
-        if (!Color.Equals(BottleColorTop))
+        if (Color.ToString() != Color.ToString())
             return false;
         //
         if (m_bottleColor.Count + Count > COLOR_MAX)
@@ -214,6 +216,12 @@ public class BottleController : MonoBehaviour
     private void SetColorFill(float CurveFillAmountValue)
     {
         m_bottleMaterial.SetFloat("_FillAmount", m_bottleMaterial.GetFloat("_FillAmount") + CurveFillAmountValue);
+    }
+
+    private void SetColorFillUpdate()
+    {
+        m_bottleColorTop = BottleColorTop;
+        m_bottleColorTopCount = BottleColorTopCount;
     }
 
     #endregion
