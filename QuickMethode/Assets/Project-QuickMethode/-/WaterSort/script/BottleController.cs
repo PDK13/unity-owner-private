@@ -102,7 +102,7 @@ public class BottleController : MonoBehaviour
 
     #region Out
 
-    public void SetColorOut()
+    private void SetColorOut()
     {
         if (m_rotateActive)
             return;
@@ -190,7 +190,7 @@ public class BottleController : MonoBehaviour
 
     #region In
 
-    public bool GetColorCheck(Color Color, int Count)
+    private bool GetColorCheck(Color Color, int Count)
     {
         if (!Color.Equals(BottleColorTop))
             return false;
@@ -201,7 +201,7 @@ public class BottleController : MonoBehaviour
         return true;
     }
 
-    public void SetColorFill(Color Color, int Count)
+    private void SetColorFill(Color Color, int Count)
     {
         int IndexStart = m_bottleColor.Count;
         for (int  i = 0; i < Count; i++)
@@ -211,7 +211,7 @@ public class BottleController : MonoBehaviour
         }
     }
 
-    public void SetColorFill(float CurveFillAmountValue)
+    private void SetColorFill(float CurveFillAmountValue)
     {
         m_bottleMaterial.SetFloat("_FillAmount", m_bottleMaterial.GetFloat("_FillAmount") + CurveFillAmountValue);
     }
