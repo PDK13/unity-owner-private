@@ -38,11 +38,15 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _FillAmount: 1
+    - _FillAmount: 1.36
     - _ScaleAndRotate: 1
     m_Colors:
-    - _Color01: {r: 1, g: 0.13876057, b: 0, a: 0}
-    - _Color02: {r: 1, g: 0.96549124, b: 0, a: 0}
-    - _Color03: {r: 0.044316262, g: 1, b: 0, a: 0}
+    - _Color0: {r: 1, g: 0.13876057, b: 0, a: 0}
+    - _Color01: {r: 1, g: 0, b: 0, a: 0}
+    - _Color02: {r: 0.97972727, g: 1, b: 0, a: 0}
+    - _Color03: {r: 0, g: 1, b: 0.29543853, a: 0}
     - _Color04: {r: 0, g: 0.47554106, b: 1, a: 0}
+    - _Color1: {r: 1, g: 0.96549124, b: 0, a: 0}
+    - _Color2: {r: 0.044316262, g: 1, b: 0, a: 0}
+    - _Color3: {r: 0, g: 0.47554106, b: 1, a: 0}
   m_BuildTextureStacks: []

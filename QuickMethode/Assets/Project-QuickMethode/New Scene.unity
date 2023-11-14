@@ -133,8 +133,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1230424199}
   - component: {fileID: 1230424200}
+  - component: {fileID: 1230424201}
   m_Layer: 0
-  m_Name: Bottle
+  m_Name: bottle-item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -208,6 +209,129 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1230424201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1230424198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4665d4d55cab2b2418c9344c793bb710, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_bottleColor:
+  - {r: 1, g: 0.13725491, b: 0, a: 0}
+  - {r: 1, g: 0.9647059, b: 0, a: 0}
+  - {r: 0.043137256, g: 1, b: 0, a: 0}
+  - {r: 0, g: 0.4745098, b: 1, a: 0}
+  m_timeRotate: 2
+  m_curveFillAmount:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1.36
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 54
+      value: 0.68
+      inSlope: -0.038652822
+      outSlope: -0.038652822
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.056245733
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 75
+      value: 0
+      inSlope: -0.058452185
+      outSlope: -0.058452185
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.12422362
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 90
+      value: -1.7
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 0
+    m_PostInfinity: 0
+    m_RotationOrder: 4
+  m_curveScaleAndRotation:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 30
+      value: 0.9
+      inSlope: -0.0050000004
+      outSlope: -0.0050000004
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 60
+      value: 0.7
+      inSlope: -0.009090909
+      outSlope: -0.009090909
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 74
+      value: 0.5
+      inSlope: -0.013333333
+      outSlope: -0.013333333
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 90
+      value: 0.3
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 0
+    m_PostInfinity: 0
+    m_RotationOrder: 4
+  m_limitRotation:
+  - 90
+  - 83
+  - 75
+  - 54
+  m_limitFillAmount:
+  - -1.7
+  - -0.68
+  - 0
+  - 0.68
+  - 1.36
+  m_bottleMark: {fileID: 1349625370}
 --- !u!1 &1349625368
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,7 +343,7 @@ GameObject:
   - component: {fileID: 1349625369}
   - component: {fileID: 1349625370}
   m_Layer: 0
-  m_Name: mark-front
+  m_Name: color-mask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
