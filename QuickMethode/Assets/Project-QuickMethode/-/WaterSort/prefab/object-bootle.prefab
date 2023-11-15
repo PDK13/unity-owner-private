@@ -103,11 +103,11 @@ MonoBehaviour:
   - {r: 0.043137256, g: 1, b: 0, a: 0}
   - {r: 1, g: 0.9647059, b: 0, a: 0}
   - {r: 1, g: 0.13725491, b: 0, a: 0}
-  m_timeRotate: 3
+  m_timeRotate: 1
   m_curveData: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
   m_bottleMaskImage: {fileID: 0}
   m_bottleMaskSprite: {fileID: 7428135846213862438}
-  m_bottleFillIn: {fileID: 0}
+  m_debugBottleColorIn: {fileID: 0}
 --- !u!1 &7428135846213862436
 GameObject:
   m_ObjectHideFlags: 0
