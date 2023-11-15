@@ -196,8 +196,10 @@ public class WaterSortBottleController : MonoBehaviour
         }
     }
 
-    private void Start()
+    private IEnumerator Start()
     {
+        yield return null; //Wait for object done init transform before init material position and scale!
+        //
         ValueFillAmount = m_curveData.LimitFillAmount[m_bottleColor.Count];
         ValueObjectPosition = this.transform.position;
         ValueObjectScale = m_bottleMaskScaleStart;
