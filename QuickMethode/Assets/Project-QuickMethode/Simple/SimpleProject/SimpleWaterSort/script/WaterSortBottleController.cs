@@ -242,6 +242,11 @@ public class WaterSortBottleController : MonoBehaviour
         ValueObjectPosition = this.transform.position;
     }
 
+    public void SetFillAmountUpdate()
+    {
+        ValueFillAmount = m_curveData.LimitFillAmount[m_bottleColor.Count];
+    }
+
     #endregion
 
     #region Out
