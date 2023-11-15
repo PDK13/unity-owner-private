@@ -409,6 +409,12 @@ public class WaterSortBottleController : MonoBehaviour
 
     private void SetColorInFillAmount(float CurveFillAmountValue)
     {
+        if (ValueFillAmount + CurveFillAmountValue > m_curveData.LimitFillAmount[m_bottleColor.Count])
+        {
+            ValueFillAmount = m_curveData.LimitFillAmount[m_bottleColor.Count];
+            return;
+        }
+        //
         ValueFillAmount = ValueFillAmount + CurveFillAmountValue;
         ValueObjectPosition = this.transform.position;
     }
