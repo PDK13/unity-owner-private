@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using Image = UnityEngine.UI.Image;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class WaterSortBottleController : MonoBehaviour
 {
