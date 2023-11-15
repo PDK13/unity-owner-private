@@ -228,7 +228,7 @@ public class WaterSortBottleController : MonoBehaviour
 
     #region Out
 
-    private void SetColorOut(WaterSortBottleController BottleFillIn)
+    public void SetColorOut(WaterSortBottleController BottleFillIn)
     {
         if (m_rotateActive)
             return;
