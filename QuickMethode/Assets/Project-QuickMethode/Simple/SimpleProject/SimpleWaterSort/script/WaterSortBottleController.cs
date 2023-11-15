@@ -221,14 +221,36 @@ public class WaterSortBottleController : MonoBehaviour
             return;
         //
         if (Input.GetKeyDown(KeyCode.Space))
-            SetColorOut(m_debugBottleColorIn);
+            SetColorOutActive(m_debugBottleColorIn);
     }
 
 #endif
 
     #region Out
 
-    public bool SetColorOut(WaterSortBottleController BottleFillIn)
+    public bool GetColorOutCheck(WaterSortBottleController BottleFillIn)
+    {
+        if (m_rotateActive)
+            return false;
+        //
+        if (m_bottleColor.Count == 0)
+            return false;
+        //
+        if (BottleFillIn == null)
+            return false;
+        //
+        if (BottleFillIn.Equals(this))
+            return false;
+        //
+        int BottleColorTopCountUsed = BottleFillIn.GetColorInOffset(BottleColorTop, BottleColorTopCount);
+        if (BottleColorTopCountUsed == 0)
+            //If offset between 2 bottle isn't more than 0, they can't fill up or down with each other!
+            return false;
+        //
+        return true;
+    }
+
+    public bool SetColorOutActive(WaterSortBottleController BottleFillIn)
     {
         if (m_rotateActive)
             return false;
