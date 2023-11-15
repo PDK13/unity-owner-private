@@ -183,7 +183,7 @@ public class WaterSortBottleController : MonoBehaviour
 
     //
 
-    public Action<bool> onRotateActive;
+    public Action<WaterSortBottleController, bool> onRotateActive;
 
     //
 
@@ -286,7 +286,7 @@ public class WaterSortBottleController : MonoBehaviour
     private IEnumerator ISetColorOutRotate(WaterSortBottleController BottleFillIn, int BottleColorTopCountUsed)
     {
         m_rotateActive = true;
-        onRotateActive?.Invoke(true);
+        onRotateActive?.Invoke(this, true);
         //
         int RotateDir = this.transform.position.x > BottleFillIn.transform.position.x ? 1 : -1; //Rotate Dir!
         //
@@ -332,7 +332,7 @@ public class WaterSortBottleController : MonoBehaviour
         yield return ISetColorOutRotateBack(LimitRotationValue, RotateDir);
         //
         m_rotateActive = false;
-        onRotateActive?.Invoke(false);
+        onRotateActive?.Invoke(this, false);
     }
 
     private IEnumerator ISetColorOutRotateBack(float LimitRotationValue, int RotateDir)
