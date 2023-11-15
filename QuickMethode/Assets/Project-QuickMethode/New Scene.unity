@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 4358267}
   - component: {fileID: 4358268}
   m_Layer: 5
-  m_Name: bottle-emty
+  m_Name: ui-bottle-emty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -174,11 +174,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4665d4d55cab2b2418c9344c793bb710, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_bottleColor:
-  - {r: 1, g: 0.019995881, b: 0, a: 0}
+  m_bottleColor: []
   m_timeRotate: 1
   m_curveData: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
-  m_bottleMaskImage: {fileID: 1108704813}
+  m_bottleMaskImage: {fileID: 0}
   m_bottleMaskSprite: {fileID: 0}
   m_bottleFillIn: {fileID: 0}
 --- !u!1 &309872390
@@ -717,7 +716,7 @@ GameObject:
   - component: {fileID: 1110526926}
   - component: {fileID: 1110526925}
   m_Layer: 0
-  m_Name: bottle-item-Full
+  m_Name: object-bootle-emty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -735,16 +734,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4665d4d55cab2b2418c9344c793bb710, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_bottleColor:
-  - {r: 0.8343433, g: 1, b: 0, a: 0}
-  - {r: 1, g: 0.019607844, b: 0, a: 0}
-  - {r: 1, g: 0.019607844, b: 0, a: 0}
-  - {r: 1, g: 0.019995881, b: 0, a: 0}
+  m_bottleColor: []
   m_timeRotate: 1
   m_curveData: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
   m_bottleMaskImage: {fileID: 0}
-  m_bottleMaskSprite: {fileID: 309872391}
-  m_bottleFillIn: {fileID: 1230424201}
+  m_bottleMaskSprite: {fileID: 0}
+  m_bottleFillIn: {fileID: 0}
 --- !u!212 &1110526926
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -824,7 +819,7 @@ GameObject:
   - component: {fileID: 1143675057}
   - component: {fileID: 1143675058}
   m_Layer: 5
-  m_Name: bottle-full
+  m_Name: ui-bottle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -865,10 +860,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_bottleColor:
-  - {r: 0.9801799, g: 1, b: 0, a: 0}
-  - {r: 1, g: 0.019995881, b: 0, a: 0}
-  - {r: 1, g: 0.019995881, b: 0, a: 0}
-  - {r: 1, g: 0.019995881, b: 0, a: 0}
+  - {r: 0, g: 0.4745098, b: 1, a: 0}
+  - {r: 0.043137256, g: 1, b: 0, a: 0}
+  - {r: 1, g: 0.9647059, b: 0, a: 0}
+  - {r: 1, g: 0.13725491, b: 0, a: 0}
   m_timeRotate: 1
   m_curveData: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
   m_bottleMaskImage: {fileID: 1877388039}
@@ -977,7 +972,7 @@ GameObject:
   - component: {fileID: 1230424200}
   - component: {fileID: 1230424201}
   m_Layer: 0
-  m_Name: bottle-item-Emty
+  m_Name: object-bootle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1064,12 +1059,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_bottleColor:
-  - {r: 1, g: 0.019995881, b: 0, a: 0}
+  - {r: 0, g: 0.4745098, b: 1, a: 0}
+  - {r: 0.043137256, g: 1, b: 0, a: 0}
+  - {r: 1, g: 0.9647059, b: 0, a: 0}
+  - {r: 1, g: 0.13725491, b: 0, a: 0}
   m_timeRotate: 1
   m_curveData: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
   m_bottleMaskImage: {fileID: 0}
   m_bottleMaskSprite: {fileID: 1349625370}
-  m_bottleFillIn: {fileID: 0}
+  m_bottleFillIn: {fileID: 1110526925}
 --- !u!1 &1238701052
 GameObject:
   m_ObjectHideFlags: 0

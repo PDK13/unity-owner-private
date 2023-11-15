@@ -21,7 +21,7 @@ public class WaterSortBottleController : MonoBehaviour
             int Count = 0;
             for (int i = m_bottleColor.Count - 1; i >= 0; i--)
             {
-                if (m_bottleColor[i].ToString() != m_bottleColorTop.ToString())
+                if (m_bottleColor[i].ToString() != BottleColorTop.ToString())
                     return Count;
                 else
                     Count++;
@@ -30,9 +30,6 @@ public class WaterSortBottleController : MonoBehaviour
         }
     }
 
-    private Color m_bottleColorTop;
-    private int m_bottleColorTopCount;
-
     [Space]
     [SerializeField] private float m_timeRotate = 3.0f;
     private float m_timeRotateCurrent;
@@ -40,21 +37,6 @@ public class WaterSortBottleController : MonoBehaviour
 
     [Space]
     [SerializeField] private WaterSortBottleCurveData m_curveData;
-
-    private int LimitRotationIndex
-    {
-        get
-        {
-            for (int i = m_bottleColor.Count - 1; i >= 0; i--)
-                if (m_bottleColor[i].ToString() != m_bottleColorTop.ToString())
-                    return i + 1;
-            return 0;
-        }
-    }
-
-    private float LimitRotationValue => m_curveData.LimitRotation[LimitRotationIndex];
-
-    private float m_limitRotationValue;
 
     private bool m_rotateActive = false;
 
@@ -177,30 +159,11 @@ public class WaterSortBottleController : MonoBehaviour
 
     private void Start()
     {
-        m_bottleColorTop = BottleColorTop;
-        m_bottleColorTopCount = BottleColorTopCount;
-        //
         ValueFillAmount = m_curveData.LimitFillAmount[m_bottleColor.Count];
         ValuePosition = transform.position;
         //
         SetUpdateColorStart();
     }
-
-#if UNITY_EDITOR
-
-    private void Update()
-    {
-        if (m_bottleFillIn == null)
-            return;
-        //
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (m_bottleFillIn.GetColorCheck(BottleColorTop, BottleColorTopCount)) 
-                SetColorOut();
-        }
-    }
-
-#endif
 
     private void SetUpdateColorStart()
     {
@@ -208,9 +171,18 @@ public class WaterSortBottleController : MonoBehaviour
             ValueColor = (i, m_bottleColor[i]);
     }
 
+    private void Update()
+    {
+        if (m_bottleFillIn == null)
+            return;
+        //
+        if (Input.GetKeyDown(KeyCode.Space))
+            SetColorOut(m_bottleFillIn);
+    }
+
     #region Out
 
-    private void SetColorOut()
+    private void SetColorOut(WaterSortBottleController BottleFillIn)
     {
         if (m_rotateActive)
             return;
@@ -218,28 +190,47 @@ public class WaterSortBottleController : MonoBehaviour
         if (m_bottleColor.Count == 0)
             return;
         //
-        StartCoroutine(ISetRotate());
+        if (BottleFillIn == null)
+            return;
+        //
+        if (BottleFillIn.Equals(this))
+            return;
+        //
+        StartCoroutine(ISetRotate(BottleFillIn));
     }
 
-    private IEnumerator ISetRotate()
+    private IEnumerator ISetRotate(WaterSortBottleController BottleFillIn)
     {
+        int BottleColorTopCountUsed = BottleFillIn.GetColorCheck(BottleColorTop, BottleColorTopCount);
+        //
+        if (BottleColorTopCountUsed == 0)
+            //If offset between 2 bottle isn't more than 0, they can't fill up or down with each other!
+            yield break;
+        //
         m_rotateActive = true;
+        //
+        Color BottleColorTopUsed = BottleColorTop;
+        for (int i = m_bottleColor.Count - 1; i >= 0; i--)
+        {
+            if (m_bottleColor[i].ToString() != BottleColorTopUsed.ToString())
+                m_bottleColor.RemoveAt(m_bottleColor.Count - 1);
+            else
+                break;
+        }
         //
         m_timeRotateCurrent = 0; //Time in curve to get value at the time of lerp value!
         m_timeRotateLerp = 0; //Time in ratio of Time Rotate from 0..1 value!
         float AngleValue = 0;
         float AngleValueLast = 0;
-        m_bottleColorTop = BottleColorTop;
-        m_bottleColorTopCount = BottleColorTopCount;
-        m_limitRotationValue = LimitRotationValue;
+        float LimitRotationValue = m_curveData.LimitRotation[m_bottleColor.Count - 1];
         //
-        m_bottleFillIn.SetColorFill(m_bottleColorTop, m_bottleColorTopCount); //Fill in another bottle!!
+        m_bottleFillIn.SetColorFill(BottleColorTopUsed, BottleColorTopCountUsed); //Fill in another bottle!!
         //
         while (m_timeRotateCurrent < m_timeRotate)
         {
             m_timeRotateLerp = m_timeRotateCurrent / m_timeRotate;
             AngleValueLast = AngleValue;
-            AngleValue = Mathf.Lerp(0.0f, m_limitRotationValue, m_timeRotateLerp);
+            AngleValue = Mathf.Lerp(0.0f, LimitRotationValue, m_timeRotateLerp);
             transform.eulerAngles = Vector3.forward * AngleValue;
             if (m_curveData.LimitFillAmount[m_bottleColor.Count] > m_curveData.CurveFillAmount.Evaluate(AngleValue))
             {
@@ -254,28 +245,18 @@ public class WaterSortBottleController : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         //
-        AngleValue = m_limitRotationValue;
+        AngleValue = LimitRotationValue;
         transform.eulerAngles = Vector3.forward * AngleValue;
         ValueFillAmount = m_curveData.CurveFillAmount.Evaluate(AngleValue);
         ValuePosition = transform.position;
         ValueScaleAndRotate = m_curveData.CurveScaleAndRotation.Evaluate(AngleValue);        
         //
-        yield return ISetRotateBack();
-        //
-        for (int  i = m_bottleColor.Count - 1; i >= 0; i--)
-        {
-            if (m_bottleColor[i].ToString() != m_bottleColorTop.ToString())
-                m_bottleColor.RemoveAt(m_bottleColor.Count - 1);
-            else
-                break;
-        }
-        //
-        m_bottleFillIn.SetColorFillUpdate();
+        yield return ISetRotateBack(LimitRotationValue);
         //
         m_rotateActive = false;
     }
 
-    private IEnumerator ISetRotateBack()
+    private IEnumerator ISetRotateBack(float LimitRotationValue)
     {
         m_timeRotateCurrent = 0; //Time in curve to get value at the time!
         m_timeRotateLerp = 0;
@@ -284,7 +265,7 @@ public class WaterSortBottleController : MonoBehaviour
         while (m_timeRotateCurrent < m_timeRotate)
         {
             m_timeRotateLerp = m_timeRotateCurrent / m_timeRotate;
-            AngleValue = Mathf.Lerp(m_limitRotationValue, 0.00f, m_timeRotateLerp);
+            AngleValue = Mathf.Lerp(LimitRotationValue, 0.00f, m_timeRotateLerp);
             transform.eulerAngles = Vector3.forward * AngleValue;
             ValueScaleAndRotate = m_curveData.CurveScaleAndRotation.Evaluate(AngleValue);
             //
@@ -302,15 +283,18 @@ public class WaterSortBottleController : MonoBehaviour
 
     #region In
 
-    private bool GetColorCheck(Color Color, int Count)
+    private int GetColorCheck(Color Color, int Count)
     {
-        if (Color.ToString() != Color.ToString())
-            return false;
+        if (m_bottleColor.Count == 0)
+            return Count;
+
+        if (BottleColorTop.ToString() != Color.ToString())
+            return 0;
         //
         if (m_bottleColor.Count + Count > COLOR_MAX)
-            return false;
+            return m_bottleColor.Count + Count - COLOR_MAX;
         //
-        return true;
+        return Count;
     }
 
     private void SetColorFill(Color Color, int Count)
@@ -327,12 +311,6 @@ public class WaterSortBottleController : MonoBehaviour
     {
         ValueFillAmount = ValueFillAmount + CurveFillAmountValue;
         ValuePosition = transform.position;
-    }
-
-    private void SetColorFillUpdate()
-    {
-        m_bottleColorTop = BottleColorTop;
-        m_bottleColorTopCount = BottleColorTopCount;
     }
 
     #endregion
