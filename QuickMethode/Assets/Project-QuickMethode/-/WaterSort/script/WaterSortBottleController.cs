@@ -10,6 +10,11 @@ public class WaterSortBottleController : MonoBehaviour
 
     private const int COLOR_MAX = 4;
 
+    private const string NODE_COLOR_FILL_AMOUNT = "_ColorFillAmount";
+    private const string NODE_COLOR_SCALE_AND_ROTATE = "_ColorScaleAndRotate";
+    private const string NODE_OBJECT_POSITION = "_ObjectPosition";
+    private const string NODE_OBJECT_SCALE = "_ObjectScale";
+
     [SerializeField] private List<Color> m_bottleColor = new List<Color>();
 
     private Color BottleColorTop => m_bottleColor.Count > 0 ? m_bottleColor[m_bottleColor.Count - 1] : Color.clear;
@@ -51,23 +56,23 @@ public class WaterSortBottleController : MonoBehaviour
         set
         {
             if (m_bottleMaskImage != null)
-                m_bottleMaskImage.material.SetFloat("_FillAmount", value);
+                m_bottleMaskImage.material.SetFloat(NODE_COLOR_FILL_AMOUNT, value);
             else
             if (m_bottleMaskSprite != null)
             {
                 Material Material = !Application.isPlaying ? m_bottleMaskSprite.sharedMaterial : m_bottleMaskSprite.material;
-                Material.SetFloat("_FillAmount", value);
+                Material.SetFloat(NODE_COLOR_FILL_AMOUNT, value);
             }
         }
         get
         {
             if (m_bottleMaskImage != null)
-                return m_bottleMaskImage.material.GetFloat("_FillAmount");
+                return m_bottleMaskImage.material.GetFloat(NODE_COLOR_FILL_AMOUNT);
             else
             if (m_bottleMaskSprite != null)
             {
                 Material Material = !Application.isPlaying ? m_bottleMaskSprite.sharedMaterial : m_bottleMaskSprite.material;
-                return Material.GetFloat("_FillAmount");
+                return Material.GetFloat(NODE_COLOR_FILL_AMOUNT);
             }
             return 0;
         }
@@ -78,23 +83,23 @@ public class WaterSortBottleController : MonoBehaviour
         set
         {
             if (m_bottleMaskImage != null)
-                m_bottleMaskImage.material.SetFloat("_ScaleAndRotate", value);
+                m_bottleMaskImage.material.SetFloat(NODE_COLOR_SCALE_AND_ROTATE, value);
             else
             if (m_bottleMaskSprite != null)
             {
                 Material Material = !Application.isPlaying ? m_bottleMaskSprite.sharedMaterial : m_bottleMaskSprite.material;
-                Material.SetFloat("_ScaleAndRotate", value);
+                Material.SetFloat(NODE_COLOR_SCALE_AND_ROTATE, value);
             }
         }
         get
         {
             if (m_bottleMaskImage != null)
-                return m_bottleMaskImage.material.GetFloat("_ScaleAndRotate");
+                return m_bottleMaskImage.material.GetFloat(NODE_COLOR_SCALE_AND_ROTATE);
             else
             if (m_bottleMaskSprite != null)
             {
                 Material Material = !Application.isPlaying ? m_bottleMaskSprite.sharedMaterial : m_bottleMaskSprite.material;
-                return Material.GetFloat("_ScaleAndRotate");
+                return Material.GetFloat(NODE_COLOR_SCALE_AND_ROTATE);
             }
             return 0;
         }
@@ -115,30 +120,57 @@ public class WaterSortBottleController : MonoBehaviour
         }
     }
 
-    private Vector2 ValuePosition
+    private Vector2 ValueObjectPosition
     {
         set
         {
             if (m_bottleMaskImage != null)
-                m_bottleMaskImage.material.SetVector("_Position", value);
+                m_bottleMaskImage.material.SetVector(NODE_OBJECT_POSITION, value);
             else
             if (m_bottleMaskSprite != null)
             {
                 Material Material = !Application.isPlaying ? m_bottleMaskSprite.sharedMaterial : m_bottleMaskSprite.material;
-                Material.SetVector("_Position", value);
+                Material.SetVector(NODE_OBJECT_POSITION, value);
             }
         }
         get
         {
             if (m_bottleMaskImage != null)
-                return m_bottleMaskImage.material.GetVector("_Position");
+                return m_bottleMaskImage.material.GetVector(NODE_OBJECT_POSITION);
             else
             if (m_bottleMaskSprite != null)
             {
                 Material Material = !Application.isPlaying ? m_bottleMaskSprite.sharedMaterial : m_bottleMaskSprite.material;
-                return Material.GetVector("_Position");
+                return Material.GetVector(NODE_OBJECT_POSITION);
             }
             return Vector2.zero;
+        }
+    }
+
+    private float ValueObjectScale
+    {
+        set
+        {
+            if (m_bottleMaskImage != null)
+                m_bottleMaskImage.material.SetFloat(NODE_OBJECT_SCALE, value);
+            else
+            if (m_bottleMaskSprite != null)
+            {
+                Material Material = !Application.isPlaying ? m_bottleMaskSprite.sharedMaterial : m_bottleMaskSprite.material;
+                Material.SetFloat(NODE_OBJECT_SCALE, value);
+            }
+        }
+        get
+        {
+            if (m_bottleMaskImage != null)
+                return m_bottleMaskImage.material.GetFloat(NODE_OBJECT_SCALE);
+            else
+            if (m_bottleMaskSprite != null)
+            {
+                Material Material = !Application.isPlaying ? m_bottleMaskSprite.sharedMaterial : m_bottleMaskSprite.material;
+                return Material.GetFloat(NODE_OBJECT_SCALE);
+            }
+            return 1f;
         }
     }
 
@@ -163,7 +195,8 @@ public class WaterSortBottleController : MonoBehaviour
     private void Start()
     {
         ValueFillAmount = m_curveData.LimitFillAmount[m_bottleColor.Count];
-        ValuePosition = this.transform.position;
+        ValueObjectPosition = this.transform.position;
+        ValueObjectScale = this.transform.localScale.x;
         //
         SetUpdateColorStart();
     }
@@ -241,7 +274,7 @@ public class WaterSortBottleController : MonoBehaviour
             if (m_curveData.LimitFillAmount[BottleColorCountSaved] > m_curveData.CurveFillAmount.Evaluate(AngleValue))
             {
                 ValueFillAmount = m_curveData.CurveFillAmount.Evaluate(AngleValue);
-                ValuePosition = this.transform.position;
+                ValueObjectPosition = this.transform.position;
                 m_debugBottleColorIn.SetColorInFillAmount(m_curveData.CurveFillAmount.Evaluate(AngleValueLast) - m_curveData.CurveFillAmount.Evaluate(AngleValue));
             }
             ValueScaleAndRotate = m_curveData.CurveScaleAndRotation.Evaluate(AngleValue);
@@ -254,7 +287,7 @@ public class WaterSortBottleController : MonoBehaviour
         AngleValue = LimitRotationValue;
         this.transform.eulerAngles = Vector3.forward * AngleValue * RotateDir;
         ValueFillAmount = m_curveData.CurveFillAmount.Evaluate(AngleValue);
-        ValuePosition = this.transform.position;
+        ValueObjectPosition = this.transform.position;
         ValueScaleAndRotate = m_curveData.CurveScaleAndRotation.Evaluate(AngleValue);        
         //
         yield return ISetColorOutRotateBack(LimitRotationValue, RotateDir);
@@ -323,7 +356,7 @@ public class WaterSortBottleController : MonoBehaviour
     private void SetColorInFillAmount(float CurveFillAmountValue)
     {
         ValueFillAmount = ValueFillAmount + CurveFillAmountValue;
-        ValuePosition = this.transform.position;
+        ValueObjectPosition = this.transform.position;
     }
 
     #endregion
