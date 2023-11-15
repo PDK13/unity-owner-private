@@ -235,6 +235,15 @@ public class WaterSortBottleController : MonoBehaviour
 
 #endif
 
+    #region Update
+
+    public void SetPositionUpdate()
+    {
+        ValueObjectPosition = this.transform.position;
+    }
+
+    #endregion
+
     #region Out
 
     public bool GetColorOutCheck(WaterSortBottleController BottleFillIn)
@@ -302,7 +311,7 @@ public class WaterSortBottleController : MonoBehaviour
         float AngleValueLast = 0;
         float LimitRotationValue = m_curveData.LimitRotation[m_bottleColor.Count];
         //
-        m_debugBottleColorIn.SetColorIn(BottleColorTopUsed, BottleColorTopCountUsed); //Fill in another bottle!!
+        BottleFillIn.SetColorIn(BottleColorTopUsed, BottleColorTopCountUsed); //Fill in another bottle!!
         //
         while (m_timeRotateCurrent < m_durationRotate)
         {
@@ -314,7 +323,7 @@ public class WaterSortBottleController : MonoBehaviour
             {
                 ValueFillAmount = m_curveData.CurveFillAmount.Evaluate(AngleValue);
                 ValueObjectPosition = this.transform.position;
-                m_debugBottleColorIn.SetColorInFillAmount(m_curveData.CurveFillAmount.Evaluate(AngleValueLast) - m_curveData.CurveFillAmount.Evaluate(AngleValue));
+                BottleFillIn.SetColorInFillAmount(m_curveData.CurveFillAmount.Evaluate(AngleValueLast) - m_curveData.CurveFillAmount.Evaluate(AngleValue));
             }
             ValueScaleAndRotate = m_curveData.CurveScaleAndRotation.Evaluate(AngleValue);
             //
