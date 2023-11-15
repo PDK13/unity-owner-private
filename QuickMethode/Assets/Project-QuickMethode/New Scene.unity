@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4358267
 RectTransform:
   m_ObjectHideFlags: 0
@@ -177,7 +177,7 @@ MonoBehaviour:
   m_bottleColor: []
   m_timeRotate: 1
   m_curveData: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
-  m_bottleMaskImage: {fileID: 0}
+  m_bottleMaskImage: {fileID: 1108704813}
   m_bottleMaskSprite: {fileID: 0}
   m_bottleFillIn: {fileID: 0}
 --- !u!1 &309872390
@@ -734,11 +734,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4665d4d55cab2b2418c9344c793bb710, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_bottleColor: []
+  m_bottleColor:
+  - {r: 1, g: 0.13725491, b: 0, a: 0}
+  - {r: 1, g: 0.13725491, b: 0, a: 0}
+  - {r: 1, g: 0.13725491, b: 0, a: 0}
   m_timeRotate: 1
   m_curveData: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
   m_bottleMaskImage: {fileID: 0}
-  m_bottleMaskSprite: {fileID: 0}
+  m_bottleMaskSprite: {fileID: 309872391}
   m_bottleFillIn: {fileID: 0}
 --- !u!212 &1110526926
 SpriteRenderer:
@@ -824,7 +827,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1143675057
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1061,7 +1064,7 @@ MonoBehaviour:
   m_bottleColor:
   - {r: 0, g: 0.4745098, b: 1, a: 0}
   - {r: 0.043137256, g: 1, b: 0, a: 0}
-  - {r: 1, g: 0.9647059, b: 0, a: 0}
+  - {r: 1, g: 0.13725491, b: 0, a: 0}
   - {r: 1, g: 0.13725491, b: 0, a: 0}
   m_timeRotate: 1
   m_curveData: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
