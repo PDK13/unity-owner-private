@@ -1,12 +1,10 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
-using static UnityEngine.Rendering.DebugUI;
+using Image = UnityEngine.UI.Image;
 
-public class BottleController : MonoBehaviour
+public class WaterSortBottleController : MonoBehaviour
 {
     //Material used with URP, should set camera 'Background Type (Clear Flag)' to "Solid Color' to avoid ghosting-image!
 
@@ -41,11 +39,7 @@ public class BottleController : MonoBehaviour
     private float m_timeRotateLerp;
 
     [Space]
-    [SerializeField] private AnimationCurve m_curveFillAmount;
-    [SerializeField] private AnimationCurve m_curveScaleAndRotation;
-    [SerializeField] private AnimationCurve m_curveRotationSpeed;
-    [SerializeField] private List<float> m_limitRotation = new List<float>();
-    [SerializeField] private List<float> m_limitFillAmount = new List<float>();
+    [SerializeField] private WaterSortBottleCurveData m_curveData;
 
     private int LimitRotationIndex
     {
@@ -58,7 +52,7 @@ public class BottleController : MonoBehaviour
         }
     }
 
-    private float LimitRotationValue => m_limitRotation[LimitRotationIndex];
+    private float LimitRotationValue => m_curveData.LimitRotation[LimitRotationIndex];
 
     private float m_limitRotationValue;
 
@@ -73,10 +67,7 @@ public class BottleController : MonoBehaviour
         set
         {
             if (m_bottleMaskImage != null)
-            {
-                Material Material = !Application.isPlaying ? m_bottleMaskImage.material : m_bottleMaskImage.material;
                 m_bottleMaskImage.material.SetFloat("_FillAmount", value);
-            }
             else
             if (m_bottleMaskSprite != null)
             {
@@ -103,10 +94,7 @@ public class BottleController : MonoBehaviour
         set
         {
             if (m_bottleMaskImage != null)
-            {
-                Material Material = !Application.isPlaying ? m_bottleMaskImage.materialForRendering : m_bottleMaskImage.material;
                 m_bottleMaskImage.material.SetFloat("_ScaleAndRotate", value);
-            }
             else
             if (m_bottleMaskSprite != null)
             {
@@ -143,13 +131,48 @@ public class BottleController : MonoBehaviour
         }
     }
 
+    private Vector2 ValuePosition
+    {
+        set
+        {
+            if (m_bottleMaskImage != null)
+                m_bottleMaskImage.material.SetVector("_Position", value);
+            else
+            if (m_bottleMaskSprite != null)
+            {
+                Material Material = !Application.isPlaying ? m_bottleMaskSprite.sharedMaterial : m_bottleMaskSprite.material;
+                Material.SetVector("_Position", value);
+            }
+        }
+        get
+        {
+            if (m_bottleMaskImage != null)
+                return m_bottleMaskImage.material.GetVector("_Position");
+            else
+            if (m_bottleMaskSprite != null)
+            {
+                Material Material = !Application.isPlaying ? m_bottleMaskSprite.sharedMaterial : m_bottleMaskSprite.material;
+                return Material.GetVector("_Position");
+            }
+            return Vector2.zero;
+        }
+    }
+
     [Space]
-    [SerializeField] private BottleController m_bottleFillIn;
+    [SerializeField] private WaterSortBottleController m_bottleFillIn;
 
     private void Awake()
     {
         if (m_bottleMaskImage != null)
+        {
+            m_bottleMaskImage.enabled = true;
             m_bottleMaskImage.material = new Material(m_bottleMaskImage.material);
+        }
+        else
+        if (m_bottleMaskSprite != null)
+        {
+            m_bottleMaskSprite.enabled = true;
+        }
     }
 
     private void Start()
@@ -157,10 +180,13 @@ public class BottleController : MonoBehaviour
         m_bottleColorTop = BottleColorTop;
         m_bottleColorTopCount = BottleColorTopCount;
         //
-        ValueFillAmount = m_limitFillAmount[m_bottleColor.Count];
+        ValueFillAmount = m_curveData.LimitFillAmount[m_bottleColor.Count];
+        ValuePosition = transform.position;
         //
         SetUpdateColorStart();
     }
+
+#if UNITY_EDITOR
 
     private void Update()
     {
@@ -173,6 +199,8 @@ public class BottleController : MonoBehaviour
                 SetColorOut();
         }
     }
+
+#endif
 
     private void SetUpdateColorStart()
     {
@@ -213,22 +241,24 @@ public class BottleController : MonoBehaviour
             AngleValueLast = AngleValue;
             AngleValue = Mathf.Lerp(0.0f, m_limitRotationValue, m_timeRotateLerp);
             transform.eulerAngles = Vector3.forward * AngleValue;
-            if (m_limitFillAmount[m_bottleColor.Count] > m_curveFillAmount.Evaluate(AngleValue))
+            if (m_curveData.LimitFillAmount[m_bottleColor.Count] > m_curveData.CurveFillAmount.Evaluate(AngleValue))
             {
-                ValueFillAmount = m_curveFillAmount.Evaluate(AngleValue);
-                m_bottleFillIn.SetColorFill(m_curveFillAmount.Evaluate(AngleValueLast) - m_curveFillAmount.Evaluate(AngleValue));
+                ValueFillAmount = m_curveData.CurveFillAmount.Evaluate(AngleValue);
+                ValuePosition = transform.position;
+                m_bottleFillIn.SetColorFill(m_curveData.CurveFillAmount.Evaluate(AngleValueLast) - m_curveData.CurveFillAmount.Evaluate(AngleValue));
             }
-            ValueScaleAndRotate = m_curveScaleAndRotation.Evaluate(AngleValue);
+            ValueScaleAndRotate = m_curveData.CurveScaleAndRotation.Evaluate(AngleValue);
             //
-            m_timeRotateCurrent += Time.deltaTime * m_curveRotationSpeed.Evaluate(AngleValue);
+            m_timeRotateCurrent += Time.deltaTime * m_curveData.CurveRotationSpeed.Evaluate(AngleValue);
             //
             yield return new WaitForEndOfFrame();
         }
         //
         AngleValue = m_limitRotationValue;
         transform.eulerAngles = Vector3.forward * AngleValue;
-        ValueFillAmount = m_curveFillAmount.Evaluate(AngleValue);
-        ValueScaleAndRotate = m_curveScaleAndRotation.Evaluate(AngleValue);        
+        ValueFillAmount = m_curveData.CurveFillAmount.Evaluate(AngleValue);
+        ValuePosition = transform.position;
+        ValueScaleAndRotate = m_curveData.CurveScaleAndRotation.Evaluate(AngleValue);        
         //
         yield return ISetRotateBack();
         //
@@ -256,7 +286,7 @@ public class BottleController : MonoBehaviour
             m_timeRotateLerp = m_timeRotateCurrent / m_timeRotate;
             AngleValue = Mathf.Lerp(m_limitRotationValue, 0.00f, m_timeRotateLerp);
             transform.eulerAngles = Vector3.forward * AngleValue;
-            ValueScaleAndRotate = m_curveScaleAndRotation.Evaluate(AngleValue);
+            ValueScaleAndRotate = m_curveData.CurveScaleAndRotation.Evaluate(AngleValue);
             //
             m_timeRotateCurrent += Time.deltaTime;
             //
@@ -265,7 +295,7 @@ public class BottleController : MonoBehaviour
         //
         AngleValue = 0f;
         transform.eulerAngles = Vector3.forward * AngleValue;
-        ValueScaleAndRotate = m_curveScaleAndRotation.Evaluate(AngleValue);
+        ValueScaleAndRotate = m_curveData.CurveScaleAndRotation.Evaluate(AngleValue);
     }
 
     #endregion
@@ -296,6 +326,7 @@ public class BottleController : MonoBehaviour
     private void SetColorFill(float CurveFillAmountValue)
     {
         ValueFillAmount = ValueFillAmount + CurveFillAmountValue;
+        ValuePosition = transform.position;
     }
 
     private void SetColorFillUpdate()
@@ -309,55 +340,9 @@ public class BottleController : MonoBehaviour
 
 #if UNITY_EDITOR
 
-[CustomEditor(typeof(BottleController))]
+//[CustomEditor(typeof(WaterSortBottleController))]
 public class BottleControllerEditor : Editor
 {
-    private BottleController m_target;
-
-    private SerializedProperty m_timeRotate;
-    //
-    private SerializedProperty m_curveFillAmount;
-    private SerializedProperty m_curveScaleAndRotation;
-    private SerializedProperty m_curveData;
-
-    private void OnEnable()
-    {
-        m_target = target as BottleController;
-        //
-        m_timeRotate = QEditorCustom.GetField(this, "m_timeRotate");
-        //
-        m_curveFillAmount = QEditorCustom.GetField(this, "m_curveFillAmount");
-        m_curveScaleAndRotation = QEditorCustom.GetField(this, "m_curveScaleAndRotation");
-        m_curveData = QEditorCustom.GetField(this, "m_curveData");
-    }
-
-    //public override void OnInspectorGUI()
-    //{
-    //    QEditorCustom.SetUpdate(this);
-    //    //
-    //    QEditorCustom.SetLabel("SETTING", QEditorCustom.GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter));
-    //    QEditorCustom.SetField(m_timeRotate);
-    //    //
-    //    QEditorCustom.SetSpace(10);
-    //    //
-    //    QEditorCustom.SetLabel("COLOR", QEditorCustom.GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter));
-    //    for (int i = 0; i < m_target.BottleColor.Count; i++)
-    //    {
-    //        QEditorCustom.SetHorizontalBegin();
-    //        QEditorCustom.SetLabel(i.ToString(), QEditorCustom.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter), QEditorCustom.GetGUIWidth(25));
-    //        m_target.BottleColor[i] = QEditorCustom.SetField(m_target.BottleColor[i], QEditorCustom.GetGUIWidth(100));
-    //        QEditorCustom.SetHorizontalEnd();
-    //    }
-    //    //
-    //    QEditorCustom.SetSpace(10);
-    //    //
-    //    QEditorCustom.SetLabel("ANIMATION", QEditorCustom.GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter));
-    //    QEditorCustom.SetField(m_curveFillAmount);
-    //    QEditorCustom.SetField(m_curveScaleAndRotation);
-    //    QEditorCustom.SetField(m_curveData);
-    //    //
-    //    QEditorCustom.SetApply(this);
-    //}
 }
 
 #endif
