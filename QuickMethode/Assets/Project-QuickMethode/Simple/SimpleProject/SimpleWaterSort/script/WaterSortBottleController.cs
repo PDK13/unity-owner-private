@@ -212,7 +212,7 @@ public class WaterSortBottleController : MonoBehaviour
         for (int i = 0; i < m_bottleColor.Count; i++)
             ValueColor = (i, m_bottleColor[i]);
     }
-    
+
 #if UNITY_EDITOR
 
     private void Update()
@@ -228,31 +228,32 @@ public class WaterSortBottleController : MonoBehaviour
 
     #region Out
 
-    public void SetColorOut(WaterSortBottleController BottleFillIn)
+    public bool SetColorOut(WaterSortBottleController BottleFillIn)
     {
         if (m_rotateActive)
-            return;
+            return false;
         //
         if (m_bottleColor.Count == 0)
-            return;
+            return false;
         //
         if (BottleFillIn == null)
-            return;
+            return false;
         //
         if (BottleFillIn.Equals(this))
-            return;
+            return false;
         //
-        StartCoroutine(ISetColorOutRotate(BottleFillIn));
-    }
-
-    private IEnumerator ISetColorOutRotate(WaterSortBottleController BottleFillIn)
-    {
         int BottleColorTopCountUsed = BottleFillIn.GetColorInOffset(BottleColorTop, BottleColorTopCount);
-        //
         if (BottleColorTopCountUsed == 0)
             //If offset between 2 bottle isn't more than 0, they can't fill up or down with each other!
-            yield break;
+            return false;
         //
+        StartCoroutine(ISetColorOutRotate(BottleFillIn, BottleColorTopCountUsed));
+        //
+        return true;
+    }
+
+    private IEnumerator ISetColorOutRotate(WaterSortBottleController BottleFillIn, int BottleColorTopCountUsed)
+    {
         m_rotateActive = true;
         //
         int RotateDir = this.transform.position.x > BottleFillIn.transform.position.x ? 1 : -1; //Rotate Dir!
@@ -294,7 +295,7 @@ public class WaterSortBottleController : MonoBehaviour
         this.transform.eulerAngles = Vector3.forward * AngleValue * RotateDir;
         ValueFillAmount = m_curveData.CurveFillAmount.Evaluate(AngleValue);
         ValueObjectPosition = this.transform.position;
-        ValueScaleAndRotate = m_curveData.CurveScaleAndRotation.Evaluate(AngleValue);        
+        ValueScaleAndRotate = m_curveData.CurveScaleAndRotation.Evaluate(AngleValue);
         //
         yield return ISetColorOutRotateBack(LimitRotationValue, RotateDir);
         //
@@ -352,7 +353,7 @@ public class WaterSortBottleController : MonoBehaviour
     private void SetColorIn(Color Color, int Count)
     {
         int IndexStart = m_bottleColor.Count;
-        for (int  i = 0; i < Count; i++)
+        for (int i = 0; i < Count; i++)
         {
             m_bottleColor.Add(Color);
             ValueColor = (IndexStart + i, Color);
