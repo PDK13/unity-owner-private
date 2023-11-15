@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Image = UnityEngine.UI.Image;
+using System;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -178,6 +179,12 @@ public class WaterSortBottleController : MonoBehaviour
         }
     }
 
+    //
+
+    public Action<bool> onRotateActive;
+
+    //
+
     [Space]
     [Tooltip("Press Enter to start fill color from this to target")]
     [SerializeField] private WaterSortBottleController m_debugBottleColorIn;
@@ -277,6 +284,7 @@ public class WaterSortBottleController : MonoBehaviour
     private IEnumerator ISetColorOutRotate(WaterSortBottleController BottleFillIn, int BottleColorTopCountUsed)
     {
         m_rotateActive = true;
+        onRotateActive?.Invoke(true);
         //
         int RotateDir = this.transform.position.x > BottleFillIn.transform.position.x ? 1 : -1; //Rotate Dir!
         //
@@ -322,6 +330,7 @@ public class WaterSortBottleController : MonoBehaviour
         yield return ISetColorOutRotateBack(LimitRotationValue, RotateDir);
         //
         m_rotateActive = false;
+        onRotateActive?.Invoke(false);
     }
 
     private IEnumerator ISetColorOutRotateBack(float LimitRotationValue, int RotateDir)
