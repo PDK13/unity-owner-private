@@ -41,7 +41,9 @@ public class WaterSortBottleController : MonoBehaviour
     private bool m_rotateActive = false;
 
     [Space]
+    [Tooltip("Mask color from Image component")]
     [SerializeField] private Image m_bottleMaskImage;
+    [Tooltip("Mask color from Sprite Renderer component")]
     [SerializeField] private SpriteRenderer m_bottleMaskSprite;
 
     private float ValueFillAmount
@@ -141,7 +143,8 @@ public class WaterSortBottleController : MonoBehaviour
     }
 
     [Space]
-    [SerializeField] private WaterSortBottleController m_bottleFillIn;
+    [Tooltip("Press Enter to start fill color from this to target")]
+    [SerializeField] private WaterSortBottleController m_debugBottleColorIn;
 
     private void Awake()
     {
@@ -170,15 +173,19 @@ public class WaterSortBottleController : MonoBehaviour
         for (int i = 0; i < m_bottleColor.Count; i++)
             ValueColor = (i, m_bottleColor[i]);
     }
+    
+#if UNITY_EDITOR
 
     private void Update()
     {
-        if (m_bottleFillIn == null)
+        if (m_debugBottleColorIn == null)
             return;
         //
         if (Input.GetKeyDown(KeyCode.Space))
-            SetColorOut(m_bottleFillIn);
+            SetColorOut(m_debugBottleColorIn);
     }
+
+#endif
 
     #region Out
 
@@ -221,7 +228,7 @@ public class WaterSortBottleController : MonoBehaviour
         float AngleValueLast = 0;
         float LimitRotationValue = m_curveData.LimitRotation[m_bottleColor.Count];
         //
-        m_bottleFillIn.SetColorIn(BottleColorTopUsed, BottleColorTopCountUsed); //Fill in another bottle!!
+        m_debugBottleColorIn.SetColorIn(BottleColorTopUsed, BottleColorTopCountUsed); //Fill in another bottle!!
         //
         while (m_timeRotateCurrent < m_timeRotate)
         {
@@ -233,7 +240,7 @@ public class WaterSortBottleController : MonoBehaviour
             {
                 ValueFillAmount = m_curveData.CurveFillAmount.Evaluate(AngleValue);
                 ValuePosition = this.transform.position;
-                m_bottleFillIn.SetColorInFillAmount(m_curveData.CurveFillAmount.Evaluate(AngleValueLast) - m_curveData.CurveFillAmount.Evaluate(AngleValue));
+                m_debugBottleColorIn.SetColorInFillAmount(m_curveData.CurveFillAmount.Evaluate(AngleValueLast) - m_curveData.CurveFillAmount.Evaluate(AngleValue));
             }
             ValueScaleAndRotate = m_curveData.CurveScaleAndRotation.Evaluate(AngleValue);
             //
