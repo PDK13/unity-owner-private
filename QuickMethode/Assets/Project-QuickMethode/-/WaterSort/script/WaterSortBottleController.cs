@@ -50,6 +50,8 @@ public class WaterSortBottleController : MonoBehaviour
     [SerializeField] private Image m_bottleMaskImage;
     [Tooltip("Mask color from Sprite Renderer component")]
     [SerializeField] private SpriteRenderer m_bottleMaskSprite;
+    //
+    [SerializeField] private float m_bottleMaskScaleStart = 1f; //Scale of renderer mask material! 
 
     private float ValueFillAmount
     {
@@ -196,7 +198,7 @@ public class WaterSortBottleController : MonoBehaviour
     {
         ValueFillAmount = m_curveData.LimitFillAmount[m_bottleColor.Count];
         ValueObjectPosition = this.transform.position;
-        ValueObjectScale = this.transform.localScale.x;
+        ValueObjectScale = m_bottleMaskScaleStart;
         //
         SetUpdateColorStart();
     }

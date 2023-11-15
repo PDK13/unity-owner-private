@@ -149,19 +149,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4358266}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1238701053}
   - {fileID: 1708597590}
-  m_Father: {fileID: 1008821111}
+  m_Father: {fileID: 1737599438}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 200, y: 0}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 120, y: 380}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4358268
@@ -181,6 +181,7 @@ MonoBehaviour:
   m_curveData: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
   m_bottleMaskImage: {fileID: 1108704813}
   m_bottleMaskSprite: {fileID: 0}
+  m_bottleMaskScaleStart: 2
   m_debugBottleColorIn: {fileID: 0}
 --- !u!114 &4358269
 MonoBehaviour:
@@ -985,8 +986,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1143675057}
-  - {fileID: 4358267}
+  - {fileID: 1737599438}
   - {fileID: 1338750719}
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -1254,6 +1254,7 @@ MonoBehaviour:
   m_curveData: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
   m_bottleMaskImage: {fileID: 0}
   m_bottleMaskSprite: {fileID: 309872391}
+  m_bottleMaskScaleStart: 1
   m_debugBottleColorIn: {fileID: 0}
 --- !u!212 &1110526926
 SpriteRenderer:
@@ -1349,19 +1350,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1143675056}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1196564810}
   - {fileID: 807134709}
-  m_Father: {fileID: 1008821111}
+  m_Father: {fileID: 1737599438}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -200, y: 0}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 120, y: 380}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1143675058
@@ -1385,6 +1386,7 @@ MonoBehaviour:
   m_curveData: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
   m_bottleMaskImage: {fileID: 1877388039}
   m_bottleMaskSprite: {fileID: 0}
+  m_bottleMaskScaleStart: 2
   m_debugBottleColorIn: {fileID: 4358268}
 --- !u!114 &1143675059
 MonoBehaviour:
@@ -1887,6 +1889,7 @@ MonoBehaviour:
   m_curveData: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
   m_bottleMaskImage: {fileID: 0}
   m_bottleMaskSprite: {fileID: 1349625370}
+  m_bottleMaskScaleStart: 1
   m_debugBottleColorIn: {fileID: 0}
 --- !u!1 &1238701052
 GameObject:
@@ -2010,7 +2013,7 @@ RectTransform:
   - {fileID: 1606655216}
   - {fileID: 1221873984}
   m_Father: {fileID: 1008821111}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2537,6 +2540,44 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1708597589}
   m_CullTransparentMesh: 1
+--- !u!1 &1737599437
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1737599438}
+  m_Layer: 5
+  m_Name: ui-group-bottle-single
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1737599438
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737599437}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
+  m_Children:
+  - {fileID: 1143675057}
+  - {fileID: 4358267}
+  m_Father: {fileID: 1008821111}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 300, y: 300}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1877388037
 GameObject:
   m_ObjectHideFlags: 0
@@ -2741,4 +2782,5 @@ MonoBehaviour:
   m_curveData: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
   m_bottleMaskImage: {fileID: 92235463}
   m_bottleMaskSprite: {fileID: 0}
+  m_bottleMaskScaleStart: 1
   m_debugBottleColorIn: {fileID: 0}
