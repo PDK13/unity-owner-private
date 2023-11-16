@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "bottle-curve-data", menuName = "Water Sort/Bottle Curve", order = 0)]
-public class WaterSortBottleCurveData : ScriptableObject
+[CreateAssetMenu(fileName = "water-sort-bottle-config", menuName = "Water Sort/Bottle Config", order = 0)]
+public class WaterSortBottleConfig : ScriptableObject
 {
     public AnimationCurve CurveFillAmount;
     public AnimationCurve CurveScaleAndRotation;

@@ -46,7 +46,8 @@ public class WaterSortBottleController : MonoBehaviour
     public float DurationRotate { get => m_durationRotate; set => m_durationRotate = value; }
 
     [Space]
-    [SerializeField] private WaterSortBottleCurveData m_curveData;
+    [SerializeField] private WaterSortBottleConfig m_curveData;
+    [SerializeField] private WaterSortBottleConfig m_animData;
 
     private bool m_rotateActive = false;
 
