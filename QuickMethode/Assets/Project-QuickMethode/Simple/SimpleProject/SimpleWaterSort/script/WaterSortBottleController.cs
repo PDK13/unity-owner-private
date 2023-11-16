@@ -12,14 +12,14 @@ public class WaterSortBottleController : MonoBehaviour
     //Material used with URP, should set camera 'Background Type (Clear Flag)' to "Solid Color' to avoid ghosting-image!
 
     private const int COLOR_MAX = 4;
-
+    //
     private const string NODE_COLOR_FILL_AMOUNT = "_ColorFillAmount";
     private const string NODE_COLOR_SCALE_AND_ROTATE = "_ColorScaleAndRotate";
     private const string NODE_OBJECT_POSITION = "_ObjectPosition";
     private const string NODE_OBJECT_SCALE = "_ObjectScale";
-
+    //
     [SerializeField] private List<Color> m_bottleColor = new List<Color>();
-
+    //
     private Color BottleColorTop => m_bottleColor.Count > 0 ? m_bottleColor[m_bottleColor.Count - 1] : Color.clear;
 
     private int BottleColorTopCount
@@ -37,16 +37,20 @@ public class WaterSortBottleController : MonoBehaviour
             return Count;
         }
     }
-
+    //
     [Space]
     [SerializeField] private WaterSortBottleConfig m_bottleConfig;
-    private float m_timeRotateCurrent;
-    private float m_timeRotateLerp;
 
     public WaterSortBottleConfig BottleConfig { get => m_bottleConfig; set => m_bottleConfig = value; }
-
+    //
+    private float m_timeRotateCurrent;
+    private float m_timeRotateLerp;
+    //
+    private float m_rotationLimit;
+    private int m_rotationDir;
+    //
     private bool m_rotateActive = false;
-
+    //
     [Space]
     [Tooltip("Mask color from Image component")]
     [SerializeField] private Image m_bottleMaskImage;
@@ -54,7 +58,7 @@ public class WaterSortBottleController : MonoBehaviour
     [SerializeField] private SpriteRenderer m_bottleMaskSprite;
     //
     [SerializeField] private float m_bottleMaskScaleStart = 1f; //Scale of renderer mask material! 
-
+    //
     private float ValueFillAmount
     {
         set
@@ -299,7 +303,7 @@ public class WaterSortBottleController : MonoBehaviour
         m_rotateActive = true;
         onRotateActive?.Invoke(this, true);
         //
-        int RotateDir = this.transform.position.x > BottleFillIn.transform.position.x ? 1 : -1; //Rotate Dir!
+        m_rotationDir = this.transform.position.x > BottleFillIn.transform.position.x ? 1 : -1; //Rotate Dir!
         //
         int BottleColorCountSaved = m_bottleColor.Count;
         //
@@ -311,7 +315,7 @@ public class WaterSortBottleController : MonoBehaviour
         m_timeRotateLerp = 0; //Time in ratio of Time Rotate from 0..1 value!
         float AngleValue = 0;
         float AngleValueLast = 0;
-        float LimitRotationValue = m_bottleConfig.LimitRotation[m_bottleColor.Count];
+        m_rotationLimit = m_bottleConfig.LimitRotation[m_bottleColor.Count];
         //
         BottleFillIn.SetColorIn(BottleColorTopUsed, BottleColorTopCountUsed); //Fill in another bottle!!
         //
@@ -319,8 +323,12 @@ public class WaterSortBottleController : MonoBehaviour
         {
             m_timeRotateLerp = m_timeRotateCurrent / m_bottleConfig.DurationRotate;
             AngleValueLast = AngleValue;
-            AngleValue = Mathf.Lerp(0.0f, LimitRotationValue, m_timeRotateLerp);
-            this.transform.eulerAngles = Vector3.forward * AngleValue * RotateDir;
+            AngleValue = Mathf.Lerp(0.0f, m_rotationLimit, m_timeRotateLerp);
+            //
+            //Rotate
+            this.transform.eulerAngles = Vector3.forward * AngleValue * m_rotationDir;
+            //Rotate
+            //
             if (m_bottleConfig.LimitFillAmount[BottleColorCountSaved] > m_bottleConfig.CurveFillAmount.Evaluate(AngleValue))
             {
                 ValueFillAmount = m_bottleConfig.CurveFillAmount.Evaluate(AngleValue);
@@ -334,29 +342,39 @@ public class WaterSortBottleController : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         //
-        AngleValue = LimitRotationValue;
-        this.transform.eulerAngles = Vector3.forward * AngleValue * RotateDir;
+        AngleValue = m_rotationLimit;
+        //
+        //Rotate
+        this.transform.eulerAngles = Vector3.forward * AngleValue * m_rotationDir;
+        //Rotate
+        //
         ValueFillAmount = m_bottleConfig.CurveFillAmount.Evaluate(AngleValue);
         ValueObjectPosition = this.transform.position;
         ValueScaleAndRotate = m_bottleConfig.CurveScaleAndRotation.Evaluate(AngleValue);
         //
-        yield return ISetColorOutRotateBack(LimitRotationValue, RotateDir);
+        yield return ISetColorOutRotateBack();
         //
         m_rotateActive = false;
         onRotateActive?.Invoke(this, false);
     }
 
-    private IEnumerator ISetColorOutRotateBack(float LimitRotationValue, int RotateDir)
+    private IEnumerator ISetColorOutRotateBack()
     {
         m_timeRotateCurrent = 0; //Time in curve to get value at the time!
         m_timeRotateLerp = 0;
         float AngleValue = 0;
+        float AngleValueLast = m_rotationDir * m_bottleConfig.LimitRotation[m_bottleColor.Count];
         //
         while (m_timeRotateCurrent < m_bottleConfig.DurationRotate)
         {
             m_timeRotateLerp = m_timeRotateCurrent / m_bottleConfig.DurationRotate;
-            AngleValue = Mathf.Lerp(LimitRotationValue, 0.00f, m_timeRotateLerp);
-            this.transform.eulerAngles = Vector3.forward * AngleValue * RotateDir;
+            AngleValueLast = AngleValue;
+            AngleValue = Mathf.Lerp(m_rotationLimit, 0.00f, m_timeRotateLerp);
+            //
+            //Rotate
+            this.transform.eulerAngles = Vector3.forward * AngleValue * m_rotationDir;
+            //Rotate
+            //
             ValueScaleAndRotate = m_bottleConfig.CurveScaleAndRotation.Evaluate(AngleValue);
             //
             m_timeRotateCurrent += Time.deltaTime;
@@ -365,7 +383,9 @@ public class WaterSortBottleController : MonoBehaviour
         }
         //
         AngleValue = 0f;
-        this.transform.eulerAngles = Vector3.forward * AngleValue * RotateDir;
+        //Rotate
+        this.transform.eulerAngles = Vector3.forward * AngleValue * m_rotationDir;
+        //Rotate
         ValueScaleAndRotate = m_bottleConfig.CurveScaleAndRotation.Evaluate(AngleValue);
     }
 
