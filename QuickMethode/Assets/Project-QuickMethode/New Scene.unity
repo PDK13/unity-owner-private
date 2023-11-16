@@ -177,8 +177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_bottleColor: []
-  m_timeRotate: 1
-  m_curveData: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
+  m_bottleConfig: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
   m_bottleMaskImage: {fileID: 1108704813}
   m_bottleMaskSprite: {fileID: 0}
   m_bottleMaskScaleStart: 2
@@ -1250,8 +1249,7 @@ MonoBehaviour:
   - {r: 1, g: 0.13725491, b: 0, a: 0}
   - {r: 1, g: 0.13725491, b: 0, a: 0}
   - {r: 1, g: 0.13725491, b: 0, a: 0}
-  m_timeRotate: 1
-  m_curveData: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
+  m_bottleConfig: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
   m_bottleMaskImage: {fileID: 0}
   m_bottleMaskSprite: {fileID: 309872391}
   m_bottleMaskScaleStart: 1
@@ -1382,8 +1380,7 @@ MonoBehaviour:
   - {r: 1, g: 0.13725491, b: 0, a: 0}
   - {r: 1, g: 0.13725491, b: 0, a: 0}
   - {r: 1, g: 0.13725491, b: 0, a: 0}
-  m_timeRotate: 1
-  m_curveData: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
+  m_bottleConfig: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
   m_bottleMaskImage: {fileID: 1877388039}
   m_bottleMaskSprite: {fileID: 0}
   m_bottleMaskScaleStart: 2
@@ -1885,8 +1882,7 @@ MonoBehaviour:
   - {r: 0.043137256, g: 1, b: 0, a: 0}
   - {r: 1, g: 0.13725491, b: 0, a: 0}
   - {r: 1, g: 0.13725491, b: 0, a: 0}
-  m_timeRotate: 1
-  m_curveData: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
+  m_bottleConfig: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
   m_bottleMaskImage: {fileID: 0}
   m_bottleMaskSprite: {fileID: 1349625370}
   m_bottleMaskScaleStart: 1
@@ -2778,8 +2774,7 @@ MonoBehaviour:
   - {r: 0.043137256, g: 1, b: 0, a: 0}
   - {r: 1, g: 0.9647059, b: 0, a: 0}
   - {r: 1, g: 0.13725491, b: 0, a: 0}
-  m_timeRotate: 1
-  m_curveData: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
+  m_bottleConfig: {fileID: 0}
   m_bottleMaskImage: {fileID: 92235463}
   m_bottleMaskSprite: {fileID: 0}
   m_bottleMaskScaleStart: 1
