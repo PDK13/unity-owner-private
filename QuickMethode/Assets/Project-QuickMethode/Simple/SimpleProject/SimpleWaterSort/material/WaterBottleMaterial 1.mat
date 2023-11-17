@@ -38,16 +38,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Value00: 1.2
-    - _Value01: 0.4
-    - _Value02: -0.5
-    - _Value03: -1.3
-    - _ValueAdd: 0.5
+    - _Value1: 0.4
+    - _Value2: -0.5
+    - _Value3: -1.3
+    - _ValueAdd: 0
     - _ValueScale: 1
+    - _ValueTop: 1.2
     m_Colors:
-    - _Color00: {r: 1, g: 0, b: 0, a: 0}
-    - _Color01: {r: 0.98279446, g: 1, b: 0, a: 0}
-    - _Color02: {r: 0, g: 0.13646817, b: 1, a: 0}
-    - _Color03: {r: 0.061700918, g: 1, b: 0, a: 0}
+    - _Color0: {r: 1, g: 0, b: 0, a: 1}
+    - _Color1: {r: 0.98279446, g: 1, b: 0, a: 1}
+    - _Color2: {r: 0, g: 0.13646817, b: 1, a: 1}
+    - _Color3: {r: 0.061700918, g: 1, b: 0, a: 1}
     - _Position: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
