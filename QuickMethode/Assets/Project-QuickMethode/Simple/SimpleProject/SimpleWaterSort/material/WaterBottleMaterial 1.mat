@@ -38,13 +38,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Value0: -1.3
-    - _Value1: -0.5
-    - _Value2: 0.4
-    - _Value3: 1.2
+    - _Value0: -1.2
+    - _Value1: -0.3
+    - _Value2: 0.6
+    - _Value3: 1.5
     - _ValueAdd: 0
     - _ValueOut: 0
-    - _ValuePosY: -0.000000008830318
+    - _ValueOutMuti: 0.9
+    - _ValuePosY: 0
     - _ValueScale: 1
     m_Colors:
     - _Color0: {r: 0.061700918, g: 1, b: 0, a: 1}
