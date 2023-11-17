@@ -10,6 +10,8 @@ using UnityEditor;
 
 public class WaterSortBottleController : MonoBehaviour
 {
+    private const int COLOR_COUNT_MAX = 4;
+
     [SerializeField] private List<Color> m_color = new List<Color>() { Color.green, Color.blue, Color.yellow, Color.red, };
     private int m_colorCount;
     private Color m_colorTop;
@@ -73,14 +75,26 @@ public class WaterSortBottleController : MonoBehaviour
     private float m_rotateDurationCurrent;
     private float m_rotateDurationLerp;
 
-    [SerializeField] private List<float> m_rotateLimit = new List<float>();
+    [SerializeField] private List<float> m_rotateLimit = new List<float>() { 90f, 80f, 60f, 40f, };
     private float m_rotateLimitCurrent;
 
-    [SerializeField] private AnimationCurve m_rotateValueAdd;
-    [SerializeField] private AnimationCurve m_rotateValueOut;
+    [SerializeField] private AnimationCurve m_rotateValueAdd = new AnimationCurve(
+        new Keyframe(0, 0), 
+        new Keyframe(90, 3.5f));
+
+    [Tooltip("Should create 4 point follow list rotate limit")]
+    [SerializeField] private AnimationCurve m_rotateValueOut = new AnimationCurve(
+        new Keyframe(0.00f, 0), 
+        new Keyframe(40.0f, 1), 
+        new Keyframe(60.0f, 2), 
+        new Keyframe(80.0f, 3), 
+        new Keyframe(90.0f, 4));
 
     private void Awake()
     {
+        if (m_color.Count > COLOR_COUNT_MAX)
+            m_color.RemoveRange(COLOR_COUNT_MAX, m_color.Count - COLOR_COUNT_MAX);
+        //
         SetBottleColorDataUpdate();
         SetBottleColorValueUpdate();
     }

@@ -158,6 +158,8 @@ MonoBehaviour:
   - {r: 0, g: 0, b: 1, a: 1}
   - {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
   m_spriteColorMask: {fileID: 496044585}
   m_valueInitScale: 1
   m_rotatePointL: {fileID: 688125659}
@@ -167,7 +169,7 @@ MonoBehaviour:
   - 90
   - 80
   - 60
-  - 45
+  - 40
   m_rotateValueAdd:
     serializedVersion: 2
     m_Curve:
@@ -190,7 +192,7 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     m_PreInfinity: 0
-    m_PostInfinity: 0
+    m_PostInfinity: 2
     m_RotationOrder: 4
   m_rotateValueOut:
     serializedVersion: 2
@@ -241,7 +243,7 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     m_PreInfinity: 2
-    m_PostInfinity: 0
+    m_PostInfinity: 2
     m_RotationOrder: 4
 --- !u!212 &11556741
 SpriteRenderer:
