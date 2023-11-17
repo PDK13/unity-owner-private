@@ -461,8 +461,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_color:
   - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 1, g: 0, b: 0, a: 1}
   m_spriteColorMask: {fileID: 844947527}
   m_valueInitScale: 1
   m_rotatePointL: {fileID: 49425613}
