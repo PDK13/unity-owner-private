@@ -44,7 +44,7 @@ Material:
     - _Value3: 1.5
     - _ValueAdd: 0
     - _ValueOut: 0
-    - _ValueOutMuti: 0.92
+    - _ValueOutMuti: 0.9
     - _ValuePosY: 0
     - _ValueScale: 1
     m_Colors:
