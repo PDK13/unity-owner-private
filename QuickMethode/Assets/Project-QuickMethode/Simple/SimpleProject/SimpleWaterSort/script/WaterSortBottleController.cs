@@ -333,7 +333,8 @@ public class WaterSortBottleControllerEditor : Editor
     private SerializedProperty m_bottleTarget;
 
     private int m_colorCount;
-    private bool m_showreferenceSetting;
+    private bool m_showReferenceSetting;
+    private bool m_showConfigSetting;
 
     private void OnEnable()
     {
@@ -384,10 +385,10 @@ public class WaterSortBottleControllerEditor : Editor
         //
         GUILayout.Space(10f);
         //
-        if (m_showreferenceSetting)
+        if (m_showReferenceSetting)
         {
             if (GUILayout.Button("Hide reference"))
-                m_showreferenceSetting = !m_showreferenceSetting;
+                m_showReferenceSetting = !m_showReferenceSetting;
             EditorGUILayout.PropertyField(m_spriteColorMask);
             EditorGUILayout.PropertyField(m_valueInitScale);
             EditorGUILayout.PropertyField(m_rotatePointL);
@@ -396,19 +397,31 @@ public class WaterSortBottleControllerEditor : Editor
         else
         {
             if (GUILayout.Button("Show reference"))
-                m_showreferenceSetting = !m_showreferenceSetting;
+                m_showReferenceSetting = !m_showReferenceSetting;
         }
         //
         EditorGUILayout.PropertyField(m_waterSortBottleConfig);
         //
+        GUILayout.Space(10f);
+        //
         if (!m_target.WaterSortBottleConfig)
         {
-            EditorGUILayout.PropertyField(m_rotateDuration);
-            EditorGUILayout.PropertyField(m_rotateLimit);
-            EditorGUILayout.PropertyField(m_rotateValueAdd);
-            EditorGUILayout.PropertyField(m_rotateValueOut);
+            if (m_showConfigSetting)
+            {
+                if (GUILayout.Button("Hide config"))
+                    m_showConfigSetting = !m_showConfigSetting;
+                EditorGUILayout.PropertyField(m_rotateDuration);
+                EditorGUILayout.PropertyField(m_rotateLimit);
+                EditorGUILayout.PropertyField(m_rotateValueAdd);
+                EditorGUILayout.PropertyField(m_rotateValueOut);
+            }
+            else
+            {
+                if (GUILayout.Button("Show config"))
+                    m_showConfigSetting = !m_showConfigSetting;
+            }
         }
-
+        //
         EditorGUILayout.PropertyField(m_bottleTarget);
         //
         serializedObject.ApplyModifiedProperties();
