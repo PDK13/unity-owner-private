@@ -353,6 +353,9 @@ public class WaterSortBottleControllerEditor : Editor
 
         m_bottleTarget = serializedObject.FindProperty("m_bottleTarget");
         //
+        if (m_target.ColorList.Count > WaterSortBottleController.COLOR_COUNT_MAX)
+            m_target.ColorList.RemoveRange(WaterSortBottleController.COLOR_COUNT_MAX, m_target.ColorList.Count - WaterSortBottleController.COLOR_COUNT_MAX);
+        //
         m_colorCount = m_target.ColorList.Count;
     }
 
