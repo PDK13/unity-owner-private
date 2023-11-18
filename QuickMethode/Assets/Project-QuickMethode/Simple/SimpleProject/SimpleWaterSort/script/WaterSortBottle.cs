@@ -8,7 +8,7 @@ using static UnityEngine.Rendering.DebugUI;
 using UnityEditor;
 #endif
 
-public class WaterSortBottleController : MonoBehaviour
+public class WaterSortBottle : MonoBehaviour
 {
     //Varible: Color
 
@@ -130,7 +130,7 @@ public class WaterSortBottleController : MonoBehaviour
     //Varible: Bottle
 
     [SerializeField] private KeyCode m_bottleTargetDebug = KeyCode.None;
-    [SerializeField] private WaterSortBottleController m_bottleTarget;
+    [SerializeField] private WaterSortBottle m_bottleTarget;
 
     private bool m_bottleActive;
     private bool m_bottleFill;
@@ -220,7 +220,7 @@ public class WaterSortBottleController : MonoBehaviour
 
     //Fill-Out
 
-    public bool SetFillOut(WaterSortBottleController BottleTarget, bool Wait = false)
+    public bool SetFillOut(WaterSortBottle BottleTarget, bool Wait = false)
     {
         if (m_bottleLock)
             return false;
@@ -387,10 +387,10 @@ public class WaterSortBottleController : MonoBehaviour
 #if UNITY_EDITOR
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(WaterSortBottleController))]
-public class WaterSortBottleControllerEditor : Editor
+[CustomEditor(typeof(WaterSortBottle))]
+public class WaterSortBottleEditor : Editor
 {
-    private WaterSortBottleController m_target;
+    private WaterSortBottle m_target;
 
     private SerializedProperty m_spriteColorMask;
     private SerializedProperty m_valueInitScale;
@@ -413,7 +413,7 @@ public class WaterSortBottleControllerEditor : Editor
 
     private void OnEnable()
     {
-        m_target = target as WaterSortBottleController;
+        m_target = target as WaterSortBottle;
         //
         m_spriteColorMask = serializedObject.FindProperty("m_spriteColorMask");
         m_valueInitScale = serializedObject.FindProperty("m_valueInitScale");
@@ -430,8 +430,8 @@ public class WaterSortBottleControllerEditor : Editor
         m_bottleTargetDebug = serializedObject.FindProperty("m_bottleTargetDebug");
         m_bottleTarget = serializedObject.FindProperty("m_bottleTarget");
         //
-        if (m_target.ColorList.Count > WaterSortBottleController.COLOR_COUNT_MAX)
-            m_target.ColorList.RemoveRange(WaterSortBottleController.COLOR_COUNT_MAX, m_target.ColorList.Count - WaterSortBottleController.COLOR_COUNT_MAX);
+        if (m_target.ColorList.Count > WaterSortBottle.COLOR_COUNT_MAX)
+            m_target.ColorList.RemoveRange(WaterSortBottle.COLOR_COUNT_MAX, m_target.ColorList.Count - WaterSortBottle.COLOR_COUNT_MAX);
         //
         m_colorCount = m_target.ColorList.Count;
     }
@@ -444,7 +444,7 @@ public class WaterSortBottleControllerEditor : Editor
         //
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Add Top"))
-            if (m_colorCount < WaterSortBottleController.COLOR_COUNT_MAX)
+            if (m_colorCount < WaterSortBottle.COLOR_COUNT_MAX)
                 m_colorCount++;
         if (GUILayout.Button("Remove Top"))
             if (m_colorCount > 0)
