@@ -12,7 +12,13 @@ public class WaterSortBottleController : MonoBehaviour
 {
     private const int COLOR_COUNT_MAX = 4;
 
-    [SerializeField] private List<Color> m_color = new List<Color>() { Color.green, Color.blue, Color.yellow, Color.red, };
+    [SerializeField] private List<Color> m_color = new List<Color>() 
+    { 
+        Color.green, 
+        Color.blue, 
+        Color.yellow, 
+        Color.red, 
+    };
     private int m_colorCount;
     private int m_colorTopCount;
     private Color m_colorTop;
@@ -72,11 +78,18 @@ public class WaterSortBottleController : MonoBehaviour
     private float m_rotateAngleLast;
 
     [Space]
+    [SerializeField] private WaterSortBottleConfig m_waterSortBottleConfig; //If not null, value below will be replace!
     [SerializeField] private float m_rotateDuration = 2f;
     private float m_rotateDurationCurrent;
     private float m_rotateDurationLerp;
 
-    [SerializeField] private List<float> m_rotateLimit = new List<float>() { 90f, 80f, 60f, 40f, };
+    [SerializeField] private List<float> m_rotateLimit = new List<float>() 
+    { 
+        90f, 
+        80f, 
+        60f, 
+        40f, 
+    };
     private float m_rotateLimitCurrent;
 
     [SerializeField] private AnimationCurve m_rotateValueAdd = new AnimationCurve(
@@ -106,30 +119,17 @@ public class WaterSortBottleController : MonoBehaviour
         //
         ValueOut = COLOR_COUNT_MAX - m_colorCount;
         ValueAdd = 0;
+        //
+        if (m_waterSortBottleConfig != null)
+        {
+            m_rotateDuration = m_waterSortBottleConfig.RotateDuration;
+            m_rotateLimit = m_waterSortBottleConfig.RotateLimit;
+            m_rotateValueAdd = m_waterSortBottleConfig.RotateValueAdd;
+            m_rotateValueOut = m_waterSortBottleConfig.RotateValueOut;
+        }
     }
 
-    private void Update()
-    {
-        //ValuePosY = this.transform.position.y;
-        //
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            this.transform.position = Vector3.zero;
-            this.transform.eulerAngles = Vector3.zero;
-            ValueOut = 0;
-            ValueAdd = 0;
-        }
-        else
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            StartCoroutine(ISetRotate(RotateDirType.Left));
-        }
-        else
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            StartCoroutine(ISetRotate(RotateDirType.Right));
-        }
-    }
+    //Update
 
     private void SetBottleColorDataUpdate()
     {
@@ -154,30 +154,30 @@ public class WaterSortBottleController : MonoBehaviour
 
     //Fill-Out
 
-    private void SetFillOut()
+    public bool SetFillOut(WaterSortBottleController BottleTarget)
     {
-
-    }
-
-    private IEnumerator ISetRotate(RotateDirType Dir)
-    {
-        if (m_bottleTarget == null)
-            yield break;
+        if (BottleTarget == null)
+            return false;
         //
         if (m_colorCount == 0)
-            yield break;
+            return false;
         //
-        m_colorTopOut = m_colorTop;
-        m_colorTopOutCount = m_bottleTarget.GetColorTopOutAvaible(m_colorTop, m_colorTopCount);
-        //
+        m_colorTopOutCount = BottleTarget.GetColorFillInAvaible(m_colorTop, m_colorTopCount);
         if (m_colorTopOutCount == 0)
-        {
-            m_colorTopOut = Color.clear;
-            yield break;
-        }
+            return false;
+        m_colorTopOut = m_colorTop;
         //
-        m_rotateDir = Dir;
-        m_rotatePoint = Dir == RotateDirType.Left ? m_rotatePointL : m_rotatePointR;
+        m_bottleTarget = BottleTarget;
+        m_rotateDir = this.transform.position.x > m_bottleTarget.transform.position.x ? RotateDirType.Left : RotateDirType.Right;
+        m_rotatePoint = m_rotateDir == RotateDirType.Left ? m_rotatePointL : m_rotatePointR;
+        //
+        StartCoroutine(ISetRotate());
+        //
+        return true;
+    }
+
+    private IEnumerator ISetRotate()
+    {
         m_rotateDurationCurrent = 0;
         m_rotateDurationLerp = 0;
         m_rotateLimitCurrent = m_rotateLimit[m_colorCount - m_colorTopOutCount] * (int)m_rotateDir;
@@ -250,7 +250,7 @@ public class WaterSortBottleController : MonoBehaviour
 
     //Fill-In
 
-    private int GetColorTopOutAvaible(Color ColorOut, int ColorOutCount)
+    private int GetColorFillInAvaible(Color ColorOut, int ColorOutCount)
     {
         if (m_colorTop.ToString() != ColorOut.ToString())
             //None color will be consume by this bottle!
@@ -269,11 +269,6 @@ public class WaterSortBottleController : MonoBehaviour
             m_color.Add(ColorOut);
             ValueColor = (m_color.Count - 1, ColorOut);
         }
-    }
-
-    private void SetValueOut()
-    {
-
     }
 }
 
