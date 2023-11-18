@@ -116,6 +116,10 @@ public class WaterSortBottle : MonoBehaviour
     [SerializeField] private Transform m_rotatePointR;
     private Transform m_rotatePoint;
 
+    public Transform RotatePointL => m_rotatePointL;
+
+    public Transform RotatePointR => m_rotatePointR;
+
     public Transform RotatePoint => m_rotatePoint;
 
     public enum RotateDirType { None = 0, Left = -1, Right = 1, }
