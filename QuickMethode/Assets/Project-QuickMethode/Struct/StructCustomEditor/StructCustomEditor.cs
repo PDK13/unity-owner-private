@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-public class SimpleCustomEditor : MonoBehaviour
+public class StructCustomEditor : MonoBehaviour
 {
     public Option m_VaribleA = Option.Option1;
 
@@ -40,10 +40,10 @@ public class SimpleCustomEditor : MonoBehaviour
 
 #if UNITY_EDITOR
 
-[CustomEditor(typeof(SimpleCustomEditor))]
-public class SimpleCustomEditorEditor : Editor
+[CustomEditor(typeof(StructCustomEditor))]
+public class StructCustomEditorEditor : Editor
 {
-    private SimpleCustomEditor m_target;
+    private StructCustomEditor m_target;
 
     private SerializedProperty m_AnotherVaribleA;
 
@@ -54,7 +54,7 @@ public class SimpleCustomEditorEditor : Editor
 
     private void OnEnable()
     {
-        m_target = (target as SimpleCustomEditor);
+        m_target = (target as StructCustomEditor);
 
         m_AnotherVaribleA = serializedObject.FindProperty("m_VaribleA");
 
@@ -72,7 +72,7 @@ public class SimpleCustomEditorEditor : Editor
 
         EditorGUILayout.PropertyField(m_AnotherVaribleA); //Show varible
 
-        if (m_target.m_VaribleA == SimpleCustomEditor.Option.Option1)
+        if (m_target.m_VaribleA == StructCustomEditor.Option.Option1)
         {
             EditorGUILayout.PropertyField(m_AnotherVaribleB);
         }
@@ -94,7 +94,7 @@ public class SimpleCustomEditorEditor : Editor
 
     private void OnSceneGUI()
     {
-        SimpleCustomEditor m_Temp = (target as SimpleCustomEditor);
+        StructCustomEditor m_Temp = (target as StructCustomEditor);
 
         if (m_Temp != null)
         {

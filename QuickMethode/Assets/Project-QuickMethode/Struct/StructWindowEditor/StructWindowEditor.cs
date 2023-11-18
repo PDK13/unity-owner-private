@@ -3,11 +3,11 @@
 using UnityEditor;
 using UnityEngine;
 
-public class SimpleWindowEditor : EditorWindow
+public class StructWindowEditor : EditorWindow
 {
     public static void Init()
     {
-        GetWindow<SimpleWindowEditor>("[!] Simple Window-Editor");
+        GetWindow<StructWindowEditor>("[!] Simple Window-Editor");
     }
 
     private void OnGUI()

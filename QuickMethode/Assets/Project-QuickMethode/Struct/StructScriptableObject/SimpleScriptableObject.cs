@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SimpleScriptableObjectGetData : MonoBehaviour
+public class StructScriptableObjectGetData : MonoBehaviour
 {
     [SerializeField] private SimpleScriptableObject m_Simple_ScriptableObject;
 

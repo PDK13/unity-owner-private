@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-public class SimpleAddressables : MonoBehaviour
+public class StructAddressables : MonoBehaviour
 {
     [SerializeField] private GameObject m_loadPrefab;
     [SerializeField] private Sprite m_loadSprite;
