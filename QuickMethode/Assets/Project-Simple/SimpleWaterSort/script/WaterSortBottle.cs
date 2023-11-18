@@ -161,6 +161,10 @@ public class WaterSortBottle : MonoBehaviour
         new Keyframe(80.0f, 3),
         new Keyframe(90.0f, 4));
 
+    [Space]
+    [SerializeField] private bool m_rotateWait;
+    [SerializeField] private float m_rotateWaitKeep = 15f;
+
     //Varible: Bottle
 
     [SerializeField] private KeyCode m_bottleTargetDebug = KeyCode.None;
@@ -215,6 +219,8 @@ public class WaterSortBottle : MonoBehaviour
             m_rotateLimit = m_bottleConfig.RotateLimit;
             m_rotateValueAdd = m_bottleConfig.RotateValueAdd;
             m_rotateValueOut = m_bottleConfig.RotateValueOut;
+            m_rotateWait = m_bottleConfig.RotateWait;
+            m_rotateWaitKeep = m_bottleConfig.RotateWaitKeep;
         }
     }
 
@@ -315,6 +321,8 @@ public class WaterSortBottle : MonoBehaviour
         //
         this.SetColorFillOut();
         m_bottleTarget.SetColorFillIn(m_colorTopOut, m_colorTopOutCount);
+        //
+        yield return new WaitUntil(() => !m_bottleWait);
         //
         while (m_rotateDurationCurrent < m_rotateDuration)
         {
@@ -465,6 +473,8 @@ public class WaterSortBottleEditor : Editor
     private SerializedProperty m_rotateLimit;
     private SerializedProperty m_rotateValueAdd;
     private SerializedProperty m_rotateValueOut;
+    private SerializedProperty m_rotateWait;
+    private SerializedProperty m_rotateWaitKeep;
 
     private SerializedProperty m_bottleTargetDebug;
     private SerializedProperty m_bottleTarget;
@@ -488,6 +498,8 @@ public class WaterSortBottleEditor : Editor
         m_rotateLimit = serializedObject.FindProperty("m_rotateLimit");
         m_rotateValueAdd = serializedObject.FindProperty("m_rotateValueAdd");
         m_rotateValueOut = serializedObject.FindProperty("m_rotateValueOut");
+        m_rotateWait = serializedObject.FindProperty("m_rotateWait");
+        m_rotateWaitKeep = serializedObject.FindProperty("m_rotateWaitKeep");
 
         m_bottleTargetDebug = serializedObject.FindProperty("m_bottleTargetDebug");
         m_bottleTarget = serializedObject.FindProperty("m_bottleTarget");
@@ -563,6 +575,8 @@ public class WaterSortBottleEditor : Editor
                 EditorGUILayout.PropertyField(m_rotateLimit);
                 EditorGUILayout.PropertyField(m_rotateValueAdd);
                 EditorGUILayout.PropertyField(m_rotateValueOut);
+                EditorGUILayout.PropertyField(m_rotateWait);
+                EditorGUILayout.PropertyField(m_rotateWaitKeep);
             }
             else
             {

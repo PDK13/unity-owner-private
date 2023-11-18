@@ -245,6 +245,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  m_rotateWait: 0
+  m_rotateWaitKeep: 15
   m_bottleTargetDebug: 0
   m_bottleTarget: {fileID: 0}
 --- !u!212 &11556741
@@ -611,6 +613,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  m_rotateWait: 0
+  m_rotateWaitKeep: 15
   m_bottleTargetDebug: 0
   m_bottleTarget: {fileID: 0}
 --- !u!212 &489120026

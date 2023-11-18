@@ -7,14 +7,15 @@ public class WaterSortBottleConfig : ScriptableObject
 {
     public float RotateDuration = 2f;
 
-    public List<float> RotateLimit = new List<float>() 
-    { 
-        90f, 
-        80f, 
-        60f, 
-        40f, 
+    [Space]
+    public List<float> RotateLimit = new List<float>()
+    {
+        90f,
+        80f,
+        60f,
+        40f,
     };
-    
+
     public AnimationCurve RotateValueAdd = new AnimationCurve(
         new Keyframe(0, 0),
         new Keyframe(90, 3.5f));
@@ -26,4 +27,8 @@ public class WaterSortBottleConfig : ScriptableObject
         new Keyframe(60.0f, 2),
         new Keyframe(80.0f, 3),
         new Keyframe(90.0f, 4));
+
+    [Space]
+    public bool RotateWait;
+    public float RotateWaitKeep = 15f;
 }
