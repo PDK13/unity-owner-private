@@ -162,6 +162,7 @@ MonoBehaviour:
   m_valueInitScale: 1
   m_rotatePointL: {fileID: 688125659}
   m_rotatePointR: {fileID: 1340864764}
+  m_waterSortBottleConfig: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
   m_rotateDuration: 2
   m_rotateLimit:
   - 90
@@ -381,6 +382,7 @@ MonoBehaviour:
   m_valueInitScale: 1
   m_rotatePointL: {fileID: 49425613}
   m_rotatePointR: {fileID: 1977312797}
+  m_waterSortBottleConfig: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
   m_rotateDuration: 2
   m_rotateLimit:
   - 90

@@ -79,6 +79,8 @@ public class WaterSortBottleController : MonoBehaviour
 
     [Space]
     [SerializeField] private WaterSortBottleConfig m_waterSortBottleConfig; //If not null, value below will be replace!
+
+    [Space]
     [SerializeField] private float m_rotateDuration = 2f;
     private float m_rotateDurationCurrent;
     private float m_rotateDurationLerp;

@@ -16,6 +16,7 @@ public class WaterSortBottleConfig : ScriptableObject
     };
     
     public AnimationCurve RotateValueAdd = new AnimationCurve(
+        new Keyframe(0, 0),
         new Keyframe(90, 3.5f));
 
     [Tooltip("Should create 4 point follow list rotate limit")]

@@ -12,29 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d287313cd6a0e564fbe507843eada0c8, type: 3}
   m_Name: water-sort-bottle-config
   m_EditorClassIdentifier: 
-  CurveFillAmount:
+  RotateDuration: 2
+  RotateLimit:
+  - 90
+  - 80
+  - 60
+  - 40
+  RotateValueAdd:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1.36
-      inSlope: -0.023103114
-      outSlope: -0.023103114
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.087991714
-    - serializedVersion: 3
-      time: 54
-      value: 0.68
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 75
       value: 0
       inSlope: 0
       outSlope: 0
@@ -43,110 +31,65 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 83
-      value: -0.68
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
       time: 90
-      value: -1.7
+      value: 3.5
       inSlope: 0
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 0
-    m_PostInfinity: 0
-    m_RotationOrder: 4
-  CurveScaleAndRotation:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 30
-      value: 0.9
-      inSlope: 0.0002314074
-      outSlope: 0.0002314074
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.16149063
-    - serializedVersion: 3
-      time: 60
-      value: 0.7
-      inSlope: 0.00026199315
-      outSlope: 0.00026199315
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.13413021
-    - serializedVersion: 3
-      time: 74
-      value: 0.5
-      inSlope: -0.00019887474
-      outSlope: -0.00019887474
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.059164524
-    - serializedVersion: 3
-      time: 90
-      value: 0.3
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 0
-    m_PostInfinity: 0
-    m_RotationOrder: 4
-  CurveRotationSpeed:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: -0.007317059
-      outSlope: -0.007317059
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.22635305
-    - serializedVersion: 3
-      time: 54
-      value: 0.2
-      inSlope: -0.01920412
-      outSlope: -0.01920412
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.0965757
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  LimitRotation:
-  - 90
-  - 83
-  - 75
-  - 54
-  - 0
-  LimitFillAmount:
-  - -1.7
-  - -0.68
-  - 0
-  - 0.68
-  - 1.36
+  RotateValueOut:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 40
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 60
+      value: 2
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 80
+      value: 3
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 90
+      value: 4
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
