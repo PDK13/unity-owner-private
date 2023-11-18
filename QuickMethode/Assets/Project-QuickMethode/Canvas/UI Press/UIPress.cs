@@ -6,6 +6,8 @@ using UnityEngine.EventSystems;
 
 public class UIPress : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler
 {
+    public static UIPress Instance;
+
     //Use on ui canvas with rectransform full stretch screen to get full mouse press support!
 
     [SerializeField] private LayerMask m_layerCheck;
@@ -13,9 +15,22 @@ public class UIPress : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler
 
     [SerializeField] private string m_messageSend = "OnPress";
 
+    public Action onNoHit;
+
     [Space]
     [SerializeField] private bool m_debug;
     private Vector2? m_debugPositionLast;
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Debug.Log("[UIPress] There are more than one instance of manager, so destroy newer instance!");
+            Destroy(this.gameObject);
+        }
+        //
+        Instance = this;
+    }
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -41,7 +56,10 @@ public class UIPress : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler
         Collider2D MouseHit = Physics2D.OverlapCircle(MousePos, m_pressRadius, m_layerCheck);
         //
         if (MouseHit == null)
+        {
+            onNoHit?.Invoke();
             return;
+        }
         //
         MouseHit.gameObject.SendMessage(m_messageSend, SendMessageOptions.DontRequireReceiver);
         Debug.LogFormat("[Press] {0}", MouseHit.gameObject.name);
