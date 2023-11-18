@@ -140,24 +140,24 @@ public class WaterSortBottleController : MonoBehaviour
     /// <summary>
     /// Bottle is current active
     /// </summary>
-    public bool BottleActive => m_bottleActive;
+    public bool BottleActive => !BottleLock && m_bottleActive;
 
     /// <summary>
     /// Bottle is current active and fill
     /// </summary>
-    public bool BottleFill => m_bottleFill;
+    public bool BottleFill => !BottleLock && m_bottleActive && m_bottleFill;
 
     /// <summary>
     /// Bottle is current active and wait
     /// </summary>
-    public bool BottleWait => m_bottleWait;
+    public bool BottleWait => !BottleLock && m_bottleActive && m_bottleWait;
 
     public bool BottleLock { get => m_bottleLock; set => m_bottleLock = value; }
 
     /// <summary>
     /// Bottle is avaible for active
     /// </summary>
-    public bool BottleAvaible => !m_bottleActive && !BottleLock;
+    public bool BottleAvaible => !BottleLock && !m_bottleActive;
 
     //Event
 
