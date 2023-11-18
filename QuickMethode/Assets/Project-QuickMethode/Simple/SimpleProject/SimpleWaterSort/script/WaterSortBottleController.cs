@@ -84,8 +84,9 @@ public class WaterSortBottleController : MonoBehaviour
     private RotateDirType m_rotateDir;
     private float m_rotateAngle;
     private float m_rotateAngleLast;
+    
+    //Varible: Config
 
-    [Space]
     [SerializeField] private WaterSortBottleConfig m_waterSortBottleConfig; //If not null, value below will be replace!
 
     public bool WaterSortBottleConfig => m_waterSortBottleConfig != null;
@@ -118,7 +119,7 @@ public class WaterSortBottleController : MonoBehaviour
 
     //Varible: Bottle
 
-    [Space]
+    [SerializeField] private KeyCode m_bottleTargetDebug = KeyCode.None;
     [SerializeField] private WaterSortBottleController m_bottleTarget;
 
     private void Start()
@@ -148,7 +149,7 @@ public class WaterSortBottleController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(m_bottleTargetDebug))
             SetFillOut(m_bottleTarget);
     }
 
@@ -330,6 +331,7 @@ public class WaterSortBottleControllerEditor : Editor
     private SerializedProperty m_rotateValueAdd;
     private SerializedProperty m_rotateValueOut;
 
+    private SerializedProperty m_bottleTargetDebug;
     private SerializedProperty m_bottleTarget;
 
     private int m_colorCount;
@@ -352,6 +354,7 @@ public class WaterSortBottleControllerEditor : Editor
         m_rotateValueAdd = serializedObject.FindProperty("m_rotateValueAdd");
         m_rotateValueOut = serializedObject.FindProperty("m_rotateValueOut");
 
+        m_bottleTargetDebug = serializedObject.FindProperty("m_bottleTargetDebug");
         m_bottleTarget = serializedObject.FindProperty("m_bottleTarget");
         //
         if (m_target.ColorList.Count > WaterSortBottleController.COLOR_COUNT_MAX)
@@ -363,6 +366,8 @@ public class WaterSortBottleControllerEditor : Editor
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
+        //
+        GUILayout.Label("COLOR", GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter));
         //
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Add Top"))
@@ -378,12 +383,18 @@ public class WaterSortBottleControllerEditor : Editor
         while (m_colorCount < m_target.ColorList.Count)
             m_target.SetEditorColorRemoveTop();
         //
-        GUILayout.BeginVertical();
-        for (int i = m_target.ColorList.Count - 1; i >= 0; i--)
-            m_target.ColorList[i] = EditorGUILayout.ColorField(m_target.ColorList[i]);
-        GUILayout.EndVertical();
+        if (m_target.ColorList.Count == 0)
+            GUILayout.Label("Bottle is current emty with no color", GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter));
+        else
+        {
+            GUILayout.BeginVertical();
+            for (int i = m_target.ColorList.Count - 1; i >= 0; i--)
+                m_target.ColorList[i] = EditorGUILayout.ColorField(m_target.ColorList[i]);
+            GUILayout.EndVertical();
+        }
         //
         GUILayout.Space(10f);
+        GUILayout.Label("REFERENCE", GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter));
         //
         if (m_showReferenceSetting)
         {
@@ -400,12 +411,15 @@ public class WaterSortBottleControllerEditor : Editor
                 m_showReferenceSetting = !m_showReferenceSetting;
         }
         //
-        EditorGUILayout.PropertyField(m_waterSortBottleConfig);
-        //
         GUILayout.Space(10f);
+        GUILayout.Label("CONFIG", GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter));
+        //
+        EditorGUILayout.PropertyField(m_waterSortBottleConfig);
         //
         if (!m_target.WaterSortBottleConfig)
         {
+            GUILayout.Space(10f);
+            //
             if (m_showConfigSetting)
             {
                 if (GUILayout.Button("Hide config"))
@@ -421,10 +435,26 @@ public class WaterSortBottleControllerEditor : Editor
                     m_showConfigSetting = !m_showConfigSetting;
             }
         }
+        else
+            GUILayout.Label("Bottle config is now follow scriptable object", GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter));
         //
+        GUILayout.Space(10f);
+        GUILayout.Label("TARGET", GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter));
+        //
+        EditorGUILayout.PropertyField(m_bottleTargetDebug);
         EditorGUILayout.PropertyField(m_bottleTarget);
         //
         serializedObject.ApplyModifiedProperties();
+    }
+
+    public GUIStyle GetGUILabel(FontStyle FontStyle, TextAnchor Alignment)
+    {
+        GUIStyle GUIStyle = new GUIStyle(GUI.skin.label)
+        {
+            fontStyle = FontStyle,
+            alignment = Alignment,
+        };
+        return GUIStyle;
     }
 }
 
