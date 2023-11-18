@@ -14,12 +14,13 @@ public class WaterSortBottle : MonoBehaviour
 
     public const int COLOR_COUNT_MAX = 4;
 
-    [SerializeField] private List<Color> m_color = new List<Color>() 
-    { 
-        Color.green, 
-        Color.blue, 
-        Color.yellow, 
-        Color.red, 
+    [SerializeField]
+    private List<Color> m_color = new List<Color>()
+    {
+        Color.green,
+        Color.blue,
+        Color.yellow,
+        Color.red,
     };
     private int m_colorCount;
     private int m_colorTopCount;
@@ -44,6 +45,26 @@ public class WaterSortBottle : MonoBehaviour
     /// Color top data is update when complete bottle active
     /// </summary>
     public Color ColorTop => m_colorTop;
+
+    public bool Finish
+    {
+        get
+        {
+            if (m_colorCount < COLOR_COUNT_MAX)
+                //Not full color, so not finish!
+                return false;
+            //
+            for (int i = 0; i < m_color.Count - 1; i++)
+            {
+                if (m_color[i].ToString() != m_color[i + 1].ToString())
+                    //Not all color same with each other, so not complete!
+                    return false;
+            }
+            //
+            //All color same with each other, so finish!
+            return true;
+        }
+    }
 
     //Varible: Image & Material
 
@@ -106,25 +127,28 @@ public class WaterSortBottle : MonoBehaviour
     private float m_rotateDurationCurrent;
     private float m_rotateDurationLerp;
 
-    [SerializeField] private List<float> m_rotateLimit = new List<float>() 
-    { 
-        90f, 
-        80f, 
-        60f, 
-        40f, 
+    [SerializeField]
+    private List<float> m_rotateLimit = new List<float>()
+    {
+        90f,
+        80f,
+        60f,
+        40f,
     };
     private float m_rotateLimitCurrent;
 
-    [SerializeField] private AnimationCurve m_rotateValueAdd = new AnimationCurve(
-        new Keyframe(0, 0), 
+    [SerializeField]
+    private AnimationCurve m_rotateValueAdd = new AnimationCurve(
+        new Keyframe(0, 0),
         new Keyframe(90, 3.5f));
 
     [Tooltip("Should create 4 point follow list rotate limit")]
-    [SerializeField] private AnimationCurve m_rotateValueOut = new AnimationCurve(
-        new Keyframe(0.00f, 0), 
-        new Keyframe(40.0f, 1), 
-        new Keyframe(60.0f, 2), 
-        new Keyframe(80.0f, 3), 
+    [SerializeField]
+    private AnimationCurve m_rotateValueOut = new AnimationCurve(
+        new Keyframe(0.00f, 0),
+        new Keyframe(40.0f, 1),
+        new Keyframe(60.0f, 2),
+        new Keyframe(80.0f, 3),
         new Keyframe(90.0f, 4));
 
     //Varible: Bottle
@@ -253,6 +277,7 @@ public class WaterSortBottle : MonoBehaviour
     private IEnumerator ISetRotate()
     {
         m_bottleActive = true;
+        m_bottleTarget.m_bottleActive = true;
         onBottleActive?.Invoke(true);
         //
         m_rotateDurationCurrent = 0;
@@ -302,6 +327,7 @@ public class WaterSortBottle : MonoBehaviour
         m_bottleTarget.SetBottleColorDataUpdate();
         //
         m_bottleActive = false;
+        m_bottleTarget.m_bottleActive = false;
         onBottleActive?.Invoke(false);
     }
 
