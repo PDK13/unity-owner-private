@@ -518,6 +518,8 @@ public class WaterSortBottleEditor : Editor
         EditorGUILayout.PropertyField(m_bottleTarget);
         //
         serializedObject.ApplyModifiedProperties();
+        //
+        EditorUtility.SetDirty(m_target);
     }
 
     public GUIStyle GetGUILabel(FontStyle FontStyle, TextAnchor Alignment)
