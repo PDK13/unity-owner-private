@@ -10,7 +10,7 @@ using UnityEditor;
 
 public class WaterSortBottleController : MonoBehaviour
 {
-    private const int COLOR_COUNT_MAX = 4;
+    public const int COLOR_COUNT_MAX = 4;
 
     [SerializeField] private List<Color> m_color = new List<Color>() 
     { 
@@ -25,6 +25,14 @@ public class WaterSortBottleController : MonoBehaviour
 
     private int m_colorTopOutCount;
     private Color m_colorTopOut;
+
+    public List<Color> ColorList => m_color;
+
+    public int ColorCount => m_colorCount;
+
+    public int ColorTopCount => m_colorTopCount;
+
+    public Color ColorTop => m_colorTop;
 
     //Varible: Image & Material
 
@@ -80,6 +88,8 @@ public class WaterSortBottleController : MonoBehaviour
     [Space]
     [SerializeField] private WaterSortBottleConfig m_waterSortBottleConfig; //If not null, value below will be replace!
 
+    public bool WaterSortBottleConfig => m_waterSortBottleConfig != null;
+
     [Space]
     [SerializeField] private float m_rotateDuration = 2f;
     private float m_rotateDurationCurrent;
@@ -131,7 +141,18 @@ public class WaterSortBottleController : MonoBehaviour
         }
     }
 
-    //Update
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+            SetFillOut(m_bottleTarget);
+    }
+
+    //
 
     private void SetBottleColorDataUpdate()
     {
@@ -254,6 +275,9 @@ public class WaterSortBottleController : MonoBehaviour
 
     private int GetColorFillInAvaible(Color ColorOut, int ColorOutCount)
     {
+        if (m_colorCount == 0)
+            return ColorOutCount;
+        //
         if (m_colorTop.ToString() != ColorOut.ToString())
             //None color will be consume by this bottle!
             return 0;
@@ -272,6 +296,18 @@ public class WaterSortBottleController : MonoBehaviour
             ValueColor = (m_color.Count - 1, ColorOut);
         }
     }
+
+    //Editor
+
+    public void SetEditorColorAddTop()
+    {
+        m_color.Add(Color.clear);
+    }
+
+    public void SetEditorColorRemoveTop()
+    {
+        m_color.RemoveAt(m_color.Count - 1);
+    }
 }
 
 #if UNITY_EDITOR
@@ -282,14 +318,97 @@ public class WaterSortBottleControllerEditor : Editor
 {
     private WaterSortBottleController m_target;
 
+    private SerializedProperty m_spriteColorMask;
+    private SerializedProperty m_valueInitScale;
+    private SerializedProperty m_rotatePointL;
+    private SerializedProperty m_rotatePointR;
+
+    private SerializedProperty m_waterSortBottleConfig;
+
+    private SerializedProperty m_rotateDuration;
+    private SerializedProperty m_rotateLimit;
+    private SerializedProperty m_rotateValueAdd;
+    private SerializedProperty m_rotateValueOut;
+
+    private SerializedProperty m_bottleTarget;
+
+    private int m_colorCount;
+    private bool m_showreferenceSetting;
+
     private void OnEnable()
     {
         m_target = target as WaterSortBottleController;
+        //
+        m_spriteColorMask = serializedObject.FindProperty("m_spriteColorMask");
+        m_valueInitScale = serializedObject.FindProperty("m_valueInitScale");
+        m_rotatePointL = serializedObject.FindProperty("m_rotatePointL");
+        m_rotatePointR = serializedObject.FindProperty("m_rotatePointR");
+
+        m_waterSortBottleConfig = serializedObject.FindProperty("m_waterSortBottleConfig");
+
+        m_rotateDuration = serializedObject.FindProperty("m_rotateDuration");
+        m_rotateLimit = serializedObject.FindProperty("m_rotateLimit");
+        m_rotateValueAdd = serializedObject.FindProperty("m_rotateValueAdd");
+        m_rotateValueOut = serializedObject.FindProperty("m_rotateValueOut");
+
+        m_bottleTarget = serializedObject.FindProperty("m_bottleTarget");
+        //
+        m_colorCount = m_target.ColorList.Count;
     }
 
     public override void OnInspectorGUI()
     {
-        base.OnInspectorGUI();
+        serializedObject.Update();
+        //
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Add Top"))
+            if (m_colorCount < WaterSortBottleController.COLOR_COUNT_MAX)
+                m_colorCount++;
+        if (GUILayout.Button("Remove Top"))
+            if (m_colorCount > 0)
+                m_colorCount--;
+        GUILayout.EndHorizontal();
+        //
+        while (m_colorCount > m_target.ColorList.Count)
+            m_target.SetEditorColorAddTop();
+        while (m_colorCount < m_target.ColorList.Count)
+            m_target.SetEditorColorRemoveTop();
+        //
+        GUILayout.BeginVertical();
+        for (int i = m_target.ColorList.Count - 1; i >= 0; i--)
+            m_target.ColorList[i] = EditorGUILayout.ColorField(m_target.ColorList[i]);
+        GUILayout.EndVertical();
+        //
+        GUILayout.Space(10f);
+        //
+        if (m_showreferenceSetting)
+        {
+            if (GUILayout.Button("Hide reference"))
+                m_showreferenceSetting = !m_showreferenceSetting;
+            EditorGUILayout.PropertyField(m_spriteColorMask);
+            EditorGUILayout.PropertyField(m_valueInitScale);
+            EditorGUILayout.PropertyField(m_rotatePointL);
+            EditorGUILayout.PropertyField(m_rotatePointR);
+        }
+        else
+        {
+            if (GUILayout.Button("Show reference"))
+                m_showreferenceSetting = !m_showreferenceSetting;
+        }
+        //
+        EditorGUILayout.PropertyField(m_waterSortBottleConfig);
+        //
+        if (!m_target.WaterSortBottleConfig)
+        {
+            EditorGUILayout.PropertyField(m_rotateDuration);
+            EditorGUILayout.PropertyField(m_rotateLimit);
+            EditorGUILayout.PropertyField(m_rotateValueAdd);
+            EditorGUILayout.PropertyField(m_rotateValueOut);
+        }
+
+        EditorGUILayout.PropertyField(m_bottleTarget);
+        //
+        serializedObject.ApplyModifiedProperties();
     }
 }
 
