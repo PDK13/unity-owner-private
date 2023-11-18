@@ -50,6 +50,10 @@ public class WaterSortBottle : MonoBehaviour
     {
         get
         {
+            if (Emty)
+                //None color in bottle, so complete!
+                return true;
+            //
             if (m_colorCount < COLOR_COUNT_MAX)
                 //Not full color, so not finish!
                 return false;
@@ -65,6 +69,8 @@ public class WaterSortBottle : MonoBehaviour
             return true;
         }
     }
+
+    public bool Emty => m_colorCount == 0;
 
     //Varible: Image & Material
 
