@@ -203,8 +203,8 @@ public class WaterSortBottle : MonoBehaviour
         if (m_color.Count > COLOR_COUNT_MAX)
             m_color.RemoveRange(COLOR_COUNT_MAX, m_color.Count - COLOR_COUNT_MAX);
         //
-        SetBottleColorDataUpdate();
-        SetBottleColorValueUpdate();
+        SetBottleDataColorUpdate();
+        SetBottleValueColorUpdate();
         //
         ValueOut = COLOR_COUNT_MAX - m_colorCount;
         ValueAdd = 0;
@@ -238,7 +238,7 @@ public class WaterSortBottle : MonoBehaviour
 
     //
 
-    private void SetBottleColorDataUpdate()
+    private void SetBottleDataColorUpdate()
     {
         m_colorCount = m_color.Count;
         //
@@ -253,10 +253,18 @@ public class WaterSortBottle : MonoBehaviour
         }
     }
 
-    private void SetBottleColorValueUpdate()
+    private void SetBottleValueColorUpdate()
     {
         for (int i = 0; i < m_colorCount; i++)
             ValueColor = (i, m_color[i]);
+    }
+
+    /// <summary>
+    /// Should use while this bottle is moving
+    /// </summary>
+    public void SetBottleValuePosYUpdate()
+    {
+        ValuePosY = this.transform.position.y;
     }
 
     //Fill-Out
@@ -343,8 +351,8 @@ public class WaterSortBottle : MonoBehaviour
         //
         yield return ISetRotateBack();
         //
-        this.SetBottleColorDataUpdate();
-        m_bottleTarget.SetBottleColorDataUpdate();
+        this.SetBottleDataColorUpdate();
+        m_bottleTarget.SetBottleDataColorUpdate();
         //
         this.m_rotateDir = RotateDirType.None;
         m_bottleTarget.m_rotateDir = RotateDirType.None;
