@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2198863856681282590}
   - component: {fileID: 2198863856681282591}
   m_Layer: 0
-  m_Name: object-bootle
+  m_Name: object-bottle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
