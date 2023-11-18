@@ -162,7 +162,7 @@ MonoBehaviour:
   m_valueInitScale: 1
   m_rotatePointL: {fileID: 688125659}
   m_rotatePointR: {fileID: 1340864764}
-  m_waterSortBottleConfig: {fileID: 0}
+  m_bottleConfig: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
   m_rotateDuration: 2
   m_rotateLimit:
   - 90
@@ -244,6 +244,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  m_bottleTargetDebug: 0
   m_bottleTarget: {fileID: 489120025}
 --- !u!212 &11556741
 SpriteRenderer:
@@ -381,7 +382,7 @@ MonoBehaviour:
   m_valueInitScale: 1
   m_rotatePointL: {fileID: 49425613}
   m_rotatePointR: {fileID: 1977312797}
-  m_waterSortBottleConfig: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
+  m_bottleConfig: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
   m_rotateDuration: 2
   m_rotateLimit:
   - 90
@@ -463,6 +464,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  m_bottleTargetDebug: 0
   m_bottleTarget: {fileID: 0}
 --- !u!212 &489120026
 SpriteRenderer:

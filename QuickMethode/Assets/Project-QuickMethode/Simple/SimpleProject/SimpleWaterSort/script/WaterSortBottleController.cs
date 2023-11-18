@@ -10,6 +10,8 @@ using UnityEditor;
 
 public class WaterSortBottleController : MonoBehaviour
 {
+    //Varible: Color
+
     public const int COLOR_COUNT_MAX = 4;
 
     [SerializeField] private List<Color> m_color = new List<Color>() 
@@ -84,12 +86,12 @@ public class WaterSortBottleController : MonoBehaviour
     private RotateDirType m_rotateDir;
     private float m_rotateAngle;
     private float m_rotateAngleLast;
-    
+
     //Varible: Config
 
-    [SerializeField] private WaterSortBottleConfig m_waterSortBottleConfig; //If not null, value below will be replace!
+    [SerializeField] private WaterSortBottleConfig m_bottleConfig; //If not null, value below will be replace!
 
-    public bool WaterSortBottleConfig => m_waterSortBottleConfig != null;
+    public bool WaterSortBottleConfig => m_bottleConfig != null;
 
     [Space]
     [SerializeField] private float m_rotateDuration = 2f;
@@ -122,6 +124,14 @@ public class WaterSortBottleController : MonoBehaviour
     [SerializeField] private KeyCode m_bottleTargetDebug = KeyCode.None;
     [SerializeField] private WaterSortBottleController m_bottleTarget;
 
+    private bool m_bottleActive;
+    private bool m_bottleFill;
+
+    //Event
+
+    public Action<bool> onBottleActive;
+    public Action<bool> onBottleFill;
+
     private void Start()
     {
         if (m_color.Count > COLOR_COUNT_MAX)
@@ -133,12 +143,12 @@ public class WaterSortBottleController : MonoBehaviour
         ValueOut = COLOR_COUNT_MAX - m_colorCount;
         ValueAdd = 0;
         //
-        if (m_waterSortBottleConfig != null)
+        if (m_bottleConfig != null)
         {
-            m_rotateDuration = m_waterSortBottleConfig.RotateDuration;
-            m_rotateLimit = m_waterSortBottleConfig.RotateLimit;
-            m_rotateValueAdd = m_waterSortBottleConfig.RotateValueAdd;
-            m_rotateValueOut = m_waterSortBottleConfig.RotateValueOut;
+            m_rotateDuration = m_bottleConfig.RotateDuration;
+            m_rotateLimit = m_bottleConfig.RotateLimit;
+            m_rotateValueAdd = m_bottleConfig.RotateValueAdd;
+            m_rotateValueOut = m_bottleConfig.RotateValueOut;
         }
     }
 
@@ -180,6 +190,9 @@ public class WaterSortBottleController : MonoBehaviour
 
     public bool SetFillOut(WaterSortBottleController BottleTarget)
     {
+        if (m_bottleActive)
+            return false;
+        //
         if (BottleTarget == null)
             return false;
         //
@@ -202,6 +215,9 @@ public class WaterSortBottleController : MonoBehaviour
 
     private IEnumerator ISetRotate()
     {
+        m_bottleActive = true;
+        onBottleActive?.Invoke(true);
+        //
         m_rotateDurationCurrent = 0;
         m_rotateDurationLerp = 0;
         m_rotateLimitCurrent = m_rotateLimit[m_colorCount - m_colorTopOutCount] * (int)m_rotateDir;
@@ -220,6 +236,12 @@ public class WaterSortBottleController : MonoBehaviour
             ValueAdd = m_rotateValueAdd.Evaluate(Mathf.Abs(m_rotateAngle));
             if (ValueOut < m_rotateValueOut.Evaluate(Mathf.Abs(m_rotateAngle)))
             {
+                if (!m_bottleFill)
+                {
+                    m_bottleFill = true;
+                    onBottleFill?.Invoke(true);
+                }
+                //
                 ValueOut = m_rotateValueOut.Evaluate(Mathf.Abs(m_rotateAngle));
                 m_bottleTarget.ValueOut += (m_rotateValueOut.Evaluate(Mathf.Abs(m_rotateAngleLast)) - m_rotateValueOut.Evaluate(Mathf.Abs(m_rotateAngle)));
             }
@@ -238,10 +260,16 @@ public class WaterSortBottleController : MonoBehaviour
         //
         SetBottleColorDataUpdate();
         m_bottleTarget.SetBottleColorDataUpdate();
+        //
+        m_bottleActive = false;
+        onBottleActive?.Invoke(false);
     }
 
     private IEnumerator ISetRotateBack()
     {
+        m_bottleFill = false;
+        onBottleFill?.Invoke(false);
+        //
         m_rotateDurationCurrent = 0;
         m_rotateDurationLerp = 0;
         m_rotateAngle = 0;
@@ -324,7 +352,7 @@ public class WaterSortBottleControllerEditor : Editor
     private SerializedProperty m_rotatePointL;
     private SerializedProperty m_rotatePointR;
 
-    private SerializedProperty m_waterSortBottleConfig;
+    private SerializedProperty m_bottleConfig;
 
     private SerializedProperty m_rotateDuration;
     private SerializedProperty m_rotateLimit;
@@ -347,7 +375,7 @@ public class WaterSortBottleControllerEditor : Editor
         m_rotatePointL = serializedObject.FindProperty("m_rotatePointL");
         m_rotatePointR = serializedObject.FindProperty("m_rotatePointR");
 
-        m_waterSortBottleConfig = serializedObject.FindProperty("m_waterSortBottleConfig");
+        m_bottleConfig = serializedObject.FindProperty("m_bottleConfig");
 
         m_rotateDuration = serializedObject.FindProperty("m_rotateDuration");
         m_rotateLimit = serializedObject.FindProperty("m_rotateLimit");
@@ -414,7 +442,7 @@ public class WaterSortBottleControllerEditor : Editor
         GUILayout.Space(10f);
         GUILayout.Label("CONFIG", GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter));
         //
-        EditorGUILayout.PropertyField(m_waterSortBottleConfig);
+        EditorGUILayout.PropertyField(m_bottleConfig);
         //
         if (!m_target.WaterSortBottleConfig)
         {
