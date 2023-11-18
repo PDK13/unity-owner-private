@@ -116,11 +116,15 @@ public class WaterSortBottle : MonoBehaviour
     [SerializeField] private Transform m_rotatePointR;
     private Transform m_rotatePoint;
 
+    public Transform RotatePoint => m_rotatePoint;
+
     public enum RotateDirType { None = 0, Left = -1, Right = 1, }
 
     private RotateDirType m_rotateDir;
     private float m_rotateAngle;
     private float m_rotateAngleLast;
+
+    public RotateDirType RotateDir => m_rotateDir;
 
     //Varible: Config
 
@@ -219,11 +223,18 @@ public class WaterSortBottle : MonoBehaviour
         StopAllCoroutines();
     }
 
+#if UNITY_EDITOR
+
     private void Update()
     {
         if (Input.GetKeyDown(m_bottleTargetDebug))
+        {
+            SetFillOutContinue();
             SetFillOut(m_bottleTarget);
+        }
     }
+
+#endif
 
     //
 
@@ -335,6 +346,10 @@ public class WaterSortBottle : MonoBehaviour
         m_bottleActive = false;
         m_bottleTarget.m_bottleActive = false;
         onBottleActive?.Invoke(false);
+        //
+        m_bottleTarget = null;
+        m_rotateDir = RotateDirType.None;
+        m_rotatePoint = null;
     }
 
     private IEnumerator ISetRotateBack()
