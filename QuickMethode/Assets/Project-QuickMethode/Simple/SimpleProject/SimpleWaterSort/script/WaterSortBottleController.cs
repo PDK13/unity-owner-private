@@ -30,10 +30,19 @@ public class WaterSortBottleController : MonoBehaviour
 
     public List<Color> ColorList => m_color;
 
+    /// <summary>
+    /// Color count data is update when complete bottle active
+    /// </summary>
     public int ColorCount => m_colorCount;
 
+    /// <summary>
+    /// Color top count data is update when complete bottle active
+    /// </summary>
     public int ColorTopCount => m_colorTopCount;
 
+    /// <summary>
+    /// Color top data is update when complete bottle active
+    /// </summary>
     public Color ColorTop => m_colorTop;
 
     //Varible: Image & Material
@@ -47,7 +56,6 @@ public class WaterSortBottleController : MonoBehaviour
     private string m_nodeValuePosY = "_ValuePosY";
     private string m_nodeValueAdd = "_ValueAdd";
     private string m_nodeValueScale = "_ValueScale";
-    private string m_nodeValueMax = "_ValueMax";
     private string m_nodeValueOut = "_ValueOut";
     private string m_nodeValueOutMuti = "_ValueOutMuti";
     private string m_nodeColor = "_Color{0}";
@@ -91,7 +99,7 @@ public class WaterSortBottleController : MonoBehaviour
 
     [SerializeField] private WaterSortBottleConfig m_bottleConfig; //If not null, value below will be replace!
 
-    public bool WaterSortBottleConfig => m_bottleConfig != null;
+    public bool BottleConfigAvaible => m_bottleConfig != null;
 
     [Space]
     [SerializeField] private float m_rotateDuration = 2f;
@@ -126,6 +134,30 @@ public class WaterSortBottleController : MonoBehaviour
 
     private bool m_bottleActive;
     private bool m_bottleFill;
+    private bool m_bottleWait; //Delay at first rotate until continue rotate called!
+    private bool m_bottleLock;
+
+    /// <summary>
+    /// Bottle is current active
+    /// </summary>
+    public bool BottleActive => m_bottleActive;
+
+    /// <summary>
+    /// Bottle is current active and fill
+    /// </summary>
+    public bool BottleFill => m_bottleFill;
+
+    /// <summary>
+    /// Bottle is current active and wait
+    /// </summary>
+    public bool BottleWait => m_bottleWait;
+
+    public bool BottleLock { get => m_bottleLock; set => m_bottleLock = value; }
+
+    /// <summary>
+    /// Bottle is avaible for active
+    /// </summary>
+    public bool BottleAvaible => !m_bottleActive && !BottleLock;
 
     //Event
 
@@ -143,7 +175,7 @@ public class WaterSortBottleController : MonoBehaviour
         ValueOut = COLOR_COUNT_MAX - m_colorCount;
         ValueAdd = 0;
         //
-        if (m_bottleConfig != null)
+        if (BottleConfigAvaible)
         {
             m_rotateDuration = m_bottleConfig.RotateDuration;
             m_rotateLimit = m_bottleConfig.RotateLimit;
@@ -188,8 +220,11 @@ public class WaterSortBottleController : MonoBehaviour
 
     //Fill-Out
 
-    public bool SetFillOut(WaterSortBottleController BottleTarget)
+    public bool SetFillOut(WaterSortBottleController BottleTarget, bool Wait = false)
     {
+        if (m_bottleLock)
+            return false;
+        //
         if (m_bottleActive)
             return false;
         //
@@ -207,6 +242,8 @@ public class WaterSortBottleController : MonoBehaviour
         m_bottleTarget = BottleTarget;
         m_rotateDir = this.transform.position.x > m_bottleTarget.transform.position.x ? RotateDirType.Left : RotateDirType.Right;
         m_rotatePoint = m_rotateDir == RotateDirType.Left ? m_rotatePointL : m_rotatePointR;
+        //
+        m_bottleWait = Wait;
         //
         StartCoroutine(ISetRotate());
         //
@@ -232,6 +269,9 @@ public class WaterSortBottleController : MonoBehaviour
             m_rotateDurationLerp = m_rotateDurationCurrent / m_rotateDuration;
             m_rotateAngle = Mathf.Lerp(0.00f, m_rotateLimitCurrent, m_rotateDurationLerp);
             this.transform.RotateAround(m_rotatePoint.position, Vector3.forward, m_rotateAngleLast - m_rotateAngle);
+            //
+            if (m_rotateAngle > m_rotateLimit[COLOR_COUNT_MAX - 1])
+                yield return new WaitUntil(() => !m_bottleWait);
             //
             ValueAdd = m_rotateValueAdd.Evaluate(Mathf.Abs(m_rotateAngle));
             if (ValueOut < m_rotateValueOut.Evaluate(Mathf.Abs(m_rotateAngle)))
@@ -298,6 +338,11 @@ public class WaterSortBottleController : MonoBehaviour
     {
         for (int i = m_colorCount - 1; i >= m_colorCount - m_colorTopOutCount; i--)
             m_color.RemoveAt(m_color.Count - 1);
+    }
+
+    public void SetFillOutContinue()
+    {
+        m_bottleWait = false;
     }
 
     //Fill-In
@@ -444,7 +489,7 @@ public class WaterSortBottleControllerEditor : Editor
         //
         EditorGUILayout.PropertyField(m_bottleConfig);
         //
-        if (!m_target.WaterSortBottleConfig)
+        if (!m_target.BottleConfigAvaible)
         {
             GUILayout.Space(10f);
             //
