@@ -114,13 +114,9 @@ public class WaterSortBottle : MonoBehaviour
     [Space]
     [SerializeField] private Transform m_rotatePointL;
     [SerializeField] private Transform m_rotatePointR;
-    private Transform m_rotatePoint;
+    private Transform m_rotatePointActive;
 
-    public Transform RotatePointL => m_rotatePointL;
-
-    public Transform RotatePointR => m_rotatePointR;
-
-    public Transform RotatePoint => m_rotatePoint;
+    public Transform RotatePointActive => m_rotatePointActive;
 
     public enum RotateDirType { None = 0, Left = -1, Right = 1, }
 
@@ -199,8 +195,8 @@ public class WaterSortBottle : MonoBehaviour
 
     //Event
 
-    public Action<bool> onBottleActive;
-    public Action<bool> onBottleFill;
+    public Action<WaterSortBottle, bool> onBottleActive;
+    public Action<WaterSortBottle, bool> onBottleFill;
 
     private void Start()
     {
@@ -286,7 +282,8 @@ public class WaterSortBottle : MonoBehaviour
         //
         m_bottleTarget = BottleTarget;
         m_rotateDir = this.transform.position.x > m_bottleTarget.transform.position.x ? RotateDirType.Left : RotateDirType.Right;
-        m_rotatePoint = m_rotateDir == RotateDirType.Left ? m_rotatePointL : m_rotatePointR;
+        m_rotatePointActive = m_rotateDir == RotateDirType.Left ? m_rotatePointL : m_rotatePointR;
+        m_bottleTarget.m_rotatePointActive = m_rotateDir == RotateDirType.Left ? m_rotatePointR : m_rotatePointL;
         //
         m_bottleWait = Wait;
         //
@@ -297,9 +294,10 @@ public class WaterSortBottle : MonoBehaviour
 
     private IEnumerator ISetRotate()
     {
-        m_bottleActive = true;
+        this.m_bottleActive = true;
         m_bottleTarget.m_bottleActive = true;
-        onBottleActive?.Invoke(true);
+        this.onBottleActive?.Invoke(this, true);
+        m_bottleTarget.onBottleActive?.Invoke(m_bottleTarget, true);
         //
         m_rotateDurationCurrent = 0;
         m_rotateDurationLerp = 0;
@@ -307,14 +305,14 @@ public class WaterSortBottle : MonoBehaviour
         m_rotateAngle = 0;
         m_rotateAngleLast = 0;
         //
-        SetColorFillOut();
+        this.SetColorFillOut();
         m_bottleTarget.SetColorFillIn(m_colorTopOut, m_colorTopOutCount);
         //
         while (m_rotateDurationCurrent < m_rotateDuration)
         {
             m_rotateDurationLerp = m_rotateDurationCurrent / m_rotateDuration;
             m_rotateAngle = Mathf.Lerp(0.00f, m_rotateLimitCurrent, m_rotateDurationLerp);
-            this.transform.RotateAround(m_rotatePoint.position, Vector3.forward, m_rotateAngleLast - m_rotateAngle);
+            this.transform.RotateAround(m_rotatePointActive.position, Vector3.forward, m_rotateAngleLast - m_rotateAngle);
             //
             if (m_rotateAngle > m_rotateLimit[COLOR_COUNT_MAX - 1])
                 yield return new WaitUntil(() => !m_bottleWait);
@@ -325,7 +323,8 @@ public class WaterSortBottle : MonoBehaviour
                 if (!m_bottleFill)
                 {
                     m_bottleFill = true;
-                    onBottleFill?.Invoke(true);
+                    this.onBottleFill?.Invoke(this, true);
+                    m_bottleTarget.onBottleFill?.Invoke(m_bottleTarget, true);
                 }
                 //
                 ValueOut = m_rotateValueOut.Evaluate(Mathf.Abs(m_rotateAngle));
@@ -340,26 +339,30 @@ public class WaterSortBottle : MonoBehaviour
         }
         //
         m_rotateAngle = m_rotateLimitCurrent;
-        this.transform.RotateAround(m_rotatePoint.position, Vector3.forward, m_rotateAngleLast - m_rotateAngle);
+        this.transform.RotateAround(m_rotatePointActive.position, Vector3.forward, m_rotateAngleLast - m_rotateAngle);
         //
         yield return ISetRotateBack();
         //
-        SetBottleColorDataUpdate();
+        this.SetBottleColorDataUpdate();
         m_bottleTarget.SetBottleColorDataUpdate();
         //
-        m_bottleActive = false;
+        this.m_rotateDir = RotateDirType.None;
+        m_bottleTarget.m_rotateDir = RotateDirType.None;
+        //
+        this.m_bottleActive = false;
         m_bottleTarget.m_bottleActive = false;
-        onBottleActive?.Invoke(false);
+        this.onBottleActive?.Invoke(this, false);
+        m_bottleTarget.onBottleActive?.Invoke(m_bottleTarget, false);
         //
         m_bottleTarget = null;
-        m_rotateDir = RotateDirType.None;
-        m_rotatePoint = null;
+        m_rotatePointActive = null;
     }
 
     private IEnumerator ISetRotateBack()
     {
         m_bottleFill = false;
-        onBottleFill?.Invoke(false);
+        this.onBottleFill?.Invoke(this, false);
+        m_bottleTarget.onBottleFill?.Invoke(m_bottleTarget, false);
         //
         m_rotateDurationCurrent = 0;
         m_rotateDurationLerp = 0;
@@ -370,7 +373,7 @@ public class WaterSortBottle : MonoBehaviour
         {
             m_rotateDurationLerp = m_rotateDurationCurrent / m_rotateDuration;
             m_rotateAngle = Mathf.Lerp(m_rotateLimitCurrent, 0.00f, m_rotateDurationLerp);
-            this.transform.RotateAround(m_rotatePoint.position, Vector3.forward, m_rotateAngleLast - m_rotateAngle);
+            this.transform.RotateAround(m_rotatePointActive.position, Vector3.forward, m_rotateAngleLast - m_rotateAngle);
             //
             ValueAdd = m_rotateValueAdd.Evaluate(Mathf.Abs(m_rotateAngle));
             //
@@ -382,7 +385,7 @@ public class WaterSortBottle : MonoBehaviour
         }
         //
         m_rotateAngle = 0;
-        this.transform.RotateAround(m_rotatePoint.position, Vector3.forward, m_rotateAngleLast - m_rotateAngle);
+        this.transform.RotateAround(m_rotatePointActive.position, Vector3.forward, m_rotateAngleLast - m_rotateAngle);
     }
 
     private void SetColorFillOut()
