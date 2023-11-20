@@ -16,9 +16,10 @@ public class WaterSortBottleConfig : ScriptableObject
         40f,
     };
 
+    [Space]
     public AnimationCurve RotateValueAdd = new AnimationCurve(
-        new Keyframe(0, 0),
-        new Keyframe(90, 3.5f));
+        new Keyframe(0.00f, 0.00f),
+        new Keyframe(90.0f, 1.50f));
 
     [Tooltip("Should create 4 point follow list rotate limit")]
     public AnimationCurve RotateValueOut = new AnimationCurve(
@@ -28,7 +29,12 @@ public class WaterSortBottleConfig : ScriptableObject
         new Keyframe(80.0f, 3),
         new Keyframe(90.0f, 4));
 
-    [Space]
-    public bool RotateWait;
-    public float RotateWaitKeep = 15f;
+    public AnimationCurve RotateValueSpeed = new AnimationCurve(
+        new Keyframe(0.00f, 0.50f),
+        new Keyframe(10.0f, 1.00f),
+        new Keyframe(90.0f, 1.00f));
+
+    public AnimationCurve RotateValueBackSpeed = new AnimationCurve(
+        new Keyframe(0.00f, 5.00f),
+        new Keyframe(90.0f, 5.00f));
 }
