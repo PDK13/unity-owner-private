@@ -87,7 +87,7 @@ public class WaterSortBottle : MonoBehaviour
     private string m_nodeValueOutMuti = "_ValueOutMuti";
     private string m_nodeColor = "_Color{0}";
 
-    //Should update position when bottle in move stage, not when bottle is in rotate stage.
+    //Should update position when bottle in move stage, not when bottle is in rotate stage
     private float ValuePosY { get => MaskMaterial.GetFloat(m_nodeValuePosY); set => MaskMaterial.SetFloat(m_nodeValuePosY, value); }
 
     private float ValueAdd { get => MaskMaterial.GetFloat(m_nodeValueAdd); set => MaskMaterial.SetFloat(m_nodeValueAdd, value); }
@@ -190,21 +190,31 @@ public class WaterSortBottle : MonoBehaviour
     [SerializeField] private KeyCode m_bottleTargetDebug = KeyCode.None;
     [SerializeField] private WaterSortBottle m_bottleTarget;
 
+    private bool m_targeted = false;
+
+    /// <summary>
+    /// This bottle current targeted by another bottle while in active stage
+    /// </summary>
+    public bool Targeted => m_targeted;
+
     private bool m_bottleActive;
     private bool m_bottleFill;
     private bool m_bottleLock;
+    private bool m_wait;
 
     /// <summary>
     /// Bottle is current active
     /// </summary>
-    public bool BottleActive => !BottleLock && m_bottleActive;
+    public bool BottleActive => m_bottleActive;
 
     /// <summary>
     /// Bottle is current active and fill
     /// </summary>
-    public bool BottleFill => !BottleLock && m_bottleActive && m_bottleFill;
+    public bool BottleFill => m_bottleFill;
 
     public bool BottleLock { get => m_bottleLock; set => m_bottleLock = value; }
+
+    public bool Wait { get => m_wait; set => m_wait = value; }
 
     /// <summary>
     /// Bottle is avaible for active
@@ -215,6 +225,8 @@ public class WaterSortBottle : MonoBehaviour
 
     public Action<WaterSortBottle, bool> onBottleActive;
     public Action<WaterSortBottle, bool> onBottleFill;
+
+    //Editor
 
     private void Start()
     {
@@ -290,7 +302,7 @@ public class WaterSortBottle : MonoBehaviour
 
     //Fill-Out
 
-    public bool SetFillOut(WaterSortBottle BottleTarget)
+    public bool SetFillOut(WaterSortBottle BottleTarget, bool Wait = false)
     {
         if (m_bottleLock)
             return false;
@@ -314,6 +326,8 @@ public class WaterSortBottle : MonoBehaviour
         m_rotatePointActive = m_rotateDir == RotateDirType.Left ? m_rotatePointL : m_rotatePointR;
         m_bottleTarget.m_rotatePointActive = m_rotateDir == RotateDirType.Left ? m_bottleTarget.m_rotatePointR : m_bottleTarget.m_rotatePointL;
         //
+        m_wait = Wait;
+        //
         StartCoroutine(ISetRotate());
         //
         return true;
@@ -325,6 +339,9 @@ public class WaterSortBottle : MonoBehaviour
         m_bottleTarget.m_bottleActive = true;
         this.onBottleActive?.Invoke(this, true);
         m_bottleTarget.onBottleActive?.Invoke(m_bottleTarget, true);
+        //
+        this.m_targeted = false;
+        m_bottleTarget.m_targeted = true;
         //
         m_rotateDurationCurrent = 0;
         m_rotateDurationLerp = 0;
@@ -344,14 +361,17 @@ public class WaterSortBottle : MonoBehaviour
             ValueAdd = RotateValueAdd.Evaluate(Mathf.Abs(m_rotateAngle));
             if (ValueOut < RotateValueOut.Evaluate(Mathf.Abs(m_rotateAngle)))
             {
+                yield return new WaitUntil(() => !m_wait);
+                //
                 if (!m_bottleFill)
                 {
-                    m_bottleFill = true;
+                    this.m_bottleFill = true;
+                    m_bottleTarget.m_bottleFill = true;
                     this.onBottleFill?.Invoke(this, true);
                     m_bottleTarget.onBottleFill?.Invoke(m_bottleTarget, true);
                 }
                 //
-                ValueOut = RotateValueOut.Evaluate(Mathf.Abs(m_rotateAngle));
+                this.ValueOut = RotateValueOut.Evaluate(Mathf.Abs(m_rotateAngle));
                 m_bottleTarget.ValueOut += RotateValueOut.Evaluate(Mathf.Abs(m_rotateAngleLast)) - RotateValueOut.Evaluate(Mathf.Abs(m_rotateAngle));
             }
             //
@@ -375,6 +395,9 @@ public class WaterSortBottle : MonoBehaviour
         this.m_rotateDir = RotateDirType.None;
         m_bottleTarget.m_rotateDir = RotateDirType.None;
         //
+        this.m_targeted = false;
+        m_bottleTarget.m_targeted = false;
+        //
         this.m_bottleActive = false;
         m_bottleTarget.m_bottleActive = false;
         this.onBottleActive?.Invoke(this, false);
@@ -386,7 +409,8 @@ public class WaterSortBottle : MonoBehaviour
 
     private IEnumerator ISetRotateBack()
     {
-        m_bottleFill = false;
+        this.m_bottleFill = false;
+        m_bottleTarget.m_bottleFill = false;
         this.onBottleFill?.Invoke(this, false);
         m_bottleTarget.onBottleFill?.Invoke(m_bottleTarget, false);
         //
@@ -458,6 +482,17 @@ public class WaterSortBottle : MonoBehaviour
     public void SetEditorColorRemoveTop()
     {
         m_color.RemoveAt(m_color.Count - 1);
+    }
+
+    public void SetEditorColorResetTop()
+    {
+        m_color = new List<Color>()
+        {
+            Color.green,
+            Color.blue,
+            Color.yellow,
+            Color.red,
+        };
     }
 }
 
@@ -545,6 +580,12 @@ public class WaterSortBottleEditor : Editor
             for (int i = m_target.ColorList.Count - 1; i >= 0; i--)
                 m_target.ColorList[i] = EditorGUILayout.ColorField(m_target.ColorList[i]);
             GUILayout.EndVertical();
+        }
+        //
+        if (GUILayout.Button("Color Reset"))
+        {
+            m_target.SetEditorColorResetTop();
+            m_colorCount = m_target.ColorList.Count;
         }
         //
         GUILayout.Space(10f);

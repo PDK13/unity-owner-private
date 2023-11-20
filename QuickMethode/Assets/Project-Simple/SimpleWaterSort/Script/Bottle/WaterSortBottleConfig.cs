@@ -8,12 +8,12 @@ public class WaterSortBottleConfig : ScriptableObject
     public float RotateDuration = 2f;
 
     [Space]
-    public List<float> RotateLimit = new List<float>()
-    {
-        90f,
-        80f,
-        60f,
-        40f,
+    public List<float> RotateLimit = new List<float>() 
+    { 
+        90f, 
+        80f, 
+        60f, 
+        40f, 
     };
 
     [Space]
