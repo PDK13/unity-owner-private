@@ -62,11 +62,15 @@ public class UIPress : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler
         }
         //
         MouseHit.gameObject.SendMessage(m_messageSend, SendMessageOptions.DontRequireReceiver);
-        Debug.LogFormat("[Press] {0}", MouseHit.gameObject.name);
+        if (m_debug)
+            Debug.LogFormat("[Press] {0}", MouseHit.gameObject.name);
     }
 
     private void OnDrawGizmos()
     {
+        if (!m_debug)
+            return;
+        //
         if (m_debugPositionLast.HasValue)
             Gizmos.DrawWireSphere(m_debugPositionLast.Value, m_pressRadius);
     }
