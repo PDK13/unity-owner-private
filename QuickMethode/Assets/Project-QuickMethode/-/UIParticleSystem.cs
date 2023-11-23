@@ -18,10 +18,13 @@ namespace UnityEngine.UI.Extensions
         [Tooltip("Enables 3d rotation for the particles")]
         public bool use3dRotation = false;
 
+        [Tooltip("Enables using Renderer.lengthScale parameter")]
+        public bool _useLengthScale = false;
+        
         private Transform _transform;
         private ParticleSystem pSystem;
         private ParticleSystem.Particle[] particles;
-        private readonly UIVertex[] _quad = new UIVertex[4];
+        private UIVertex[] _quad = new UIVertex[4];
         private Vector4 imageUV = Vector4.zero;
         private ParticleSystem.TextureSheetAnimationModule textureSheetAnimation;
         private int textureSheetAnimationFrames;
@@ -37,7 +40,13 @@ namespace UnityEngine.UI.Extensions
         private ParticleSystem.MainModule mainModule;
 #endif
 
-        public override Texture mainTexture => currentTexture;
+        public override Texture mainTexture
+        {
+            get
+            {
+                return currentTexture;
+            }
+        }
 
         public ParticleSystem.Particle[] Particles
         {
@@ -86,13 +95,11 @@ namespace UnityEngine.UI.Extensions
 
                 pRenderer = pSystem.GetComponent<ParticleSystemRenderer>();
                 if (pRenderer != null)
-                {
                     pRenderer.enabled = false;
-                }
-
+                
                 if (material == null)
                 {
-                    Shader foundShader = ShaderLibrary.GetShaderInstance("UI Extensions/Particles/Additive");
+                    var foundShader = ShaderLibrary.GetShaderInstance("UI Extensions/Particles/Additive");
                     if (foundShader)
                     {
                         material = new Material(foundShader);
@@ -104,9 +111,7 @@ namespace UnityEngine.UI.Extensions
                 {
                     currentTexture = currentMaterial.mainTexture;
                     if (currentTexture == null)
-                    {
                         currentTexture = Texture2D.whiteTexture;
-                    }
                 }
                 material = currentMaterial;
                 // automatically set scaling
@@ -183,17 +188,13 @@ namespace UnityEngine.UI.Extensions
 #else
                 Vector2 position = (pSystem.simulationSpace == ParticleSystemSimulationSpace.Local ? particle.position : _transform.InverseTransformPoint(particle.position));
 #endif
-                float rotation = -particle.rotation * Mathf.Deg2Rad;
-                float rotation90 = rotation + Mathf.PI / 2;
                 Color32 color = particle.GetCurrentColor(pSystem);
                 float size = particle.GetCurrentSize(pSystem) * 0.5f;
 
                 // apply scale
 #if UNITY_5_5_OR_NEWER
                 if (mainModule.scalingMode == ParticleSystemScalingMode.Shape)
-                {
                     position /= canvas.scaleFactor;
-                }
 #else
                 if (pSystem.scalingMode == ParticleSystemScalingMode.Shape)
                     position /= canvas.scaleFactor;
@@ -282,13 +283,29 @@ namespace UnityEngine.UI.Extensions
                 _quad[3].color = color;
                 _quad[3].uv0 = temp;
 
+                
+                float rotation = -particle.rotation * Mathf.Deg2Rad;
+                var lengthScale = pRenderer.lengthScale;
+                if (_useLengthScale)
+                {
+                    // rotate towards velocity
+                    var normalizedVelocity = particle.velocity.normalized;
+                    rotation = Mathf.Atan2(normalizedVelocity.y, normalizedVelocity.x);
+                }
+                else
+                {
+                    lengthScale = 1f;
+                }
+                
+                float rotation90 = rotation + Mathf.PI / 2;
+
                 if (rotation == 0)
                 {
                     // no rotation
                     corner1.x = position.x - size;
-                    corner1.y = position.y - size;
+                    corner1.y = position.y - size * lengthScale;
                     corner2.x = position.x + size;
-                    corner2.y = position.y + size;
+                    corner2.y = position.y + size * lengthScale;
 
                     temp.x = corner1.x;
                     temp.y = corner1.y;
@@ -317,9 +334,7 @@ namespace UnityEngine.UI.Extensions
                         // apply scale
 #if UNITY_5_5_OR_NEWER
                         if (mainModule.scalingMode == ParticleSystemScalingMode.Shape)
-                        {
                             position /= canvas.scaleFactor;
-                        }
 #else
                         if (pSystem.scalingMode == ParticleSystemScalingMode.Shape)
                             position /= canvas.scaleFactor;
@@ -343,7 +358,7 @@ namespace UnityEngine.UI.Extensions
                     else
                     {
                         // apply rotation
-                        Vector2 right = new Vector2(Mathf.Cos(rotation), Mathf.Sin(rotation)) * size;
+                        Vector2 right = new Vector2(Mathf.Cos(rotation), Mathf.Sin(rotation)) * size * lengthScale;
                         Vector2 up = new Vector2(Mathf.Cos(rotation90), Mathf.Sin(rotation90)) * size;
 
                         _quad[0].position = position - right - up;
