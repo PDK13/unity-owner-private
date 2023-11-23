@@ -6,10 +6,13 @@ namespace UnityEngine.UI.Extensions
 {
     //Required "com.unity.uiextensions-release" package!
 
+    /// <summary>
+    /// Component use with particle system component to run on canvas
+    /// </summary>
 #if UNITY_5_3_OR_NEWER
     [ExecuteInEditMode]
     [RequireComponent(typeof(CanvasRenderer), typeof(ParticleSystem))]
-    [AddComponentMenu("UI/Effects/Extensions/UIParticleSystem")]
+    [AddComponentMenu("UIParticleSystem")]
     public class UIParticleSystem : MaskableGraphic
     {
         [Tooltip("Having this enabled run the system in LateUpdate rather than in Update making it faster but less precise (more clunky)")]

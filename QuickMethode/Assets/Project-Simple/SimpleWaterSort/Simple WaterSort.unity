@@ -313,6 +313,7 @@ GameObject:
   m_Component:
   - component: {fileID: 481336766}
   - component: {fileID: 481336767}
+  - component: {fileID: 481336768}
   m_Layer: 0
   m_Name: game-manager
   m_TagString: Untagged
@@ -353,6 +354,19 @@ MonoBehaviour:
   m_bottleConfig: {fileID: 11400000, guid: 1dee293faa050c945bd9087d53aed393, type: 2}
   m_groupBottle: {fileID: 489897688}
   m_groupActive: {fileID: 404064601}
+--- !u!114 &481336768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 481336765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cee28565d2e200e4a8fdbb005106a871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_base: {fileID: 0}
 --- !u!1 &489897687
 GameObject:
   m_ObjectHideFlags: 0
