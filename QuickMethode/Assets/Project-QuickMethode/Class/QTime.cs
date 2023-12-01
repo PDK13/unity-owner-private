@@ -22,84 +22,52 @@ public class QDateTime
     public static string GetFormat(DateTime Time, string FormatTime, string Special = "en-US")
     {
         if (Special != "")
-        {
             return Time.ToString(FormatTime, CultureInfo.CreateSpecificCulture(Special));
-        }
         else
-        {
             return Time.ToString(FormatTime, DateTimeFormatInfo.InvariantInfo);
-        }
     }
 
     public static DateTime GetConvert(string Time, string FormatTime, string Special = "en-US")
     {
         if (Special != "")
-        {
             return DateTime.ParseExact(Time, FormatTime, CultureInfo.CreateSpecificCulture(Special));
-        }
         else
-        {
             return DateTime.ParseExact(Time, FormatTime, CultureInfo.InvariantCulture);
-        }
     }
 
     #endregion
 
     #region ==================================== Time Compare
 
-    public static (bool Prev, bool Equa, bool Next) GetCompare(DateTime TimeFrom, DateTime TimeTo)
+    public static (bool Past, bool Present, bool Future) GetCompare(DateTime DateFrom, DateTime DateTo)
     {
-        if (TimeFrom < TimeTo)
-        {
-            return (true, false, false); //Past Time!!
-        }
-
-        if (TimeFrom > TimeTo)
-        {
-            return (false, false, true); //Future Time!!
-        }
-
-        return (false, true, false); //Now Time (Maybe not)!!
+        return (DateFrom < DateTo, DateFrom == DateTo, DateFrom > DateTo);
     }
 
-    public static (bool Prev, bool Equa, bool Next) GetCompareDay(DateTime TimeFrom, DateTime TimeTo)
+    public static (bool Past, bool Present, bool Future) GetCompareDay(DateTime DateFrom, DateTime DateTo)
     {
-        if (TimeFrom.Year > TimeTo.Year)
-        {
-            return (false, false, true); //Future Time!!
-        }
-
-        if (TimeFrom.Year < TimeTo.Year)
-        {
-            return (true, false, false); //Past Time!!
-        }
-
-        if (TimeFrom.Month > TimeTo.Month)
-        {
-            return (false, false, true); //Future Time!!
-        }
-
-        if (TimeFrom.Month < TimeTo.Month)
-        {
-            return (true, false, false); //Past Time!!
-        }
-
-        if (TimeFrom.Day > TimeTo.Day)
-        {
-            return (false, false, true); //Future Time!!
-        }
-
-        if (TimeFrom.Day < TimeTo.Day)
-        {
-            return (true, false, false); //Past Time!!
-        }
-
-        return (false, true, false); //Now Time (Maybe not)!!
+        //Year
+        if (DateFrom.Year > DateTo.Year)
+            return (false, false, true);
+        if (DateFrom.Year < DateTo.Year)
+            return (true, false, false);
+        //Month
+        if (DateFrom.Month > DateTo.Month)
+            return (false, false, true);
+        if (DateFrom.Month < DateTo.Month) 
+            return (true, false, false);
+        //Day
+        if (DateFrom.Day > DateTo.Day)
+            return (false, false, true);
+        if (DateFrom.Day < DateTo.Day)
+            return (true, false, false);
+        //
+        return (false, true, false); //Today!
     }
 
-    public static int GetDay(DateTime From, DateTime To)
+    public static TimeSpan GetTotal(DateTime From, DateTime To)
     {
-        return (To - From).Days;
+        return To.Subtract(From);
     }
 
     #endregion

@@ -34,6 +34,8 @@ public class QPlayerPrefs
 
     #region ------------------------------------ Set Primary
 
+    //Single
+
     public static void SetValue(string Name, string Value)
     {
         PlayerPrefs.SetString(Name, Value);
@@ -58,15 +60,7 @@ public class QPlayerPrefs
         PlayerPrefs.Save();
     }
 
-    public static void SetValue<EnumType>(string Name, EnumType Value)
-    {
-        PlayerPrefs.SetInt(Name, QEnum.GetChoice(Value));
-        PlayerPrefs.Save();
-    }
-
-    #endregion
-
-    #region ------------------------------------ Set Params
+    //Params
 
     public static void SetValue(string Name, char Key, params string[] Value)
     {
@@ -87,12 +81,6 @@ public class QPlayerPrefs
     }
 
     public static void SetValue(string Name, char Key, params bool[] Value)
-    {
-        PlayerPrefs.SetString(Name, QEncypt.GetEncypt(Key, Value.ToList()));
-        PlayerPrefs.Save();
-    }
-
-    public static void SetValueEnum<EnumType>(string Name, char Key, params EnumType[] Value)
     {
         PlayerPrefs.SetString(Name, QEncypt.GetEncypt(Key, Value.ToList()));
         PlayerPrefs.Save();
@@ -124,11 +112,31 @@ public class QPlayerPrefs
 
     #endregion
 
-    #region ------------------------------------ Set Time
+    #region ------------------------------------ Set Enum
 
-    public static void SetValue(string Name, DateTime Value, string FormatTime)
+    //Single
+
+    public static void SetValue<EnumType>(string Name, EnumType Value)
     {
-        SetValue(Name, Value.ToString(FormatTime));
+        PlayerPrefs.SetInt(Name, QEnum.GetChoice(Value));
+        PlayerPrefs.Save();
+    }
+
+    //Params
+
+    public static void SetValueEnum<EnumType>(string Name, char Key, params EnumType[] Value)
+    {
+        PlayerPrefs.SetString(Name, QEncypt.GetEncypt(Key, Value.ToList()));
+        PlayerPrefs.Save();
+    }
+
+    #endregion
+
+    #region ------------------------------------ Set DateTime
+
+    public static void SetValue(string Name, DateTime Value, string Format = QDateTime.DD_MM_YYYY)
+    {
+        SetValue(Name, Value.ToString(Format));
     }
 
     #endregion
@@ -147,6 +155,8 @@ public class QPlayerPrefs
     #endregion
 
     #region ------------------------------------ Get Primary
+
+    //Single
 
     public static string GetValueString(string Name, string Default = "")
     {
@@ -172,14 +182,7 @@ public class QPlayerPrefs
         return Default;
     }
 
-    public static EnumType GetValueEnum<EnumType>(string Name)
-    {
-        return QEnum.GetChoice<EnumType>(PlayerPrefs.GetInt(Name));
-    }
-
-    #endregion
-
-    #region ------------------------------------ Get Params
+    //Params
 
     public static List<string> GetValueString(string Name, char Key)
     {
@@ -199,11 +202,6 @@ public class QPlayerPrefs
     public static List<bool> GetValueBool(string Name, char Key)
     {
         return QEncypt.GetDencyptBool(Key, GetValueString(Name));
-    }
-
-    public static List<EnumType> GetValueEnum<EnumType>(string Name, char Key)
-    {
-        return QEncypt.GetDencyptEnum<EnumType>(Key, GetValueString(Name));
     }
 
     #endregion
@@ -232,30 +230,32 @@ public class QPlayerPrefs
 
     #endregion
 
+    #region ------------------------------------ Get Enum
+
+    //Single
+
+    public static EnumType GetValueEnum<EnumType>(string Name)
+    {
+        return QEnum.GetChoice<EnumType>(PlayerPrefs.GetInt(Name));
+    }
+
+    //Params
+
+    public static List<EnumType> GetValueEnum<EnumType>(string Name, char Key)
+    {
+        return QEncypt.GetDencyptEnum<EnumType>(Key, GetValueString(Name));
+    }
+
+    #endregion
+
     #region ------------------------------------ Get Time
 
-    public static DateTime GetValueTime(string Name, string FormatTime)
+    public static DateTime GetValueDateTime(string Name, string FormatTime = QDateTime.DD_MM_YYYY)
     {
         return QDateTime.GetConvert(GetValueString(Name), FormatTime);
     }
 
     #endregion
-
-    #endregion
-
-    #region ==================================== App First Run (Should Remove)
-
-    public static bool SetFirstRun(string PlayerPref = "-First-Run")
-    {
-        if (GetValueExist(Application.productName + PlayerPref))
-        {
-            return false;
-        }
-
-        SetValue(Application.productName + PlayerPref, true);
-
-        return true;
-    }
 
     #endregion
 }

@@ -29,15 +29,15 @@ public class SimpleTimeCountDown : MonoBehaviour
 
         try
         {
-            DateTime Last = QPlayerPrefs.GetValueTime(HELLO, QDateTime.DD_MM_YYYY);
+            DateTime Last = QPlayerPrefs.GetValueDateTime(HELLO, QDateTime.DD_MM_YYYY);
 
-            if (QDateTime.GetCompareDay(QDateTime.Now, Last).Next)
+            if (QDateTime.GetCompareDay(QDateTime.Now, Last).Future)
             {
                 QPlayerPrefs.SetValue(HELLO, QDateTime.Now, QDateTime.DD_MM_YYYY);
                 Debug.Log("Hello new Day!!");
             }
             else
-            if (QDateTime.GetCompareDay(QDateTime.Now, Last).Prev)
+            if (QDateTime.GetCompareDay(QDateTime.Now, Last).Past)
             {
                 Debug.Log("We go to the past?!");
             }
@@ -52,8 +52,8 @@ public class SimpleTimeCountDown : MonoBehaviour
             Debug.Log("Hello First Born!!");
         }
 
-        Debug.Log(QDateTime.GetCompare(new DateTime(2011, 01, 02), new DateTime(2020, 01, 01)).Next);
-        Debug.Log(QDateTime.GetDay(new DateTime(2011, 01, 01), new DateTime(2011, 01, 01)));
+        Debug.Log(QDateTime.GetCompare(new DateTime(2011, 01, 02), new DateTime(2020, 01, 01)).Future);
+        Debug.Log(QDateTime.GetCompareDay(new DateTime(2011, 01, 01), new DateTime(2011, 01, 01)).Future);
     }
 
     private void OnDestroy()
