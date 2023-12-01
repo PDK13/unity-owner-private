@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class QDateTime
 {
-    public const string DD_MM_YYYY = "dd/MM/yyyy";
-    public const string YYYY_MM_DD = "yyyy/MM/dd";
+    public const string DD_MM_YYYY = @"dd/MM/yyyy";
+    public const string YYYY_MM_DD = @"yyyy/MM/dd";
 
-    public const string DDD_DD_MM_YYYY = "ddd dd/MM/yyyy";
+    public const string DDD_DD_MM_YYYY = @"ddd dd/MM/yyyy";
 
     public const string HH_MM_SS = "HH:mm:ss";
     public const string HH_MM_SS_TT = "hh:mm:ss tt";
@@ -19,20 +19,20 @@ public class QDateTime
 
     #region ==================================== Time Format
 
-    public static string GetFormat(DateTime Time, string FormatTime, string Special = "en-US")
+    public static string GetFormat(DateTime DateValue, string FormatDate, string SpecificCulture = "en-US")
     {
-        if (Special != "")
-            return Time.ToString(FormatTime, CultureInfo.CreateSpecificCulture(Special));
+        if (SpecificCulture != "")
+            return DateValue.ToString(FormatDate, CultureInfo.CreateSpecificCulture(SpecificCulture));
         else
-            return Time.ToString(FormatTime, DateTimeFormatInfo.InvariantInfo);
+            return DateValue.ToString(FormatDate, DateTimeFormatInfo.InvariantInfo);
     }
 
-    public static DateTime GetConvert(string Time, string FormatTime, string Special = "en-US")
+    public static DateTime GetConvert(string DateValue, string FormatDate, string SpecificCulture = "en-US")
     {
-        if (Special != "")
-            return DateTime.ParseExact(Time, FormatTime, CultureInfo.CreateSpecificCulture(Special));
+        if (SpecificCulture != "")
+            return DateTime.ParseExact(DateValue, FormatDate, CultureInfo.CreateSpecificCulture(SpecificCulture));
         else
-            return DateTime.ParseExact(Time, FormatTime, CultureInfo.InvariantCulture);
+            return DateTime.ParseExact(DateValue, FormatDate, CultureInfo.InvariantCulture);
     }
 
     #endregion
@@ -65,9 +65,9 @@ public class QDateTime
         return (false, true, false); //Today!
     }
 
-    public static TimeSpan GetTotal(DateTime From, DateTime To)
+    public static TimeSpan GetTotal(DateTime DateFrom, DateTime DateTo)
     {
-        return To.Subtract(From);
+        return DateTo.Subtract(DateFrom);
     }
 
     #endregion
