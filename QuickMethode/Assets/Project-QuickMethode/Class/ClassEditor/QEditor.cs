@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System;
+using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -302,9 +304,9 @@ public class QEditor
         return EditorGUILayout.Popup("", IndexChoice, ListChoice.ToArray(), GUILayoutOption);
     }
 
-    public static int SetPopup<EnumType>(int IndexChoice, params GUILayoutOption[] GUILayoutOption)
+    public static int SetPopup<T>(int IndexChoice, params GUILayoutOption[] GUILayoutOption) where T : Enum
     {
-        return EditorGUILayout.Popup("", IndexChoice, QEnum.GetListName<EnumType>().ToArray(), GUILayoutOption);
+        return EditorGUILayout.Popup("", IndexChoice, QEnum.GetListName<T>().ToArray(), GUILayoutOption);
     }
 
     #endregion

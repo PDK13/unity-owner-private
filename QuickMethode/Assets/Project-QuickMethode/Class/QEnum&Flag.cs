@@ -5,23 +5,23 @@ using UnityEngine;
 
 public class QEnum
 {
-    public static int GetChoice<EnumType>(EnumType Choice)
+    public static int GetChoice<T>(T Choice) where T : Enum
     {
-        //Simple: (int)EnumType
+        //Simple: (int)T
         return (int)Convert.ChangeType(Choice, typeof(int));
     }
 
-    public static EnumType GetChoice<EnumType>(int Index)
+    public static T GetChoice<T>(int Index)
     {
-        //Simple: (EnumType)Index
-        return (EnumType)Enum.ToObject(typeof(EnumType), Index);
+        //Simple: (T)Index
+        return (T)Enum.ToObject(typeof(T), Index);
     }
 
-    public static List<string> GetListName<EnumType>(bool Fixed = true)
+    public static List<string> GetListName<T>(bool Fixed = true) where T : Enum
     {
         if (Fixed)
         {
-            List<string> ListName = Enum.GetNames(typeof(EnumType)).ToList();
+            List<string> ListName = Enum.GetNames(typeof(T)).ToList();
             for (int i = 0; i < ListName.Count; i++)
             {
                 if (ListName[i][0].Equals('_'))
@@ -34,15 +34,15 @@ public class QEnum
             return ListName;
         }
 
-        return Enum.GetNames(typeof(EnumType)).ToList();
+        return Enum.GetNames(typeof(T)).ToList();
     }
 
-    public static List<int> GetListIndex<EnumType>()
+    public static List<int> GetListIndex<T>() where T : Enum
     {
-        return Enum.GetValues(typeof(EnumType)).Cast<int>().ToList();
+        return Enum.GetValues(typeof(T)).Cast<int>().ToList();
     }
 
-    public static List<int> GetListIndex<EnumType>(params EnumType[] Value)
+    public static List<int> GetListIndex<T>(params T[] Value) where T : Enum
     {
         List<int> Index = new List<int>();
         for (int i = 0; i < Value.Length; i++)
@@ -53,9 +53,9 @@ public class QEnum
         return Index;
     }
 
-    public static string GetName<EnumType>(int Index)
+    public static string GetName<T>(int Index) where T : Enum
     {
-        return Enum.GetName(typeof(EnumType), Index);
+        return Enum.GetName(typeof(T), Index);
     }
 }
 
@@ -71,9 +71,9 @@ public class QFlag
     //Exist     : "(Flag & Flag.A) == Flag.A" or "Flag.HasFlag(Flag.A)"
     //Emty      : "Alpha == 0"
 
-    public static List<int> GetBit<EnumType>()
+    public static List<int> GetBit<T>() where T : Enum
     {
-        List<int> Index = QEnum.GetListIndex<EnumType>();
+        List<int> Index = QEnum.GetListIndex<T>();
         for (int i = 0; i < Index.Count; i++)
         {
             if (i == 0)
@@ -89,10 +89,10 @@ public class QFlag
         return Index;
     }
 
-    public static int GetChoice<EnumType>(params EnumType[] Choice)
+    public static int GetChoice<T>(params T[] Choice) where T : Enum
     {
         int Sum32 = 0;
-        foreach (EnumType Value in Choice)
+        foreach (T Value in Choice)
         {
             int Value32 = (int)Convert.ChangeType(Value, typeof(int));
             Sum32 += Value32;
@@ -100,10 +100,10 @@ public class QFlag
         return Sum32;
     }
 
-    public static int GetAdd<EnumType>(EnumType Current, params EnumType[] Choice)
+    public static int GetAdd<T>(T Current, params T[] Choice) where T : Enum
     {
         int Sum32 = GetChoice(Current);
-        foreach (EnumType Value in Choice)
+        foreach (T Value in Choice)
         {
             if (GetExist(Current, Value))
             {
@@ -116,10 +116,10 @@ public class QFlag
         return Sum32;
     }
 
-    public static int GetRemove<EnumType>(EnumType Current, params EnumType[] Choice)
+    public static int GetRemove<T>(T Current, params T[] Choice) where T : Enum
     {
         int Sum32 = GetChoice(Current);
-        foreach (EnumType Value in Choice)
+        foreach (T Value in Choice)
         {
             if (!GetExist(Current, Value))
             {
@@ -132,12 +132,12 @@ public class QFlag
         return Sum32;
     }
 
-    public static bool GetExist<EnumType>(EnumType Current, params EnumType[] Check)
+    public static bool GetExist<T>(T Current, params T[] Check) where T : Enum
     {
         return (GetChoice(Current) & GetChoice(Check)) == GetChoice(Check);
     }
 
-    public static bool GetEmty<EnumType>(EnumType Current)
+    public static bool GetEmty<T>(T Current) where T : Enum
     {
         return GetChoice(Current) == 0;
     }

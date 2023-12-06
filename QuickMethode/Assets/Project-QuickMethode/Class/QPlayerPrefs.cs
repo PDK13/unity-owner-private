@@ -112,7 +112,7 @@ public class QPlayerPrefs
 
     //Single
 
-    public static void SetValue<EnumType>(string Name, EnumType Value)
+    public static void SetValue<T>(string Name, T Value) where T : Enum
     {
         PlayerPrefs.SetInt(Name, QEnum.GetChoice(Value));
         PlayerPrefs.Save();
@@ -120,7 +120,7 @@ public class QPlayerPrefs
 
     //Params
 
-    public static void SetValueEnum<EnumType>(string Name, char Key, params EnumType[] Value)
+    public static void SetValueEnum<T>(string Name, char Key, params T[] Value) where T : Enum
     {
         PlayerPrefs.SetString(Name, QEncypt.GetEncypt(Key, Value.ToList()));
         PlayerPrefs.Save();
@@ -230,16 +230,16 @@ public class QPlayerPrefs
 
     //Single
 
-    public static EnumType GetValueEnum<EnumType>(string Name)
+    public static T GetValueEnum<T>(string Name)
     {
-        return QEnum.GetChoice<EnumType>(PlayerPrefs.GetInt(Name));
+        return QEnum.GetChoice<T>(PlayerPrefs.GetInt(Name));
     }
 
     //Params
 
-    public static List<EnumType> GetValueEnum<EnumType>(string Name, char Key)
+    public static List<T> GetValueEnum<T>(string Name, char Key)
     {
-        return QEncypt.GetDencyptEnum<EnumType>(Key, GetValueString(Name));
+        return QEncypt.GetDencyptEnum<T>(Key, GetValueString(Name));
     }
 
     #endregion

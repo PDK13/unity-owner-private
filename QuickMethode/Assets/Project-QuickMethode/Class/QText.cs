@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class QText
 {
-    #region ==================================== Color - Hex Color
+    #region ==================================== Color - Color Hex
 
     public static string GetColorHex(Color Color)
     {

@@ -7,8 +7,6 @@ public class QColor
 
     #region ==================================== Color
 
-    //Key "ref" use to immediately save value to primary varible param!
-
     /// <summary>
     /// Get Color with custom alpha value [0..1]
     /// </summary>

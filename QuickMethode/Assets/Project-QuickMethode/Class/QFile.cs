@@ -368,7 +368,7 @@ public class QFileIO : QPath
         SetWriteAdd(QEncypt.GetEncyptVector3Int(Key, DataAdd));
     }
 
-    public void SetWriteAdd<EnumType>(EnumType DataAdd)
+    public void SetWriteAdd<T>(T DataAdd) where T : Enum
     {
         if (TextWrite.Length != 0)
         {
@@ -604,15 +604,15 @@ public class QFileIO : QPath
         return QEncypt.GetDencyptVector3Int(Key, TextRead[ReadRun]);
     }
 
-    public EnumType GetReadAutoEnum<EnumType>()
+    public T GetReadAutoEnum<T>()
     {
         if (ReadRun >= TextRead.Count - 1)
         {
-            return QEnum.GetChoice<EnumType>(0);
+            return QEnum.GetChoice<T>(0);
         }
 
         ReadRun++;
-        return QEnum.GetChoice<EnumType>(int.Parse(TextRead[ReadRun]));
+        return QEnum.GetChoice<T>(int.Parse(TextRead[ReadRun]));
     }
 
     public bool GetReadAutoEnd()

@@ -45,7 +45,7 @@ public class QEncypt
         return string.Join(Key, Data);
     }
 
-    public static string GetEncypt<EnumType>(char Key, List<EnumType> Data)
+    public static string GetEncypt<T>(char Key, List<T> Data) where T : Enum
     {
         string Encypt = "";
         //
@@ -77,7 +77,7 @@ public class QEncypt
         return string.Join(Key, Data);
     }
 
-    public static string GetEncypt<EnumType>(char Key, params EnumType[] Data)
+    public static string GetEncypt<T>(char Key, params T[] Data) where T : Enum
     {
         string Encypt = "";
         //
@@ -159,20 +159,20 @@ public class QEncypt
         return Data.Split(Key).ToList().ConvertAll(bool.Parse);
     }
 
-    public static List<EnumType> GetDencyptEnum<EnumType>(char Key, string Data)
+    public static List<T> GetDencyptEnum<T>(char Key, string Data)
     {
         if (Data.Equals(""))
         {
-            return new List<EnumType>();
+            return new List<T>();
         }
         //
         List<string> DataString = GetDencyptString(Key, Data);
         //
-        List<EnumType> DataEnum = new List<EnumType>();
+        List<T> DataEnum = new List<T>();
         //
         for (int i = 0; i < DataString.Count; i++)
         {
-            DataEnum.Add(QEnum.GetChoice<EnumType>(int.Parse(DataString[i])));
+            DataEnum.Add(QEnum.GetChoice<T>(int.Parse(DataString[i])));
         }
         //
         return DataEnum;

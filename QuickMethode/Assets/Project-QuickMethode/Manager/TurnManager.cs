@@ -234,32 +234,32 @@ public class TurnManager : SingletonManager<TurnManager>
 
     #region Enum
 
-    public static void SetInit<EnumType>(EnumType Turn, GameObject Unit)
+    public static void SetInit<T>(T Turn, GameObject Unit) where T : Enum
     {
         SetInit(QEnum.GetChoice(Turn), Turn.ToString(), Unit);
     } //Init on Start!!
 
-    public static void SetRemove<EnumType>(EnumType Turn, GameObject Unit)
+    public static void SetRemove<T>(T Turn, GameObject Unit)
     {
         SetRemove(Turn.ToString(), Unit);
     } //Remove on Destroy!!
 
-    public static void SetEndMove<EnumType>(EnumType Turn, GameObject Unit)
+    public static void SetEndMove<T>(T Turn, GameObject Unit)
     {
         SetEndMove(Turn.ToString(), Unit);
     } //End!!
 
-    public static void SetEndTurn<EnumType>(EnumType Turn, GameObject Unit)
+    public static void SetEndTurn<T>(T Turn, GameObject Unit)
     {
         SetEndTurn(Turn.ToString(), Unit);
     } //End!!
 
-    public static void SetAdd<EnumType>(EnumType Turn, GameObject Unit, int After = 0)
+    public static void SetAdd<T>(T Turn, GameObject Unit, int After = 0) where T : Enum
     {
         SetAdd(QEnum.GetChoice(Turn), Turn.ToString(), Unit, After);
     } //Add Turn Special!!
 
-    public static void SetAdd<EnumType>(EnumType Turn, GameObject Unit, string After)
+    public static void SetAdd<T>(T Turn, GameObject Unit, string After)
     {
         SetAdd(Turn.ToString(), Unit, After);
     } //Add Turn Special!!
