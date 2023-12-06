@@ -22,29 +22,6 @@ public class QColor
 
     #endregion
 
-    #region ==================================== Color - Hex Color
-
-    public static string GetTextHex(Color Color)
-    {
-        return ColorUtility.ToHtmlStringRGB(Color);
-    }
-
-    public static string GetTextHexCode(Color Color)
-    {
-        string ColorHex = GetTextHex(Color);
-        string ColorHexCode = string.Format("#{0}", ColorHex);
-        return ColorHexCode;
-    }
-
-    public static string GetTextHexFormat(Color Color, string Text)
-    {
-        string ColorHex = GetTextHex(Color);
-        string TextFormat = string.Format("<#{0}>{1}</color>", ColorHex, Text);
-        return TextFormat;
-    }
-
-    #endregion
-
     #region ==================================== Color - Mesh Renderer & Material
 
     //Can be applied to Spine Material!!

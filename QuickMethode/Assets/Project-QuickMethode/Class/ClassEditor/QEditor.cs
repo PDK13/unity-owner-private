@@ -585,6 +585,4 @@ public class QEditorObject : QEditor
     #endregion
 } //This used for Custom Class or Struct (PropertyDrawer)!!
 
-
-
 #endif

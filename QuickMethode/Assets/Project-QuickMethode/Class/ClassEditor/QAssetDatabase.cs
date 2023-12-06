@@ -16,6 +16,11 @@ public class QAssetsDatabase : QPath
 
     #region ==================================== Create Folder
 
+    /// <summary>
+    /// Caution: Unity Editor only!
+    /// </summary>
+    /// <param name="PathChildInAssets"></param>
+    /// <returns></returns>
     public static string SetCreateFolder(params string[] PathChildInAssets)
     {
         List<string> Path = new List<string>();
@@ -26,7 +31,7 @@ public class QAssetsDatabase : QPath
         {
             Path.Add(PathChildInAssets[i]);
             //
-            QEncypt.GetEncyptAdd('/', PathString, PathChildInAssets[i], out PathString);
+            PathString = QEncypt.GetEncyptAdd('/', PathString, PathChildInAssets[i]);
             //
             SetCreateFolderExist(Path.ToArray());
         }
@@ -34,6 +39,11 @@ public class QAssetsDatabase : QPath
         return PathString;
     }
 
+    /// <summary>
+    /// Caution: Unity Editor only!
+    /// </summary>
+    /// <param name="PathChildInAssets"></param>
+    /// <returns></returns>
     private static string SetCreateFolderExist(params string[] PathChildInAssets)
     {
         //If Root Folder not Exist, then can't Create new Folder from that Root Folder
@@ -41,7 +51,7 @@ public class QAssetsDatabase : QPath
         string PathInAssets = "Assets";
         //
         for (int i = 0; i < PathChildInAssets.Length - 1; i++)
-            QEncypt.GetEncyptAdd('/', PathInAssets, PathChildInAssets[i], out PathInAssets);
+            PathInAssets = QEncypt.GetEncyptAdd('/', PathInAssets, PathChildInAssets[i]);
         //
         string PathFolderInAssets = PathChildInAssets[PathChildInAssets.Length - 1];
 
@@ -70,6 +80,11 @@ public class QAssetsDatabase : QPath
 
     #region ==================================== Delete
 
+    /// <summary>
+    /// Caution: Unity Editor only!
+    /// </summary>
+    /// <param name="PathType"></param>
+    /// <param name="PathChild"></param>
     public static void SetDelete(PathType PathType, params string[] PathChild)
     {
         FileUtil.DeleteFileOrDirectory(QPath.GetPath(PathType, PathChild) + ".meta");
@@ -82,6 +97,9 @@ public class QAssetsDatabase : QPath
 
     #region ==================================== Refresh
 
+    /// <summary>
+    /// Caution: Unity Editor only!
+    /// </summary>
     public static void SetRefresh()
     {
         AssetDatabase.Refresh();
@@ -90,8 +108,6 @@ public class QAssetsDatabase : QPath
     #endregion
 
     #region ==================================== Get
-
-#if UNITY_EDITOR
 
     /// <summary>
     /// Caution: Unity Editor only!
@@ -441,8 +457,6 @@ public class QAssetsDatabase : QPath
         //
         return ObjectsFound as List<T>;
     }
-
-#endif
 
     #endregion
 }

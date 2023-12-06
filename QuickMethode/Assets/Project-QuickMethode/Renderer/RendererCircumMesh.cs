@@ -496,11 +496,9 @@ public class RendererCircumMeshEditor : Editor
     private SerializedProperty m_outerRadius;
     private SerializedProperty m_outerDeg;
     //
-    private SerializedProperty m_interPoint;
     private SerializedProperty m_interRadius;
 
     private Vector2 m_scrollOuterPointRatio;
-    private Vector2 m_scrollInterPointRatio;
 
     private void OnEnable()
     {
@@ -512,7 +510,6 @@ public class RendererCircumMeshEditor : Editor
         m_outerRadius = QEditorCustom.GetField(this, "m_outerRadius");
         m_outerDeg = QEditorCustom.GetField(this, "m_outerDeg");
         //
-        m_interPoint = QEditorCustom.GetField(this, "m_interPoint");
         m_interRadius = QEditorCustom.GetField(this, "m_interRadius");
     }
 
