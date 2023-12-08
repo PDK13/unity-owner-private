@@ -8,61 +8,21 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-public class QResources
-{
-    //NOTE:
-    //Folder(s) "Resources" can be created everywhere from root "Assests/*", that can be access by Unity or Application
-
-    //BEWARD:
-    //All content(s) in folder(s) "Resources" will be builded to Application, even they ightn't be used in Build-Game Application
-
-    #region ==================================== Prefab
-
-    public static List<GameObject> GetPrefab(params string[] PathChildInResources)
-    {
-        string PathInResources = QPath.GetPath(QPath.PathType.None, PathChildInResources);
-        GameObject[] LoadArray = Resources.LoadAll<GameObject>(PathInResources);
-        List<GameObject> LoadList = new List<GameObject>();
-        LoadList.AddRange(LoadArray);
-        return LoadList;
-    }
-
-    #endregion
-
-    #region ==================================== Sprite
-
-    public static List<Sprite> GetSprite(params string[] PathChildInResources)
-    {
-        string PathInResources = QPath.GetPath(QPath.PathType.None, PathChildInResources);
-        Sprite[] LoadArray = Resources.LoadAll<Sprite>(PathInResources);
-        List<Sprite> LoadList = new List<Sprite>();
-        LoadList.AddRange(LoadArray);
-        return LoadList;
-    }
-
-    #endregion
-
-    #region ==================================== Text Asset
-
-    public static List<TextAsset> GetTextAsset(params string[] PathChildInResources)
-    {
-        string PathInResources = QPath.GetPath(QPath.PathType.None, PathChildInResources);
-        TextAsset[] LoadArray = Resources.LoadAll<TextAsset>(PathInResources);
-        List<TextAsset> LoadList = new List<TextAsset>();
-        LoadList.AddRange(LoadArray);
-        return LoadList;
-    }
-
-    #endregion
-}
-
 public class QPath
 {
-    public const string ExamplePath = @"D:/ClassFileIO.txt";
-
     #region ==================================== Path Get
 
-    public enum PathType { None, Persistent, Assets, Resources, Document, Picture, Music, Video, }
+    public enum PathType 
+    { 
+        None, 
+        Persistent, 
+        Assets, 
+        Resources, 
+        Document, 
+        Picture, 
+        Music, 
+        Video, 
+    }
 
     public static string GetPath(PathType PathType, params string[] PathChild)
     {
@@ -210,17 +170,19 @@ public class QPath
     #endregion
 }
 
-public class QFileIO : QPath
+public class QFileIO
 {
     #region ==================================== File IO Write 
 
-    private string TextWrite = "";
+    public List<string> DataWriteQueue { private set; get; } = new List<string>();
+
+    public string DataWriteText { private set; get; } = "";
 
     #region ------------------------------------ Write Start
 
     public void SetWriteStart(string Path)
     {
-        SetWriteToFile(Path, GetWriteString());
+        SetWriteToFile(Path, DataWriteText);
     } //Call Last
 
     private void SetWriteToFile(string Path, string Data)
@@ -241,7 +203,8 @@ public class QFileIO : QPath
 
     public void SetWriteClear()
     {
-        TextWrite = "";
+        DataWriteText = "";
+        DataWriteQueue.Clear();
     }
 
     #endregion
@@ -250,137 +213,124 @@ public class QFileIO : QPath
 
     public void SetWriteAdd()
     {
-        if (TextWrite.Length != 0)
-        {
-            TextWrite += "\n";
-        }
-
-        TextWrite += "";
+        if (DataWriteText.Length != 0)
+            DataWriteText += "\n";
+        DataWriteText += "";
+        DataWriteQueue.Add("");
     }
 
-    public void SetWriteAdd(string DataAdd)
-    {
-        if (TextWrite.Length != 0)
-        {
-            TextWrite += "\n";
-        }
+    //Primary
 
-        TextWrite += DataAdd;
+    public void SetWriteAdd(string Value)
+    {
+        if (DataWriteText.Length != 0)
+            DataWriteText += "\n";
+        DataWriteText += Value;
+        DataWriteQueue.Add(Value);
     }
 
-    public void SetWriteAdd(char Key, params string[] DataAdd)
+    public void SetWriteAdd(int Value)
     {
-        if (TextWrite.Length != 0)
-        {
-            TextWrite += "\n";
-        }
-
-        TextWrite += QEncypt.GetEncypt(Key, DataAdd.ToList());
+        if (DataWriteText.Length != 0)
+            DataWriteText += "\n";
+        DataWriteText += Value;
+        DataWriteQueue.Add(Value.ToString());
     }
 
-    public void SetWriteAdd(char Key, params int[] DataAdd)
+    public void SetWriteAdd(float Value)
     {
-        if (TextWrite.Length != 0)
-        {
-            TextWrite += "\n";
-        }
-
-        TextWrite += QEncypt.GetEncypt(Key, DataAdd.ToList());
+        if (DataWriteText.Length != 0)
+            DataWriteText += "\n";
+        DataWriteText += Value;
+        DataWriteQueue.Add(Value.ToString());
     }
 
-    public void SetWriteAdd(char Key, params float[] DataAdd)
+    public void SetWriteAdd(double Value)
     {
-        if (TextWrite.Length != 0)
-        {
-            TextWrite += "\n";
-        }
-
-        TextWrite += QEncypt.GetEncypt(Key, DataAdd.ToList());
+        if (DataWriteText.Length != 0)
+            DataWriteText += "\n";
+        DataWriteText += Value;
+        DataWriteQueue.Add(Value.ToString());
     }
 
-    public void SetWriteAdd(char Key, params bool[] DataAdd)
+    public void SetWriteAdd(bool Value)
     {
-        if (TextWrite.Length != 0)
-        {
-            TextWrite += "\n";
-        }
-
-        TextWrite += QEncypt.GetEncypt(Key, DataAdd.ToList());
+        if (DataWriteText.Length != 0)
+            DataWriteText += "\n";
+        DataWriteText += Value.ToString().ToLower();
+        DataWriteQueue.Add(Value.ToString().ToLower());
     }
 
-    public void SetWriteAdd(int DataAdd)
+    public void SetWriteAdd<T>(T Value) where T : Enum
     {
-        if (TextWrite.Length != 0)
-        {
-            TextWrite += "\n";
-        }
-
-        TextWrite += DataAdd.ToString();
+        if (DataWriteText.Length != 0)
+            DataWriteText += "\n";
+        DataWriteText += QEnum.GetChoice(Value).ToString();
+        DataWriteQueue.Add(QEnum.GetChoice(Value).ToString());
     }
 
-    public void SetWriteAdd(float DataAdd)
-    {
-        if (TextWrite.Length != 0)
-        {
-            TextWrite += "\n";
-        }
+    //Params & List
 
-        TextWrite += DataAdd.ToString();
+    public void SetWriteAdd(char Key, params string[] Value)
+    {
+        if (DataWriteText.Length != 0)
+            DataWriteText += "\n";
+        DataWriteText += QEncypt.GetEncypt(Key, Value.ToList());
+        DataWriteQueue.Add(QEncypt.GetEncypt(Key, Value.ToList()));
     }
 
-    public void SetWriteAdd(double DataAdd)
+    public void SetWriteAdd(char Key, params int[] Value)
     {
-        if (TextWrite.Length != 0)
-        {
-            TextWrite += "\n";
-        }
-
-        TextWrite += DataAdd.ToString();
+        if (DataWriteText.Length != 0)
+            DataWriteText += "\n";
+        DataWriteText += QEncypt.GetEncypt(Key, Value.ToList());
+        DataWriteQueue.Add(QEncypt.GetEncypt(Key, Value.ToList()));
     }
 
-    public void SetWriteAdd(bool DataAdd)
+    public void SetWriteAdd(char Key, params float[] Value)
     {
-        if (TextWrite.Length != 0)
-        {
-            TextWrite += "\n";
-        }
-
-        TextWrite += ((DataAdd) ? "True" : "False");
+        if (DataWriteText.Length != 0)
+            DataWriteText += "\n";
+        DataWriteText += QEncypt.GetEncypt(Key, Value.ToList());
+        DataWriteQueue.Add(QEncypt.GetEncypt(Key, Value.ToList()));
     }
 
-    public void SetWriteAdd(char Key, Vector2 DataAdd)
+    public void SetWriteAdd(char Key, params bool[] Value)
     {
-        SetWriteAdd(QEncypt.GetEncyptVector2(Key, DataAdd));
+        if (DataWriteText.Length != 0)
+            DataWriteText += "\n";
+        DataWriteText += QEncypt.GetEncypt(Key, Value.ToList());
+        DataWriteQueue.Add(QEncypt.GetEncypt(Key, Value.ToList()));
     }
 
-    public void SetWriteAdd(char Key, Vector2Int DataAdd)
+    public void SetWriteAdd<T>(char Key, params T[] Value) where T : Enum
     {
-        SetWriteAdd(QEncypt.GetEncyptVector2Int(Key, DataAdd));
+        if (DataWriteText.Length != 0)
+            DataWriteText += "\n";
+        DataWriteText += QEncypt.GetEncypt(Key, Value.ToList());
+        DataWriteQueue.Add(QEncypt.GetEncypt(Key, Value.ToList()));
     }
 
-    public void SetWriteAdd(char Key, Vector3 DataAdd)
+    //Vector
+
+    public void SetWriteAdd(char Key, Vector2 Value)
     {
-        SetWriteAdd(QEncypt.GetEncyptVector3(Key, DataAdd));
+        SetWriteAdd(QEncypt.GetEncyptVector2(Key, Value));
     }
 
-    public void SetWriteAdd(char Key, Vector3Int DataAdd)
+    public void SetWriteAdd(char Key, Vector2Int Value)
     {
-        SetWriteAdd(QEncypt.GetEncyptVector3Int(Key, DataAdd));
+        SetWriteAdd(QEncypt.GetEncyptVector2Int(Key, Value));
     }
 
-    public void SetWriteAdd<T>(T DataAdd) where T : Enum
+    public void SetWriteAdd(char Key, Vector3 Value)
     {
-        if (TextWrite.Length != 0)
-        {
-            TextWrite += "\n";
-        }
-
-        TextWrite += QEnum.GetChoice(DataAdd).ToString();
+        SetWriteAdd(QEncypt.GetEncyptVector3(Key, Value));
     }
 
-    public string GetWriteString()
+    public void SetWriteAdd(char Key, Vector3Int Value)
     {
-        return TextWrite;
+        SetWriteAdd(QEncypt.GetEncyptVector3Int(Key, Value));
     }
 
     #endregion
@@ -389,14 +339,17 @@ public class QFileIO : QPath
 
     #region ==================================== File IO Read
 
-    private List<string> TextRead = new List<string>();
-    private int ReadRun = -1;
+    public List<string> DataReadQueue { private set; get; } = new List<string>();
+
+    public int RunRead { private set; get; } = -1;
+
+    public bool RunReadEnd => RunRead >= DataReadQueue.Count - 1;
 
     #region ------------------------------------ Read Start
 
     public void SetReadStart(string Path)
     {
-        TextRead = GetReadFromFile(Path);
+        DataReadQueue = GetReadFromFile(Path);
     } //Call First
 
     private List<string> GetReadFromFile(string Path)
@@ -423,7 +376,7 @@ public class QFileIO : QPath
 
     public void SetReadStart(TextAsset FileTest)
     {
-        TextRead = GetReadFromFile(FileTest);
+        DataReadQueue = GetReadFromFile(FileTest);
     } //Call First
 
     private List<string> GetReadFromFile(TextAsset FileTest)
@@ -443,191 +396,152 @@ public class QFileIO : QPath
 
     public void SetReadClear()
     {
-        TextRead = new List<string>();
-        ReadRun = -1;
+        DataReadQueue = new List<string>();
+        RunRead = -1;
+    }
+
+    public void SetReadReset()
+    {
+        RunRead = -1;
     }
 
     #endregion
 
     #region ------------------------------------ Read Auto
 
+    //Emty
+
     public void GetReadAuto()
     {
-        if (ReadRun >= TextRead.Count - 1)
-        {
+        if (RunRead >= DataReadQueue.Count - 1)
             return;
-        }
-
-        ReadRun++;
+        RunRead++;
     }
+
+    //Primary
 
     public string GetReadAutoString()
     {
-        if (ReadRun >= TextRead.Count - 1)
-        {
+        if (RunRead >= DataReadQueue.Count - 1)
             return "";
-        }
-
-        ReadRun++;
-        return TextRead[ReadRun];
-    }
-
-    public List<string> GetReadAutoString(char Key)
-    {
-        if (ReadRun >= TextRead.Count - 1)
-        {
-            return new List<string>();
-        }
-
-        ReadRun++;
-        return QEncypt.GetDencyptString(Key, TextRead[ReadRun]);
-    }
-
-    public List<int> GetReadAutoInt(char Key)
-    {
-        if (ReadRun >= TextRead.Count - 1)
-        {
-            return new List<int>();
-        }
-
-        ReadRun++;
-        return QEncypt.GetDencyptInt(Key, TextRead[ReadRun]);
-    }
-
-    public List<float> GetReadAutoFloat(char Key)
-    {
-        if (ReadRun >= TextRead.Count - 1)
-        {
-            return new List<float>();
-        }
-
-        ReadRun++;
-        return QEncypt.GetDencyptFloat(Key, TextRead[ReadRun]);
-    }
-
-    public List<bool> GetReadAutoBool(char Key)
-    {
-        if (ReadRun >= TextRead.Count - 1)
-        {
-            return new List<bool>();
-        }
-
-        ReadRun++;
-        return QEncypt.GetDencyptBool(Key, TextRead[ReadRun]);
+        RunRead++;
+        return DataReadQueue[RunRead];
     }
 
     public int GetReadAutoInt()
     {
-        if (ReadRun >= TextRead.Count - 1)
-        {
+        if (RunRead >= DataReadQueue.Count - 1)
             return 0;
-        }
-
-        ReadRun++;
-        return int.Parse(TextRead[ReadRun]);
+        RunRead++;
+        return int.Parse(DataReadQueue[RunRead]);
     }
 
     public float GetReadAutoFloat()
     {
-        if (ReadRun >= TextRead.Count - 1)
-        {
+        if (RunRead >= DataReadQueue.Count - 1)
             return 0f;
-        }
-
-        ReadRun++;
-        return float.Parse(TextRead[ReadRun]);
+        RunRead++;
+        return float.Parse(DataReadQueue[RunRead]);
     }
 
     public double GetReadAutoDouble()
     {
-        if (ReadRun >= TextRead.Count - 1)
-        {
+        if (RunRead >= DataReadQueue.Count - 1)
             return 0f;
-        }
-
-        ReadRun++;
-        return double.Parse(TextRead[ReadRun]);
+        RunRead++;
+        return double.Parse(DataReadQueue[RunRead]);
     }
 
     public bool GetReadAutoBool()
     {
-        if (ReadRun >= TextRead.Count - 1)
-        {
+        if (RunRead >= DataReadQueue.Count - 1)
             return false;
-        }
-
-        ReadRun++;
-        return TextRead[ReadRun] == "True";
+        RunRead++;
+        return DataReadQueue[RunRead].ToLower() == "true";
     }
+
+    public T GetReadAutoEnum<T>() where T : Enum
+    {
+        if (RunRead >= DataReadQueue.Count - 1)
+            return QEnum.GetChoice<T>(0);
+        RunRead++;
+        return QEnum.GetChoice<T>(int.Parse(DataReadQueue[RunRead]));
+    }
+
+    //Params & List
+
+    public List<string> GetReadAutoString(char Key)
+    {
+        if (RunRead >= DataReadQueue.Count - 1)
+            return new List<string>();
+        RunRead++;
+        return QEncypt.GetDencyptString(Key, DataReadQueue[RunRead]);
+    }
+
+    public List<int> GetReadAutoInt(char Key)
+    {
+        if (RunRead >= DataReadQueue.Count - 1)
+            return new List<int>();
+        RunRead++;
+        return QEncypt.GetDencyptInt(Key, DataReadQueue[RunRead]);
+    }
+
+    public List<float> GetReadAutoFloat(char Key)
+    {
+        if (RunRead >= DataReadQueue.Count - 1)
+            return new List<float>();
+        RunRead++;
+        return QEncypt.GetDencyptFloat(Key, DataReadQueue[RunRead]);
+    }
+
+    public List<bool> GetReadAutoBool(char Key)
+    {
+        if (RunRead >= DataReadQueue.Count - 1)
+            return new List<bool>();
+        RunRead++;
+        return QEncypt.GetDencyptBool(Key, DataReadQueue[RunRead]);
+    }
+
+    public List<T> GetReadAutoString<T>(char Key) where T : Enum
+    {
+        if (RunRead >= DataReadQueue.Count - 1)
+            return new List<T>();
+        RunRead++;
+        return QEncypt.GetDencyptEnum<T>(Key, DataReadQueue[RunRead]);
+    }
+
+    //Vector
 
     public Vector2 GetReadAutoVector2(char Key)
     {
-        if (ReadRun >= TextRead.Count - 1)
-        {
+        if (RunRead >= DataReadQueue.Count - 1)
             return new Vector2();
-        }
-
-        ReadRun++;
-        return QEncypt.GetDencyptVector2(Key, TextRead[ReadRun]);
+        RunRead++;
+        return QEncypt.GetDencyptVector2(Key, DataReadQueue[RunRead]);
     }
 
     public Vector2Int GetReadAutoVector2Int(char Key)
     {
-        if (ReadRun >= TextRead.Count - 1)
-        {
+        if (RunRead >= DataReadQueue.Count - 1)
             return new Vector2Int();
-        }
-
-        ReadRun++;
-        return QEncypt.GetDencyptVector2Int(Key, TextRead[ReadRun]);
+        RunRead++;
+        return QEncypt.GetDencyptVector2Int(Key, DataReadQueue[RunRead]);
     }
 
     public Vector3 GetReadAutoVector3(char Key)
     {
-        if (ReadRun >= TextRead.Count - 1)
-        {
+        if (RunRead >= DataReadQueue.Count - 1)
             return new Vector3();
-        }
-
-        ReadRun++;
-        return QEncypt.GetDencyptVector3(Key, TextRead[ReadRun]);
+        RunRead++;
+        return QEncypt.GetDencyptVector3(Key, DataReadQueue[RunRead]);
     }
 
     public Vector3Int GetReadAutoVector3Int(char Key)
     {
-        if (ReadRun >= TextRead.Count - 1)
-        {
+        if (RunRead >= DataReadQueue.Count - 1)
             return new Vector3Int();
-        }
-
-        ReadRun++;
-        return QEncypt.GetDencyptVector3Int(Key, TextRead[ReadRun]);
-    }
-
-    public T GetReadAutoEnum<T>()
-    {
-        if (ReadRun >= TextRead.Count - 1)
-        {
-            return QEnum.GetChoice<T>(0);
-        }
-
-        ReadRun++;
-        return QEnum.GetChoice<T>(int.Parse(TextRead[ReadRun]));
-    }
-
-    public bool GetReadAutoEnd()
-    {
-        return ReadRun >= TextRead.Count - 1;
-    }
-
-    public int GetReadAutoCurrent()
-    {
-        return ReadRun;
-    }
-
-    public List<string> GetRead()
-    {
-        return TextRead;
+        RunRead++;
+        return QEncypt.GetDencyptVector3Int(Key, DataReadQueue[RunRead]);
     }
 
     #endregion
@@ -668,7 +582,7 @@ public class QJSON
     {
         QFileIO FileIO = new QFileIO();
         FileIO.SetReadStart(Path);
-        List<string> JSonRead = FileIO.GetRead();
+        List<string> JSonRead = FileIO.DataReadQueue;
         //
         string JsonData = "";
         for (int i = 0; i < JSonRead.Count; i++)

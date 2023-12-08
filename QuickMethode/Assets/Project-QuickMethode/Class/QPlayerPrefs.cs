@@ -130,7 +130,7 @@ public class QPlayerPrefs
 
     #region ------------------------------------ Set DateTime
 
-    public static void SetValue(string Name, DateTime Value, string Format = QDateTime.DD_MM_YYYY)
+    public static void SetValue(string Name, DateTime Value, string Format)
     {
         SetValue(Name, Value.ToString(Format));
     }
@@ -237,7 +237,7 @@ public class QPlayerPrefs
 
     //Params
 
-    public static List<T> GetValueEnum<T>(string Name, char Key)
+    public static List<T> GetValueEnum<T>(string Name, char Key) where T : Enum
     {
         return QEncypt.GetDencyptEnum<T>(Key, GetValueString(Name));
     }
@@ -246,7 +246,7 @@ public class QPlayerPrefs
 
     #region ------------------------------------ Get Time
 
-    public static DateTime GetValueDateTime(string Name, string FormatTime = QDateTime.DD_MM_YYYY)
+    public static DateTime GetValueDateTime(string Name, string FormatTime)
     {
         return QDateTime.GetConvert(GetValueString(Name), FormatTime);
     }

@@ -447,7 +447,7 @@ public class QAIML
     /// <returns></returns>
     public bool GetFileExist(string Path)
     {
-        return QFileIO.GetPathFileExist(Path);
+        return QPath.GetPathFileExist(Path);
     }
 
     /// <summary>
