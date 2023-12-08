@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using System;
+using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -42,7 +44,7 @@ public class QGameObject
 
     //Component
 
-    public static T SetCreateComponent<T>(GameObject Prepab, Transform Parent = null, bool WorldStay = true) where T : Component
+    public static T SetCreate<T>(GameObject Prepab, Transform Parent = null, bool WorldStay = true) where T : Component
     {
         GameObject GameObject = SetCreate(Prepab, Parent, WorldStay);
         //
@@ -55,7 +57,7 @@ public class QGameObject
             return GameObject.GetComponent<T>();
     }
 
-    public static T SetCreateComponent<T>(string Name, Transform Parent = null, bool WorldStay = true) where T : Component
+    public static T SetCreate<T>(string Name, Transform Parent = null, bool WorldStay = true) where T : Component
     {
         return SetCreate(Name, Parent, WorldStay).AddComponent<T>();
     }
@@ -125,11 +127,7 @@ public class QGameObject
 
     //Prefab
 
-    /// <summary>
-    /// Caution: Unity Editor only!
-    /// </summary>
-    /// <param name="From"></param>
-    /// <returns></returns>
+    ///<summary><b>(UnityEditorOnly)</b></summary>
     public static bool GetCheckPrefab(GameObject From)
     {
         //Check if GameObject is a Prefab?!
@@ -142,17 +140,13 @@ public class QGameObject
 
     //Focus
 
-    ///<summary>
-    ///Caution: Unity Editor only!
-    ///</summary>
+    ///<summary><b>(UnityEditorOnly)</b></summary>
     public static GameObject SetFocus(GameObject From)
     {
         return Selection.activeGameObject = From;
     }
 
-    ///<summary>
-    ///Caution: Unity Editor only!
-    ///</summary>
+    ///<summary><b>(UnityEditorOnly)</b></summary>
     public static GameObject GetFocus()
     {
         return Selection.activeGameObject;
@@ -217,6 +211,73 @@ public class QComponent
         //Caution: Some version of Unity might not run this after build app!!
 
         From.onClick.AddListener(Action);
+    }
+
+    #endregion
+}
+
+public class QLayer
+{
+    public enum UnityTagType
+    {
+        Untagged,
+        Respawm,
+        Finish,
+        EditorOnly,
+        MainCamera,
+        Player,
+        GameController,
+    }
+
+    [Flags]
+    public enum UnityLayerType
+    {
+        Default = 0,
+        TransparentFX = 1,
+        IgnoreRaycast = 2,
+        Water = 4,
+        UI = 5,
+    }
+
+    #region ==================================== Primary
+
+    public static int GetLayerMask(params string[] LayerName)
+    {
+        return LayerMask.GetMask(LayerName);
+    }
+
+    public static int GetLayerMaskSingle(string LayerName)
+    {
+        return LayerMask.NameToLayer(LayerName);
+    }
+
+    #endregion
+
+    #region ==================================== GameObject & Component
+
+    public static void SetLayerMask(GameObject From, string LayerName)
+    {
+        From.layer = GetLayerMaskSingle(LayerName);
+    }
+
+    public static void SetLayerMask(PlatformEffector2D Platform, params string[] LayerName)
+    {
+        Platform.colliderMask = GetLayerMask(LayerName);
+    }
+
+    public static void SetLayerMask(AreaEffector2D Platform, params string[] LayerName)
+    {
+        Platform.colliderMask = GetLayerMask(LayerName);
+    }
+
+    public static void SetLayerMask(PointEffector2D Platform, params string[] LayerName)
+    {
+        Platform.colliderMask = GetLayerMask(LayerName);
+    }
+
+    public static void SetLayerMask(SurfaceEffector2D Platform, params string[] LayerName)
+    {
+        Platform.colliderMask = GetLayerMask(LayerName);
     }
 
     #endregion

@@ -24,7 +24,7 @@ public class UniqueEditor : Editor
 
         if (QGameObject.GetCheckPrefab(m_target.gameObject))
         {
-            if (QEditor.SetButton("Refresh"))
+            if (QUnityEditor.SetButton("Refresh"))
             {
                 m_target.SetUpdateRefresh();
             }

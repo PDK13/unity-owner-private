@@ -337,75 +337,75 @@ public class RendererCircumPointEditor : Editor
     {
         m_target = target as RendererCircumPoint;
         //
-        m_outerPoint = QEditorCustom.GetField(this, "m_outerPoint");
-        m_outerRadius = QEditorCustom.GetField(this, "m_outerRadius");
-        m_outerDeg = QEditorCustom.GetField(this, "m_outerDeg");
+        m_outerPoint = QUnityEditorCustom.GetField(this, "m_outerPoint");
+        m_outerRadius = QUnityEditorCustom.GetField(this, "m_outerRadius");
+        m_outerDeg = QUnityEditorCustom.GetField(this, "m_outerDeg");
     }
 
     public override void OnInspectorGUI()
     {
-        QEditorCustom.SetUpdate(this);
+        QUnityEditorCustom.SetUpdate(this);
         //
-        QEditor.SetLabel("SETTING", QEditor.GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter));
+        QUnityEditor.SetLabel("SETTING", QUnityEditor.GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter));
         //
-        QEditorCustom.SetField(m_outerPoint);
+        QUnityEditorCustom.SetField(m_outerPoint);
         //
         if (m_target.OuterPointRatio.Length != m_target.OuterPoint)
             m_target.OuterPointRatio = new float[m_target.OuterPoint];
         //
         int i = 0;
-        m_scrollOuterPointRatio = QEditor.SetScrollViewBegin(m_scrollOuterPointRatio, QEditor.GetGUIHeight(105));
+        m_scrollOuterPointRatio = QUnityEditor.SetScrollViewBegin(m_scrollOuterPointRatio, QUnityEditor.GetGUIHeight(105));
         while (i < m_target.OuterPoint)
         {
             if (m_target.OuterPointRatio[i] < 0 && m_target.OuterPointRatio[i] < -m_target.OuterRadius)
                 m_target.OuterPointRatio[i] = -m_target.OuterRadius;
             //
             //VIEW:
-            QEditor.SetHorizontalBegin();
-            QEditor.SetLabel(string.Format("{0}", i), QEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter), QEditor.GetGUIWidth(25));
-            m_target.OuterPointRatio[i] = QEditor.SetField(m_target.OuterPointRatio[i], null, QEditor.GetGUIWidth(50));
+            QUnityEditor.SetHorizontalBegin();
+            QUnityEditor.SetLabel(string.Format("{0}", i), QUnityEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter), QUnityEditor.GetGUIWidth(25));
+            m_target.OuterPointRatio[i] = QUnityEditor.SetField(m_target.OuterPointRatio[i], null, QUnityEditor.GetGUIWidth(50));
             //
             if (m_target.Data != null)
                 if (m_target.Data.OuterPoints != null)
                     if (i < m_target.Data.OuterPoints.Length)
-                        QEditor.SetLabel(((Vector2)m_target.Data.OuterPoints[i]).ToString(), QEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter));
+                        QUnityEditor.SetLabel(((Vector2)m_target.Data.OuterPoints[i]).ToString(), QUnityEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter));
             //
-            QEditor.SetHorizontalEnd();
+            QUnityEditor.SetHorizontalEnd();
             //VIEW:
             //
             i++;
         }
-        QEditor.SetScrollViewEnd();
+        QUnityEditor.SetScrollViewEnd();
         //
-        QEditorCustom.SetField(m_outerRadius);
-        QEditorCustom.SetField(m_outerDeg);
+        QUnityEditorCustom.SetField(m_outerRadius);
+        QUnityEditorCustom.SetField(m_outerDeg);
         //
-        QEditor.SetSpace(10);
+        QUnityEditor.SetSpace(10);
         //
-        QEditor.SetLabel("SAMPLE", QEditor.GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter));
+        QUnityEditor.SetLabel("SAMPLE", QUnityEditor.GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter));
         //
-        QEditor.SetHorizontalBegin();
-        if (QEditor.SetButton("Star A"))
+        QUnityEditor.SetHorizontalBegin();
+        if (QUnityEditor.SetButton("Star A"))
             m_target.SetSampleStarA();
-        if (QEditor.SetButton("Star B"))
+        if (QUnityEditor.SetButton("Star B"))
             m_target.SetSampleStarB();
-        QEditor.SetHorizontalEnd();
+        QUnityEditor.SetHorizontalEnd();
         //
-        QEditor.SetHorizontalBegin();
-        if (QEditor.SetButton("Star C"))
+        QUnityEditor.SetHorizontalBegin();
+        if (QUnityEditor.SetButton("Star C"))
             m_target.SetSampleStarC();
-        if (QEditor.SetButton("Star D"))
+        if (QUnityEditor.SetButton("Star D"))
             m_target.SetSampleStarD();
-        QEditor.SetHorizontalEnd();
+        QUnityEditor.SetHorizontalEnd();
         //
-        QEditor.SetHorizontalBegin();
-        if (QEditor.SetButton("Star E"))
+        QUnityEditor.SetHorizontalBegin();
+        if (QUnityEditor.SetButton("Star E"))
             m_target.SetSampleStarE();
-        if (QEditor.SetButton("Star F"))
+        if (QUnityEditor.SetButton("Star F"))
             m_target.SetSampleStarF();
-        QEditor.SetHorizontalEnd();
+        QUnityEditor.SetHorizontalEnd();
         //
-        QEditorCustom.SetApply(this);
+        QUnityEditorCustom.SetApply(this);
     }
 }
 

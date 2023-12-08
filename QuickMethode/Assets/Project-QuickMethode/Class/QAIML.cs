@@ -456,7 +456,7 @@ public class QAIML
     /// <param name="Path"></param>
     public void SetFileSave(string Path)
     {
-        QFileIO FileIO = new QFileIO();
+        QDataFile FileIO = new QDataFile();
 
         FileIO.SetWriteAdd("LayerCount:");
         FileIO.SetWriteAdd(m_LayerCount);
@@ -497,7 +497,7 @@ public class QAIML
     /// <param name="Path"></param>
     public void SetFileOpen(string Path)
     {
-        QFileIO FileIO = new QFileIO();
+        QDataFile FileIO = new QDataFile();
 
         FileIO.SetReadStart(Path);
 

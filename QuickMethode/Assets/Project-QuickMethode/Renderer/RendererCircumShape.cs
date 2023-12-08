@@ -195,38 +195,38 @@ public class ShapeCreatorEditor : Editor
     {
         m_target = target as RendererCircumShape;
         //
-        m_spriteShape = QEditorCustom.GetField(this, "m_spriteShape");
+        m_spriteShape = QUnityEditorCustom.GetField(this, "m_spriteShape");
         //
-        FilledRadius = QEditorCustom.GetField(this, "FilledRadius");
-        FilledCut = QEditorCustom.GetField(this, "FilledCut");
+        FilledRadius = QUnityEditorCustom.GetField(this, "FilledRadius");
+        FilledCut = QUnityEditorCustom.GetField(this, "FilledCut");
         //
-        HollowRadius = QEditorCustom.GetField(this, "HollowRadius");
-        HollowCut = QEditorCustom.GetField(this, "HollowCut");
+        HollowRadius = QUnityEditorCustom.GetField(this, "HollowRadius");
+        HollowCut = QUnityEditorCustom.GetField(this, "HollowCut");
     }
 
     public override void OnInspectorGUI()
     {
-        QEditorCustom.SetUpdate(this);
+        QUnityEditorCustom.SetUpdate(this);
         //
-        QEditorCustom.SetField(m_spriteShape);
+        QUnityEditorCustom.SetField(m_spriteShape);
         //
-        QEditorCustom.SetField(FilledRadius);
+        QUnityEditorCustom.SetField(FilledRadius);
         //
-        if (QEditor.SetButton("Generate Filled"))
+        if (QUnityEditor.SetButton("Generate Filled"))
             m_target.SetGenerateFilled();
         //
-        QEditorCustom.SetField(FilledCut);
+        QUnityEditorCustom.SetField(FilledCut);
         //
-        if (QEditor.SetButton("Generate Filled Open"))
+        if (QUnityEditor.SetButton("Generate Filled Open"))
             m_target.SetGenerateFilledOpen();
         //
-        QEditorCustom.SetField(HollowRadius);
-        QEditorCustom.SetField(HollowCut);
+        QUnityEditorCustom.SetField(HollowRadius);
+        QUnityEditorCustom.SetField(HollowCut);
         //
-        if (QEditor.SetButton("Generate Hollow"))
+        if (QUnityEditor.SetButton("Generate Hollow"))
             m_target.SetGenerateHollow();
         //
-        QEditorCustom.SetApply(this);
+        QUnityEditorCustom.SetApply(this);
     }
 }
 

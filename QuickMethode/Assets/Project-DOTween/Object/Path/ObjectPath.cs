@@ -321,45 +321,45 @@ public class TweenMovePathEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        QEditorCustom.SetUpdate(this);
+        QUnityEditorCustom.SetUpdate(this);
         //
-        QEditor.SetDisableGroupBegin(Application.isPlaying);
+        QUnityEditor.SetDisableGroupBegin(Application.isPlaying);
         //
-        QEditorCustom.SetField(m_activeType);
+        QUnityEditorCustom.SetField(m_activeType);
         //
-        QEditor.SetSpace(10);
+        QUnityEditor.SetSpace(10);
         //
-        QEditorCustom.SetField(m_tweenType);
-        QEditorCustom.SetField(m_easeType);
-        QEditorCustom.SetField(m_pathType);
+        QUnityEditorCustom.SetField(m_tweenType);
+        QUnityEditorCustom.SetField(m_easeType);
+        QUnityEditorCustom.SetField(m_pathType);
         //
-        QEditor.SetSpace(10);
+        QUnityEditor.SetSpace(10);
         //
-        QEditorCustom.SetField(m_duration);
-        QEditorCustom.SetField(m_timeScaleRevert);
+        QUnityEditorCustom.SetField(m_duration);
+        QUnityEditorCustom.SetField(m_timeScaleRevert);
         //
-        QEditor.SetSpace(10);
+        QUnityEditor.SetSpace(10);
         //
-        if (QEditor.SetButton("Add Path"))
+        if (QUnityEditor.SetButton("Add Path"))
         {
             m_target.SetPathAdd();
         }
 
-        if (QEditor.SetButton("Remove Path"))
+        if (QUnityEditor.SetButton("Remove Path"))
         {
             m_target.SetPathRemove();
         }
         //
-        QEditorCustom.SetField(m_pathList);
+        QUnityEditorCustom.SetField(m_pathList);
         //
-        QEditor.SetSpace(10);
+        QUnityEditor.SetSpace(10);
         //
-        QEditorCustom.SetField(m_colliderBase);
-        QEditorCustom.SetField(m_rigidbodyBase);
+        QUnityEditorCustom.SetField(m_colliderBase);
+        QUnityEditorCustom.SetField(m_rigidbodyBase);
         //
-        QEditor.SetDisableGroupEnd();
+        QUnityEditor.SetDisableGroupEnd();
         //
-        QEditorCustom.SetApply(this);
+        QUnityEditorCustom.SetApply(this);
     }
 
     private void OnSceneGUI()

@@ -113,6 +113,11 @@ public class QEncypt
         return Data + ((Data.Length != 0) ? Key.ToString() : "") + (DataAdd.ToString().ToLower());
     }
 
+    public static string GetEncyptAdd<T>(char Key, string Data, T DataAdd) where T : Enum
+    {
+        return Data + ((Data.Length != 0) ? Key.ToString() : "") + DataAdd;
+    }
+
     //List
 
     public static string GetEncyptAdd(char Key, string Data, List<string> DataAdd)
@@ -131,6 +136,11 @@ public class QEncypt
     }
 
     public static string GetEncyptAdd(char Key, string Data, List<bool> DataAdd)
+    {
+        return Data + ((Data.Length != 0) ? Key.ToString() : "") + GetEncypt(Key, DataAdd);
+    }
+
+    public static string GetEncyptAdd<T>(char Key, string Data, List<T> DataAdd) where T : Enum
     {
         return Data + ((Data.Length != 0) ? Key.ToString() : "") + GetEncypt(Key, DataAdd);
     }

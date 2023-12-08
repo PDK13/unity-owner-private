@@ -51,8 +51,8 @@ public class ColliderFixedEditor : Editor
                 EditorGUILayout.PropertyField(m_fixedOffsetY);
             }
 
-            QEditor.SetSpace(10f);
-            if (QEditor.SetButton("Fixed"))
+            QUnityEditor.SetSpace(10f);
+            if (QUnityEditor.SetButton("Fixed"))
             {
                 Target.SetFixed();
             }

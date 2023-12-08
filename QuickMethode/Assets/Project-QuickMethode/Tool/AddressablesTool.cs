@@ -25,7 +25,7 @@ public class AddressablesTool : EditorWindow
 
     private void OnGUI()
     {
-        if (QEditor.SetButton("Refresh"))
+        if (QUnityEditor.SetButton("Refresh"))
             SetAddressablesRefresh();
     }
 

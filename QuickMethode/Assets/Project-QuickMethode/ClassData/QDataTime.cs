@@ -2,7 +2,7 @@ using System.Globalization;
 using System;
 using UnityEngine;
 
-public class ClassDataTime
+public class QDataTime
 {
     [SerializeField] private string m_name;
 
@@ -10,7 +10,7 @@ public class ClassDataTime
 
     private string TimeNowString => DateTime.Now.ToString(DATE_FORMAT, CultureInfo.CreateSpecificCulture("en-US")); //Date now to string format!!
 
-    public ClassDataTime(string Name)
+    public QDataTime(string Name)
     {
         this.m_name = Name;
     }
