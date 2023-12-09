@@ -105,7 +105,7 @@ public class IsometricTool : EditorWindow
         QUnityEditor.SetSpace(5f);
         QUnityEditor.SetLabel("MAIN MANAGER", QUnityEditor.GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter), QUnityEditorWindow.GetGUILayoutWidth(this));
         //
-        //if (QEditor.SetButton((m_main == MainType.World ? "WORLD" : "BLOCK"), null, QEditorWindow.GetGUILayoutWidth(this)))
+        //if (QUnityEditor.SetButton((m_main == MainType.World ? "WORLD" : "BLOCK"), null, QUnityEditorWindow.GetGUILayoutWidth(this)))
         //    m_main = m_main == MainType.World ? MainType.Block : MainType.World;
         //
         switch (m_main)
