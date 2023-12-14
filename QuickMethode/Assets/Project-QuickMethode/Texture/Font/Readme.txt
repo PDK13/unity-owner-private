@@ -9,7 +9,7 @@
 6. Font Atlas was Created got it own Default Material inside it.
 7. Duplicate the Default Material.
 8. Chance that Material's Name, but still got it father name.
-Ex: If father name "Simple-Font SDF Material", then child name "Simple-Font SDF Material-Grow"
+Ex: If father name "Sample-Font SDF Material", then child name "Sample-Font SDF Material-Grow"
 
 * Fix Font error Pink:
 - Just chance Shader to "GUI/Text Shader".

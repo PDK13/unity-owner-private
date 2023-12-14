@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-[CreateAssetMenu(fileName = "message-text-config", menuName = "Message/Text Config", order = 0)]
+[CreateAssetMenu(fileName = "message-text-config", menuName = "QConfig/Message Text", order = 1)]
 public class MessageDataConfigText : ScriptableObject
 {
     public List<MessageDataText> Message = new List<MessageDataText>();
@@ -88,13 +88,13 @@ public class MessageDataConfigTextEditor : Editor
         }
         //
         if (AuthorConfigFound.Count > 1)
-            Debug.Log("[Message] Config found more than one, get the first one found");
+            Debug.Log("[Message] found more than one, get the first one found");
         //
         m_messageConfig = AuthorConfigFound[0];
         //
         if (m_messageConfig.Author.Count == 0)
         {
-            m_debugError = "Author Config not have any data, please add one";
+            m_debugError = "Author not have any data, please add one";
             Debug.Log("[Message] " + m_debugError);
             return;
         }
