@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -8,7 +9,6 @@ using UnityEngine.UI;
 public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     public Image Image;
-    public RectTransform RectTransform;
     public CanvasGroup CanvasGroup;
 
     public bool Lock = false;
@@ -67,13 +67,10 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private void Start()
     {
         if (Image == null)
-            Image = GetComponent<Image>();
-        //
-        if (RectTransform == null)
-            RectTransform = GetComponent<RectTransform>();
+            Image = QComponent.GetComponent<Image>(gameObject);
         //
         if (CanvasGroup == null)
-            CanvasGroup = GetComponent<CanvasGroup>();
+            CanvasGroup = QComponent.GetComponent<CanvasGroup>(gameObject);
     }
 
     private void OnDestroy()
@@ -106,7 +103,7 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public void SetButtonPress()
     {
         Image.color = ColorEvent.Ready;
-        RectTransform.localScale = ScaleEvent.Ready;
+        transform.localScale = ScaleEvent.Ready;
         CanvasGroup.alpha = AlphaEvent.Ready;
         //
         SetEventPointerDown();
@@ -133,13 +130,13 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             if (Hold || HoldActive)
             {
                 Image.color = ColorEvent.Hold;
-                RectTransform.localScale = ScaleEvent.Hold;
+                transform.localScale = ScaleEvent.Hold;
                 CanvasGroup.alpha = AlphaEvent.Hold;
             }
             else
             {
                 Image.color = ColorEvent.Ready;
-                RectTransform.localScale = ScaleEvent.Ready;
+                transform.localScale = ScaleEvent.Ready;
                 CanvasGroup.alpha = AlphaEvent.Ready;
             }
             //
@@ -161,13 +158,13 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             if (Hold)
             {
                 Image.color = HoldActive ? ColorEvent.Hold : ColorEvent.Ready;
-                RectTransform.localScale = HoldActive ? ScaleEvent.Hold : ScaleEvent.Ready;
+                transform.localScale = HoldActive ? ScaleEvent.Hold : ScaleEvent.Ready;
                 CanvasGroup.alpha = HoldActive ? AlphaEvent.Hold : AlphaEvent.Ready;
             }
             else
             {
                 Image.color = ColorEvent.Normal;
-                RectTransform.localScale = ScaleEvent.Normal;
+                transform.localScale = ScaleEvent.Normal;
                 CanvasGroup.alpha = AlphaEvent.Normal;
             }
             //
@@ -197,20 +194,20 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         if (Hold)
         {
             Image.color = HoldActive ? ColorEvent.Hold : ColorEvent.Ready;
-            RectTransform.localScale = HoldActive ? ScaleEvent.Hold : ScaleEvent.Ready;
+            transform.localScale = HoldActive ? ScaleEvent.Hold : ScaleEvent.Ready;
             CanvasGroup.alpha = HoldActive ? AlphaEvent.Hold : AlphaEvent.Ready;
         }
         else
         if (Ready)
         {
             Image.color = ColorEvent.Ready;
-            RectTransform.localScale = ScaleEvent.Ready;
+            transform.localScale = ScaleEvent.Ready;
             CanvasGroup.alpha = AlphaEvent.Ready;
         }
         else
         {
             Image.color = ColorEvent.Normal;
-            RectTransform.localScale = ScaleEvent.Normal;
+            transform.localScale = ScaleEvent.Normal;
             CanvasGroup.alpha = AlphaEvent.Ready;
         }
         //
@@ -226,7 +223,7 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         //
         HoldActive = true;
         Image.color = ColorEvent.Hold;
-        RectTransform.localScale = ScaleEvent.Hold;
+        transform.localScale = ScaleEvent.Hold;
         CanvasGroup.alpha = AlphaEvent.Hold;
         //
         while (Hold)
