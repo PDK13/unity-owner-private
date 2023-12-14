@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 161030645}
   - component: {fileID: 161030644}
   m_Layer: 5
-  m_Name: ui-drag-B
+  m_Name: ui-item-B
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -175,17 +175,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Lock: 0
-  m_Pivot: {x: 0.5, y: 0.5}
-  DragEvent:
-    OnDragBegin:
-      m_PersistentCalls:
-        m_Calls: []
-    OnDrag:
-      m_PersistentCalls:
-        m_Calls: []
-    OnDragEnd:
-      m_PersistentCalls:
-        m_Calls: []
 --- !u!114 &161030645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,7 +188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0.13546324, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -490,7 +479,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -705,7 +694,7 @@ GameObject:
   - component: {fileID: 995164210}
   - component: {fileID: 995164212}
   m_Layer: 5
-  m_Name: ui-drag-A
+  m_Name: ui-item-A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -782,17 +771,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Lock: 0
-  m_Pivot: {x: 0.5, y: 0.5}
-  DragEvent:
-    OnDragBegin:
-      m_PersistentCalls:
-        m_Calls: []
-    OnDrag:
-      m_PersistentCalls:
-        m_Calls: []
-    OnDragEnd:
-      m_PersistentCalls:
-        m_Calls: []
 --- !u!1 &1381792093
 GameObject:
   m_ObjectHideFlags: 0
@@ -843,7 +821,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1041,10 +1019,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Lock: 0
-  DropEvent:
-    OnDrop:
-      m_PersistentCalls:
-        m_Calls: []
+  Fixed: 1
+  Once: 1
 --- !u!1 &1987535554
 GameObject:
   m_ObjectHideFlags: 0
@@ -1097,7 +1073,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.754717, g: 0.754717, b: 0.754717, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1135,10 +1111,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Lock: 0
-  DropEvent:
-    OnDrop:
-      m_PersistentCalls:
-        m_Calls: []
+  Fixed: 1
+  Once: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
