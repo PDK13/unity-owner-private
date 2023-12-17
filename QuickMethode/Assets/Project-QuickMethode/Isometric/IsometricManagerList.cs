@@ -3,22 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class IsometricDataList
+public class IsometricManagerList
 {
     public Action onListRead;
 
     public List<IsometricDataBlockListTag> BlockList;
 
-    public IsometricDataList()
+    public List<string> ListTag
+    {
+        get
+        {
+            List<string> ListTag = new List<string>();
+            for (int i = 0; i < BlockList.Count; i++)
+                ListTag.Add(BlockList[i].Tag);
+            return ListTag;
+        }
+    }
+
+    public IsometricManagerList()
     {
         BlockList = new List<IsometricDataBlockListTag>();
+    }
+
+    public IsometricManagerList(IsometricConfig IsometricConfig, bool All)
+    {
+        BlockList = new List<IsometricDataBlockListTag>();
+        SetList(IsometricConfig, All);
     }
 
     #region Read
 
     public void SetList(IsometricConfig IsometricConfig, bool All)
     {
-        SetList(IsometricConfig.BlockList, All);
+        SetList(IsometricConfig.Block.ListAssets, All);
     }
 
     public void SetList(List<IsometricBlock> BlockList, bool All)

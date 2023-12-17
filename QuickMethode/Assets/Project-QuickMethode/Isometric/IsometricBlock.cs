@@ -47,7 +47,7 @@ public class IsometricBlock : MonoBehaviour
 
     private void Awake()
     {
-        if (Application.isPlaying && this.name == IsometricDataWorld.CURSON_NAME)
+        if (Application.isPlaying && this.name == IsometricManagerMap.NAME_CURSON)
             Destroy(this.gameObject);
     }
 
@@ -84,7 +84,7 @@ public class IsometricBlock : MonoBehaviour
         set
         {
             m_worldManager = value;
-            m_sceneData = value.Game.Scene;
+            m_sceneData = value.Scene;
         }
     }
 
@@ -193,7 +193,7 @@ public class IsometricBlock : MonoBehaviour
     {
         if (WorldManager != null)
         {
-            m_sceneData = WorldManager.Game.Scene;
+            m_sceneData = WorldManager.Scene;
         }
 
         Vector3 PosTransform = GetIsoTransform(m_pos);
@@ -209,12 +209,12 @@ public class IsometricBlock : MonoBehaviour
 
     public List<IsometricBlock> GetCheck(IsometricVector Dir, int Length)
     {
-        return WorldManager.World.GetBlockCurrentAll(Pos.Fixed + Dir * Length);
+        return WorldManager.World.Current.GetBlockCurrentAll(Pos.Fixed + Dir * Length);
     }
 
     public List<IsometricBlock> GetCheck(IsometricVector Dir, int Length, params string[] TagFind)
     {
-        return WorldManager.World.GetBlockCurrentAll(Pos.Fixed + Dir * Length, TagFind);
+        return WorldManager.World.Current.GetBlockCurrentAll(Pos.Fixed + Dir * Length, TagFind);
     }
 
     #endregion

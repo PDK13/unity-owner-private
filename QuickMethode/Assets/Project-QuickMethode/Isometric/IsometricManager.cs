@@ -1,87 +1,56 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
+[ExecuteAlways]
 public class IsometricManager : SingletonManager<IsometricManager>
 {
-    #region Varible: Game Config
+    public IsometricConfig Config;
 
-    [SerializeField] private IsometricConfig m_isometricConfig;
+    [Space]
+    public IsometricGameDataScene Scene = new IsometricGameDataScene();
+    public IsometricManagerWorld World;
+    public IsometricManagerList List = new IsometricManagerList();
 
-    private string m_debugError = "";
-
-    public IsometricConfig IsometricConfig => m_isometricConfig;
-
-    #endregion
-
-    #region Varible: World Manager
-
-    public IsometricGameData Game;
-    //
-    public IsometricDataWorld World;
-    //
-    public IsometricDataList List;
-
-    #endregion
-
-    protected override void Awake()
+    private void Reset()
     {
-        base.Awake();
-        //
-#if UNITY_EDITOR
-        SetConfigFind();
-#endif
+        SetEditorConfigFind();
     }
 
-    public void SetInit()
+    public void SetEditorConfigFind()
     {
-        World = new IsometricDataWorld(this);
-        List = new IsometricDataList();
-    }
-
 #if UNITY_EDITOR
-
-    public void SetConfigFind()
-    {
-        if (m_isometricConfig != null)
+        if (this.Config != null)
             return;
         //
-        var AuthorConfigFound = QUnityAssets.GetScriptableObject<IsometricConfig>("");
+        var Config = QUnityAssets.GetScriptableObject<IsometricConfig>("");
         //
-        if (AuthorConfigFound == null)
+        if (Config == null)
         {
-            m_debugError = "Config not found, please create one";
-            Debug.Log("[Message] " + m_debugError);
+            Debug.Log("[Message] Config not found, please create one");
             return;
         }
         //
-        if (AuthorConfigFound.Count == 0)
+        if (Config.Count == 0)
         {
-            m_debugError = "Config not found, please create one";
-            Debug.Log("[Message] " + m_debugError);
+            Debug.Log("[Message] Config not found, please create one");
             return;
         }
         //
-        if (AuthorConfigFound.Count > 1)
+        if (Config.Count > 1)
             Debug.Log("[Message] Config found more than one, get the first one found");
         //
-        m_isometricConfig = AuthorConfigFound[0];
-        //
-        m_debugError = "";
+        this.Config = Config[0];
+#endif
     }
 
-#endif
-}
-
-[Serializable]
-public class IsometricGameData
-{
-    public string Name = "";
-    public List<string> Command = new List<string>();
-    public IsometricGameDataScene Scene = new IsometricGameDataScene();
+    public void SetEditorDataRefresh()
+    {
+        World = new IsometricManagerWorld(this);
+        List = new IsometricManagerList(Config, true);
+    }
 }
 
 [Serializable]
@@ -128,9 +97,9 @@ public class IsometricManagerEditor : Editor
 {
     private IsometricManager m_target;
 
-    private SerializedProperty m_isometricConfig;
+    private SerializedProperty Config;
 
-    private SerializedProperty Game;
+    private SerializedProperty Scene;
     private SerializedProperty World;
     private SerializedProperty List;
 
@@ -138,24 +107,27 @@ public class IsometricManagerEditor : Editor
     {
         m_target = target as IsometricManager;
         //
-        m_isometricConfig = QUnityEditorCustom.GetField(this, "m_isometricConfig");
+        Config = QUnityEditorCustom.GetField(this, "Config");
         //
-        Game = QUnityEditorCustom.GetField(this, "Game");
+        Scene = QUnityEditorCustom.GetField(this, "Scene");
         World = QUnityEditorCustom.GetField(this, "World");
         List = QUnityEditorCustom.GetField(this, "List");
         //
-        m_target.SetConfigFind();
+        m_target.SetEditorConfigFind();
     }
 
     public override void OnInspectorGUI()
     {
         QUnityEditorCustom.SetUpdate(this);
         //
-        QUnityEditorCustom.SetField(m_isometricConfig);
+        QUnityEditorCustom.SetField(Config);
         //
-        QUnityEditorCustom.SetField(Game);
+        QUnityEditorCustom.SetField(Scene);
+        //
+        QUnityEditor.SetDisableGroupBegin();
         QUnityEditorCustom.SetField(World);
         QUnityEditorCustom.SetField(List);
+        QUnityEditor.SetDisableGroupEnd();
         //
         QUnityEditor.SetDisableGroupEnd();
         //

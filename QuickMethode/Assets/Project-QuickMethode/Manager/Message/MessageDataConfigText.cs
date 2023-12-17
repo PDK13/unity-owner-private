@@ -88,13 +88,13 @@ public class MessageDataConfigTextEditor : Editor
         }
         //
         if (AuthorConfigFound.Count > 1)
-            Debug.Log("[Message] found more than one, get the first one found");
+            Debug.Log("[Message] Config found more than one, get the first one found");
         //
         m_messageConfig = AuthorConfigFound[0];
         //
         if (m_messageConfig.Author.Count == 0)
         {
-            m_debugError = "Author not have any data, please add one";
+            m_debugError = "Author Config not have any data, please add one";
             Debug.Log("[Message] " + m_debugError);
             return;
         }

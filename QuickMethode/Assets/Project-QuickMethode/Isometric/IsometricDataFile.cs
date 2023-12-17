@@ -32,29 +32,29 @@ public class IsometricDataFile
 
     private static void SetFileWrite(IsometricManager Manager, QDataFile FileIO)
     {
-        Manager.World.SetWorldOrder();
+        Manager.World.Current.SetWorldOrder();
         //
         List<IsometricDataFileBlock> WorldBlocks = new List<IsometricDataFileBlock>();
-        for (int i = 0; i < Manager.World.m_worldPosH.Count; i++)
+        for (int i = 0; i < Manager.World.Current.PosH.Count; i++)
         {
-            for (int j = 0; j < Manager.World.m_worldPosH[i].Block.Count; j++)
+            for (int j = 0; j < Manager.World.Current.PosH[i].Block.Count; j++)
             {
-                WorldBlocks.Add(new IsometricDataFileBlock(Manager.World.m_worldPosH[i].Block[j].PosPrimary, Manager.World.m_worldPosH[i].Block[j].Name, (Manager.World.m_worldPosH[i].Block[j].Data)));
+                WorldBlocks.Add(new IsometricDataFileBlock(Manager.World.Current.PosH[i].Block[j].PosPrimary, Manager.World.Current.PosH[i].Block[j].Name, (Manager.World.Current.PosH[i].Block[j].Data)));
             }
         }
         //
         //WORLD START!!
         //
         FileIO.SetWriteAdd(KEY_WORLD_NAME);
-        FileIO.SetWriteAdd((Manager.Game.Name != "") ? Manager.Game.Name : "...");
+        FileIO.SetWriteAdd((Manager.World.Current.Name != "") ? Manager.World.Current.Name : "...");
         //
         FileIO.SetWriteAdd();
         //
         FileIO.SetWriteAdd(KEY_WORLD_COMMAND);
-        FileIO.SetWriteAdd(Manager.Game.Command.Count);
-        for (int i = 0; i < Manager.Game.Command.Count; i++)
+        FileIO.SetWriteAdd(Manager.World.Current.Command.Count);
+        for (int i = 0; i < Manager.World.Current.Command.Count; i++)
         {
-            FileIO.SetWriteAdd(Manager.Game.Command[i]);
+            FileIO.SetWriteAdd(Manager.World.Current.Command[i]);
         }
         //
         FileIO.SetWriteAdd();
@@ -175,7 +175,6 @@ public class IsometricDataFile
 
     private static void SetFileRead(IsometricManager Manager, QDataFile FileIO)
     {
-        Manager.World.SetWorldRemove(true);
         //
         //WORLD START!!
         //
@@ -185,15 +184,19 @@ public class IsometricDataFile
             switch (FileIO.GetReadAutoString())
             {
                 case KEY_WORLD_NAME:
-                    Manager.Game.Name = FileIO.GetReadAutoString();
+                    string MapName = FileIO.GetReadAutoString();
+                    if (Manager.World.Current.Name == MapName)
+                        Manager.World.Current.SetWorldRemove(true);
+                    Manager.World.SetGenerate(MapName);
+                    Manager.World.SetActive(MapName);
                     break;
                 case KEY_WORLD_COMMAND:
                     int CommandCount = FileIO.GetReadAutoInt();
                     //
-                    Manager.Game.Command = new List<string>();
+                    Manager.World.Current.Command = new List<string>();
                     for (int CommandIndex = 0; CommandIndex < CommandCount; CommandIndex++)
                     {
-                        Manager.Game.Command.Add(FileIO.GetReadAutoString());
+                        Manager.World.Current.Command.Add(FileIO.GetReadAutoString());
                     }
                     break;
                 case KEY_WORLD_BLOCK:
@@ -285,7 +288,7 @@ public class IsometricDataFile
                         //
                         //BLOCK END!!
                         //
-                        Manager.World.SetBlockCreate(PosPrimary, Manager.List.GetList(Name), Data);
+                        Manager.World.Current.SetBlockCreate(PosPrimary, Manager.List.GetList(Name), Data);
                     }
                     break;
                 case KEY_WORLD_END:
@@ -300,7 +303,7 @@ public class IsometricDataFile
         //
         //WORLD END!!
         //
-        Manager.World.onCreate?.Invoke();
+        Manager.World.Current.onCreate?.Invoke();
     }
 
     #endregion
