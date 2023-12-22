@@ -41,10 +41,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Fill02: 0.65
-    - _Fill03: -0.25
-    - _Fill04: -1.05
+    - _Fill02: 0.63
+    - _Fill03: -0.27
+    - _Fill04: -1.07
     - _FillAmount: 1.5
+    - _FillScale: 1
     m_Colors:
     - _Color01: {r: 1, g: 0, b: 0, a: 0}
     - _Color02: {r: 0.9556835, g: 1, b: 0, a: 0}
