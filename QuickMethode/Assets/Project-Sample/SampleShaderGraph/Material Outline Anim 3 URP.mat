@@ -57,6 +57,6 @@ Material:
     - _OutlineRevert: 0
     - _OutlineSpeed: 1
     m_Colors:
-    - _OutlineColor1: {r: 1, g: 0.8470588, b: 0, a: 0}
-    - _OutlineColor2: {r: 0, g: 1, b: 0.9811893, a: 0}
+    - _OutlineColor1: {r: 1, g: 0, b: 0.059297085, a: 0}
+    - _OutlineColor2: {r: 1, g: 0.88739085, b: 0, a: 0}
   m_BuildTextureStacks: []
