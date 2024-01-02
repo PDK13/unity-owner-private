@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -8,10 +7,10 @@ using UnityEngine.UI;
 
 public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
-    public Image Image;
-    public CanvasGroup CanvasGroup;
-
     public bool Lock = false;
+    public bool PhoneDevice = false;
+
+    public bool PhoneLogic => PhoneDevice || Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer;
 
     [Min(0)]
     [Tooltip("Duration delay before active hold event")]
@@ -64,14 +63,9 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public bool HoldActive { private set; get; } = false;
 
-    private void Start()
-    {
-        if (Image == null)
-            Image = QComponent.GetComponent<Image>(gameObject);
-        //
-        if (CanvasGroup == null)
-            CanvasGroup = QComponent.GetComponent<CanvasGroup>(gameObject);
-    }
+    [Space]
+    public Image Image;
+    public CanvasGroup CanvasGroup;
 
     private void OnDestroy()
     {
@@ -102,9 +96,11 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void SetButtonPress()
     {
-        Image.color = ColorEvent.Ready;
+        if (Image != null)
+            Image.color = ColorEvent.Ready;
         transform.localScale = ScaleEvent.Ready;
-        CanvasGroup.alpha = AlphaEvent.Ready;
+        if (CanvasGroup != null)
+            CanvasGroup.alpha = AlphaEvent.Ready;
         //
         SetEventPointerDown();
     }
@@ -121,23 +117,30 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         if (Lock)
             return;
         //
-        if (Application.platform == RuntimePlatform.Android)
-            SetEventPointerDown();
+        if (PhoneLogic)
+        {
+            if (!Application.isEditor)
+                SetEventPointerDown();
+        }
         else
         {
             Ready = true;
             //
             if (Hold || HoldActive)
             {
-                Image.color = ColorEvent.Hold;
+                if (Image != null)
+                    Image.color = ColorEvent.Hold;
                 transform.localScale = ScaleEvent.Hold;
-                CanvasGroup.alpha = AlphaEvent.Hold;
+                if (CanvasGroup != null)
+                    CanvasGroup.alpha = AlphaEvent.Hold;
             }
             else
             {
-                Image.color = ColorEvent.Ready;
+                if (Image != null)
+                    Image.color = ColorEvent.Ready;
                 transform.localScale = ScaleEvent.Ready;
-                CanvasGroup.alpha = AlphaEvent.Ready;
+                if (CanvasGroup != null)
+                    CanvasGroup.alpha = AlphaEvent.Ready;
             }
             //
             PointerEvent.PointerEnter?.Invoke();
@@ -149,23 +152,30 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         if (Lock)
             return;
         //
-        if (Application.platform == RuntimePlatform.Android)
-            SetEventPointerUp();
+        if (PhoneLogic)
+        {
+            if (!Application.isEditor)
+                SetEventPointerUp();
+        }
         else
         {
             Ready = false;
             //
             if (Hold)
             {
-                Image.color = HoldActive ? ColorEvent.Hold : ColorEvent.Ready;
+                if (Image != null)
+                    Image.color = HoldActive ? ColorEvent.Hold : ColorEvent.Ready;
                 transform.localScale = HoldActive ? ScaleEvent.Hold : ScaleEvent.Ready;
-                CanvasGroup.alpha = HoldActive ? AlphaEvent.Hold : AlphaEvent.Ready;
+                if (CanvasGroup != null)
+                    CanvasGroup.alpha = HoldActive ? AlphaEvent.Hold : AlphaEvent.Ready;
             }
             else
             {
-                Image.color = ColorEvent.Normal;
+                if (Image != null)
+                    Image.color = ColorEvent.Normal;
                 transform.localScale = ScaleEvent.Normal;
-                CanvasGroup.alpha = AlphaEvent.Normal;
+                if (CanvasGroup != null)
+                    CanvasGroup.alpha = AlphaEvent.Normal;
             }
             //
             PointerEvent.PointerExit?.Invoke();
@@ -193,22 +203,28 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         //
         if (Hold)
         {
-            Image.color = HoldActive ? ColorEvent.Hold : ColorEvent.Ready;
+            if (Image != null)
+                Image.color = HoldActive ? ColorEvent.Hold : ColorEvent.Ready;
             transform.localScale = HoldActive ? ScaleEvent.Hold : ScaleEvent.Ready;
-            CanvasGroup.alpha = HoldActive ? AlphaEvent.Hold : AlphaEvent.Ready;
+            if (CanvasGroup != null)
+                CanvasGroup.alpha = HoldActive ? AlphaEvent.Hold : AlphaEvent.Ready;
         }
         else
         if (Ready)
         {
-            Image.color = ColorEvent.Ready;
+            if (Image != null)
+                Image.color = ColorEvent.Ready;
             transform.localScale = ScaleEvent.Ready;
-            CanvasGroup.alpha = AlphaEvent.Ready;
+            if (CanvasGroup != null)
+                CanvasGroup.alpha = AlphaEvent.Ready;
         }
         else
         {
-            Image.color = ColorEvent.Normal;
+            if (Image != null)
+                Image.color = ColorEvent.Normal;
             transform.localScale = ScaleEvent.Normal;
-            CanvasGroup.alpha = AlphaEvent.Ready;
+            if (CanvasGroup != null)
+                CanvasGroup.alpha = AlphaEvent.Normal;
         }
         //
         PointerEvent.PointerUp?.Invoke();
@@ -222,9 +238,11 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             yield return new WaitForSeconds(DelayHold);
         //
         HoldActive = true;
-        Image.color = ColorEvent.Hold;
+        if (Image != null)
+            Image.color = ColorEvent.Hold;
         transform.localScale = ScaleEvent.Hold;
-        CanvasGroup.alpha = AlphaEvent.Hold;
+        if (CanvasGroup != null)
+            CanvasGroup.alpha = AlphaEvent.Hold;
         //
         while (Hold)
         {

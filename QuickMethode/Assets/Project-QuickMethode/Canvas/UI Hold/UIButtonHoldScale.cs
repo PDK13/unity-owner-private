@@ -7,6 +7,9 @@ using UnityEngine.EventSystems;
 public class UIButtonHoldScale : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     public bool Lock = false;
+    public bool PhoneDevice = false;
+
+    public bool PhoneLogic => PhoneDevice || Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer;
 
     [Min(0)]
     [Tooltip("Duration delay before active hold event")]
@@ -87,8 +90,11 @@ public class UIButtonHoldScale : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if (Lock)
             return;
         //
-        if (Application.platform == RuntimePlatform.Android)
-            SetEventPointerDown();
+        if (PhoneLogic)
+        {
+            if (!Application.isEditor)
+                SetEventPointerDown();
+        }
         else
         {
             Ready = true;
@@ -107,8 +113,11 @@ public class UIButtonHoldScale : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if (Lock)
             return;
         //
-        if (Application.platform == RuntimePlatform.Android)
-            SetEventPointerUp();
+        if (PhoneLogic)
+        {
+            if (!Application.isEditor)
+                SetEventPointerUp();
+        }
         else
         {
             Ready = false;

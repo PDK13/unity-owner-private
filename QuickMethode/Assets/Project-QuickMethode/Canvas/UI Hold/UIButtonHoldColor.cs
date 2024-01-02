@@ -7,9 +7,10 @@ using UnityEngine.UI;
 
 public class UIButtonHoldColor : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
-    public Image Target;
-
     public bool Lock = false;
+    public bool PhoneDevice = false;
+
+    public bool PhoneLogic => PhoneDevice || Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer;
 
     [Min(0)]
     [Tooltip("Duration delay before active hold event")]
@@ -44,11 +45,8 @@ public class UIButtonHoldColor : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public bool HoldActive { private set; get; } = false;
 
-    private void Start()
-    {
-        if (Target == null)
-            Target = QComponent.GetComponent<Image>(gameObject);
-    }
+    [Space]
+    public Image Image;
 
     private void OnDestroy()
     {
@@ -79,7 +77,8 @@ public class UIButtonHoldColor : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void SetButtonPress()
     {
-        Target.color = ColorEvent.Ready;
+        if (Image != null)
+            Image.color = ColorEvent.Ready;
         //
         SetEventPointerDown();
     }
@@ -96,16 +95,25 @@ public class UIButtonHoldColor : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if (Lock)
             return;
         //
-        if (Application.platform == RuntimePlatform.Android)
-            SetEventPointerDown();
+        if (PhoneLogic)
+        {
+            if (!Application.isEditor)
+                SetEventPointerDown();
+        }
         else
         {
             Ready = true;
             //
             if (Hold || HoldActive)
-                Target.color = ColorEvent.Hold;
+            {
+                if (Image != null)
+                    Image.color = ColorEvent.Hold;
+            }
             else
-                Target.color = ColorEvent.Ready;
+            {
+                if (Image != null)
+                    Image.color = ColorEvent.Ready;
+            }
             //
             PointerEvent.PointerEnter?.Invoke();
         }
@@ -116,16 +124,25 @@ public class UIButtonHoldColor : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if (Lock)
             return;
         //
-        if (Application.platform == RuntimePlatform.Android)
-            SetEventPointerUp();
+        if (PhoneLogic)
+        {
+            if (!Application.isEditor)
+                SetEventPointerUp();
+        }
         else
         {
             Ready = false;
             //
             if (Hold)
-                Target.color = HoldActive ? ColorEvent.Hold : ColorEvent.Ready;
+            {
+                if (Image != null)
+                    Image.color = HoldActive ? ColorEvent.Hold : ColorEvent.Ready;
+            }
             else
-                Target.color = ColorEvent.Normal;
+            {
+                if (Image != null)
+                    Image.color = ColorEvent.Normal;
+            }
             //
             PointerEvent.PointerExit?.Invoke();
         }
@@ -151,12 +168,21 @@ public class UIButtonHoldColor : MonoBehaviour, IPointerEnterHandler, IPointerEx
         HoldActive = false;
         //
         if (Hold)
-            Target.color = HoldActive ? ColorEvent.Hold : ColorEvent.Ready;
+        {
+            if (Image != null)
+                Image.color = HoldActive ? ColorEvent.Hold : ColorEvent.Ready;
+        }
         else
         if (Ready)
-            Target.color = ColorEvent.Ready;
+        {
+            if (Image != null)
+                Image.color = ColorEvent.Ready;
+        }
         else
-            Target.color = ColorEvent.Normal;
+        {
+            if (Image != null)
+                Image.color = ColorEvent.Normal;
+        }
         //
         PointerEvent.PointerUp?.Invoke();
         //
@@ -169,7 +195,8 @@ public class UIButtonHoldColor : MonoBehaviour, IPointerEnterHandler, IPointerEx
             yield return new WaitForSeconds(DelayHold);
         //
         HoldActive = true;
-        Target.color = ColorEvent.Hold;
+        if (Image != null)
+            Image.color = ColorEvent.Hold;
         //
         while (Hold)
         {

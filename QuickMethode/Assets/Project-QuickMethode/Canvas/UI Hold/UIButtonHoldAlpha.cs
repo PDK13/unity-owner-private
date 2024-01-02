@@ -6,9 +6,10 @@ using UnityEngine.EventSystems;
 
 public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
-    public CanvasGroup CanvasGroup;
-
     public bool Lock = false;
+    public bool PhoneDevice = false;
+
+    public bool PhoneLogic => PhoneDevice || Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer;
 
     [Min(0)]
     [Tooltip("Duration delay before active hold event")]
@@ -43,11 +44,8 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public bool HoldActive { private set; get; } = false;
 
-    private void Start()
-    {
-        if (CanvasGroup == null)
-            CanvasGroup = QComponent.GetComponent<CanvasGroup>(gameObject);
-    }
+    [Space]
+    public CanvasGroup CanvasGroup;
 
     private void OnDestroy()
     {
@@ -78,7 +76,8 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void SetButtonPress()
     {
-        CanvasGroup.alpha = AlphaEvent.Ready;
+        if (CanvasGroup != null)
+            CanvasGroup.alpha = AlphaEvent.Ready;
         //
         SetEventPointerDown();
     }
@@ -95,16 +94,25 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if (Lock)
             return;
         //
-        if (Application.platform == RuntimePlatform.Android)
-            SetEventPointerDown();
+        if (PhoneLogic)
+        {
+            if (!Application.isEditor)
+                SetEventPointerDown();
+        }
         else
         {
             Ready = true;
             //
             if (Hold || HoldActive)
-                CanvasGroup.alpha = AlphaEvent.Hold;
+            {
+                if (CanvasGroup != null)
+                    CanvasGroup.alpha = AlphaEvent.Hold;
+            }
             else
-                CanvasGroup.alpha = AlphaEvent.Ready;
+            {
+                if (CanvasGroup != null)
+                    CanvasGroup.alpha = AlphaEvent.Ready;
+            }
             //
             PointerEvent.PointerEnter?.Invoke();
         }
@@ -115,16 +123,25 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if (Lock)
             return;
         //
-        if (Application.platform == RuntimePlatform.Android)
-            SetEventPointerUp();
+        if (PhoneLogic)
+        {
+            if (!Application.isEditor)
+                SetEventPointerUp();
+        }
         else
         {
             Ready = false;
             //
             if (Hold)
-                CanvasGroup.alpha = HoldActive ? AlphaEvent.Hold : AlphaEvent.Ready;
+            {
+                if (CanvasGroup != null)
+                    CanvasGroup.alpha = HoldActive ? AlphaEvent.Hold : AlphaEvent.Ready;
+            }
             else
-                CanvasGroup.alpha = AlphaEvent.Normal;
+            {
+                if (CanvasGroup != null)
+                    CanvasGroup.alpha = AlphaEvent.Normal;
+            }
             //
             PointerEvent.PointerExit?.Invoke();
         }
@@ -150,12 +167,21 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
         HoldActive = false;
         //
         if (Hold)
-            CanvasGroup.alpha = HoldActive ? AlphaEvent.Hold : AlphaEvent.Ready;
+        {
+            if (CanvasGroup != null)
+                CanvasGroup.alpha = HoldActive ? AlphaEvent.Hold : AlphaEvent.Ready;
+        }
         else
         if (Ready)
-            CanvasGroup.alpha = AlphaEvent.Ready;
+        {
+            if (CanvasGroup != null)
+                CanvasGroup.alpha = AlphaEvent.Ready;
+        }
         else
-            CanvasGroup.alpha = AlphaEvent.Normal;
+        {
+            if (CanvasGroup != null)
+                CanvasGroup.alpha = AlphaEvent.Normal;
+        }
         //
         PointerEvent.PointerUp?.Invoke();
         //
@@ -168,7 +194,8 @@ public class UIButtonHoldAlpha : MonoBehaviour, IPointerEnterHandler, IPointerEx
             yield return new WaitForSeconds(DelayHold);
         //
         HoldActive = true;
-        CanvasGroup.alpha = AlphaEvent.Hold;
+        if (CanvasGroup != null)
+            CanvasGroup.alpha = AlphaEvent.Hold;
         //
         while (Hold)
         {

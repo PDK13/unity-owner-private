@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 65151198}
   - component: {fileID: 65151200}
   - component: {fileID: 65151199}
+  - component: {fileID: 65151202}
   - component: {fileID: 65151201}
   m_Layer: 5
   m_Name: btn-hold
@@ -212,9 +213,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d5f9e1ce5271834d9e33689cb017d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Image: {fileID: 0}
-  CanvasGroup: {fileID: 0}
   Lock: 0
+  PhoneDevice: 1
   DelayHold: 0
   ColorEvent:
     Normal: {r: 1, g: 1, b: 1, a: 1}
@@ -244,6 +244,20 @@ MonoBehaviour:
     PointerExit:
       m_PersistentCalls:
         m_Calls: []
+  Image: {fileID: 65151199}
+  CanvasGroup: {fileID: 65151202}
+--- !u!225 &65151202
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 65151197}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &207212965
 GameObject:
   m_ObjectHideFlags: 0
@@ -744,6 +758,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Lock: 0
+  PhoneDevice: 1
   DelayHold: 0
   ScaleEvent:
     Normal: {x: 1, y: 1}
@@ -854,8 +869,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4abf86b541f9dcb47b3ee8928a007ad0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Target: {fileID: 0}
   Lock: 0
+  PhoneDevice: 1
   DelayHold: 0
   ColorEvent:
     Normal: {r: 1, g: 1, b: 1, a: 1}
@@ -877,6 +892,7 @@ MonoBehaviour:
     PointerExit:
       m_PersistentCalls:
         m_Calls: []
+  Image: {fileID: 1491331230}
 --- !u!1 &1616952264
 GameObject:
   m_ObjectHideFlags: 0
@@ -967,6 +983,7 @@ GameObject:
   - component: {fileID: 1650398723}
   - component: {fileID: 1650398725}
   - component: {fileID: 1650398724}
+  - component: {fileID: 1650398727}
   - component: {fileID: 1650398726}
   m_Layer: 5
   m_Name: btn-hold-alpha
@@ -1045,8 +1062,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3e3e48c05cdc214688c7a1789ebcb7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CanvasGroup: {fileID: 0}
   Lock: 0
+  PhoneDevice: 1
   DelayHold: 0
   AlphaEvent:
     Normal: 1
@@ -1068,6 +1085,19 @@ MonoBehaviour:
     PointerExit:
       m_PersistentCalls:
         m_Calls: []
+  CanvasGroup: {fileID: 1650398727}
+--- !u!225 &1650398727
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1650398722}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1978093537
 GameObject:
   m_ObjectHideFlags: 0
