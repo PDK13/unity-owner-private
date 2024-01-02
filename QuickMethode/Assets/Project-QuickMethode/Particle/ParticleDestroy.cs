@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class ParticleDestroy : ParticlePlay
 {
     public override void SetStart()
