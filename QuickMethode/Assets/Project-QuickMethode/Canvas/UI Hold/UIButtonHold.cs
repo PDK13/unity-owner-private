@@ -120,9 +120,12 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         if (Image != null)
             Image.color = ColorEvent.Ready;
+
         transform.localScale = ScaleEvent.Ready;
+
         if (CanvasGroup != null)
             CanvasGroup.alpha = AlphaEvent.Ready;
+
         if (Image != null)
             Image.sprite = SpriteEvent.Ready;
         //
@@ -154,9 +157,12 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             {
                 if (Image != null)
                     Image.color = ColorEvent.Hold;
+
                 transform.localScale = ScaleEvent.Hold;
+
                 if (CanvasGroup != null)
                     CanvasGroup.alpha = AlphaEvent.Hold;
+
                 if (Image != null)
                     Image.sprite = SpriteEvent.Hold;
             }
@@ -164,9 +170,12 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             {
                 if (Image != null)
                     Image.color = ColorEvent.Ready;
+
                 transform.localScale = ScaleEvent.Ready;
+
                 if (CanvasGroup != null)
                     CanvasGroup.alpha = AlphaEvent.Ready;
+
                 if (Image != null)
                     Image.sprite = SpriteEvent.Ready;
             }
@@ -193,9 +202,12 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             {
                 if (Image != null)
                     Image.color = HoldActive ? ColorEvent.Hold : ColorEvent.Ready;
+                
                 transform.localScale = HoldActive ? ScaleEvent.Hold : ScaleEvent.Ready;
+                
                 if (CanvasGroup != null)
                     CanvasGroup.alpha = HoldActive ? AlphaEvent.Hold : AlphaEvent.Ready;
+                
                 if (Image != null)
                     Image.sprite = HoldActive ? SpriteEvent.Hold : SpriteEvent.Ready;
             }
@@ -203,9 +215,12 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             {
                 if (Image != null)
                     Image.color = ColorEvent.Normal;
+                
                 transform.localScale = ScaleEvent.Normal;
+                
                 if (CanvasGroup != null)
                     CanvasGroup.alpha = AlphaEvent.Normal;
+                
                 if (Image != null)
                     Image.sprite = SpriteEvent.Normal;
             }
@@ -237,9 +252,12 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         {
             if (Image != null)
                 Image.color = HoldActive ? ColorEvent.Hold : ColorEvent.Ready;
+            
             transform.localScale = HoldActive ? ScaleEvent.Hold : ScaleEvent.Ready;
+            
             if (CanvasGroup != null)
                 CanvasGroup.alpha = HoldActive ? AlphaEvent.Hold : AlphaEvent.Ready;
+            
             if (Image != null)
                 Image.sprite = HoldActive ? SpriteEvent.Hold : SpriteEvent.Ready;
         }
@@ -248,9 +266,12 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         {
             if (Image != null)
                 Image.color = ColorEvent.Ready;
+            
             transform.localScale = ScaleEvent.Ready;
+            
             if (CanvasGroup != null)
                 CanvasGroup.alpha = AlphaEvent.Ready;
+            
             if (Image != null)
                 Image.sprite = SpriteEvent.Ready;
         }
@@ -258,9 +279,12 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         {
             if (Image != null)
                 Image.color = ColorEvent.Normal;
+            
             transform.localScale = ScaleEvent.Normal;
+            
             if (CanvasGroup != null)
                 CanvasGroup.alpha = AlphaEvent.Normal;
+            
             if (Image != null)
                 Image.sprite = SpriteEvent.Normal;
         }
@@ -278,9 +302,12 @@ public class UIButtonHold : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         HoldActive = true;
         if (Image != null)
             Image.color = ColorEvent.Hold;
+        
         transform.localScale = ScaleEvent.Hold;
+        
         if (CanvasGroup != null)
             CanvasGroup.alpha = AlphaEvent.Hold;
+        
         if (Image != null)
             Image.sprite = SpriteEvent.Hold;
         //
