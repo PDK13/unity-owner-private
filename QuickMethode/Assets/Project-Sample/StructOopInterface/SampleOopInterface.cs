@@ -1,16 +1,21 @@
 using UnityEngine;
 
-public class SampleOopInterface : MonoBehaviour, ISampleClass
+public class SampleOopInterface : MonoBehaviour, ISampleClass, ISampleRoom
 {
     public string Class { get; set; }
 
     private void Start()
     {
         SetStart();
+        SetClean();
     }
+
+    //Class
 
     public void SetStart()
     {
+        Debug.Log("[Sample] Class started!");
+        //
         ISampleStudent StudentA = new SampleObjectMover();
         StudentA.SetName("Adam");
         StudentA.SetLearn();
@@ -21,6 +26,13 @@ public class SampleOopInterface : MonoBehaviour, ISampleClass
         ISampleTeacher Teacher = new SampleObjectMover();
         Teacher.SetName("Eve");
         Teacher.SetTeach();
+    }
+
+    //Room
+
+    public void SetClean()
+    {
+        Debug.Log("[Sample] Room end used!");
     }
 }
 
@@ -33,6 +45,11 @@ public interface ISampleClass
     string Class { get; set; }
 
     void SetStart();
+}
+
+public interface ISampleRoom
+{
+    void SetClean();
 }
 
 //
