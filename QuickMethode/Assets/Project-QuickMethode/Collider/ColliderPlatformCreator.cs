@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PolygonCollider2D))]
-public class PlatformCreator : MonoBehaviour
+public class ColliderPlatformCreator : MonoBehaviour
 {
     [SerializeField] private LayerMask m_colliderMask;
     [SerializeField] private float m_degLimit = 90f;
