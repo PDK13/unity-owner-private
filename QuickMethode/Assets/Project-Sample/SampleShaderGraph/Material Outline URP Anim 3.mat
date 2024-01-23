@@ -54,9 +54,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _OutlineRevert: 0
+    - _OutlineRevert: 1
     - _OutlineSpeed: 1
     m_Colors:
-    - _OutlineColor1: {r: 0, g: 0.6977514, b: 2.996078, a: 0}
-    - _OutlineColor2: {r: 0, g: 2.996078, b: 2.221741, a: 0}
+    - _OutlineColor1: {r: 2.9960783, g: 0, b: 2.0888593, a: 0}
+    - _OutlineColor2: {r: 0, g: 2.9960783, b: 0.738304, a: 0}
   m_BuildTextureStacks: []
