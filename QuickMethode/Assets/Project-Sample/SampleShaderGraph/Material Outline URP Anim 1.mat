@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Material Outline Anim 2 URP
-  m_Shader: {fileID: -6465566751694194690, guid: 96518343529e61140932ee24d6332c6f, type: 3}
+  m_Name: Material Outline URP Anim 1
+  m_Shader: {fileID: -6465566751694194690, guid: 3db3ff1072616ed45a910e7db43e2c7c, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -24,7 +24,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 70d7697ef75c8824b805c12b9189a655, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1891bb47fc282b942a00f79de67fdf4f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -41,12 +41,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _OutlineRevert: 1
     - _OutlineSpeed: 1
     m_Colors:
-    - _OutlineColor: {r: 1, g: 0.8470588, b: 0, a: 0}
+    - _OutlineColor: {r: 2, g: 2, b: 2, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &595461489937205492
+--- !u!114 &5600086786230997244
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

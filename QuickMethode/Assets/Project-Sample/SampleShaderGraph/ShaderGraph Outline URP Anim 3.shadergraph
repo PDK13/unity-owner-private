@@ -3284,7 +3284,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Y",
     "m_StageCapability": 3,
-    "m_Value": 0.009999999776482582,
+    "m_Value": 0.0,
     "m_DefaultValue": 0.0,
     "m_Labels": [
         "Y"
@@ -3480,8 +3480,8 @@
     "m_Hidden": false,
     "m_Value": {
         "r": 0.0,
-        "g": 1.0,
-        "b": 0.9811892509460449,
+        "g": 2.9960777759552,
+        "b": 2.22174072265625,
         "a": 0.0
     },
     "isMainColor": false,
@@ -3735,7 +3735,7 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"70d7697ef75c8824b805c12b9189a655\",\"type\":3}}",
+        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"1891bb47fc282b942a00f79de67fdf4f\",\"type\":3}}",
         "m_Guid": ""
     },
     "isMainTexture": false,
@@ -4657,9 +4657,9 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "r": 1.0,
-        "g": 0.8470588326454163,
-        "b": 0.0,
+        "r": 0.0,
+        "g": 0.6977514028549194,
+        "b": 2.9960784912109377,
         "a": 0.0
     },
     "isMainColor": false,
@@ -6164,7 +6164,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "X",
     "m_StageCapability": 3,
-    "m_Value": 0.009999999776482582,
+    "m_Value": 0.0,
     "m_DefaultValue": 0.0,
     "m_Labels": []
 }
