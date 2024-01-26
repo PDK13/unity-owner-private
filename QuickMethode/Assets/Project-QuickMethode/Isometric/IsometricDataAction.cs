@@ -6,57 +6,79 @@ using UnityEngine;
 public class IsometricDataAction
 {
     public DataBlockType Type = DataBlockType.Forward;
-    public List<string> Action = new List<string>();
-    public List<int> Duration = new List<int>();
 
-    [HideInInspector]
-    public int Index = 0;
-    [HideInInspector]
-    public int Quantity = 1;
+    //
+
+    [SerializeField] private List<IsometricDataBlockActionSingle> m_data = new List<IsometricDataBlockActionSingle>();
+    private int m_index = 0;
+    private int m_quantity = 1;
+
+    //
 
     public List<IsometricDataBlockActionSingle> Data
     {
         get
         {
-            List<IsometricDataBlockActionSingle> Data = new List<IsometricDataBlockActionSingle>();
-            for (int i = 0; i < Action.Count; i++)
-                Data.Add(new IsometricDataBlockActionSingle(Action[i], (Action.Count == Duration.Count ? Duration[i] : 1)));
-            //
-            return Data;
+            if (m_data == null)
+                m_data = new List<IsometricDataBlockActionSingle>();
+            return m_data;
         }
     }
 
-    public int DataCount => Action.Count;
+    public int Index => m_index;
+
+    public int Quantity => m_quantity;
+
+    //
 
     public void SetDataNew()
     {
-        Action = new List<string>();
-        Duration = new List<int>();
+        m_data = new List<IsometricDataBlockActionSingle>();
     }
 
     public void SetDataAdd(IsometricDataBlockActionSingle DataSingle)
     {
         if (DataSingle == null)
-        {
             return;
-        }
         //
-        Action.Add(DataSingle.Action);
-        Duration.Add(DataSingle.Duration);
+        m_data.Add(DataSingle);
     }
 
     public void SetDataAdd(string Action)
     {
-        this.Action.Add(Action);
+        m_data.Add(new IsometricDataBlockActionSingle(Action));
     }
 
-    public void SetDataAdd(string Action, int Duration)
+    //
+
+    public List<string> ActionCurrent => Data[Index].Action;
+
+    public void SetDirNext()
     {
-        this.Action.Add(Action);
-        this.Duration.Add(Duration);
+        m_index += m_quantity;
+        //
+        if (m_index < 0 || m_index > m_data.Count - 1)
+        {
+            switch (Type)
+            {
+                case DataBlockType.Forward:
+                    m_index = m_quantity == 1 ? m_data.Count - 1 : 0;
+                    break;
+                case DataBlockType.Loop:
+                    m_index = m_quantity == 1 ? 0 : m_data.Count - 1;
+                    break;
+                case DataBlockType.Revert:
+                    m_quantity *= -1;
+                    m_index += Quantity;
+                    break;
+            }
+        }
     }
 
-    public bool DataExist => Action == null ? false : Action.Count == 0 ? false : true;
+    public void SetDirRevert()
+    {
+        m_quantity *= -1;
+    }
 }
 
 [Serializable]
@@ -64,15 +86,18 @@ public class IsometricDataBlockActionSingle
 {
     public const char KEY_VALUE_ENCYPT = '|';
 
-    public string Action = "";
-    public int Duration = 1;
+    public List<string> Action = new List<string>();
 
-    public string Encypt => QEncypt.GetEncypt(KEY_VALUE_ENCYPT, Duration.ToString(), Action);
+    public string Encypt => QEncypt.GetEncypt(KEY_VALUE_ENCYPT, QEncypt.GetEncypt(KEY_VALUE_ENCYPT, Action));
 
-    public IsometricDataBlockActionSingle(string Action, int Time)
+    public IsometricDataBlockActionSingle(List<string> Action)
     {
         this.Action = Action;
-        this.Duration = Time;
+    }
+
+    public IsometricDataBlockActionSingle(string ActionSingle)
+    {
+        this.Action = new List<string>() { ActionSingle };
     }
 
     public static IsometricDataBlockActionSingle GetDencypt(string Value)
@@ -83,6 +108,6 @@ public class IsometricDataBlockActionSingle
         }
         //
         List<string> DataString = QEncypt.GetDencyptString(KEY_VALUE_ENCYPT, Value);
-        return new IsometricDataBlockActionSingle(DataString[1], int.Parse(DataString[0]));
+        return new IsometricDataBlockActionSingle(DataString);
     }
 }

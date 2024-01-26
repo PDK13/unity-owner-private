@@ -1,0 +1,528 @@
+fileFormatVersion: 2
+guid: 6cbbd5eb811d5c44b861aa008c36a8ee
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 62a9f0aa5b59740cfbadc7e5f9823bb0, type: 3}
+  textureImporterSettings:
+    alphaSource: 1
+    mipMapMode: 0
+    enableMipMap: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+    convertToNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
+    isReadable: 0
+    streamingMipmaps: 0
+    streamingMipmapsPriority: 0
+    vTOnly: 0
+    ignoreMipmapLimit: 0
+    nPOTScale: 1
+    sRGBTexture: 1
+    spriteMode: 2
+    spriteExtrude: 1
+    spriteMeshType: 1
+    alignment: 0
+    spritePivot: {x: 0.5, y: 0.5}
+    spritePixelsToUnits: 100
+    spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+    spriteGenerateFallbackPhysicsShape: 0
+    generateCubemap: 6
+    cubemapConvolution: 0
+    seamlessCubemap: 0
+    alphaIsTransparency: 1
+    spriteTessellationDetail: -1
+    textureType: 8
+    textureShape: 1
+    singleChannelComponent: 0
+    flipbookRows: 0
+    flipbookColumns: 0
+    ignorePngGamma: 0
+    cookieMode: 0
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+    normalMap: 0
+    textureFormat: 0
+    maxTextureSize: 0
+    lightmap: 0
+    compressionQuality: 0
+    linearTexture: 0
+    grayScaleToAlpha: 0
+    rGBM: 0
+    cubemapConvolutionSteps: 0
+    cubemapConvolutionExponent: 0
+    maxTextureSizeSet: 0
+    compressionQualitySet: 0
+    textureFormatSet: 0
+    applyGammaDecoding: 0
+  previousAsepriteImporterSettings:
+    fileImportMode: 1
+    importHiddenLayers: 0
+    layerImportMode: 1
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 7
+    customPivotPosition: {x: 0.5, y: 0.5}
+    spritePadding: 0
+    generateModelPrefab: 1
+    generateAnimationClips: 1
+    addSortingGroup: 1
+    addShadowCasters: 0
+  asepriteImporterSettings:
+    fileImportMode: 1
+    importHiddenLayers: 0
+    layerImportMode: 1
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 7
+    customPivotPosition: {x: 0.5, y: 0.5}
+    spritePadding: 0
+    generateModelPrefab: 1
+    generateAnimationClips: 1
+    addSortingGroup: 1
+    addShadowCasters: 0
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  textureAssetName: 
+  singleSpriteImportData:
+  - name: 
+    originalName: 
+    pivot: {x: 0, y: 0}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    spriteID: 
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+  animatedSpriteImportData:
+  - name: Mole 0_Frame_0
+    originalName: 
+    pivot: {x: 0.5, y: -0.26666668}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 60
+      height: 90
+    spriteID: 7e106a7480aa7b3429db7b28868da14b
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 4}
+  - name: Mole 0_Frame_1
+    originalName: 
+    pivot: {x: 0.5, y: -0.26666668}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 102
+      width: 60
+      height: 90
+    spriteID: a8b321e6f3dfd4942ac150f1f908e982
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 102}
+  - name: Mole 0_Frame_6
+    originalName: 
+    pivot: {x: 0.5, y: -0.27906978}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 72
+      y: 396
+      width: 60
+      height: 86
+    spriteID: 4b213877720325f49a3454563ee09343
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 72, y: 396}
+  - name: Mole 0_Frame_7
+    originalName: 
+    pivot: {x: 0.5, y: -0.27906978}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 140
+      y: 4
+      width: 60
+      height: 86
+    spriteID: 99eddc42605b7d042852a139bf05360b
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 140, y: 4}
+  - name: Mole 0_Frame_12
+    originalName: 
+    pivot: {x: 0.5, y: -0.26666668}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 200
+      width: 60
+      height: 90
+    spriteID: b603c4c978fa7024da1405cfbcd8be5b
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 200}
+  - name: Mole 0_Frame_13
+    originalName: 
+    pivot: {x: 0.5, y: -0.26666668}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 298
+      width: 60
+      height: 90
+    spriteID: b4f1e39adb6d6324fa6120705470cccd
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 298}
+  - name: Mole 0_Frame_18
+    originalName: 
+    pivot: {x: 0.5, y: -0.26666668}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 396
+      width: 60
+      height: 90
+    spriteID: a796b6cce96963842a414a69589dd04b
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 396}
+  - name: Mole 0_Frame_19
+    originalName: 
+    pivot: {x: 0.5, y: -0.41860464}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 140
+      y: 98
+      width: 60
+      height: 86
+    spriteID: 2197ea19005a12f4ba73dc7663a5e47c
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 140, y: 98}
+  - name: Mole 0_Frame_24
+    originalName: 
+    pivot: {x: 0.5, y: -0.26666668}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 72
+      y: 4
+      width: 60
+      height: 90
+    spriteID: 0f961940dfe4d2540b3d810f60e2b6e7
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 72, y: 4}
+  - name: Mole 0_Frame_25
+    originalName: 
+    pivot: {x: 0.5, y: -0.27906978}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 140
+      y: 192
+      width: 60
+      height: 86
+    spriteID: 40cf391799e46b64385e827e9eef2adf
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 140, y: 192}
+  - name: Mole 0_Frame_26
+    originalName: 
+    pivot: {x: 0.5, y: -0.26666668}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 72
+      y: 102
+      width: 60
+      height: 90
+    spriteID: 7e405b85dfb4ee74ba4c4b9d7e1d251f
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 72, y: 102}
+  - name: Mole 0_Frame_27
+    originalName: 
+    pivot: {x: 0.5, y: -0.26666668}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 72
+      y: 200
+      width: 60
+      height: 90
+    spriteID: ba7263fa39386314782ad70267f74c30
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 72, y: 200}
+  - name: Mole 0_Frame_28
+    originalName: 
+    pivot: {x: 0.5, y: -0.27906978}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 140
+      y: 286
+      width: 60
+      height: 86
+    spriteID: 0701236a94f2fe441b61d80ce0912965
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 140, y: 286}
+  - name: Mole 0_Frame_29
+    originalName: 
+    pivot: {x: 0.5, y: -0.26666668}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 72
+      y: 298
+      width: 60
+      height: 90
+    spriteID: 6d6a81a237477764c832c77027cddc87
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 72, y: 298}
+  spriteSheetImportData: []
+  asepriteLayers:
+  - layerIndex: 0
+    guid: 1410318515
+    name: Mole 0
+    layerFlags: 0
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Mole 0_Frame_0
+      frameIndex: 0
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 90
+      spriteId: 7e106a7480aa7b3429db7b28868da14b
+    - name: Mole 0_Frame_1
+      frameIndex: 1
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 90
+      spriteId: a8b321e6f3dfd4942ac150f1f908e982
+    - name: Mole 0_Frame_6
+      frameIndex: 6
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 86
+      spriteId: 4b213877720325f49a3454563ee09343
+    - name: Mole 0_Frame_7
+      frameIndex: 7
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 86
+      spriteId: 99eddc42605b7d042852a139bf05360b
+    - name: Mole 0_Frame_12
+      frameIndex: 12
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 90
+      spriteId: b603c4c978fa7024da1405cfbcd8be5b
+    - name: Mole 0_Frame_13
+      frameIndex: 13
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 90
+      spriteId: b4f1e39adb6d6324fa6120705470cccd
+    - name: Mole 0_Frame_18
+      frameIndex: 18
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 90
+      spriteId: a796b6cce96963842a414a69589dd04b
+    - name: Mole 0_Frame_19
+      frameIndex: 19
+      cellRect:
+        x: 34
+        y: 36
+        width: 60
+        height: 86
+      spriteId: 2197ea19005a12f4ba73dc7663a5e47c
+    - name: Mole 0_Frame_24
+      frameIndex: 24
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 90
+      spriteId: 0f961940dfe4d2540b3d810f60e2b6e7
+    - name: Mole 0_Frame_25
+      frameIndex: 25
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 86
+      spriteId: 40cf391799e46b64385e827e9eef2adf
+    - name: Mole 0_Frame_26
+      frameIndex: 26
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 90
+      spriteId: 7e405b85dfb4ee74ba4c4b9d7e1d251f
+    - name: Mole 0_Frame_27
+      frameIndex: 27
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 90
+      spriteId: ba7263fa39386314782ad70267f74c30
+    - name: Mole 0_Frame_28
+      frameIndex: 28
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 86
+      spriteId: 0701236a94f2fe441b61d80ce0912965
+    - name: Mole 0_Frame_29
+      frameIndex: 29
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 90
+      spriteId: 6d6a81a237477764c832c77027cddc87
+    linkedCells: []
+    parentIndex: -1
+  platformSettings: []
+  secondarySpriteTextures: []
+  spritePackingTag: 
+  canvasSize: {x: 128, y: 128}

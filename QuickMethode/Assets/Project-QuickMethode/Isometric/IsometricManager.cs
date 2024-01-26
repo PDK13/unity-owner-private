@@ -19,6 +19,14 @@ public class IsometricManager : SingletonManager<IsometricManager>
         SetEditorConfigFind();
     }
 
+    public void SetInit()
+    {
+        World = new IsometricManagerWorld(this);
+        World.SetRemoveAll();
+        //
+        List = new IsometricManagerList(Config, true);
+    }
+
     public void SetEditorConfigFind()
     {
 #if UNITY_EDITOR

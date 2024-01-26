@@ -1,0 +1,528 @@
+fileFormatVersion: 2
+guid: 5f0b0a3d2beafa741952761f512093b1
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 62a9f0aa5b59740cfbadc7e5f9823bb0, type: 3}
+  textureImporterSettings:
+    alphaSource: 1
+    mipMapMode: 0
+    enableMipMap: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+    convertToNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
+    isReadable: 0
+    streamingMipmaps: 0
+    streamingMipmapsPriority: 0
+    vTOnly: 0
+    ignoreMipmapLimit: 0
+    nPOTScale: 1
+    sRGBTexture: 1
+    spriteMode: 2
+    spriteExtrude: 1
+    spriteMeshType: 1
+    alignment: 0
+    spritePivot: {x: 0.5, y: 0.5}
+    spritePixelsToUnits: 100
+    spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+    spriteGenerateFallbackPhysicsShape: 0
+    generateCubemap: 6
+    cubemapConvolution: 0
+    seamlessCubemap: 0
+    alphaIsTransparency: 1
+    spriteTessellationDetail: -1
+    textureType: 8
+    textureShape: 1
+    singleChannelComponent: 0
+    flipbookRows: 0
+    flipbookColumns: 0
+    ignorePngGamma: 0
+    cookieMode: 0
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+    normalMap: 0
+    textureFormat: 0
+    maxTextureSize: 0
+    lightmap: 0
+    compressionQuality: 0
+    linearTexture: 0
+    grayScaleToAlpha: 0
+    rGBM: 0
+    cubemapConvolutionSteps: 0
+    cubemapConvolutionExponent: 0
+    maxTextureSizeSet: 0
+    compressionQualitySet: 0
+    textureFormatSet: 0
+    applyGammaDecoding: 0
+  previousAsepriteImporterSettings:
+    fileImportMode: 1
+    importHiddenLayers: 0
+    layerImportMode: 1
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 7
+    customPivotPosition: {x: 0.5, y: 0.5}
+    spritePadding: 0
+    generateModelPrefab: 1
+    generateAnimationClips: 1
+    addSortingGroup: 1
+    addShadowCasters: 0
+  asepriteImporterSettings:
+    fileImportMode: 1
+    importHiddenLayers: 0
+    layerImportMode: 1
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 7
+    customPivotPosition: {x: 0.5, y: 0.5}
+    spritePadding: 0
+    generateModelPrefab: 1
+    generateAnimationClips: 1
+    addSortingGroup: 1
+    addShadowCasters: 0
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  textureAssetName: 
+  singleSpriteImportData:
+  - name: 
+    originalName: 
+    pivot: {x: 0, y: 0}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    spriteID: 
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+  animatedSpriteImportData:
+  - name: Frog 1_Frame_0
+    originalName: 
+    pivot: {x: 0.5, y: -0.27906978}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 60
+      height: 86
+    spriteID: 30f7e20ebf4db5c478442fbe1a0d2d96
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 4}
+  - name: Frog 1_Frame_1
+    originalName: 
+    pivot: {x: 0.5, y: -0.27906978}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 98
+      width: 60
+      height: 86
+    spriteID: 6c58385ba0cf1454c84edab5838bb8e0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 98}
+  - name: Frog 1_Frame_6
+    originalName: 
+    pivot: {x: 0.5, y: -0.29268292}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 72
+      y: 380
+      width: 60
+      height: 82
+    spriteID: 63e876046caf6144093eea1c82609f03
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 72, y: 380}
+  - name: Frog 1_Frame_7
+    originalName: 
+    pivot: {x: 0.5, y: -0.29268292}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 140
+      y: 4
+      width: 60
+      height: 82
+    spriteID: 293a53c57cfb91d4690b42a86ebd16bc
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 140, y: 4}
+  - name: Frog 1_Frame_12
+    originalName: 
+    pivot: {x: 0.5, y: -0.27906978}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 192
+      width: 60
+      height: 86
+    spriteID: a15dc7fb096a53a45a765fdcbb59bdbd
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 192}
+  - name: Frog 1_Frame_13
+    originalName: 
+    pivot: {x: 0.5, y: -0.27906978}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 286
+      width: 60
+      height: 86
+    spriteID: a5133d66bc53d6f4cb528b884294085d
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 286}
+  - name: Frog 1_Frame_18
+    originalName: 
+    pivot: {x: 0.5, y: -0.27906978}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 380
+      width: 60
+      height: 86
+    spriteID: 6e8a8324e1956594e951da8d576aedeb
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 380}
+  - name: Frog 1_Frame_19
+    originalName: 
+    pivot: {x: 0.5, y: -0.4390244}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 140
+      y: 94
+      width: 60
+      height: 82
+    spriteID: 8b51aac1abdeb294bae6c4033a0d8a8a
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 140, y: 94}
+  - name: Frog 1_Frame_24
+    originalName: 
+    pivot: {x: 0.5, y: -0.27906978}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 72
+      y: 4
+      width: 60
+      height: 86
+    spriteID: 412c5f16c4ed1604c857011b7778b655
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 72, y: 4}
+  - name: Frog 1_Frame_25
+    originalName: 
+    pivot: {x: 0.5, y: -0.29268292}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 140
+      y: 184
+      width: 60
+      height: 82
+    spriteID: 7a46e8e74682a58498a7e5cc5d5df327
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 140, y: 184}
+  - name: Frog 1_Frame_26
+    originalName: 
+    pivot: {x: 0.5, y: -0.27906978}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 72
+      y: 98
+      width: 60
+      height: 86
+    spriteID: 474b319b96f4b0740ae42a7577139840
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 72, y: 98}
+  - name: Frog 1_Frame_27
+    originalName: 
+    pivot: {x: 0.5, y: -0.27906978}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 72
+      y: 192
+      width: 60
+      height: 86
+    spriteID: 57146a716b4960f4594cea49999df363
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 72, y: 192}
+  - name: Frog 1_Frame_28
+    originalName: 
+    pivot: {x: 0.5, y: -0.29268292}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 140
+      y: 274
+      width: 60
+      height: 82
+    spriteID: e3ad4cfea3ce9bd439eeee765761cc9d
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 140, y: 274}
+  - name: Frog 1_Frame_29
+    originalName: 
+    pivot: {x: 0.5, y: -0.27906978}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 72
+      y: 286
+      width: 60
+      height: 86
+    spriteID: 668d024019620044799f59556eeaf9c1
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 72, y: 286}
+  spriteSheetImportData: []
+  asepriteLayers:
+  - layerIndex: 0
+    guid: -832977251
+    name: Frog 1
+    layerFlags: 0
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Frog 1_Frame_0
+      frameIndex: 0
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 86
+      spriteId: 30f7e20ebf4db5c478442fbe1a0d2d96
+    - name: Frog 1_Frame_1
+      frameIndex: 1
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 86
+      spriteId: 6c58385ba0cf1454c84edab5838bb8e0
+    - name: Frog 1_Frame_6
+      frameIndex: 6
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 82
+      spriteId: 63e876046caf6144093eea1c82609f03
+    - name: Frog 1_Frame_7
+      frameIndex: 7
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 82
+      spriteId: 293a53c57cfb91d4690b42a86ebd16bc
+    - name: Frog 1_Frame_12
+      frameIndex: 12
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 86
+      spriteId: a15dc7fb096a53a45a765fdcbb59bdbd
+    - name: Frog 1_Frame_13
+      frameIndex: 13
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 86
+      spriteId: a5133d66bc53d6f4cb528b884294085d
+    - name: Frog 1_Frame_18
+      frameIndex: 18
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 86
+      spriteId: 6e8a8324e1956594e951da8d576aedeb
+    - name: Frog 1_Frame_19
+      frameIndex: 19
+      cellRect:
+        x: 34
+        y: 36
+        width: 60
+        height: 82
+      spriteId: 8b51aac1abdeb294bae6c4033a0d8a8a
+    - name: Frog 1_Frame_24
+      frameIndex: 24
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 86
+      spriteId: 412c5f16c4ed1604c857011b7778b655
+    - name: Frog 1_Frame_25
+      frameIndex: 25
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 82
+      spriteId: 7a46e8e74682a58498a7e5cc5d5df327
+    - name: Frog 1_Frame_26
+      frameIndex: 26
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 86
+      spriteId: 474b319b96f4b0740ae42a7577139840
+    - name: Frog 1_Frame_27
+      frameIndex: 27
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 86
+      spriteId: 57146a716b4960f4594cea49999df363
+    - name: Frog 1_Frame_28
+      frameIndex: 28
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 82
+      spriteId: e3ad4cfea3ce9bd439eeee765761cc9d
+    - name: Frog 1_Frame_29
+      frameIndex: 29
+      cellRect:
+        x: 34
+        y: 24
+        width: 60
+        height: 86
+      spriteId: 668d024019620044799f59556eeaf9c1
+    linkedCells: []
+    parentIndex: -1
+  platformSettings: []
+  secondarySpriteTextures: []
+  spritePackingTag: 
+  canvasSize: {x: 128, y: 128}

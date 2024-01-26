@@ -1,0 +1,528 @@
+fileFormatVersion: 2
+guid: 4c029e8cb8b07a14584de3fc4f8560dd
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 62a9f0aa5b59740cfbadc7e5f9823bb0, type: 3}
+  textureImporterSettings:
+    alphaSource: 1
+    mipMapMode: 0
+    enableMipMap: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+    convertToNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
+    isReadable: 0
+    streamingMipmaps: 0
+    streamingMipmapsPriority: 0
+    vTOnly: 0
+    ignoreMipmapLimit: 0
+    nPOTScale: 1
+    sRGBTexture: 1
+    spriteMode: 2
+    spriteExtrude: 1
+    spriteMeshType: 1
+    alignment: 0
+    spritePivot: {x: 0.5, y: 0.5}
+    spritePixelsToUnits: 100
+    spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+    spriteGenerateFallbackPhysicsShape: 0
+    generateCubemap: 6
+    cubemapConvolution: 0
+    seamlessCubemap: 0
+    alphaIsTransparency: 1
+    spriteTessellationDetail: -1
+    textureType: 8
+    textureShape: 1
+    singleChannelComponent: 0
+    flipbookRows: 0
+    flipbookColumns: 0
+    ignorePngGamma: 0
+    cookieMode: 0
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+    normalMap: 0
+    textureFormat: 0
+    maxTextureSize: 0
+    lightmap: 0
+    compressionQuality: 0
+    linearTexture: 0
+    grayScaleToAlpha: 0
+    rGBM: 0
+    cubemapConvolutionSteps: 0
+    cubemapConvolutionExponent: 0
+    maxTextureSizeSet: 0
+    compressionQualitySet: 0
+    textureFormatSet: 0
+    applyGammaDecoding: 0
+  previousAsepriteImporterSettings:
+    fileImportMode: 1
+    importHiddenLayers: 0
+    layerImportMode: 1
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 7
+    customPivotPosition: {x: 0.5, y: 0.5}
+    spritePadding: 0
+    generateModelPrefab: 1
+    generateAnimationClips: 1
+    addSortingGroup: 1
+    addShadowCasters: 0
+  asepriteImporterSettings:
+    fileImportMode: 1
+    importHiddenLayers: 0
+    layerImportMode: 1
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 7
+    customPivotPosition: {x: 0.5, y: 0.5}
+    spritePadding: 0
+    generateModelPrefab: 1
+    generateAnimationClips: 1
+    addSortingGroup: 1
+    addShadowCasters: 0
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  textureAssetName: 
+  singleSpriteImportData:
+  - name: 
+    originalName: 
+    pivot: {x: 0, y: 0}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    spriteID: 
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+  animatedSpriteImportData:
+  - name: Fish 1_Frame_0
+    originalName: 
+    pivot: {x: 0.5, y: -0.26666668}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 76
+      height: 90
+    spriteID: d1f39c2c4c28c9d4f8e4ed57f0b8f097
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 4}
+  - name: Fish 1_Frame_1
+    originalName: 
+    pivot: {x: 0.5, y: -0.26666668}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 102
+      width: 76
+      height: 90
+    spriteID: a37b4cce005a6bb4d948631b803d59d6
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 102}
+  - name: Fish 1_Frame_6
+    originalName: 
+    pivot: {x: 0.5, y: -0.27272728}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 88
+      y: 396
+      width: 76
+      height: 88
+    spriteID: a6f425a8038a21948834b20569949d15
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 88, y: 396}
+  - name: Fish 1_Frame_7
+    originalName: 
+    pivot: {x: 0.5, y: -0.27272728}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 172
+      y: 4
+      width: 76
+      height: 88
+    spriteID: acd21133c7433e046b109047053656ae
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 172, y: 4}
+  - name: Fish 1_Frame_12
+    originalName: 
+    pivot: {x: 0.5, y: -0.26666668}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 200
+      width: 76
+      height: 90
+    spriteID: 1509ce877fa572b45802677e9cd4505c
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 200}
+  - name: Fish 1_Frame_13
+    originalName: 
+    pivot: {x: 0.5, y: -0.26666668}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 298
+      width: 76
+      height: 90
+    spriteID: 9a5f27f1beb723144a07f48f354a4a7c
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 298}
+  - name: Fish 1_Frame_18
+    originalName: 
+    pivot: {x: 0.5, y: -0.26666668}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 396
+      width: 76
+      height: 90
+    spriteID: 1b11c640d5822584896089194e048d33
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 396}
+  - name: Fish 1_Frame_19
+    originalName: 
+    pivot: {x: 0.5, y: -0.41860464}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 172
+      y: 100
+      width: 76
+      height: 86
+    spriteID: 789fca23c4836334bb1e77e6673ef327
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 172, y: 100}
+  - name: Fish 1_Frame_24
+    originalName: 
+    pivot: {x: 0.5, y: -0.26666668}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 88
+      y: 4
+      width: 76
+      height: 90
+    spriteID: 1d508a6f3aa72d54baf72340ed4386f6
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 88, y: 4}
+  - name: Fish 1_Frame_25
+    originalName: 
+    pivot: {x: 0.5, y: -0.27906978}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 172
+      y: 194
+      width: 76
+      height: 86
+    spriteID: 80199c92ee060a143942276b4f591977
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 172, y: 194}
+  - name: Fish 1_Frame_26
+    originalName: 
+    pivot: {x: 0.5, y: -0.26666668}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 88
+      y: 102
+      width: 76
+      height: 90
+    spriteID: 823167b333bb7694eab36aefe315714c
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 88, y: 102}
+  - name: Fish 1_Frame_27
+    originalName: 
+    pivot: {x: 0.5, y: -0.26666668}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 88
+      y: 200
+      width: 76
+      height: 90
+    spriteID: 4a0dc81d7800f73458670c30fc38190e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 88, y: 200}
+  - name: Fish 1_Frame_28
+    originalName: 
+    pivot: {x: 0.5, y: -0.27906978}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 172
+      y: 288
+      width: 76
+      height: 86
+    spriteID: f9c8d627c1ee6e642988df916e63b839
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 172, y: 288}
+  - name: Fish 1_Frame_29
+    originalName: 
+    pivot: {x: 0.5, y: -0.26666668}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 88
+      y: 298
+      width: 76
+      height: 90
+    spriteID: f13eec8c5d19d5d4ba04aeec875e949b
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 88, y: 298}
+  spriteSheetImportData: []
+  asepriteLayers:
+  - layerIndex: 0
+    guid: -449967995
+    name: Fish 1
+    layerFlags: 0
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Fish 1_Frame_0
+      frameIndex: 0
+      cellRect:
+        x: 26
+        y: 24
+        width: 76
+        height: 90
+      spriteId: d1f39c2c4c28c9d4f8e4ed57f0b8f097
+    - name: Fish 1_Frame_1
+      frameIndex: 1
+      cellRect:
+        x: 26
+        y: 24
+        width: 76
+        height: 90
+      spriteId: a37b4cce005a6bb4d948631b803d59d6
+    - name: Fish 1_Frame_6
+      frameIndex: 6
+      cellRect:
+        x: 26
+        y: 24
+        width: 76
+        height: 88
+      spriteId: a6f425a8038a21948834b20569949d15
+    - name: Fish 1_Frame_7
+      frameIndex: 7
+      cellRect:
+        x: 26
+        y: 24
+        width: 76
+        height: 88
+      spriteId: acd21133c7433e046b109047053656ae
+    - name: Fish 1_Frame_12
+      frameIndex: 12
+      cellRect:
+        x: 26
+        y: 24
+        width: 76
+        height: 90
+      spriteId: 1509ce877fa572b45802677e9cd4505c
+    - name: Fish 1_Frame_13
+      frameIndex: 13
+      cellRect:
+        x: 26
+        y: 24
+        width: 76
+        height: 90
+      spriteId: 9a5f27f1beb723144a07f48f354a4a7c
+    - name: Fish 1_Frame_18
+      frameIndex: 18
+      cellRect:
+        x: 26
+        y: 24
+        width: 76
+        height: 90
+      spriteId: 1b11c640d5822584896089194e048d33
+    - name: Fish 1_Frame_19
+      frameIndex: 19
+      cellRect:
+        x: 26
+        y: 36
+        width: 76
+        height: 86
+      spriteId: 789fca23c4836334bb1e77e6673ef327
+    - name: Fish 1_Frame_24
+      frameIndex: 24
+      cellRect:
+        x: 26
+        y: 24
+        width: 76
+        height: 90
+      spriteId: 1d508a6f3aa72d54baf72340ed4386f6
+    - name: Fish 1_Frame_25
+      frameIndex: 25
+      cellRect:
+        x: 26
+        y: 24
+        width: 76
+        height: 86
+      spriteId: 80199c92ee060a143942276b4f591977
+    - name: Fish 1_Frame_26
+      frameIndex: 26
+      cellRect:
+        x: 26
+        y: 24
+        width: 76
+        height: 90
+      spriteId: 823167b333bb7694eab36aefe315714c
+    - name: Fish 1_Frame_27
+      frameIndex: 27
+      cellRect:
+        x: 26
+        y: 24
+        width: 76
+        height: 90
+      spriteId: 4a0dc81d7800f73458670c30fc38190e
+    - name: Fish 1_Frame_28
+      frameIndex: 28
+      cellRect:
+        x: 26
+        y: 24
+        width: 76
+        height: 86
+      spriteId: f9c8d627c1ee6e642988df916e63b839
+    - name: Fish 1_Frame_29
+      frameIndex: 29
+      cellRect:
+        x: 26
+        y: 24
+        width: 76
+        height: 90
+      spriteId: f13eec8c5d19d5d4ba04aeec875e949b
+    linkedCells: []
+    parentIndex: -1
+  platformSettings: []
+  secondarySpriteTextures: []
+  spritePackingTag: 
+  canvasSize: {x: 128, y: 128}
