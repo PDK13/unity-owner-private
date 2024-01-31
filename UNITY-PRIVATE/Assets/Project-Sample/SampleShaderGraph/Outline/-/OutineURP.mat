@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-7796517747428120695
+--- !u!114 &-8567080172977808776
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Material Outline URP Anim 3
-  m_Shader: {fileID: -6465566751694194690, guid: f3645ca0a326fe94d8265c63a5b013dd, type: 3}
+  m_Name: OutineURP
+  m_Shader: {fileID: -6465566751694194690, guid: 3e0fb38ce12bba84d9a5254e79870ea7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -54,9 +54,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _OutlineRevert: 1
     - _OutlineSpeed: 1
     m_Colors:
-    - _OutlineColor1: {r: 2.9960783, g: 0, b: 2.0888593, a: 0}
-    - _OutlineColor2: {r: 0, g: 2.9960783, b: 0.738304, a: 0}
+    - _Outline: {r: 1, g: 0.7327648, b: 0, a: 0}
   m_BuildTextureStacks: []

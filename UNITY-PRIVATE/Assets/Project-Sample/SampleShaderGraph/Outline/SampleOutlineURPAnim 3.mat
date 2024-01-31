@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-4970059787750933371
+--- !u!114 &-7796517747428120695
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Material Fill 4 Color URP
-  m_Shader: {fileID: -6465566751694194690, guid: 381f5fa8ce971bd45b0c23a7667a8529, type: 3}
+  m_Name: SampleOutlineURPAnim 3
+  m_Shader: {fileID: -6465566751694194690, guid: f3645ca0a326fe94d8265c63a5b013dd, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -37,7 +37,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 1891bb47fc282b942a00f79de67fdf4f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -54,13 +54,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Fill02: 0.65
-    - _Fill03: -0.25
-    - _Fill04: -1.05
-    - _FillAmount: 1.5
+    - _OutlineRevert: 1
+    - _OutlineSpeed: 1
     m_Colors:
-    - _Color01: {r: 1, g: 0, b: 0, a: 0}
-    - _Color02: {r: 0.9556835, g: 1, b: 0, a: 0}
-    - _Color03: {r: 0.11012388, g: 1, b: 0, a: 0}
-    - _Color04: {r: 0, g: 0.18120667, b: 1, a: 0}
+    - _OutlineColor1: {r: 2.9960783, g: 0, b: 2.0888593, a: 0}
+    - _OutlineColor2: {r: 0, g: 2.9960783, b: 0.738304, a: 0}
   m_BuildTextureStacks: []
