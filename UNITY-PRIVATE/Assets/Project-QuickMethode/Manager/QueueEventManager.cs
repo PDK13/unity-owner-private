@@ -9,16 +9,11 @@ public class QueueEventManager : SingletonManager<QueueEventManager>
     /// <summary>
     /// Add new or get the exist of group queue event!
     /// </summary>
-    public QueueEventData SetGroup(string GroupName = "", bool ClearExist = false)
+    public QueueEventData SetGroup(string GroupName = "")
     {
         QueueEventData EventData = m_queueEvent.Find(t => t.GroupName == GroupName);
         if (EventData != null)
-        {
-            if (ClearExist)
-                EventData.SetClear();
-            //
             return EventData;
-        }
         //
         EventData = new QueueEventData(GroupName);
         m_queueEvent.Add(EventData);
