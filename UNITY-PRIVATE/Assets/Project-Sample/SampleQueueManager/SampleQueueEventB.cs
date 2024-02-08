@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SampleQueueEventB : MonoBehaviour, IQueueEvent
@@ -11,7 +10,7 @@ public class SampleQueueEventB : MonoBehaviour, IQueueEvent
         if (m_activeThis)
             StartCoroutine(ISetEventA());
         else
-            QueueEventManager.Instance.SetInvoke();
+            QueueEventManager.Instance.SetGroup().SetInvoke();
     }
 
     private IEnumerator ISetEventA()
@@ -20,6 +19,6 @@ public class SampleQueueEventB : MonoBehaviour, IQueueEvent
         yield return new WaitForSeconds(1f);
         Debug.Log("[Sample] Event B ended!");
         //
-        QueueEventManager.Instance.SetInvoke();
+        QueueEventManager.Instance.SetGroup().SetInvoke();
     }
 }
