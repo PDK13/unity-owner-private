@@ -56,7 +56,6 @@ public class TurnManager : SingletonManager<TurnManager>
 
         public bool EndTurnRemove = false;
 
-        public TurnSingle(int Start, string Turn, GameObject Unit)
         public TurnSingle(string Turn, int Start, GameObject Unit)
         {
             this.Start = Start;
