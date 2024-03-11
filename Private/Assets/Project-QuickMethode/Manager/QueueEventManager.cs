@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class QueueEventManager : SingletonManager<QueueEventManager>
 {
-    private QueueEventData m_data = new QueueEventData();
-
-    public QueueEventData Data => m_data ??= new QueueEventData();
+    public QueueEventData Data { get; } = new QueueEventData();
 }
 
 [Serializable]
@@ -17,17 +15,11 @@ public class QueueEventData
 
     private IQueueEvent m_eventFinal = null;
 
-    //
+    public int Index => m_eventQueueIndex;
 
-    public QueueEventData(IQueueEvent EventFinal = null)
-    {
-        m_eventQueue ??= new List<IQueueEvent>();
-        m_eventQueueIndex = 0;
-        //
-        m_eventFinal = EventFinal;
-    }
+    public int Count => m_eventQueue.Count;
 
-    //
+    public bool Complete => m_eventQueueIndex > m_eventQueue.Count - 1;
 
     /// <summary>
     /// Add a event to queue!
@@ -61,7 +53,7 @@ public class QueueEventData
     {
         m_eventQueue ??= new List<IQueueEvent>();
         //
-        if (m_eventQueueIndex <= m_eventQueue.Count - 1)
+        if (!Complete)
         {
             m_eventQueue[m_eventQueueIndex].ISetInvoke();
             m_eventQueueIndex++;
