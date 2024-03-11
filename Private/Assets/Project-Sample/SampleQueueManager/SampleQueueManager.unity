@@ -182,9 +182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5c3b8de539b17042984b3ec3b639318, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_queueEvent:
-  - Group: 
-    ClearOnFinish: 1
+  m_queueEvent: []
 --- !u!1 &1427844854
 GameObject:
   m_ObjectHideFlags: 0

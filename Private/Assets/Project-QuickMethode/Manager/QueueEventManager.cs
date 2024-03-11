@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class QueueEventManager : SingletonManager<QueueEventManager>
 {
-    [SerializeField] private List<QueueEventData> m_queueEvent = new List<QueueEventData>();
+    private List<QueueEventData> m_queueEvent = new List<QueueEventData>();
 
     /// <summary>
     /// Add new or get the exist of group queue event!
@@ -48,7 +48,7 @@ public class QueueEventData
     {
         this.GroupName = GroupName;
         //
-        m_eventQueue = new List<IQueueEvent>();
+        m_eventQueue ??= new List<IQueueEvent>();
         m_eventQueueIndex = 0;
     }
 
@@ -61,6 +61,8 @@ public class QueueEventData
     /// <param name="AddForce">When TRUE, the event will be add without check exist!</param>
     public void SetAdd(IQueueEvent EventQueue, bool AddForce = false)
     {
+        m_eventQueue ??= new List<IQueueEvent>();
+        //
         if (!AddForce && m_eventQueue.Contains(EventQueue))
             return;
         //
@@ -73,6 +75,8 @@ public class QueueEventData
     /// <param name="EventFinal">When event(s) in queue are invoked, then invoke this final event!</param>
     public void SetInvoke(IQueueEvent EventFinal = null)
     {
+        m_eventQueue ??= new List<IQueueEvent>();
+        //
         if (m_eventQueueIndex <= m_eventQueue.Count - 1)
         {
             m_eventQueue[m_eventQueueIndex].SetInvoke();
