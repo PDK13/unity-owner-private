@@ -5,7 +5,7 @@ public class SampleQueueEventB : MonoBehaviour, IQueueEvent
 {
     [SerializeField] private bool m_activeThis = true;
 
-    public void SetInvoke()
+    public void ISetInvoke()
     {
         if (m_activeThis)
             StartCoroutine(ISetEventA());

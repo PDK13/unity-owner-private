@@ -79,12 +79,12 @@ public class QueueEventData
         //
         if (m_eventQueueIndex <= m_eventQueue.Count - 1)
         {
-            m_eventQueue[m_eventQueueIndex].SetInvoke();
+            m_eventQueue[m_eventQueueIndex].ISetInvoke();
             m_eventQueueIndex++;
         }
         else
         if (EventFinal != null)
-            EventFinal.SetInvoke();
+            EventFinal.ISetInvoke();
     }
 
     /// <summary>
@@ -100,5 +100,5 @@ public class QueueEventData
 
 public interface IQueueEvent
 {
-    void SetInvoke();
+    void ISetInvoke();
 }
