@@ -4,16 +4,18 @@ public class SampleQueueEventManager : MonoBehaviour
 {
     [SerializeField] private SampleQueueEventA m_eventA;
     [SerializeField] private SampleQueueEventB m_eventB;
+    [SerializeField] private SampleQueueEventC m_eventC;
 
     private void Start()
     {
-        QueueEventManager.Instance.SetGroup().SetAdd(m_eventA);
-        QueueEventManager.Instance.SetGroup().SetAdd(m_eventB);
+        QueueEventManager.Instance.Data.SetQueue(m_eventA);
+        QueueEventManager.Instance.Data.SetQueue(m_eventB);
+        QueueEventManager.Instance.Data.SetFinal(m_eventC);
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-            QueueEventManager.Instance.SetGroup().SetInvoke();
+            QueueEventManager.Instance.Data.SetInvoke();
     }
 }

@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class SampleQueueEventB : MonoBehaviour, IQueueEvent
+public class SampleQueueEventC : MonoBehaviour, IQueueEvent
 {
     [SerializeField] private bool m_activeThis = true;
 
@@ -15,9 +15,9 @@ public class SampleQueueEventB : MonoBehaviour, IQueueEvent
 
     private IEnumerator ISetEventA()
     {
-        Debug.Log("[Sample] Event B called!");
+        Debug.Log("[Sample] Event C called!");
         yield return new WaitForSeconds(1f);
-        Debug.Log("[Sample] Event B ended!");
+        Debug.Log("[Sample] Event C ended!");
         //
         QueueEventManager.Instance.Data.SetInvoke();
     }

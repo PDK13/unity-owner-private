@@ -10,7 +10,7 @@ public class SampleQueueEventA : MonoBehaviour, IQueueEvent
         if (m_activeThis)
             StartCoroutine(ISetEventA());
         else
-            QueueEventManager.Instance.SetGroup().SetInvoke();
+            QueueEventManager.Instance.Data.SetInvoke();
     }
 
     private IEnumerator ISetEventA()
@@ -19,6 +19,6 @@ public class SampleQueueEventA : MonoBehaviour, IQueueEvent
         yield return new WaitForSeconds(1f);
         Debug.Log("[Sample] Event A ended!");
         //
-        QueueEventManager.Instance.SetGroup().SetInvoke();
+        QueueEventManager.Instance.Data.SetInvoke();
     }
 }
