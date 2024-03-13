@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SampleCode : MonoBehaviour
@@ -7,12 +9,35 @@ public class SampleCode : MonoBehaviour
     private int value = 3;
     private int? number = null;
 
-    private List<int> numbers;
+    [Serializable]
+    public class SimpleClass
+    {
+        public int valueA;
+        public int valueB;
+    }
+
+    public List<int> numbers = new List<int>();
+
+    public List<SimpleClass> data = new List<SimpleClass>();
 
     private void Awake()
     {
-        
+        Test03();
     }
+
+    private void Test03()
+    {
+        IEnumerable<int> numbercheck = 
+            from valueData 
+            in data 
+            where (valueData.valueB % 2 == 0) 
+            select valueData.valueA;
+        //
+        foreach(int valueCheck in numbercheck)
+            Debug.Log(valueCheck);
+    }
+
+    //
 
     private void Test01()
     {
