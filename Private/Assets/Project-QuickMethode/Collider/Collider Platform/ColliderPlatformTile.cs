@@ -37,8 +37,7 @@ public class ColliderPlatformTile : MonoBehaviour
     {
         if (!Application.isPlaying)
         {
-            if (m_composite == null)
-                m_composite = GetComponent<CompositeCollider2D>();
+            m_composite ??= GetComponent<CompositeCollider2D>();
             //
             ColliderPlatformTileData Data = new ColliderPlatformTileData(m_composite);
             Data.SetInit();

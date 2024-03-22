@@ -37,8 +37,7 @@ public class ColliderPlatformShape : MonoBehaviour
     {
         if (!Application.isPlaying)
         {
-            if (m_poligon == null)
-                m_poligon = GetComponent<PolygonCollider2D>();
+            m_poligon ??= GetComponent<PolygonCollider2D>();
             //
             ColliderPlatformShapeData Data = new ColliderPlatformShapeData(m_poligon, m_degLimit);
             Data.SetInit();
