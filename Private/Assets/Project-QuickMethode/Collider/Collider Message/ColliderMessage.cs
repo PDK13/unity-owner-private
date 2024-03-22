@@ -47,16 +47,16 @@ public class ColliderMessage : MonoBehaviour
         SetMessage(m_code, m_methodeExit, collision);
     }
     
-    private void SetMessage(string Code, string Methode, Collider2D Collision)
+    private bool SetMessage(string Code, string Methode, Collider2D Collision)
     {
         if (Methode == "")
-            return;
+            return false;
         //
         if (Collision.gameObject.Equals(m_messageSend))
-            return;
+            return false;
         //
         if (!m_checkTag.Contains(Collision.gameObject.tag) && m_checkTag.Count > 0)
-            return;
+            return false;
         //
         if (((1 << Collision.gameObject.layer) & m_checkLayer) != 0 || m_checkLayer == 0)
         {
@@ -70,12 +70,15 @@ public class ColliderMessage : MonoBehaviour
                     break;
                 case MessageType.Rigidbody:
                     if (Collision.attachedRigidbody == null)
-                        return;
+                        return false;
                     if (Collision.attachedRigidbody.gameObject.Equals(m_messageSend))
-                        return;
+                        return false;
                     m_messageSend.SendMessage(Methode, new ColliderMessageData(Code, Collision.attachedRigidbody.gameObject), m_messageOptions);
                     break;
             }
+            return true;
         }
+        //
+        return false;
     }
 }
