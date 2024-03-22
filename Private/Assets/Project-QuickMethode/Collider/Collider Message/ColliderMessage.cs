@@ -46,7 +46,7 @@ public class ColliderMessage : MonoBehaviour
     {
         SetMessage(m_code, m_methodeExit, collision);
     }
-
+    
     private void SetMessage(string Code, string Methode, Collider2D Collision)
     {
         if (Methode == "")
@@ -58,21 +58,24 @@ public class ColliderMessage : MonoBehaviour
         if (!m_checkTag.Contains(Collision.gameObject.tag) && m_checkTag.Count > 0)
             return;
         //
-        switch (m_messageType)
+        if (((1 << Collision.gameObject.layer) & m_checkLayer) != 0 || m_checkLayer == 0)
         {
-            case MessageType.None:
-                m_messageSend.SendMessage(Methode, m_messageOptions);
-                break;
-            case MessageType.Collider:
-                m_messageSend.SendMessage(Methode, new ColliderMessageData(Code, Collision.gameObject), m_messageOptions);
-                break;
-            case MessageType.Rigidbody:
-                if (Collision.attachedRigidbody == null)
-                    return;
-                if (Collision.attachedRigidbody.gameObject.Equals(m_messageSend))
-                    return;
-                m_messageSend.SendMessage(Methode, new ColliderMessageData(Code, Collision.attachedRigidbody.gameObject), m_messageOptions);
-                break;
+            switch (m_messageType)
+            {
+                case MessageType.None:
+                    m_messageSend.SendMessage(Methode, m_messageOptions);
+                    break;
+                case MessageType.Collider:
+                    m_messageSend.SendMessage(Methode, new ColliderMessageData(Code, Collision.gameObject), m_messageOptions);
+                    break;
+                case MessageType.Rigidbody:
+                    if (Collision.attachedRigidbody == null)
+                        return;
+                    if (Collision.attachedRigidbody.gameObject.Equals(m_messageSend))
+                        return;
+                    m_messageSend.SendMessage(Methode, new ColliderMessageData(Code, Collision.attachedRigidbody.gameObject), m_messageOptions);
+                    break;
+            }
         }
     }
 }
