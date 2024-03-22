@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PolygonCollider2D))]
-public class ColliderPlatformCreator : MonoBehaviour
+public class ColliderPlatform : MonoBehaviour
 {
     [SerializeField] private LayerMask m_colliderMask;
     [SerializeField] private float m_degLimit = 90f;
 
     private PolygonCollider2D m_poligonColider;
-    private PlatformCreatorData m_platformData;
+    private ColliderPlatformData m_platformData;
 
     private void Awake()
     {
         m_poligonColider = GetComponent<PolygonCollider2D>();
         //
-        m_platformData = new PlatformCreatorData(m_poligonColider, m_degLimit);
+        m_platformData = new ColliderPlatformData(m_poligonColider, m_degLimit);
     }
 
     private void Start()
@@ -31,7 +31,7 @@ public class ColliderPlatformCreator : MonoBehaviour
             if (m_poligonColider == null)
                 m_poligonColider = GetComponent<PolygonCollider2D>();
             //
-            PlatformCreatorData ShapePlatformData = new PlatformCreatorData(m_poligonColider, m_degLimit);
+            ColliderPlatformData ShapePlatformData = new ColliderPlatformData(m_poligonColider, m_degLimit);
             ShapePlatformData.SetInit();
             //
             Gizmos.color = Color.red;
@@ -48,15 +48,15 @@ public class ColliderPlatformCreator : MonoBehaviour
     }
 }
 
-public class PlatformCreatorData
+public class ColliderPlatformData
 {
     [SerializeField] private PolygonCollider2D m_polygonCollider;
     [SerializeField] private float DegLimit;
-    [SerializeField] private List<ShapePlatformSingle> m_platform = new List<ShapePlatformSingle>();
+    [SerializeField] private List<ColliderPlatformDataSingle> m_platform = new List<ColliderPlatformDataSingle>();
 
-    public ShapePlatformSingle[] Platform => m_platform.ToArray();
+    public ColliderPlatformDataSingle[] Platform => m_platform.ToArray();
 
-    public PlatformCreatorData(PolygonCollider2D polygonCollider, float degLimit)
+    public ColliderPlatformData(PolygonCollider2D polygonCollider, float degLimit)
     {
         m_polygonCollider = polygonCollider;
         DegLimit = degLimit;
@@ -136,7 +136,7 @@ public class PlatformCreatorData
 
     public void SetInit()
     {
-        m_platform = new List<ShapePlatformSingle>();
+        m_platform = new List<ColliderPlatformDataSingle>();
         //
         for (int Group = 0; Group < m_polygonCollider.pathCount; Group++)
         {
@@ -159,11 +159,11 @@ public class PlatformCreatorData
         if (Deg > DegLimit || Deg < -DegLimit)
             return;
         //
-        this.m_platform.Add(new ShapePlatformSingle(PointA, PointB));
+        this.m_platform.Add(new ColliderPlatformDataSingle(PointA, PointB));
     }
 }
 
-public class ShapePlatformSingle
+public class ColliderPlatformDataSingle
 {
     public Vector2 PointA { private set; get; }
 
@@ -177,7 +177,7 @@ public class ShapePlatformSingle
 
     public float Length => Vector2.Distance(PointA, PointB);
 
-    public ShapePlatformSingle(Vector2 PointA, Vector2 PointB)
+    public ColliderPlatformDataSingle(Vector2 PointA, Vector2 PointB)
     {
         this.PointA = PointA;
         this.PointB = PointB;
