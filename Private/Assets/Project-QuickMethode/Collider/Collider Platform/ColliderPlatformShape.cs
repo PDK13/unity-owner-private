@@ -44,10 +44,10 @@ public class ColliderPlatformShape : MonoBehaviour
             Data.SetInit();
             //
             Gizmos.color = Color.red;
-            for (int i = 0; i < Data.Platform.Length; i++)
+            for (int i = 0; i < Data.LocalPlatform.Length; i++)
             {
-                Vector2 PointA = transform.position + (Vector3)Data.Platform[i].PointA;
-                Vector2 PointB = transform.position + (Vector3)Data.Platform[i].PointB;
+                Vector2 PointA = transform.position + (Vector3)Data.LocalPlatform[i].PointA;
+                Vector2 PointB = transform.position + (Vector3)Data.LocalPlatform[i].PointB;
                 //
                 Gizmos.DrawLine(PointA, PointB);
                 Gizmos.DrawWireSphere(PointA, 0.05f);
@@ -60,13 +60,13 @@ public class ColliderPlatformShape : MonoBehaviour
 public class ColliderPlatformShapeData
 {
     private PolygonCollider2D m_poligon;
-    private float DegLimit;
-    private List<ColliderPlatformDataSingle> m_platform = new List<ColliderPlatformDataSingle>();
+    private float m_degLimit;
+    private List<ColliderPlatformData> m_localPlatform = new List<ColliderPlatformData>();
 
     public ColliderPlatformShapeData(PolygonCollider2D polygonCollider, float degLimit)
     {
         m_poligon = polygonCollider;
-        DegLimit = degLimit;
+        m_degLimit = degLimit;
     }
 
     //
@@ -81,7 +81,7 @@ public class ColliderPlatformShapeData
         GroupTransform.SetParent(m_poligon.transform);
         GroupTransform.localPosition = Vector3.zero;
         //
-        for (int i = 0; i < m_platform.Count; i++)
+        for (int i = 0; i < m_localPlatform.Count; i++)
         {
             GameObject Platform = new GameObject("platform");
             Platform.layer = m_poligon.gameObject.layer;
@@ -92,13 +92,13 @@ public class ColliderPlatformShapeData
             PlatformTransform.localPosition = Vector3.zero;
             //
             EdgeCollider2D EdgeCollider2D = Platform.AddComponent<EdgeCollider2D>();
-            EdgeCollider2D.points = m_platform[i].Points;
+            EdgeCollider2D.points = m_localPlatform[i].Points;
             EdgeCollider2D.usedByEffector = true;
             //
             PlatformEffector2D PlatformEffector2D = Platform.AddComponent<PlatformEffector2D>();
             PlatformEffector2D.useColliderMask = false;
             PlatformEffector2D.surfaceArc = 160f;
-            PlatformEffector2D.rotationalOffset = m_platform[i].Deg;
+            PlatformEffector2D.rotationalOffset = m_localPlatform[i].Deg;
         }
         //
         m_poligon.enabled = false;
@@ -114,7 +114,7 @@ public class ColliderPlatformShapeData
         GroupTransform.SetParent(m_poligon.transform);
         GroupTransform.localPosition = Vector3.zero;
         //
-        for (int i = 0; i < m_platform.Count; i++)
+        for (int i = 0; i < m_localPlatform.Count; i++)
         {
             GameObject Platform = new GameObject("platform");
             Platform.layer = m_poligon.gameObject.layer;
@@ -125,13 +125,13 @@ public class ColliderPlatformShapeData
             PlatformTransform.localPosition = Vector3.zero;
             //
             EdgeCollider2D EdgeCollider2D = Platform.AddComponent<EdgeCollider2D>();
-            EdgeCollider2D.points = m_platform[i].Points;
+            EdgeCollider2D.points = m_localPlatform[i].Points;
             EdgeCollider2D.usedByEffector = true;
             //
             PlatformEffector2D PlatformEffector2D = Platform.AddComponent<PlatformEffector2D>();
             PlatformEffector2D.colliderMask = ColliderMask;
             PlatformEffector2D.surfaceArc = 160f;
-            PlatformEffector2D.rotationalOffset = m_platform[i].Deg;
+            PlatformEffector2D.rotationalOffset = m_localPlatform[i].Deg;
         }
         //
         m_poligon.enabled = false;
@@ -141,7 +141,7 @@ public class ColliderPlatformShapeData
 
     public void SetInit()
     {
-        m_platform = new List<ColliderPlatformDataSingle>();
+        m_localPlatform = new List<ColliderPlatformData>();
         //
         for (int Group = 0; Group < m_poligon.pathCount; Group++)
         {
@@ -161,32 +161,11 @@ public class ColliderPlatformShapeData
             return;
         //
         double Deg = Math.Atan2(PointB.y - PointA.y, PointB.x - PointA.x) * Mathf.Rad2Deg;
-        if (Deg > DegLimit || Deg < -DegLimit)
+        if (Deg > m_degLimit || Deg < -m_degLimit)
             return;
         //
-        this.m_platform.Add(new ColliderPlatformDataSingle(PointA, PointB));
+        this.m_localPlatform.Add(new ColliderPlatformData(PointA, PointB));
     }
 
-    public ColliderPlatformDataSingle[] Platform => m_platform.ToArray();
-}
-
-public class ColliderPlatformDataSingle
-{
-    public Vector2 PointA { private set; get; }
-
-    public Vector2 PointB { private set; get; }
-
-    public Vector2[] Points => new Vector2[2] { PointA, PointB };
-
-    public Vector2 PointCentre => (PointA + PointB) / 2;
-
-    public float Deg => Mathf.Atan2(PointB.y - PointA.y, PointB.x - PointA.x) * Mathf.Rad2Deg;
-
-    public float Length => Vector2.Distance(PointA, PointB);
-
-    public ColliderPlatformDataSingle(Vector2 PointA, Vector2 PointB)
-    {
-        this.PointA = PointA;
-        this.PointB = PointB;
-    }
+    public ColliderPlatformData[] LocalPlatform => m_localPlatform.ToArray();
 }

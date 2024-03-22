@@ -44,10 +44,10 @@ public class ColliderPlatformTile : MonoBehaviour
             Data.SetInit();
             //
             Gizmos.color = Color.red;
-            for (int i = 0; i < Data.Platform.Length; i++)
+            for (int i = 0; i < Data.LocalPlatform.Length; i++)
             {
-                Vector2 PointA = transform.position + (Vector3)Data.Platform[i].PointA;
-                Vector2 PointB = transform.position + (Vector3)Data.Platform[i].PointB;
+                Vector2 PointA = transform.position + (Vector3)Data.LocalPlatform[i].PointA;
+                Vector2 PointB = transform.position + (Vector3)Data.LocalPlatform[i].PointB;
                 //
                 Gizmos.DrawLine(PointA, PointB);
                 Gizmos.DrawWireSphere(PointA, 0.05f);
@@ -60,7 +60,7 @@ public class ColliderPlatformTile : MonoBehaviour
 public class ColliderPlatformTileData
 {
     private CompositeCollider2D m_composite;
-    private List<ColliderPlatformDataSingle> m_platform = new List<ColliderPlatformDataSingle>();
+    private List<ColliderPlatformData> m_localPlatform = new List<ColliderPlatformData>();
 
     public ColliderPlatformTileData(CompositeCollider2D m_composite)
     {
@@ -79,7 +79,7 @@ public class ColliderPlatformTileData
         GroupTransform.SetParent(m_composite.transform);
         GroupTransform.localPosition = Vector3.zero;
         //
-        for (int i = 0; i < m_platform.Count; i++)
+        for (int i = 0; i < m_localPlatform.Count; i++)
         {
             GameObject Platform = new GameObject("platform");
             Platform.layer = m_composite.gameObject.layer;
@@ -90,13 +90,13 @@ public class ColliderPlatformTileData
             PlatformTransform.localPosition = Vector3.zero;
             //
             EdgeCollider2D EdgeCollider2D = Platform.AddComponent<EdgeCollider2D>();
-            EdgeCollider2D.points = m_platform[i].Points;
+            EdgeCollider2D.points = m_localPlatform[i].Points;
             EdgeCollider2D.usedByEffector = true;
             //
             PlatformEffector2D PlatformEffector2D = Platform.AddComponent<PlatformEffector2D>();
             PlatformEffector2D.useColliderMask = false;
             PlatformEffector2D.surfaceArc = 160f;
-            PlatformEffector2D.rotationalOffset = m_platform[i].Deg;
+            PlatformEffector2D.rotationalOffset = m_localPlatform[i].Deg;
         }
         //
         m_composite.isTrigger = true;
@@ -115,7 +115,7 @@ public class ColliderPlatformTileData
         GroupTransform.SetParent(m_composite.transform);
         GroupTransform.localPosition = Vector3.zero;
         //
-        for (int i = 0; i < m_platform.Count; i++)
+        for (int i = 0; i < m_localPlatform.Count; i++)
         {
             GameObject Platform = new GameObject("platform");
             Platform.layer = m_composite.gameObject.layer;
@@ -126,13 +126,13 @@ public class ColliderPlatformTileData
             PlatformTransform.localPosition = Vector3.zero;
             //
             EdgeCollider2D EdgeCollider2D = Platform.AddComponent<EdgeCollider2D>();
-            EdgeCollider2D.points = m_platform[i].Points;
+            EdgeCollider2D.points = m_localPlatform[i].Points;
             EdgeCollider2D.usedByEffector = true;
             //
             PlatformEffector2D PlatformEffector2D = Platform.AddComponent<PlatformEffector2D>();
             PlatformEffector2D.colliderMask = ColliderMask;
             PlatformEffector2D.surfaceArc = 160f;
-            PlatformEffector2D.rotationalOffset = m_platform[i].Deg;
+            PlatformEffector2D.rotationalOffset = m_localPlatform[i].Deg;
         }
         //
         m_composite.isTrigger = true;
@@ -145,7 +145,7 @@ public class ColliderPlatformTileData
 
     public void SetInit()
     {
-        m_platform = new List<ColliderPlatformDataSingle>();
+        m_localPlatform = new List<ColliderPlatformData>();
         //
         var PlatformGroup = GetPlatform(m_composite);
         //
@@ -159,14 +159,14 @@ public class ColliderPlatformTileData
 
     private void SetInit(Vector2 PointA, Vector2 PointB)
     {
-        this.m_platform.Add(new ColliderPlatformDataSingle(PointA, PointB));
+        this.m_localPlatform.Add(new ColliderPlatformData(PointA, PointB));
     }
 
-    public ColliderPlatformDataSingle[] Platform => m_platform.ToArray();
+    public ColliderPlatformData[] LocalPlatform => m_localPlatform.ToArray();
 
     //
 
-    public List<(Vector2 Center, float Length)> GetPlatform(CompositeCollider2D From)
+    private List<(Vector2 Center, float Length)> GetPlatform(CompositeCollider2D From)
     {
         //NOTE: Caculate Platform Pos and Length of Collider on each Group!!
         List<(Vector2 Center, float Length)> Platform = new List<(Vector2 Center, float Length)>();
