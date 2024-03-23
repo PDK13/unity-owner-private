@@ -334,10 +334,11 @@
       }
     },
     "com.unity.uiextensions": {
-      "version": "file:D:/Unity-Package/UIExtensions",
+      "version": "https://github.com/Unity-UI-Extensions/com.unity.uiextensions.git",
       "depth": 0,
-      "source": "local",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "855607ab678bb88178d2eea69032fe57a74270c8"
     },
     "com.unity.visualscripting": {
       "version": "1.9.1",
