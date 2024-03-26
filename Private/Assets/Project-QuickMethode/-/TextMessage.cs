@@ -11,7 +11,8 @@ public class TextMessage : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         //
-        MessageManager.Instance.SetStart(m_tmpMyText, m_messageConfig);
+        MessageManager.Instance.TextMeshPro = m_tmpMyText;
+        MessageManager.Instance.SetStart(m_messageConfig);
     }
 
     private void Update()

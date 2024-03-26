@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c6ff8ca28e90d74f8f47bd3237fd694, type: 3}
+  m_Name: message-text-config
+  m_EditorClassIdentifier: 
+  Message:
+  - AuthorIndex: 0
+    Message: 
+    DelayAlpha: 9999
+    DelaySpace: 0.1
+    DelayMark: 0.1
+    TriggerCode: 
+    TriggerObject: {fileID: 0}
+  - AuthorIndex: 0
+    Message: 
+    DelayAlpha: 0.1
+    DelaySpace: 0.1
+    DelayMark: 0.1
+    TriggerCode: 
+    TriggerObject: {fileID: 0}
+  - AuthorIndex: 0
+    Message: 
+    DelayAlpha: 0.1
+    DelaySpace: 0.1
+    DelayMark: 0.1
+    TriggerCode: 
+    TriggerObject: {fileID: 0}
+  - AuthorIndex: 0
+    Message: 
+    DelayAlpha: 0.1
+    DelaySpace: 0.1
+    DelayMark: 0.1
+    TriggerCode: 
+    TriggerObject: {fileID: 0}
+  Choice:
+  - Text: 
+    Next: {fileID: 0}
+    AuthorIndex: 0
+    Message: Will you do that?
+    TriggerCode: 
+    TriggerObject: {fileID: 0}
+  - Text: 
+    Next: {fileID: 0}
+    AuthorIndex: 0
+    Message: 
+    TriggerCode: 
+    TriggerObject: {fileID: 0}
+  - Text: 
+    Next: {fileID: 0}
+    AuthorIndex: 0
+    Message: 
+    TriggerCode: 
+    TriggerObject: {fileID: 0}
+  - Text: 
+    Next: {fileID: 0}
+    AuthorIndex: 0
+    Message: 
+    TriggerCode: 
+    TriggerObject: {fileID: 0}
