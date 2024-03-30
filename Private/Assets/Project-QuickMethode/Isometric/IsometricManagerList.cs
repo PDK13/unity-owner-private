@@ -69,6 +69,7 @@ public class IsometricManagerList
                 }
                 //
                 if (!All)
+                    //If not need to check all tag of this block!
                     break;
             }
         }
@@ -108,6 +109,7 @@ public class IsometricManagerList
                 }
                 //
                 if (!All)
+                    //If not need to check all tag of this block!
                     break;
             }
         }
@@ -175,7 +177,7 @@ public class IsometricManagerList
 
     public GameObject GetList(string BlockName, string Tag = "")
     {
-        if (Tag != "")
+        if (!string.IsNullOrEmpty(Tag))
         {
             for (int i = 0; i < BlockList.Count; i++)
             {
