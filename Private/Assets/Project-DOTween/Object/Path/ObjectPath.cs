@@ -102,6 +102,7 @@ public class ObjectPath : MonoBehaviour
 
     #region Tween Move
 
+    [ContextMenu("Start")]
     public void SetStart()
     {
         if (PathCount == 0)
@@ -139,6 +140,7 @@ public class ObjectPath : MonoBehaviour
         }
     }
 
+    [ContextMenu("Move")]
     public void SetMove()
     {
         if (PathCount == 0)
@@ -158,6 +160,7 @@ public class ObjectPath : MonoBehaviour
         m_tweenMove.timeScale = 1;
     }
 
+    [ContextMenu("Move Invert")]
     public void SetMoveInvert()
     {
         if (m_tweenMove == null)
@@ -169,6 +172,7 @@ public class ObjectPath : MonoBehaviour
         m_tweenMove.PlayBackwards();
     }
 
+    [ContextMenu("Stop")]
     public void SetMoveStop()
     {
         if (m_tweenMove == null)
