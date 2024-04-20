@@ -521,7 +521,7 @@ public class RendererCircumMeshEditor : Editor
         //
         QUnityEditor.SetSpace(10);
         //
-        QUnityEditor.SetLabel("SETTING", QUnityEditor.GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter));
+        QUnityEditor.SetLabel("SETTING", QUnityEditor.GetGUIStyleLabel(FontStyle.Bold));
         //
         //OUTER:
         QUnityEditorCustom.SetField(m_outerPoint);
@@ -536,7 +536,7 @@ public class RendererCircumMeshEditor : Editor
             m_target.OuterPointRatio = new float[m_target.OuterPoint];
         //
         int i = 0;
-        m_scrollOuterPointRatio = QUnityEditor.SetScrollViewBegin(m_scrollOuterPointRatio, QUnityEditor.GetGUIHeight(105));
+        m_scrollOuterPointRatio = QUnityEditor.SetScrollViewBegin(m_scrollOuterPointRatio, QUnityEditor.GetGUILayoutHeight(105));
         while (i < m_target.OuterPoint)
         {
             if (m_target.OuterPointRatio[i] < 0 && m_target.OuterPointRatio[i] < -m_target.OuterRadius)
@@ -544,13 +544,13 @@ public class RendererCircumMeshEditor : Editor
             //
             //VIEW:
             QUnityEditor.SetHorizontalBegin();
-            QUnityEditor.SetLabel(string.Format("{0}", i), QUnityEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter), QUnityEditor.GetGUIWidth(25));
-            m_target.OuterPointRatio[i] = QUnityEditor.SetField(m_target.OuterPointRatio[i], null, QUnityEditor.GetGUIWidth(50));
+            QUnityEditor.SetLabel(string.Format("{0}", i), QUnityEditor.GetGUIStyleLabel(), QUnityEditor.GetGUILayoutWidth(25));
+            m_target.OuterPointRatio[i] = QUnityEditor.SetField(m_target.OuterPointRatio[i], null, QUnityEditor.GetGUILayoutWidth(50));
             //
             if (m_target.Data != null)
                 if (m_target.Data.OuterPoints != null)
                     if (i < m_target.Data.OuterPoints.Length)
-                        QUnityEditor.SetLabel(((Vector2)m_target.Data.OuterPoints[i]).ToString(), QUnityEditor.GetGUILabel(FontStyle.Normal, TextAnchor.MiddleCenter));
+                        QUnityEditor.SetLabel(((Vector2)m_target.Data.OuterPoints[i]).ToString(), QUnityEditor.GetGUIStyleLabel());
             //
             QUnityEditor.SetHorizontalEnd();
             //VIEW:
@@ -567,7 +567,7 @@ public class RendererCircumMeshEditor : Editor
         //
         QUnityEditor.SetSpace(10);
         //
-        QUnityEditor.SetLabel("SAMPLE", QUnityEditor.GetGUILabel(FontStyle.Bold, TextAnchor.MiddleCenter));
+        QUnityEditor.SetLabel("SAMPLE", QUnityEditor.GetGUIStyleLabel(FontStyle.Bold));
         //
         QUnityEditor.SetHorizontalBegin();
         if (QUnityEditor.SetButton("Star A"))
