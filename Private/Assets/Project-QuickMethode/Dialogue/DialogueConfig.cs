@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -8,47 +7,47 @@ using UnityEditor;
 [CreateAssetMenu(fileName = "dialogue-config", menuName = "Dialogue/Dialogue Config", order = 1)]
 public class DialogueConfig : ScriptableObject
 {
+    public string AuthorNone = "None";
     public List<DialogueDataAuthor> Author = new List<DialogueDataAuthor>();
-
     public DialogueDataTextDelay DelayDefault;
 
     //
 
-    public List<string> AuthorName
+    public string[] AuthorName
     {
         get
         {
-            List<string> NameFound = new List<string>();
-            //
             if (Author == null)
-                return NameFound;
-            //
+                return null;
+
             if (Author.Count == 0)
-                return NameFound;
-            //
+                return null;
+
+            List<string> Data = new List<string>() { AuthorNone };
+
             foreach (DialogueDataAuthor AuthorItem in Author)
-                NameFound.Add(AuthorItem.Name);
-            //
-            return NameFound;
+                Data.Add(AuthorItem.Name);
+
+            return Data.ToArray();
         }
     }
 
-    public List<Sprite> AuthorAvatar
+    public Sprite[] AuthorAvatar
     {
         get
         {
             if (Author == null)
                 return null;
-            //
+
             if (Author.Count == 0)
                 return null;
-            //
-            List<Sprite> NameFound = new List<Sprite>();
-            //
+
+            List<Sprite> Data = new List<Sprite>() { null };
+
             foreach (DialogueDataAuthor AuthorItem in Author)
-                NameFound.Add(AuthorItem.Avatar);
+                Data.Add(AuthorItem.Avatar);
             //
-            return NameFound;
+            return Data.ToArray();
         }
     }
 
@@ -63,55 +62,73 @@ public class DialogueConfig : ScriptableObject
     {
         return Author.Find(t => t.Name == Name);
     }
+
+#if UNITY_EDITOR
+
+    public int EditorAuthorListCount
+    {
+        get => Author.Count;
+        set
+        {
+            while (Author.Count > value)
+                Author.RemoveAt(Author.Count - 1);
+            while (Author.Count < value)
+                Author.Add(new DialogueDataAuthor());
+        }
+    }
+
+    public bool EditorAuthorListCommand { get; set; } = false;
+
+#endif
 }
-
-//Editor
-
-
 
 #if UNITY_EDITOR
 
 [CustomEditor(typeof(DialogueConfig))]
 public class DialogueConfigEditor : Editor
 {
+    private const float POPUP_HEIGHT = 300f;
+    private const float LABEL_WIDTH = 65f;
+
     private DialogueConfig m_target;
 
-    private SerializedProperty Author;
-    private SerializedProperty DelayDefault;
+    private Vector2 m_scrollAuthor;
 
     private void OnEnable()
     {
         m_target = target as DialogueConfig;
-        //
-        Author = QUnityEditorCustom.GetField(this, "Author");
-        DelayDefault = QUnityEditorCustom.GetField(this, "DelayDefault");
-        //
-        SetConfigAuthorFixed();
+
+        SetConfigFixed();
     }
 
     private void OnDisable()
     {
-        SetConfigAuthorFixed();
+        SetConfigFixed();
     }
 
     private void OnDestroy()
     {
-        SetConfigAuthorFixed();
+        SetConfigFixed();
     }
 
     public override void OnInspectorGUI()
     {
         QUnityEditorCustom.SetUpdate(this);
-        //
-        QUnityEditorCustom.SetField(Author);
-        QUnityEditorCustom.SetField(DelayDefault);
-        //
+
+        SetGUIGroupAuthor();
+
+        QUnityEditor.SetSpace();
+
+        SetGUIGroupSetting();
+
         QUnityEditorCustom.SetApply(this);
+
+        QUnityEditor.SetDirty(m_target);
     }
 
     //
 
-    private void SetConfigAuthorFixed()
+    private void SetConfigFixed()
     {
         bool RemoveEmty = false;
         int Index = 0;
@@ -129,6 +146,85 @@ public class DialogueConfigEditor : Editor
         //
         if (RemoveEmty)
             Debug.Log("[Dialogue] Author(s) emty have been remove from list");
+    }
+
+    //
+
+    private void SetGUIGroupAuthor()
+    {
+        QUnityEditor.SetLabel("AUTHOR", QUnityEditor.GetGUIStyleLabel(FontStyle.Bold));
+
+        //COUNT:
+        m_target.EditorAuthorListCount = QUnityEditor.SetGroupNumberChangeLimitMin("Author", m_target.EditorAuthorListCount, 0);
+        //LIST
+        m_scrollAuthor = QUnityEditor.SetScrollViewBegin(m_scrollAuthor, QUnityEditor.GetGUILayoutHeight(POPUP_HEIGHT));
+        for (int i = 0; i < m_target.Author.Count; i++)
+        {
+            #region ITEM
+            QUnityEditor.SetHorizontalBegin();
+            if (QUnityEditor.SetButton(i.ToString(), QUnityEditor.GetGUIStyleLabel(), QUnityEditor.GetGUILayoutWidth(25)))
+                m_target.EditorAuthorListCommand = !m_target.EditorAuthorListCommand;
+            m_target.Author[i].Name = QUnityEditor.SetField(m_target.Author[i].Name);
+            m_target.Author[i].Avatar = QUnityEditor.SetField(m_target.Author[i].Avatar, QUnityEditor.GetGUILayoutSizeSprite());
+            QUnityEditor.SetHorizontalEnd();
+            #endregion
+
+            #region ARRAY
+            if (m_target.EditorAuthorListCommand)
+            {
+                QUnityEditor.SetHorizontalBegin();
+                QUnityEditor.SetLabel("", QUnityEditor.GetGUIStyleLabel(), QUnityEditor.GetGUILayoutWidth(25));
+                if (QUnityEditor.SetButton("↑", QUnityEditor.GetGUIStyleButton(), QUnityEditor.GetGUILayoutWidth(25)))
+                    QList.SetSwap(m_target.Author, i, i - 1);
+                if (QUnityEditor.SetButton("↓", QUnityEditor.GetGUIStyleButton(), QUnityEditor.GetGUILayoutWidth(25)))
+                    QList.SetSwap(m_target.Author, i, i + 1);
+                if (QUnityEditor.SetButton("X", QUnityEditor.GetGUIStyleButton(), QUnityEditor.GetGUILayoutWidth(25)))
+                {
+                    m_target.Author.RemoveAt(i);
+                    m_target.EditorAuthorListCount--;
+                }
+                QUnityEditor.SetHorizontalEnd();
+            }
+            #endregion
+        }
+        QUnityEditor.SetScrollViewEnd();
+    }
+
+    private void SetGUIGroupSetting()
+    {
+        QUnityEditor.SetLabel("SETTING", QUnityEditor.GetGUIStyleLabel(FontStyle.Bold));
+
+        #region DELAY - DEFAULT
+        QUnityEditor.SetLabel("Delay Default", null, QUnityEditor.GetGUILayoutWidth(LABEL_WIDTH * 1.5f));
+
+        #region DELAY - DEFAULT - ITEM
+        QUnityEditor.SetVerticalBegin();
+
+        #region DELAY - DEFAULT - ITEM - ALPHA
+        QUnityEditor.SetHorizontalBegin();
+        QUnityEditor.SetLabel("Alpha", null, QUnityEditor.GetGUILayoutWidth(LABEL_WIDTH));
+        m_target.DelayDefault.Alpha = QUnityEditor.SetField(m_target.DelayDefault.Alpha);
+        QUnityEditor.SetHorizontalEnd();
+        #endregion
+
+        #region DELAY - DEFAULT - ITEM - SPACE
+        QUnityEditor.SetHorizontalBegin();
+        QUnityEditor.SetLabel("Space", null, QUnityEditor.GetGUILayoutWidth(LABEL_WIDTH));
+        m_target.DelayDefault.Space = QUnityEditor.SetField(m_target.DelayDefault.Space);
+        QUnityEditor.SetHorizontalEnd();
+        #endregion
+
+        #region DELAY - DEFAULT - ITEM - MARK
+        QUnityEditor.SetHorizontalBegin();
+        QUnityEditor.SetLabel("Mark", null, QUnityEditor.GetGUILayoutWidth(LABEL_WIDTH));
+        m_target.DelayDefault.Mark = QUnityEditor.SetField(m_target.DelayDefault.Mark);
+        QUnityEditor.SetHorizontalEnd();
+        #endregion
+
+        QUnityEditor.SetVerticalEnd();
+        #endregion
+
+        #endregion
     }
 }
 

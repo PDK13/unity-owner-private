@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System;
 using Object = UnityEngine.Object;
+
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -116,13 +117,9 @@ public class QUnityEditor
     public static void SetLabel(string Label, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
     {
         if (GUIStyle == null)
-        {
             GUILayout.Label(Label, GUILayoutOption);
-        }
         else
-        {
             GUILayout.Label(Label, GUIStyle, GUILayoutOption);
-        }
     }
 
     public static void SetLabel(string Label, Rect Rect)
@@ -142,13 +139,9 @@ public class QUnityEditor
     public static bool SetButton(string Label, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
     {
         if (GUIStyle == null)
-        {
             return GUILayout.Button(Label, GUILayoutOption);
-        }
         else
-        {
             return GUILayout.Button(Label, GUIStyle, GUILayoutOption);
-        }
     }
 
     public static bool SetButton(Sprite Sprite, params GUILayoutOption[] GUILayoutOption)
@@ -160,6 +153,25 @@ public class QUnityEditor
 
     #region ------------------------------------ Field
 
+    #region Field Special
+
+    public static T SetFieldScriptableObject<T>(T Value, params GUILayoutOption[] GUILayoutOption) where T : ScriptableObject
+    {
+        return (T)EditorGUILayout.ObjectField("", Value, typeof(T), true, GUILayoutOption);
+    }
+
+    public static T SetFieldMonoBehaviour<T>(T Value, params GUILayoutOption[] GUILayoutOption) where T : MonoBehaviour
+    {
+        return (T)EditorGUILayout.ObjectField("", Value, typeof(T), true, GUILayoutOption);
+    }
+
+    public static T SetFieldTextAsset<T>(T Value, params GUILayoutOption[] GUILayoutOption) where T : TextAsset
+    {
+        return (T)EditorGUILayout.ObjectField("", Value, typeof(T), true, GUILayoutOption);
+    }
+
+    #endregion
+
     #region Field Text
 
     //String
@@ -167,25 +179,17 @@ public class QUnityEditor
     public static string SetField(string Value, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
     {
         if (GUIStyle == null)
-        {
             return EditorGUILayout.TextField("", Value, GUILayoutOption);
-        }
         else
-        {
             return EditorGUILayout.TextField("", Value, GUIStyle, GUILayoutOption);
-        }
     }
 
     public static string SetFieldPassword(string Value, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
     {
         if (GUIStyle == null)
-        {
             return EditorGUILayout.PasswordField("", Value, GUILayoutOption);
-        }
         else
-        {
             return EditorGUILayout.PasswordField("", Value, GUIStyle, GUILayoutOption);
-        }
     }
 
     //Value
@@ -193,50 +197,39 @@ public class QUnityEditor
     public static int SetField(int Value, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
     {
         if (GUIStyle == null)
-        {
             return EditorGUILayout.IntField("", Value, GUILayoutOption);
-        }
         else
-        {
             return EditorGUILayout.IntField("", Value, GUIStyle, GUILayoutOption);
-        }
     }
 
     public static long SetField(long Value, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
     {
         if (GUIStyle == null)
-        {
             return EditorGUILayout.LongField("", Value, GUILayoutOption);
-        }
         else
-        {
             return EditorGUILayout.LongField("", Value, GUIStyle, GUILayoutOption);
-        }
     }
 
     public static float SetField(float Value, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
     {
         if (GUIStyle == null)
-        {
             return EditorGUILayout.FloatField("", Value, GUILayoutOption);
-        }
         else
-        {
             return EditorGUILayout.FloatField("", Value, GUIStyle, GUILayoutOption);
-        }
     }
 
     public static double SetField(double Value, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
     {
         if (GUIStyle == null)
-        {
             return EditorGUILayout.DoubleField("", Value, GUILayoutOption);
-        }
         else
-        {
             return EditorGUILayout.DoubleField("", Value, GUIStyle, GUILayoutOption);
-        }
     }
+
+    public static bool SetField(bool Value, params GUILayoutOption[] GUILayoutOption)
+    {
+        return EditorGUILayout.Toggle(Value, GUILayoutOption);
+    } //Toggle
 
     #endregion
 
@@ -268,21 +261,21 @@ public class QUnityEditor
 
     #endregion
 
-    #region Field Else
-
-    public static Color SetField(Color Value, params GUILayoutOption[] GUILayoutOption)
-    {
-        return EditorGUILayout.ColorField(Value, GUILayoutOption);
-    }
+    #region Field Other
 
     public static GameObject SetField(GameObject Value, params GUILayoutOption[] GUILayoutOption)
     {
         return (GameObject)EditorGUILayout.ObjectField("", Value, typeof(GameObject), true, GUILayoutOption);
     }
 
-    public static T SetField<T>(T Value, params GUILayoutOption[] GUILayoutOption) where T : ScriptableObject
+    public static Sprite SetField(Sprite Value, params GUILayoutOption[] GUILayoutOption)
     {
-        return (T)EditorGUILayout.ObjectField("", Value, typeof(T), true, GUILayoutOption);
+        return (Sprite)EditorGUILayout.ObjectField("", Value, typeof(Sprite), true, GUILayoutOption);
+    }
+
+    public static Color SetField(Color Value, params GUILayoutOption[] GUILayoutOption)
+    {
+        return EditorGUILayout.ColorField(Value, GUILayoutOption);
     }
 
     #endregion
@@ -341,6 +334,18 @@ public class QUnityEditor
     public static GUILayoutOption[] GetGUILayoutSize(float Width = 20f, float Height = 20)
     {
         return new GUILayoutOption[2] { GUILayout.Width(Width), GUILayout.Height(Height) };
+    }
+
+    //
+
+    public static GUILayoutOption[] GetGUILayoutSizeSprite(float Width = 125f, float Height = 18f)
+    {
+        return new GUILayoutOption[2] { GUILayout.Width(Width), GUILayout.Height(Height) };
+    }
+
+    public static GUILayoutOption GetGUILayoutSizeToggle(float Width = 25f)
+    {
+        return GUILayout.Width(Width);
     }
 
     #endregion
@@ -456,13 +461,9 @@ public class QUnityEditor
         Texture2D Texture = QSprite.GetTextureConvert(Sprite);
 
         if (Texture != null)
-        {
             return new GUIContent("", Texture);
-        }
         else
-        {
             return new GUIContent("");
-        }
     }
 
     #endregion
@@ -473,7 +474,7 @@ public class QUnityEditor
 
     public static void SetUnFocus()
     {
-        //Call will Lost Focus when Editor Focus on Typing or etc!!
+        //NOTE: Call will Lost Focus when Editor Focus on Typing or etc!!
         GUIUtility.keyboardControl = 0;
     }
 
@@ -481,24 +482,28 @@ public class QUnityEditor
 
     #region ==================================== GUI Quick
 
-    #region ------------------------------------ GUI Quick Number
+    #region ------------------------------------ GUI Group Number
 
-    public static int SetGroupNumberChange(int Value)
+    //Group Number - Primary
+
+    public static int SetGroupNumberChange(string Label, int Value)
     {
         SetHorizontalBegin();
+        SetLabel(Label);
         Value = SetField(Value, null, GetGUILayoutWidth(50));
         if (SetButton("+", null, GetGUILayoutSize()))
             Value++;
         if (SetButton("-", null, GetGUILayoutSize()))
             Value--;
         SetHorizontalEnd();
-        //
+
         return Value;
     }
 
-    public static int SetGroupNumberChangeLimit(int Value, int Max, int Min)
+    public static int SetGroupNumberChangeLimit(string Label, int Value, int Max, int Min)
     {
         SetHorizontalBegin();
+        SetLabel(Label);
         Value = SetField(Value, null, GetGUILayoutWidth(50));
         if (SetButton("+", null, GetGUILayoutSize()))
             if (Value < Max)
@@ -507,13 +512,14 @@ public class QUnityEditor
             if (Value > Min)
                 Value--;
         SetHorizontalEnd();
-        //
+
         return Value;
     }
 
-    public static int SetGroupNumberChangeLimitMin(int Value, int Limit)
+    public static int SetGroupNumberChangeLimitMin(string Label, int Value, int Limit)
     {
         SetHorizontalBegin();
+        SetLabel(Label);
         Value = SetField(Value, null, GetGUILayoutWidth(50));
         if (SetButton("+", null, GetGUILayoutSize()))
             Value++;
@@ -521,13 +527,14 @@ public class QUnityEditor
             if (Value > Limit)
                 Value--;
         SetHorizontalEnd();
-        //
+
         return Value;
     }
 
-    public static int SetGroupNumberChangeLimitMax(int Value, int Limit)
+    public static int SetGroupNumberChangeLimitMax(string Label, int Value, int Limit)
     {
         SetHorizontalBegin();
+        SetLabel(Label);
         Value = SetField(Value, null, GetGUILayoutWidth(50));
         if (SetButton("+", null, GetGUILayoutSize()))
             if (Value < Limit)
@@ -535,8 +542,74 @@ public class QUnityEditor
         if (SetButton("-", null, GetGUILayoutSize()))
             Value--;
         SetHorizontalEnd();
-        //
+
         return Value;
+    }
+
+    //Group Number - Switch
+
+    public static (int Value, bool Switch) SetGroupNumberChange(string Label, bool Switch, int Value)
+    {
+        SetHorizontalBegin();
+        if (SetButton(Label, GetGUIStyleLabel(Switch ? FontStyle.Bold : FontStyle.Normal, TextAnchor.MiddleLeft)))
+            Switch = !Switch;
+        Value = SetField(Value, null, GetGUILayoutWidth(50));
+        if (SetButton("+", null, GetGUILayoutSize()))
+            Value++;
+        if (SetButton("-", null, GetGUILayoutSize()))
+            Value--;
+        SetHorizontalEnd();
+
+        return (Value, Switch);
+    }
+
+    public static (int Value, bool Switch) SetGroupNumberChangeLimit(string Label, bool Switch, int Value, int Max, int Min)
+    {
+        SetHorizontalBegin();
+        if (SetButton(Label, GetGUIStyleLabel(Switch ? FontStyle.Bold : FontStyle.Normal, TextAnchor.MiddleLeft)))
+            Switch = !Switch;
+        Value = SetField(Value, null, GetGUILayoutWidth(50));
+        if (SetButton("+", null, GetGUILayoutSize()))
+            if (Value < Max)
+                Value++;
+        if (SetButton("-", null, GetGUILayoutSize()))
+            if (Value > Min)
+                Value--;
+        SetHorizontalEnd();
+
+        return (Value, Switch);
+    }
+
+    public static (int Value, bool Switch) SetGroupNumberChangeLimitMin(string Label, bool Switch, int Value, int Limit)
+    {
+        SetHorizontalBegin();
+        if (SetButton(Label, GetGUIStyleLabel(Switch ? FontStyle.Bold : FontStyle.Normal, TextAnchor.MiddleLeft)))
+            Switch = !Switch;
+        Value = SetField(Value, null, GetGUILayoutWidth(50));
+        if (SetButton("+", null, GetGUILayoutSize()))
+            Value++;
+        if (SetButton("-", null, GetGUILayoutSize()))
+            if (Value > Limit)
+                Value--;
+        SetHorizontalEnd();
+
+        return (Value, Switch);
+    }
+
+    public static (int Value, bool Switch) SetGroupNumberChangeLimitMax(string Label, bool Switch, int Value, int Limit)
+    {
+        SetHorizontalBegin();
+        if (SetButton(Label, GetGUIStyleLabel(Switch ? FontStyle.Bold : FontStyle.Normal, TextAnchor.MiddleLeft)))
+            Switch = !Switch;
+        Value = SetField(Value, null, GetGUILayoutWidth(50));
+        if (SetButton("+", null, GetGUILayoutSize()))
+            if (Value < Limit)
+                Value++;
+        if (SetButton("-", null, GetGUILayoutSize()))
+            Value--;
+        SetHorizontalEnd();
+
+        return (Value, Switch);
     }
 
     #endregion
@@ -637,13 +710,9 @@ public class QUnityEditorCustom
     public static void SetField(SerializedProperty Field, Rect Rect, bool FieldName = false)
     {
         if (FieldName)
-        {
             EditorGUI.PropertyField(Rect, Field);
-        }
         else
-        {
             EditorGUI.PropertyField(Rect, Field, GUIContent.none);
-        }
     }
 
     public static void SetApply(Editor This)
@@ -672,7 +741,7 @@ public class QUnityEditorObject
     public static VisualElement GetContainer(SerializedProperty Property, params string[] FieldName)
     {
         VisualElement Container = new VisualElement();
-        //
+
         foreach (string FieldNameChild in FieldName)
         {
             PropertyField Field = GetField(Property, FieldNameChild);
@@ -705,13 +774,9 @@ public class QUnityEditorObject
     public static void SetField(SerializedProperty Property, string NameField, Rect Rect, bool FieldName = false)
     {
         if (FieldName)
-        {
             EditorGUI.PropertyField(Rect, Property.FindPropertyRelative(NameField));
-        }
         else
-        {
             EditorGUI.PropertyField(Rect, Property.FindPropertyRelative(NameField), GUIContent.none);
-        }
     }
 
     #endregion

@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -9,49 +8,40 @@ using UnityEditor;
 
 public class DialogueManager : SingletonManager<DialogueManager>
 {
-    #region Varible: Setting
+    #region Varible: Action
+
+    /// <summary>
+    /// Dialogue system start, trigger once time only, until end and refresh
+    /// </summary>
+    public Action onStart;
+
+    /// <summary>
+    /// Dialogue system stage current active, trigger while system active
+    /// </summary>
+    public Action<DialogueStageType> onStage;
+
+    /// <summary>
+    /// Dialogue imformation current active, trigger while system active
+    /// </summary>
+    public Action<DialogueDataText> onText;
+
+    #endregion
+
+    #region Varible: Config
 
     [SerializeField] private DialogueConfig m_dialogueConfig;
     [SerializeField] private StringConfig m_stringConfig;
 
-    private string m_debugError = "";
-
     #endregion
 
-    #region Varible: Debug
-
-    private enum DebugType { None = 0, Primary = 1, Full = int.MaxValue, }
+    #region Varible: Setting
 
     [Space]
-    [SerializeField] private DebugType m_debug = DebugType.Primary;
+    [SerializeField] private float m_delayStart = 1f;
 
     #endregion
 
-    #region Event
-
-    /// <summary>
-    /// Dialogue system stage current active
-    /// </summary>
-    public Action<DialogueStageType> onStageActive;
-
-    /// <summary>
-    /// Dialogue system current author and trigger active
-    /// </summary>
-    public Action<DialogueDataText> onTextActive;
-
-    /// <summary>
-    /// Dialogue system current choice check
-    /// </summary>
-    public Action<int, DialogueDataChoice> onChoiceCheck;
-
-    /// <summary>
-    /// Dialogue system current choice active
-    /// </summary>
-    public Action<int, DialogueDataChoice> onChoiceActive;
-
-    #endregion
-
-    #region Varible: Dialogue Manager
+    #region Varible: Dialogue
 
     private enum DialogueCommandType
     {
@@ -61,31 +51,64 @@ public class DialogueManager : SingletonManager<DialogueManager>
         Wait,
         Next,
         Skip,
-        Choice,
     }
 
-    [SerializeField] private DialogueCommandType m_command = DialogueCommandType.Text;
-    [SerializeField] private DialogueConfigSingle m_currentData;
-    [SerializeField] private string m_currentDialogue = "";
-    [SerializeField] private bool m_currentActive = false;
-    [SerializeField] private bool m_currentChoice = false;
-    [SerializeField] private TextMeshProUGUI m_tmp;
+    private DialogueCommandType m_command = DialogueCommandType.Text;
+    private DialogueStageType m_stage = DialogueStageType.None;
+
+    private bool m_active = false;
+
+    private DialogueConfigSingle m_dataCurrent;
+
+    private string m_text = "";
+    private TextMeshProUGUI m_tmp;
+
+    private DialogueDataText m_textCurrent;
+    private DialogueDataText m_textNext;
 
     private Coroutine m_iSetDialogueShowSingle;
 
-    [SerializeField] private DialogueStageType m_stage = DialogueStageType.None;
+    #endregion
+
+    #region Varible: Get
+
+    /// <summary>
+    /// Dialogue current active in progess
+    /// </summary>
+    public bool Active => m_active;
 
     /// <summary>
     /// Dialogue system stage current
     /// </summary>
     public DialogueStageType Stage => m_stage;
 
+    /// <summary>
+    /// Dialogue current data
+    /// </summary>
+    public DialogueDataText TextCurrent => m_textCurrent;
+
+    /// <summary>
+    /// Dialogue next data
+    /// </summary>
+    public DialogueDataText TextNext => m_textNext;
+
+    /// <summary>
+    /// Dialogue last data
+    /// </summary>
+    public DialogueDataText TextLast => m_dataCurrent != null ? m_dataCurrent.Dialogue[m_dataCurrent.Dialogue.Count - 1] : null;
+
+    /// <summary>
+    /// Change show dialogue
+    /// </summary>
+    /// <param name="Tmp"></param>
+    public TextMeshProUGUI Tmp { get => m_tmp; set => m_tmp = value; }
+
     #endregion
 
     protected override void Awake()
     {
         base.Awake();
-        //
+
 #if UNITY_EDITOR
         SetConfigFind();
 #endif
@@ -104,29 +127,27 @@ public class DialogueManager : SingletonManager<DialogueManager>
     {
         if (m_dialogueConfig != null)
             return;
-        //
+
         var AuthorConfigFound = QUnityAssets.GetScriptableObject<DialogueConfig>("", false);
-        //
+
         if (AuthorConfigFound == null)
         {
-            m_debugError = "Config not found, please create one";
-            Debug.Log("[Dialogue] " + m_debugError);
+            Debug.Log("[Dialogue] Config not found, please create one");
             return;
         }
-        //
+
         if (AuthorConfigFound.Count == 0)
         {
-            m_debugError = "Config not found, please create one";
-            Debug.Log("[Dialogue] " + m_debugError);
+            Debug.Log("[Dialogue] Config not found, please create one");
             return;
         }
-        //
+
         if (AuthorConfigFound.Count > 1)
             Debug.Log("[Dialogue] Config found more than one, get the first one found");
-        //
+
         m_dialogueConfig = AuthorConfigFound[0];
-        //
-        m_debugError = "";
+
+        QUnityEditor.SetDirty(this);
     }
 
 #endif
@@ -138,105 +159,87 @@ public class DialogueManager : SingletonManager<DialogueManager>
     /// <summary>
     /// Start dialogue with config data
     /// </summary>
-    /// <param name="Tmp"></param>
     /// <param name="DialogueData"></param>
     public void SetStart(DialogueConfigSingle DialogueData)
     {
-        if (m_currentActive)
+        if (m_active)
             return;
-        //
+
+        onStart?.Invoke();
+
         StartCoroutine(ISetDialogueShow(DialogueData));
     }
 
-    private IEnumerator ISetDialogueShow(DialogueConfigSingle DialogueData, bool WaitForNextDialogue = false)
+    private IEnumerator ISetDialogueShow(DialogueConfigSingle DialogueData)
     {
-        m_currentData = DialogueData;
-        //
-        if (WaitForNextDialogue)
-            //Not check when first show dialogue!!
-            yield return new WaitUntil(() => m_command == DialogueCommandType.Next);
-        //
+        m_dataCurrent = DialogueData;
+
         m_command = DialogueCommandType.None;
-        m_currentActive = true;
-        m_currentChoice = false;
-        //
+        m_active = true;
+
         SetStage(DialogueStageType.Start);
-        //
-        SetDebug("[START]", DebugType.Primary);
-        //
-        for (int i = 0; i < m_currentData.Dialogue.Count; i++)
+
+        yield return new WaitForSeconds(m_delayStart);
+
+        //START
+
+        for (int i = 0; i < m_dataCurrent.Dialogue.Count; i++)
         {
-            Current = m_currentData.Dialogue[i];
-            Next = (i < m_currentData.Dialogue.Count - 1) ? m_currentData.Dialogue[i + 1] : null;
-            //
-            m_currentDialogue = m_currentData.Dialogue[i].Dialogue;
-            //
-            //Dialogue:
-            if (string.IsNullOrEmpty(m_currentDialogue))
-                m_tmp.text = "...";
-            else
+            m_textCurrent = m_dataCurrent.Dialogue[i];
+            m_textNext = (i < m_dataCurrent.Dialogue.Count - 1) ? m_dataCurrent.Dialogue[i + 1] : null;
+
+            m_text = m_dataCurrent.Dialogue[i].Dialogue;
+
+            //DIALOGUE
+
+            onText?.Invoke(m_dataCurrent.Dialogue[i]);
+
+            m_tmp.text = "";
+            if (m_stringConfig != null)
+                m_text = m_stringConfig.GetColorHexFormatReplace(m_text);
+
+            if (m_command != DialogueCommandType.Skip)
             {
-                //BEGIN:
-                onTextActive?.Invoke(m_currentData.Dialogue[i]);
-                //
-                m_tmp.text = "";
-                //
-                if (m_stringConfig != null)
-                    m_currentDialogue = m_stringConfig.GetColorHexFormatReplace(m_currentDialogue);
-                //
-                //PROGESS:
+                //PROGESS
                 m_command = DialogueCommandType.Text;
-                //
                 SetStage(DialogueStageType.Text);
-                //
-                m_iSetDialogueShowSingle = StartCoroutine(ISetDialogueShowSingle(m_currentData.Dialogue[i]));
-                //
-                SetDebug(string.Format("[Dialogue] Current: '{0}'", m_currentDialogue), DebugType.Full);
-                //
-                yield return new WaitUntil(() => m_command == DialogueCommandType.Skip || m_command == DialogueCommandType.Done);
-                //
-                //DONE:
-                m_tmp.text = m_currentDialogue;
+                m_iSetDialogueShowSingle = StartCoroutine(ISetDialogueShowSingle(m_dataCurrent.Dialogue[i]));
             }
-            //WAIT:
-            if (!string.IsNullOrEmpty(m_currentDialogue) && i < m_currentData.Dialogue.Count - 1)
+
+            //WAIT PROGESS
+            yield return new WaitUntil(() => m_command == DialogueCommandType.Next || m_command == DialogueCommandType.Skip || m_command == DialogueCommandType.Done);
+
+            //DONE
+            m_tmp.text = m_text;
+
+            if (m_command != DialogueCommandType.Skip)
             {
-                //FINAL:
+                //WAIT
                 m_command = DialogueCommandType.Wait;
-                //
                 SetStage(DialogueStageType.Wait);
-                //
-                SetDebug("[Dialogue] Next?", DebugType.Primary);
-                //
-                yield return new WaitUntil(() => m_command == DialogueCommandType.Next);
+
+                //WAIT NEXT
+                yield return new WaitUntil(() => m_command == DialogueCommandType.Next || m_command == DialogueCommandType.Skip);
             }
         }
-        //
-        m_command = m_currentData.ChoiceAvaible ? DialogueCommandType.Choice : DialogueCommandType.None;
-        m_currentActive = m_currentData.ChoiceAvaible;
-        m_currentChoice = m_currentData.ChoiceAvaible;
-        //
-        SetStage(m_currentChoice ? DialogueStageType.Choice : DialogueStageType.End);
-        //
-        if (m_currentChoice)
-        {
-            SetDebug("[Dialogue] Choice?", DebugType.Primary);
-        }
-        else
-        {
-            SetDebug("[Dialogue] End!", DebugType.Primary);
-        }
+
+        m_command = DialogueCommandType.None;
+        m_active = false;
+
+        SetStage(DialogueStageType.End);
+
+        //END:
     }
 
     private IEnumerator ISetDialogueShowSingle(DialogueDataText DialogueSingle)
     {
         bool HtmlFormat = false;
-        //
-        foreach (char DialogueChar in m_currentDialogue)
+
+        foreach (char DialogueChar in m_text)
         {
             //TEXT:
             m_tmp.text += DialogueChar;
-            //
+
             //COLOR:
             if (!HtmlFormat && DialogueChar == '<')
             {
@@ -249,11 +252,11 @@ public class DialogueManager : SingletonManager<DialogueManager>
                 HtmlFormat = false;
                 continue;
             }
-            //
+
             //DELAY:
             if (HtmlFormat)
                 continue;
-            //
+
             switch (DialogueChar)
             {
                 case '.':
@@ -279,10 +282,22 @@ public class DialogueManager : SingletonManager<DialogueManager>
 
     private void SetStage(DialogueStageType Stage)
     {
-        SetDebug("[Dialogue] [STAGE] " + Stage.ToString(), DebugType.Full);
-        //
         m_stage = Stage;
-        onStageActive?.Invoke(Stage);
+        onStage?.Invoke(Stage);
+    }
+
+    #endregion
+
+    #region Data
+
+    public string GetAuthorName(DialogueDataText Text)
+    {
+        return m_dialogueConfig.AuthorName[Text.AuthorIndex];
+    }
+
+    public Sprite GetAuthorAvatar(DialogueDataText Text)
+    {
+        return m_dialogueConfig.AuthorAvatar[Text.AuthorIndex];
     }
 
     #endregion
@@ -290,125 +305,59 @@ public class DialogueManager : SingletonManager<DialogueManager>
     #region Control
 
     /// <summary>
-    /// Dialogue current data!
-    /// </summary>
-    public DialogueDataText Current { private set; get; } = null;
-
-    /// <summary>
-    /// Dialogue next data!
-    /// </summary>
-    public DialogueDataText Next { private set; get; } = null;
-
-    /// <summary>
-    /// Change show dialogue!
-    /// </summary>
-    /// <param name="Tmp"></param>
-    public TextMeshProUGUI TextMeshPro { get => m_tmp; set => m_tmp = value; }
-
-    /// <summary>
-    /// Next dialogue; or continue dialogue after choice option delay continue dialogue
+    /// Dialogue quick end current text, or continue next text after text done
     /// </summary>
     public void SetNext()
     {
-        if (m_command != DialogueCommandType.Wait)
-            //When current dialogue in done show up, press Next to move on next dialogue!
-            return;
-        //
-        m_command = DialogueCommandType.Next;
-        //
-        SetDebug("[Dialogue] Next!", DebugType.Primary);
+        switch (m_command)
+        {
+            case DialogueCommandType.Text:
+            case DialogueCommandType.Wait:
+                StopCoroutine(m_iSetDialogueShowSingle);
+                m_command = DialogueCommandType.Next;
+                break;
+        }
     }
 
     /// <summary>
-    /// Skip current dialogue, until got choice option or end dialogue
+    /// Dialogue quick end current text and continue quick end next text
     /// </summary>
     public void SetSkip()
     {
-        if (m_command != DialogueCommandType.Text)
-            //When current dialogue is showing up, press Next to skip and show full dialogue!
-            return;
-        //
-        StopCoroutine(m_iSetDialogueShowSingle);
-        //
-        m_command = DialogueCommandType.Skip;
-        //
-        SetDebug("[Dialogue] Skip!", DebugType.Primary);
+        switch (m_command)
+        {
+            case DialogueCommandType.Text:
+            case DialogueCommandType.Wait:
+                StopCoroutine(m_iSetDialogueShowSingle);
+                m_command = DialogueCommandType.Skip;
+                break;
+        }
     }
 
     /// <summary>
-    /// Choice current data!
+    /// Dialogue quick end all text
     /// </summary>
-    public List<DialogueDataChoice> Choice => m_currentData.Choice; //Should get this data when dialogue at choice stage!!
-
-    /// <summary>
-    /// Check choice option of dialogue when avaible
-    /// </summary>
-    /// <param name="ChoiceIndex"></param>
-    public void SetChoiceCheck(int ChoiceIndex)
-    {
-        if (m_command != DialogueCommandType.Choice)
-            //When current dialogue in done show up and got choice option, move choice option to get imformation of choice!
-            return;
-        //
-        if (ChoiceIndex < 0 || ChoiceIndex > m_currentData.Choice.Count - 1)
-            return;
-        //
-        onChoiceCheck?.Invoke(ChoiceIndex, m_currentData.Choice[ChoiceIndex]);
-        //
-        SetDebug(string.Format("[Dialogue] Check {0}: {1}", ChoiceIndex, m_currentData.Choice[ChoiceIndex].Text), DebugType.Full);
-    }
-
-    /// <summary>
-    /// Choice option of dialogue when avaible
-    /// </summary>
-    /// <param name="ChoiceIndex"></param>
-    /// <param name="NextDialogue">If false, must call 'Next' methode for continue dialogue of last option choice</param>
-    public void SetChoiceActive(int ChoiceIndex, bool NextDialogue = true)
-    {
-        if (m_command != DialogueCommandType.Choice)
-            //When current dialogue in done show up and got choice option, press choice option to move on next dialogue!
-            return;
-        //
-        if (ChoiceIndex < 0 || ChoiceIndex > m_currentData.Choice.Count - 1)
-            return;
-        //
-        m_command = NextDialogue ? DialogueCommandType.Next : DialogueCommandType.Wait;
-        //
-        StartCoroutine(ISetDialogueShow(m_currentData.Choice[ChoiceIndex].Next, true));
-        //
-        onChoiceActive?.Invoke(ChoiceIndex, m_currentData.Choice[ChoiceIndex]);
-        //
-        SetDebug(string.Format("[Dialogue] Choice {0}: {1}", ChoiceIndex, m_currentData.Choice[ChoiceIndex].Text), DebugType.Primary);
-    }
-
-    /// <summary>
-    /// Stop dialogue
-    /// </summary>
-    public void SetStop()
+    public void SetStop(bool Clear = false)
     {
         StopAllCoroutines();
         StopCoroutine(m_iSetDialogueShowSingle);
-        //
+
         m_command = DialogueCommandType.None;
-        m_currentActive = false;
-        m_currentChoice = false;
-        //
+        m_active = false;
+
         SetStage(DialogueStageType.End);
-        //
+
         m_tmp.text = "";
-        //
-        SetDebug("[Dialogue] Stop!", DebugType.Primary);
+
+        if (Clear)
+        {
+            m_dataCurrent = null;
+            m_textCurrent = null;
+            m_textNext = null;
+        }
     }
 
     #endregion
-
-    private static void SetDebug(string Dialogue, DebugType DebugLimit)
-    {
-        if ((int)Instance.m_debug < (int)DebugLimit)
-            return;
-        //
-        Debug.Log(string.Format("[Dialogue] {0}", Dialogue));
-    }
 }
 
 public enum DialogueStageType
@@ -419,7 +368,6 @@ public enum DialogueStageType
     //Trigger when Show
     Text,
     Wait,
-    Choice,
     //Trigger when End
     End,
 }
@@ -434,51 +382,29 @@ public class DialogueManagerEditor : Editor
     private SerializedProperty m_dialogueConfig;
     private SerializedProperty m_stringConfig;
 
-    private SerializedProperty m_debug;
-
-    private SerializedProperty m_command;
-    private SerializedProperty m_currentData;
-    private SerializedProperty m_currentDialogue;
-    private SerializedProperty m_stage;
-    private SerializedProperty m_tmp;
+    private SerializedProperty m_delayStart;
 
     private void OnEnable()
     {
         m_target = target as DialogueManager;
-        //
+
         m_dialogueConfig = QUnityEditorCustom.GetField(this, "m_dialogueConfig");
         m_stringConfig = QUnityEditorCustom.GetField(this, "m_stringConfig");
-        //
-        m_debug = QUnityEditorCustom.GetField(this, "m_debug");
-        //
-        m_command = QUnityEditorCustom.GetField(this, "m_command");
-        m_currentData = QUnityEditorCustom.GetField(this, "m_currentData");
-        m_currentDialogue = QUnityEditorCustom.GetField(this, "m_currentDialogue");
-        m_stage = QUnityEditorCustom.GetField(this, "m_stage");
-        m_tmp = QUnityEditorCustom.GetField(this, "m_tmp");
-        //
+
+        m_delayStart = QUnityEditorCustom.GetField(this, "m_delayStart");
+
         m_target.SetConfigFind();
     }
 
     public override void OnInspectorGUI()
     {
         QUnityEditorCustom.SetUpdate(this);
-        //
+
         QUnityEditorCustom.SetField(m_dialogueConfig);
         QUnityEditorCustom.SetField(m_stringConfig);
-        //
-        QUnityEditorCustom.SetField(m_debug);
-        //
-        QUnityEditor.SetDisableGroupBegin();
-        //
-        QUnityEditorCustom.SetField(m_command);
-        QUnityEditorCustom.SetField(m_currentData);
-        QUnityEditorCustom.SetField(m_currentDialogue);
-        QUnityEditorCustom.SetField(m_stage);
-        QUnityEditorCustom.SetField(m_tmp);
-        //
-        QUnityEditor.SetDisableGroupEnd();
-        //
+
+        QUnityEditorCustom.SetField(m_delayStart);
+
         QUnityEditorCustom.SetApply(this);
     }
 }

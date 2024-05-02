@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -151,12 +152,12 @@ public class IsometricTool : EditorWindow
         m_manager.SetEditorDataRefresh();
         //
         m_manager.World.SetRefresh();
-        m_manager.Config.SetRefresh();
+        m_manager.Config.SetEditorRefresh();
         //
         m_manager.List.SetList(m_manager.Config, false);
         //
         m_listMapScene = m_manager.World.ListMapName;
-        m_listMapFile = m_manager.Config.Map.ListName;
+        m_listMapFile = m_manager.Config.Map.DataName.ToList();
         m_listTag = m_manager.List.ListTag;
         //
         m_maskXY = false;
@@ -474,7 +475,7 @@ public class IsometricTool : EditorWindow
 
     private void SetGUIWorldConfig()
     {
-        if (m_manager.Config.Map.ListAssets.Count <= 0)
+        if (m_manager.Config.Map.DataAssets.Length <= 0)
             return;
         //
         QUnityEditor.SetHorizontalBegin();
@@ -483,9 +484,9 @@ public class IsometricTool : EditorWindow
         m_indexMapFile = QUnityEditor.SetPopup(m_indexMapFile, m_listMapFile, QUnityEditorWindow.GetGUILayoutWidth(this, 0.5f, 2.5f));
         if (QUnityEditor.SetButton("Open", QUnityEditor.GetGUIStyleButton(FontStyle.Bold), QUnityEditorWindow.GetGUILayoutWidth(this, 0.25f)))
         {
-            IsometricDataFile.SetFileRead(m_manager, m_manager.Config.Map.ListAssets[m_indexMapFile]);
+            IsometricDataFile.SetFileRead(m_manager, m_manager.Config.Map.DataAssets[m_indexMapFile]);
             m_listMapScene = m_manager.World.ListMapName;
-            m_listMapFile = m_manager.Config.Map.ListName;
+            m_listMapFile = m_manager.Config.Map.DataName.ToList();
             //
             m_mapName = m_manager.World.Current.Name;
             //
@@ -511,7 +512,7 @@ public class IsometricTool : EditorWindow
                 m_pathOpen = Path.Path;
                 IsometricDataFile.SetFileRead(m_manager, QPath.GetPath(QPath.PathType.None, Path.Path));
                 m_listMapScene = m_manager.World.ListMapName;
-                m_listMapFile = m_manager.Config.Map.ListName;
+                m_listMapFile = m_manager.Config.Map.DataName.ToList();
                 //
                 m_mapName = m_manager.World.Current.Name;
                 //
