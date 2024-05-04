@@ -41,14 +41,16 @@ public class ObjectPath : MonoBehaviour
     #region Varible: Elevator
 
     [SerializeField] private ElevatorActive m_activeType = ElevatorActive.Start;
-    //
+
     [SerializeField] private ElevatorTween m_tweenType = ElevatorTween.Rigidbody;
     [SerializeField] private Ease m_easeType = Ease.Linear;
     [SerializeField] private ElevatorPath m_pathType = ElevatorPath.Local;
 
-    public ElevatorActive MoveType => m_activeType;
-    public ElevatorPath PathType => m_pathType;
-    //
+    [SerializeField] private bool m_loop = true;
+    [SerializeField] private bool m_loopInfinite = true;
+    [SerializeField][Min(1)] private int m_loopCount = 1;
+    [SerializeField] private LoopType m_loopType = LoopType.Yoyo;
+
     [SerializeField][Min(0)] private float m_duration = 4f;
     [SerializeField][Min(0)] private float m_timeScaleRevert = 1f;
 
@@ -59,11 +61,24 @@ public class ObjectPath : MonoBehaviour
 
     #endregion
 
-    private Tweener m_tweenMove;
-    //
+    #region Varible: Component
+
     [SerializeField] protected Collider2D m_colliderBase;
     [SerializeField] protected Rigidbody2D m_rigidbodyBase;
-    [HideInInspector] public Color m_colorDebug = Color.white;
+
+    #endregion
+
+    #region Get
+
+    public (bool Loop, bool Infinite, int Count) TweenLoop => (m_loop, m_loop ? m_loopInfinite : false, m_loop ? (m_loopInfinite ? -1 : m_loopCount) : 0);
+
+    public ElevatorActive MoveType => m_activeType;
+
+    public ElevatorPath PathType => m_pathType;
+
+    #endregion
+
+    private Tweener m_tweenMove;
 
     protected virtual void Awake()
     {
@@ -125,16 +140,36 @@ public class ObjectPath : MonoBehaviour
                         Path[i] = m_pathList[i];
                     }
                     //
-                    m_tweenMove = transform.DOPath(Path, m_duration).SetEase(m_easeType).SetLoops(-1, LoopType.Yoyo)
-                        .OnStart(() => onStart?.Invoke())
-                        .OnUpdate(() => onUpdate?.Invoke())
-                        .OnKill(() => onKill?.Invoke());
+                    if (m_loop)
+                    {
+                        m_tweenMove = transform.DOPath(Path, m_duration).SetEase(m_easeType).SetLoops(m_loopInfinite ? -1 : m_loopCount, m_loopType)
+                            .OnStart(() => onStart?.Invoke())
+                            .OnUpdate(() => onUpdate?.Invoke())
+                            .OnKill(() => onKill?.Invoke());
+                    }
+                    else
+                    {
+                        m_tweenMove = transform.DOPath(Path, m_duration).SetEase(m_easeType)
+                            .OnStart(() => onStart?.Invoke())
+                            .OnUpdate(() => onUpdate?.Invoke())
+                            .OnKill(() => onKill?.Invoke());
+                    }
                     break;
                 case ElevatorTween.Rigidbody:
-                    m_tweenMove = m_rigidbodyBase.DOPath(m_pathList.ToArray(), m_duration).SetEase(m_easeType).SetLoops(-1, LoopType.Yoyo)
-                        .OnStart(() => onStart?.Invoke())
-                        .OnUpdate(() => onUpdate?.Invoke())
-                        .OnKill(() => onKill?.Invoke());
+                    if (m_loop)
+                    {
+                        m_tweenMove = m_rigidbodyBase.DOPath(m_pathList.ToArray(), m_duration).SetEase(m_easeType).SetLoops(m_loopInfinite ? -1 : m_loopCount, m_loopType)
+                            .OnStart(() => onStart?.Invoke())
+                            .OnUpdate(() => onUpdate?.Invoke())
+                            .OnKill(() => onKill?.Invoke());
+                    }
+                    else
+                    {
+                        m_tweenMove = m_rigidbodyBase.DOPath(m_pathList.ToArray(), m_duration).SetEase(m_easeType)
+                            .OnStart(() => onStart?.Invoke())
+                            .OnUpdate(() => onUpdate?.Invoke())
+                            .OnKill(() => onKill?.Invoke());
+                    }
                     break;
             }
         }
@@ -172,7 +207,7 @@ public class ObjectPath : MonoBehaviour
         m_tweenMove.PlayBackwards();
     }
 
-    [ContextMenu("Stop")]
+    [ContextMenu("Move Stop")]
     public void SetMoveStop()
     {
         if (m_tweenMove == null)
@@ -263,10 +298,10 @@ public class ObjectPath : MonoBehaviour
                     switch (m_pathType)
                     {
                         case ElevatorPath.Local:
-                            QGizmos.SetCollider2D(transform.TransformPoint(m_pathList[i]), m_colliderBase, m_colorDebug);
+                            SetCollider2D(transform.TransformPoint(m_pathList[i]), m_colliderBase, Color.white);
                             break;
                         case ElevatorPath.World:
-                            QGizmos.SetCollider2D(m_pathList[i], m_colliderBase, m_colorDebug);
+                            SetCollider2D(m_pathList[i], m_colliderBase, Color.white);
                             break;
                     }
                 }
@@ -275,10 +310,21 @@ public class ObjectPath : MonoBehaviour
             {
                 for (int i = 0; i < PathCount; i++)
                 {
-                    QGizmos.SetCollider2D(m_pathList[i], m_colliderBase, m_colorDebug);
+                    SetCollider2D(m_pathList[i], m_colliderBase, Color.white);
                 }
             }
         }
+    }
+
+    public void SetCollider2D(Vector2 Pos, Collider2D From, Color Color)
+    {
+        SetWireCube(Pos, (Vector2)From.bounds.size, Color);
+    }
+
+    public void SetWireCube(Vector2 Pos, Vector3 Size, Color Color)
+    {
+        Gizmos.color = Color;
+        Gizmos.DrawWireCube(Pos, Size);
     }
 }
 
@@ -291,29 +337,39 @@ public class TweenMovePathEditor : Editor
     private ObjectPath m_target;
 
     private SerializedProperty m_activeType;
-    //
+
     private SerializedProperty m_tweenType;
     private SerializedProperty m_easeType;
     private SerializedProperty m_pathType;
-    //
+
+    private SerializedProperty m_loop;
+    private SerializedProperty m_loopInfinite;
+    private SerializedProperty m_loopCount;
+    private SerializedProperty m_loopType;
+
     private SerializedProperty m_duration;
     private SerializedProperty m_timeScaleRevert;
-    //
+
     private SerializedProperty m_pathList;
-    //
+
     private SerializedProperty m_colliderBase;
     private SerializedProperty m_rigidbodyBase;
 
     private void OnEnable()
     {
         m_target = (target as ObjectPath);
-        //
+
         m_activeType = serializedObject.FindProperty("m_activeType");
-        //
+
         m_tweenType = serializedObject.FindProperty("m_tweenType");
         m_easeType = serializedObject.FindProperty("m_easeType");
         m_pathType = serializedObject.FindProperty("m_pathType");
-        //
+
+        m_loop = serializedObject.FindProperty("m_loop");
+        m_loopInfinite = serializedObject.FindProperty("m_loopInfinite");
+        m_loopCount = serializedObject.FindProperty("m_loopCount");
+        m_loopType = serializedObject.FindProperty("m_loopType");
+
         m_duration = serializedObject.FindProperty("m_duration");
         m_timeScaleRevert = serializedObject.FindProperty("m_timeScaleRevert");
 
@@ -325,45 +381,56 @@ public class TweenMovePathEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        QUnityEditorCustom.SetUpdate(this);
-        //
-        QUnityEditor.SetDisableGroupBegin(Application.isPlaying);
-        //
-        QUnityEditorCustom.SetField(m_activeType);
-        //
-        QUnityEditor.SetSpace(10);
-        //
-        QUnityEditorCustom.SetField(m_tweenType);
-        QUnityEditorCustom.SetField(m_easeType);
-        QUnityEditorCustom.SetField(m_pathType);
-        //
-        QUnityEditor.SetSpace(10);
-        //
-        QUnityEditorCustom.SetField(m_duration);
-        QUnityEditorCustom.SetField(m_timeScaleRevert);
-        //
-        QUnityEditor.SetSpace(10);
-        //
-        if (QUnityEditor.SetButton("Add Path"))
+        serializedObject.Update();
+
+        EditorGUI.BeginDisabledGroup(Application.isPlaying);
+
+        EditorGUILayout.PropertyField(m_activeType);
+
+        GUILayout.Space(10);
+
+        EditorGUILayout.PropertyField(m_tweenType);
+        EditorGUILayout.PropertyField(m_easeType);
+        EditorGUILayout.PropertyField(m_pathType);
+
+        GUILayout.Space(10);
+
+        EditorGUILayout.PropertyField(m_loop);
+        if (m_target.TweenLoop.Loop)
+        {
+            EditorGUILayout.PropertyField(m_loopInfinite);
+            if (!m_target.TweenLoop.Infinite)
+                EditorGUILayout.PropertyField(m_loopCount);
+            EditorGUILayout.PropertyField(m_loopType);
+        }
+
+        GUILayout.Space(10);
+
+        EditorGUILayout.PropertyField(m_duration);
+        EditorGUILayout.PropertyField(m_timeScaleRevert);
+
+        GUILayout.Space(10);
+
+        if (SetButton("Add Path"))
         {
             m_target.SetPathAdd();
         }
 
-        if (QUnityEditor.SetButton("Remove Path"))
+        if (SetButton("Remove Path"))
         {
             m_target.SetPathRemove();
         }
-        //
-        QUnityEditorCustom.SetField(m_pathList);
-        //
-        QUnityEditor.SetSpace(10);
-        //
-        QUnityEditorCustom.SetField(m_colliderBase);
-        QUnityEditorCustom.SetField(m_rigidbodyBase);
-        //
-        QUnityEditor.SetDisableGroupEnd();
-        //
-        QUnityEditorCustom.SetApply(this);
+
+        EditorGUILayout.PropertyField(m_pathList);
+
+        GUILayout.Space(10);
+
+        EditorGUILayout.PropertyField(m_colliderBase);
+        EditorGUILayout.PropertyField(m_rigidbodyBase);
+
+        EditorGUI.EndDisabledGroup();
+
+        serializedObject.ApplyModifiedProperties();
     }
 
     private void OnSceneGUI()
@@ -373,7 +440,7 @@ public class TweenMovePathEditor : Editor
             return;
         }
         //
-        Handles.color = m_target.m_colorDebug;
+        Handles.color = Color.white;
         //
         for (int i = 0; i < m_target.PathCount; i++)
         {
@@ -421,6 +488,14 @@ public class TweenMovePathEditor : Editor
                 }
             }
         }
+    }
+
+    public static bool SetButton(string Label, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
+    {
+        if (GUIStyle == null)
+            return GUILayout.Button(Label, GUILayoutOption);
+        else
+            return GUILayout.Button(Label, GUIStyle, GUILayoutOption);
     }
 }
 
