@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ColliderMessage : MonoBehaviour
+public class ColliderMessageBase : MonoBehaviour
 {
-    [SerializeField] private string m_code = "";
+    [SerializeField] private string m_tag = "";
 
     [Space]
     [SerializeField] private LayerMask m_checkLayer;
@@ -27,37 +27,37 @@ public class ColliderMessage : MonoBehaviour
     [SerializeField] private string m_methodeStay = "OnCheckStay";
     [SerializeField] private string m_methodeExit = "OnCheckExit";
 
-    private void Awake()
+    private void Start()
     {
         m_messageSend ??= this.gameObject;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        SetMessage(m_code, m_methodeEnter, collision);
+        SetMessage(m_tag, m_methodeEnter, collision);
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        SetMessage(m_code, m_methodeStay, collision);
+        SetMessage(m_tag, m_methodeStay, collision);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        SetMessage(m_code, m_methodeExit, collision);
+        SetMessage(m_tag, m_methodeExit, collision);
     }
     
-    private bool SetMessage(string Code, string Methode, Collider2D Collision)
+    private bool SetMessage(string Tag, string Methode, Collider2D Collision)
     {
         if (Methode == "")
             return false;
-        //
+
         if (Collision.gameObject.Equals(m_messageSend))
             return false;
-        //
+
         if (!m_checkTag.Contains(Collision.gameObject.tag) && m_checkTag.Count > 0)
             return false;
-        //
+
         if (((1 << Collision.gameObject.layer) & m_checkLayer) != 0 || m_checkLayer == 0)
         {
             switch (m_messageType)
@@ -66,19 +66,19 @@ public class ColliderMessage : MonoBehaviour
                     m_messageSend.SendMessage(Methode, m_messageOptions);
                     break;
                 case MessageType.Collider:
-                    m_messageSend.SendMessage(Methode, new ColliderMessageData(Code, Collision.gameObject), m_messageOptions);
+                    m_messageSend.SendMessage(Methode, new ColliderMessageData(Tag, Collision.gameObject), m_messageOptions);
                     break;
                 case MessageType.Rigidbody:
                     if (Collision.attachedRigidbody == null)
                         return false;
                     if (Collision.attachedRigidbody.gameObject.Equals(m_messageSend))
                         return false;
-                    m_messageSend.SendMessage(Methode, new ColliderMessageData(Code, Collision.attachedRigidbody.gameObject), m_messageOptions);
+                    m_messageSend.SendMessage(Methode, new ColliderMessageData(Tag, Collision.attachedRigidbody.gameObject), m_messageOptions);
                     break;
             }
             return true;
         }
-        //
+
         return false;
     }
 }
