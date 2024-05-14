@@ -66,7 +66,7 @@ public class ColliderCollisionMessageBase : MonoBehaviour
                     m_base.SendMessage(Methode, m_messageOptions);
                     break;
                 case MessageTargetType.Collider:
-                    if (string.IsNullOrEmpty(Tag))
+                    if (!string.IsNullOrEmpty(Tag))
                         m_base.SendMessage(Methode, new ColliderMessageData(Tag, Collision.gameObject), m_messageOptions);
                     else
                         m_base.SendMessage(Methode, Collision.gameObject, m_messageOptions);
@@ -76,7 +76,7 @@ public class ColliderCollisionMessageBase : MonoBehaviour
                         return false;
                     if (Collision.rigidbody.gameObject.Equals(m_base))
                         return false;
-                    if (string.IsNullOrEmpty(Tag))
+                    if (!string.IsNullOrEmpty(Tag))
                         m_base.SendMessage(Methode, new ColliderMessageData(Tag, Collision.rigidbody.gameObject), m_messageOptions);
                     else
                         m_base.SendMessage(Methode, Collision.rigidbody.gameObject, m_messageOptions);
