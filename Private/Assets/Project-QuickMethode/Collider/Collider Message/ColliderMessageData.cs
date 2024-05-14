@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class ColliderMessageData
 {
-    public string Code;
+    public string Tag;
     public GameObject Target;
 
-    public ColliderMessageData(string Code, GameObject target)
+    public ColliderMessageData(string Tag, GameObject target)
     {
-        this.Code = Code;
+        this.Tag = Tag;
         this.Target = target;
     }
 }

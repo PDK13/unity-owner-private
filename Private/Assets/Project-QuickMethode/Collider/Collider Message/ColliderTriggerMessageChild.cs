@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
-public class ColliderMessageChild : MonoBehaviour
+public class ColliderTriggerMessageChild : MonoBehaviour
 {
     [Serializable]
     private class ColliderChildData
@@ -17,7 +18,7 @@ public class ColliderMessageChild : MonoBehaviour
     [Space]
     [SerializeField] private List<ColliderChildData> m_child = new List<ColliderChildData>();
 
-    private enum MessageType
+    private enum MessageTargetType
     {
         None = 0,
         Collider = 1,
@@ -25,8 +26,8 @@ public class ColliderMessageChild : MonoBehaviour
     }
 
     [Space]
-    [SerializeField] private GameObject m_messageSend;
-    [SerializeField] private MessageType m_messageType = MessageType.None;
+    [SerializeField] private GameObject m_base;
+    [SerializeField] private MessageTargetType m_messageType = MessageTargetType.None;
     [SerializeField] private SendMessageOptions m_messageOptions = SendMessageOptions.DontRequireReceiver;
 
     [Space]
@@ -36,7 +37,7 @@ public class ColliderMessageChild : MonoBehaviour
 
     private void Awake()
     {
-        m_messageSend ??= this.gameObject;
+        m_base ??= this.gameObject;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -88,25 +89,32 @@ public class ColliderMessageChild : MonoBehaviour
         if (Methode == "")
             return false;
 
-        if (Collision.gameObject.Equals(m_messageSend))
+        if (Collision.gameObject.Equals(m_base))
             return false;
 
         switch (m_messageType)
         {
-            case MessageType.None:
-                m_messageSend.SendMessage(Methode, m_messageOptions);
+            case MessageTargetType.None:
+                m_base.SendMessage(Methode, m_messageOptions);
                 break;
-            case MessageType.Collider:
-                m_messageSend.SendMessage(Methode, new ColliderMessageData(Tag, Collision.gameObject), m_messageOptions);
+            case MessageTargetType.Collider:
+                if (string.IsNullOrEmpty(Tag))
+                    m_base.SendMessage(Methode, new ColliderMessageData(Tag, Collision.gameObject), m_messageOptions);
+                else
+                    m_base.SendMessage(Methode, Collision.gameObject, m_messageOptions);
                 break;
-            case MessageType.Rigidbody:
+            case MessageTargetType.Rigidbody:
                 if (Collision.attachedRigidbody == null)
                     return false;
-                if (Collision.attachedRigidbody.gameObject.Equals(m_messageSend))
+                if (Collision.attachedRigidbody.gameObject.Equals(m_base))
                     return false;
-                m_messageSend.SendMessage(Methode, new ColliderMessageData(Tag, Collision.attachedRigidbody.gameObject), m_messageOptions);
+                if (string.IsNullOrEmpty(Tag))
+                    m_base.SendMessage(Methode, new ColliderMessageData(Tag, Collision.attachedRigidbody.gameObject), m_messageOptions);
+                else
+                    m_base.SendMessage(Methode, Collision.attachedRigidbody.gameObject, m_messageOptions);
                 break;
         }
+
         return true;
     }
 }
