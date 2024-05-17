@@ -136,6 +136,8 @@ public class QUnityEditor
 
     #region ------------------------------------ Button
 
+    //Button Normal
+
     public static bool SetButton(string Label, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
     {
         if (GUIStyle == null)
@@ -147,6 +149,21 @@ public class QUnityEditor
     public static bool SetButton(Sprite Sprite, params GUILayoutOption[] GUILayoutOption)
     {
         return GUILayout.Button(GetGUIContentImage(Sprite), GUILayoutOption);
+    }
+
+    //Button Hold
+
+    public static bool SetButtonHold(string Label, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
+    {
+        if (GUIStyle == null)
+            return GUILayout.RepeatButton(Label, GUILayoutOption);
+        else
+            return GUILayout.RepeatButton(Label, GUIStyle, GUILayoutOption);
+    }
+
+    public static bool SetButtonHold(Sprite Sprite, params GUILayoutOption[] GUILayoutOption)
+    {
+        return GUILayout.RepeatButton(GetGUIContentImage(Sprite), GUILayoutOption);
     }
 
     #endregion
@@ -308,7 +325,7 @@ public class QUnityEditor
         GUI.backgroundColor = Color;
     }
 
-    public static void SetSpace(float Space = 20)
+    public static void SetSpace(float Space = 10)
     {
         GUILayout.Space(Space);
     }

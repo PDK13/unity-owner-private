@@ -8,7 +8,7 @@ using UnityEditor;
 
 public class DialogueManager : SingletonManager<DialogueManager>
 {
-    #region Varible: Action
+    #region Action
 
     /// <summary>
     /// Dialogue system start, trigger once time only, until end and refresh
@@ -25,23 +25,28 @@ public class DialogueManager : SingletonManager<DialogueManager>
     /// </summary>
     public Action<DialogueDataText> onText;
 
+    /// <summary>
+    /// Dialogue system end, trigger once time only, until end and refresh
+    /// </summary>
+    public Action onEnd;
+
     #endregion
 
-    #region Varible: Config
+    #region Config
 
     [SerializeField] private DialogueConfig m_dialogueConfig;
     [SerializeField] private StringConfig m_stringConfig;
 
     #endregion
 
-    #region Varible: Setting
+    #region Setting
 
     [Space]
     [SerializeField] private float m_delayStart = 1f;
 
     #endregion
 
-    #region Varible: Dialogue
+    #region Dialogue
 
     private enum DialogueCommandType
     {
@@ -70,7 +75,7 @@ public class DialogueManager : SingletonManager<DialogueManager>
 
     #endregion
 
-    #region Varible: Get
+    #region Get
 
     /// <summary>
     /// Dialogue current active in progess
@@ -105,9 +110,9 @@ public class DialogueManager : SingletonManager<DialogueManager>
 
     #endregion
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
+        SetInstance();
 
 #if UNITY_EDITOR
         SetConfigFind();
@@ -165,21 +170,22 @@ public class DialogueManager : SingletonManager<DialogueManager>
         if (m_active)
             return;
 
-        onStart?.Invoke();
-
         StartCoroutine(ISetDialogueShow(DialogueData));
     }
 
     private IEnumerator ISetDialogueShow(DialogueConfigSingle DialogueData)
     {
+        //START
+        onStart?.Invoke();
+
         m_dataCurrent = DialogueData;
 
         m_command = DialogueCommandType.None;
         m_active = true;
 
-        SetStage(DialogueStageType.Start);
-
         yield return new WaitForSeconds(m_delayStart);
+
+        SetStage(DialogueStageType.Start);
 
         //START
 
@@ -229,6 +235,7 @@ public class DialogueManager : SingletonManager<DialogueManager>
         SetStage(DialogueStageType.End);
 
         //END:
+        onEnd?.Invoke();
     }
 
     private IEnumerator ISetDialogueShowSingle(DialogueDataText DialogueSingle)

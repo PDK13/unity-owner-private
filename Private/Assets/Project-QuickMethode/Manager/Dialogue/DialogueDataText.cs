@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 [Serializable]
 public class DialogueDataText
@@ -19,6 +20,8 @@ public class DialogueDataText
     }
 
 #if UNITY_EDITOR
+
+    public bool EditorFull { get; set; } = false;
 
     public bool EditorDelayShow { get; set; } = false;
 
