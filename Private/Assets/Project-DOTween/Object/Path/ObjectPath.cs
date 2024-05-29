@@ -52,7 +52,7 @@ public class ObjectPath : MonoBehaviour
     [SerializeField] private LoopType m_loopType = LoopType.Yoyo;
 
     [SerializeField][Min(0)] private float m_duration = 4f;
-    [SerializeField][Min(0)] private float m_timeScaleRevert = 1f;
+    [SerializeField][Min(0)] private float m_durationRevertScale = 1f;
 
     [SerializeField] private List<Vector2> m_pathList;
     private Vector2 m_posStart;
@@ -195,15 +195,15 @@ public class ObjectPath : MonoBehaviour
         m_tweenMove.timeScale = 1;
     }
 
-    [ContextMenu("Move Invert")]
-    public void SetMoveInvert()
+    [ContextMenu("Move Revert")]
+    public void SetMoveRevert()
     {
         if (m_tweenMove == null)
         {
             return;
         }
         //
-        m_tweenMove.timeScale = m_timeScaleRevert;
+        m_tweenMove.timeScale = m_durationRevertScale;
         m_tweenMove.PlayBackwards();
     }
 
@@ -348,7 +348,7 @@ public class TweenMovePathEditor : Editor
     private SerializedProperty m_loopType;
 
     private SerializedProperty m_duration;
-    private SerializedProperty m_timeScaleRevert;
+    private SerializedProperty m_durationRevertScale;
 
     private SerializedProperty m_pathList;
 
@@ -371,7 +371,7 @@ public class TweenMovePathEditor : Editor
         m_loopType = serializedObject.FindProperty("m_loopType");
 
         m_duration = serializedObject.FindProperty("m_duration");
-        m_timeScaleRevert = serializedObject.FindProperty("m_timeScaleRevert");
+        m_durationRevertScale = serializedObject.FindProperty("m_durationRevertScale");
 
         m_pathList = serializedObject.FindProperty("m_pathList");
 
@@ -407,7 +407,7 @@ public class TweenMovePathEditor : Editor
         GUILayout.Space(10);
 
         EditorGUILayout.PropertyField(m_duration);
-        EditorGUILayout.PropertyField(m_timeScaleRevert);
+        EditorGUILayout.PropertyField(m_durationRevertScale);
 
         GUILayout.Space(10);
 
