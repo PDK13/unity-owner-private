@@ -63,8 +63,13 @@ public class ObjectPath : MonoBehaviour
 
     #region Varible: Component
 
-    [SerializeField] protected Collider2D m_colliderBase;
     [SerializeField] protected Rigidbody2D m_rigidbodyBase;
+
+#if UNITY_EDITOR
+    [SerializeField] protected Collider2D m_colliderBase;
+    [SerializeField] protected bool m_colliderChildShow = false;
+    [SerializeField] protected List<Collider2D> m_colliderChild = new List<Collider2D>();
+#endif
 
     #endregion
 
@@ -282,6 +287,8 @@ public class ObjectPath : MonoBehaviour
 
     #endregion
 
+#if UNITY_EDITOR
+
     protected virtual void OnDrawGizmosSelected()
     {
         if (m_colliderBase == null)
@@ -291,41 +298,50 @@ public class ObjectPath : MonoBehaviour
 
         if (m_pathList != null)
         {
-            if (!Application.isPlaying)
+            for (int i = 0; i < PathCount; i++)
             {
-                for (int i = 0; i < PathCount; i++)
+                switch (m_pathType)
                 {
-                    switch (m_pathType)
-                    {
-                        case ElevatorPath.Local:
-                            SetCollider2D(transform.TransformPoint(m_pathList[i]), m_colliderBase, Color.white);
-                            break;
-                        case ElevatorPath.World:
-                            SetCollider2D(m_pathList[i], m_colliderBase, Color.white);
-                            break;
-                    }
-                }
-            }
-            else
-            {
-                for (int i = 0; i < PathCount; i++)
-                {
-                    SetCollider2D(m_pathList[i], m_colliderBase, Color.white);
+                    case ElevatorPath.Local:
+                        SetGizmosCollider((Vector2)m_colliderBase.bounds.center + m_pathList[i], m_colliderBase, Color.white);
+                        SetGizmosColliderChild(m_pathList[i]);
+                        break;
+                    case ElevatorPath.World:
+                        SetGizmosCollider(m_pathList[i], m_colliderBase, Color.white);
+                        SetGizmosColliderChild(m_pathList[i]);
+                        break;
                 }
             }
         }
     }
 
-    public void SetCollider2D(Vector2 Pos, Collider2D From, Color Color)
+    public void SetGizmosColliderChild(Vector2 PosPath)
     {
-        SetWireCube(Pos, (Vector2)From.bounds.size, Color);
+        if (!m_colliderChildShow)
+            return;
+
+        foreach (var ColliderChildCheck in m_colliderChild)
+        {
+            if (ColliderChildCheck == null)
+                continue;
+            SetGizmosCollider((Vector2)ColliderChildCheck.bounds.center + PosPath, ColliderChildCheck, Color.white);
+        }
     }
 
-    public void SetWireCube(Vector2 Pos, Vector3 Size, Color Color)
+    public void SetGizmosCollider(Vector2 Pos, Collider2D From, Color Color)
+    {
+        BoxCollider2D Box = From.GetComponent<BoxCollider2D>();
+        float BoxEdgeRadius = Box != null ? Box.edgeRadius : 0;
+        SetGizmosSetGizmosColliderWireCube(Pos, (Vector2)From.bounds.size + Vector2.one * BoxEdgeRadius, Color);
+    }
+
+    public void SetGizmosSetGizmosColliderWireCube(Vector2 Pos, Vector3 Size, Color Color)
     {
         Gizmos.color = Color;
         Gizmos.DrawWireCube(Pos, Size);
     }
+
+#endif
 }
 
 #if UNITY_EDITOR
@@ -352,8 +368,10 @@ public class TweenMovePathEditor : Editor
 
     private SerializedProperty m_pathList;
 
-    private SerializedProperty m_colliderBase;
     private SerializedProperty m_rigidbodyBase;
+    private SerializedProperty m_colliderBase;
+    private SerializedProperty m_colliderChildShow;
+    private SerializedProperty m_colliderChild;
 
     private void OnEnable()
     {
@@ -376,6 +394,8 @@ public class TweenMovePathEditor : Editor
         m_pathList = serializedObject.FindProperty("m_pathList");
 
         m_colliderBase = serializedObject.FindProperty("m_colliderBase");
+        m_colliderChildShow = serializedObject.FindProperty("m_colliderChildShow");
+        m_colliderChild = serializedObject.FindProperty("m_colliderChild");
         m_rigidbodyBase = serializedObject.FindProperty("m_rigidbodyBase");
     }
 
@@ -383,7 +403,7 @@ public class TweenMovePathEditor : Editor
     {
         serializedObject.Update();
 
-        EditorGUI.BeginDisabledGroup(Application.isPlaying);
+        //EditorGUI.BeginDisabledGroup(Application.isPlaying);
 
         EditorGUILayout.PropertyField(m_activeType);
 
@@ -425,10 +445,15 @@ public class TweenMovePathEditor : Editor
 
         GUILayout.Space(10);
 
-        EditorGUILayout.PropertyField(m_colliderBase);
         EditorGUILayout.PropertyField(m_rigidbodyBase);
 
-        EditorGUI.EndDisabledGroup();
+        GUILayout.Space(10);
+
+        EditorGUILayout.PropertyField(m_colliderBase);
+        EditorGUILayout.PropertyField(m_colliderChildShow);
+        EditorGUILayout.PropertyField(m_colliderChild);
+
+        //EditorGUI.EndDisabledGroup();
 
         serializedObject.ApplyModifiedProperties();
     }
@@ -467,35 +492,43 @@ public class TweenMovePathEditor : Editor
             if (m_target.PathType == ObjectPath.ElevatorPath.Local)
             {
                 EditorGUI.BeginChangeCheck();
-                Vector3 WorldPos = m_target.transform.TransformPoint(m_target.GetPath(i));
+                //Vector3 WorldPos = m_target.transform.TransformPoint(m_target.GetPath(i));
+                Vector3 WorldPos = m_target.transform.position + m_target.GetPath(i);
                 WorldPos = Handles.PositionHandle(WorldPos, Quaternion.identity);
                 //
                 if (EditorGUI.EndChangeCheck())
                 {
                     Undo.RecordObject(target, "change path");
-                    m_target.SetPath((Vector2)m_target.transform.InverseTransformPoint(WorldPos), i);
+                    //m_target.SetPath((Vector2)m_target.transform.InverseTransformPoint(WorldPos), i);
+                    m_target.SetPath(WorldPos - m_target.transform.position, i);
                 }
                 //
                 if (i != 0)
                 {
-                    Vector3 WorldPosLast = m_target.transform.TransformPoint(m_target.GetPath(i - 1));
+                    //Vector3 WorldPosLast = m_target.transform.TransformPoint(m_target.GetPath(i - 1));
+                    Vector3 WorldPosLast = m_target.transform.position + m_target.GetPath(i - 1);
                     Handles.DrawDottedLine(WorldPos, WorldPosLast, 10);
                 }
                 else
                 {
-                    Vector3 WorldPosLast = m_target.transform.TransformPoint(Vector3.zero);
+                    //Vector3 WorldPosLast = m_target.transform.TransformPoint(Vector3.zero);
+                    Vector3 WorldPosLast = m_target.transform.position;
                     Handles.DrawDottedLine(WorldPos, WorldPosLast, 10);
                 }
             }
         }
     }
 
-    public static bool SetButton(string Label, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
+    public bool SetButton(string Label, GUIStyle GUIStyle = null, params GUILayoutOption[] GUILayoutOption)
     {
         if (GUIStyle == null)
+        {
             return GUILayout.Button(Label, GUILayoutOption);
+        }
         else
+        {
             return GUILayout.Button(Label, GUIStyle, GUILayoutOption);
+        }
     }
 }
 
