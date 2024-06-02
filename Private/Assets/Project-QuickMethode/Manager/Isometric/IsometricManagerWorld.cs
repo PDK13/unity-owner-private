@@ -49,7 +49,7 @@ public class IsometricManagerWorld
     {
         if (Manager == null)
         {
-            Debug.Log("[Isometric] Manager can't be null!");
+            Debug.Log("Manager can't be null!");
             return;
         }
         m_manager = Manager;
@@ -61,8 +61,8 @@ public class IsometricManagerWorld
     {
         m_map = m_map.Where(x => x.Root != null).ToList();
         //
-        foreach (IsometricManagerMap BlockSingle in m_map)
-            BlockSingle.SetRefresh();
+        foreach (IsometricManagerMap MapCheck in m_map)
+            MapCheck.SetRefresh();
         //
         for (int i = 0; i < m_manager.transform.childCount; i++)
             SetGenerate(m_manager.transform.GetChild(i));
