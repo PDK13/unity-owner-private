@@ -77,9 +77,11 @@ public class ObjectPath : MonoBehaviour
 
     public (bool Loop, bool Infinite, int Count) TweenLoop => (m_loop, m_loop ? m_loopInfinite : false, m_loop ? (m_loopInfinite ? -1 : m_loopCount) : 0);
 
-    public ElevatorActive MoveType => m_activeType;
+    public ElevatorActive ActiveType => m_activeType;
 
     public ElevatorPath PathType => m_pathType;
+
+    public bool TweenMove => m_tweenMove.IsPlaying();
 
     #endregion
 
