@@ -27,6 +27,9 @@ public class ColliderCollisionMessageBase : MonoBehaviour
     [SerializeField] private string m_methodeStay = "OnCheckStay";
     [SerializeField] private string m_methodeExit = "OnCheckExit";
 
+    [Space]
+    [SerializeField] private bool m_ignoreEnter = false;
+
     private void Start()
     {
         m_base ??= this.gameObject;
@@ -82,6 +85,14 @@ public class ColliderCollisionMessageBase : MonoBehaviour
                         m_base.SendMessage(Methode, Collision.rigidbody.gameObject, m_messageOptions);
                     break;
             }
+
+            if (m_ignoreEnter)
+            {
+                var Collider = GetComponents<Collider2D>();
+                foreach (var ColliderCheck in Collider)
+                    Physics2D.IgnoreCollision(ColliderCheck, Collision.collider, true);
+            }
+
             return true;
         }
 
